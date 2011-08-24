@@ -1,0 +1,30 @@
+development:
+  encoding: utf8
+  adapter: mysql
+  database: m2mhub_development
+  username: root
+
+test:
+  encoding: utf8
+  adapter: mysql
+  database: m2mhub_test
+  username: root
+  encoding: utf8
+
+production:
+  encoding: utf8
+  adapter: mysql
+  database: m2mhub_development
+  username: root
+  encoding: utf8
+
+development_m2m:
+  adapter: sqlserver
+  mode: dblib
+  host: 192.168.x.y
+  tds_version: 70
+  database:
+  username:
+  password:
+  timeout: 5000
+  encoding: utf8
