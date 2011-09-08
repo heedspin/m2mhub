@@ -1,0 +1,44 @@
+<% local_config = File.join(Rails.root, 'config/app_config_local.yml') %>
+<% if File.exists?(local_config) %>
+<%= File.open(local_config).read %>
+<% else %>
+local_config: &local_config
+  nothing: here
+<% end %>
+
+<% lxd = (File.basename(Rails.root) == 'lxd_m2mhub') %>
+  
+shared_config: &shared_config
+  <% if lxd %>
+  email_name: LXD WebBot
+  email_address: tharrison@lxdinc.com
+  email_domain: lxdinc.com
+  company_name: LXD Research & Display
+  hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'lxd_m2mhub.dev' %>
+  <% else %>
+  email_name: SMT WebBot
+  email_address: tharrison@smtcoinc.com
+  email_domain: smtcoinc.com
+  company_name: SMT
+  hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'lxd_m2mhub.dev' %>
+  <% end %>
+  email_password: <%= ENV['email_password'] %>
+
+development:
+  <<: *local_config
+  <<: *shared_config
+  contact_us_recipients: heedspin@gmail.com
+  quote_request_recipients: heedspin@gmail.com
+  s3_bucket: smtcoinc-dev
+  
+production:
+  <<: *local_config
+  <<: *shared_config
+  contact_us_recipients: tharrison@smtcoinc.com, mardovino@smtcoinc.com
+  quote_request_recipients: tharrison@smtcoinc.com, mardovino@smtcoinc.com
+  s3_bucket: smtcoinc
+  
+test:
+  <<: *local_config
+  <<: *shared_config
+

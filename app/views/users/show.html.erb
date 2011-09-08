@@ -1,0 +1,73 @@
+<% title @user.full_name  %>
+
+<% links = [] %>
+<% if permitted_to? :manage, @user %>
+<% links.push link_to("Edit", edit_user_path(@user)) %> 
+<% links.push link_to('Cancel Account', user_path(@user), :method => :delete, :confirm => 'Are you sure?') %>
+<% links.push link_to('Change Password', edit_user_password_path(@user)) %>
+<% end %>
+<%# if permitted_to? :switch, :users %>
+<%# links.push link_to('Switch', switch_path(@user.email)) %>
+<%# end %>
+<% if permitted_to?(:delete) %>
+<% links.push link_to "Delete From Database", delete_user_url(@user), :confirm => 'Are you sure?' %>
+<% end %>
+<%= raw links.join(' | ')%>
+
+<table class="data" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+    <tr>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Name</td>
+      <td><%= @user.full_name %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Status</td>
+      <td><%= @user.user_status.name %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Created</td>
+      <td><%= @user.created_at %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Email</td>
+      <td><%= @user.email %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Role</td>
+      <td><%= @user.user_role.name %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Login Count</td>
+      <td><%= comma @user.login_count %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Failed Login Count</td>
+      <td><%= comma @user.failed_login_count %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Last Request At</td>
+      <td><%= @user.last_request_at %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Current Login At</td>
+      <td><%= @user.current_login_at %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Last Login At</td>
+      <td><%= @user.last_login_at %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Current Login IP</td>
+      <td><%= @user.current_login_ip %></td>
+    </tr>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Last Login IP</td>
+      <td><%= @user.last_login_ip %></td>
+    </tr>
+	</tbody>
+</table>

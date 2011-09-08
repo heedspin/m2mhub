@@ -1,0 +1,21 @@
+<% f.inputs do %>
+  <%= f.input :first_name %> 
+  <%= f.input :last_name %> 
+  <%= f.input :email %>
+  <% if permitted_to?(:set_role, @user) %>
+  <%= f.input :user_role %>
+  <%= f.input :user_status %>
+  <% end %>
+	<% if @user.new_record? %>
+  <%= f.input :password %>
+  <%= f.input :password_confirmation %>
+	<% end %>
+<% end %>
+
+<% f.buttons do %>
+  <%= f.commit_button %>
+  <%= f.cancel_link %>
+	<% if !@user.new_record? and permitted_to?(:delete) %>
+	<li class="link"><%= link_to "Delete From Database", delete_user_url(@user), :confirm => 'Are you sure?' %></li>
+	<% end %>
+<% end %>

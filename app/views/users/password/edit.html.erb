@@ -1,0 +1,14 @@
+<% title "Change Password for #{@user.full_name}"  %>
+<% semantic_form_for @user, :url => user_password_path(@user) do |f| %>
+  <%= f.inputs do %>
+		<% unless permitted_to?(:update_without_current_password, :users_password) %>
+    <%= f.input :current_password %>
+		<% end %>
+    <%= f.input :password %>
+    <%= f.input :password_confirmation %>
+  <% end %>
+  <%= f.buttons do %>
+  <%= f.cancel_link %>
+    <%= f.commit_button %>
+  <% end %>
+<% end %>
