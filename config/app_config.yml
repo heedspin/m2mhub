@@ -6,7 +6,7 @@ local_config: &local_config
   nothing: here
 <% end %>
 
-<% lxd = (File.basename(Rails.root) == 'lxd_m2mhub') %>
+<% lxd = Rails.root.to_s.include?('lxd_m2mhub') %>
   
 shared_config: &shared_config
   <% if lxd %>
