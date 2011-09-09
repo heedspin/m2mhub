@@ -30,7 +30,7 @@ module LayoutHelper
     txt = if txt.present?
       "#{txt} | #{AppConfig.company_name}"
     else
-      AppConfig.company_name
+      CompanyConfig.company_name
     end
     strip_tags(txt).html_safe
   end

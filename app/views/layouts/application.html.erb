@@ -26,10 +26,10 @@
 			<% end %>
 			<div class="banner">
 				<div class="logo">
-					<%= link_to image_tag(AppConfig.lxd_or_smt + '_logo.gif', :alt => 'SMT', :title => 'Home'), root_url %>
+					<%= link_to image_tag(CompanyConfig.current_company_key + '_logo.gif', :alt => 'SMT', :title => 'Home'), root_url %>
 					<%= image_tag 'm2m.gif', :alt => 'm2m', :title => 'm2m rocks' %>
 				</div> 
-				<div class="tagline"><%= AppConfig.lxd_or_smt %>'s Made2Manage Hub</div>				
+				<div class="tagline"><%= AppConfig.current_company_key %>'s Made2Manage Hub</div>				
 			</div><!-- banner -->
 			<div class="clear"></div>  
 			<div class="nav">    
@@ -74,7 +74,7 @@
 <% if Rails.env.production? and AppConfig.lxd? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-25625566-1']);
+  _gaq.push(['_setAccount', <%= CompanyConfig.google_analytics_key %>]);
   _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

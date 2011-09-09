@@ -4,15 +4,20 @@ module FormatHelper
     return '' if thing.nil?
     thing.to_s.gsub(/(\d)(?=\d{3}+(?:\D|$))/, '\\1,')
   end
-  
-  def cm(thing)
+
+  def cm(thing, company_config_key=nil)
     if thing and (thing.to_i > 0)
-      comma(thing)
+      case thing
+      when BigDecimal, Float
+        comma(company_sprintf(thing, company_config_key))
+      else
+        comma(thing)
+      end        
     else
       nil
     end
   end
-  
+
   def link_to_cm(thing, url)
     if (number = cm(thing)).present?
       link_to number, url
@@ -20,9 +25,15 @@ module FormatHelper
       ''
     end
   end
-  
+
   def comma_join(*args)
     args.select { |a| a.try(:strip).present? }.join(', ')
   end
-  
+
+  def company_sprintf(num, key)
+    return num unless key
+    company_format = CompanyConfig.get(key) || '%.1f'
+    num && sprintf(company_format, num)
+  end
+
 end

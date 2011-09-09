@@ -1,0 +1,26 @@
+
+<p>
+	Sales Order: <%= @sales_order.fsono %>
+</p>
+
+<h2>Sales Order Items</h2>
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Item #</th>
+				<th>LXD Part No.</th>
+				<th>Quantity</th>
+				<th>Price</th>
+			</tr>
+		</thead>
+<% @sales_order.items.each do |item| %>
+		<tr>
+			<td><%= item.fenumber %></td>
+			<td><%= item.fpartno %></td>
+			<td><%= cm item.fquantity, :sales_order_quantity %></td>
+			<td><%= item.fprice %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
