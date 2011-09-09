@@ -3,23 +3,53 @@
 	Sales Order: <%= @sales_order.fsono %>
 </p>
 
-<h2>Sales Order Items</h2>
+<h2>Items</h2>
 <table class="data">
 	<tbody>
 		<thead>
 			<tr>
 				<th>Item #</th>
 				<th>LXD Part No.</th>
+				<th>Type</th>
+				<th>Description</th>
 				<th>Quantity</th>
-				<th>Price</th>
+				<th>Cust Part No.</th>
+				<th>Due Date</th>
 			</tr>
 		</thead>
 <% @sales_order.items.each do |item| %>
 		<tr>
 			<td><%= item.fenumber %></td>
 			<td><%= item.fpartno %></td>
+			<td><%= item.fgroup.strip %></td>
+			<td><%= item.fdesc.strip %></td>
 			<td><%= cm item.fquantity, :sales_order_quantity %></td>
-			<td><%= item.fprice %></td>
+			<td><%= item.fcustpart %></td>
+			<td><%= item.fduedate.to_s(:number_date) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<h2>Releases</h2>
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Release #</th>
+				<th>LXD Part No.</th>
+				<th>Quantity</th>
+				<th>Due Date</th>
+				<th>Net Price</th>
+			</tr>
+		</thead>
+<% @sales_order.releases.each do |r| %>
+		<tr>
+			<td><%= r.fenumber %> - <%= r.frelease %></td>
+			<td><%= r.fpartno %></td>
+			<td><%= cm r.fquant, :sales_order_quantity %></td>
+			<td><%= r.fduedate.to_s(:number_date) %></td>
+			<td><%= r.fnetprice %></td>
 		</tr>
 <% end %>
 	</tbody>
