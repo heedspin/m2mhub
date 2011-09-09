@@ -142,11 +142,11 @@ class ApplicationController < ActionController::Base
     rescue_from Exception, :with => :server_error unless Rails.env.development?
     def server_error(exception)
       begin
-        notify_hoptoad(exception)
+        notify_airbrake(exception)
       rescue => hoptoad_exc
-        Rails.logger.error "Failed to notify hoptoad: #{hoptoad_exc.class.name} #{hoptoad_exc.message}"
+        Rails.logger.error "Failed to notify airbrake: #{hoptoad_exc.class.name} #{hoptoad_exc.message}"
       ensure
-        Rails.logger.error "Notified hoptoad: #{exception.class.name} #{exception.message}" + exception.backtrace.join("\n")
+        Rails.logger.error "Notified airbrake: #{exception.class.name} #{exception.message}" + exception.backtrace.join("\n")
       end
 
       request.format = :html
