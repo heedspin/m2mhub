@@ -2,6 +2,8 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include NavigationSystem
+  include Userstamp
 
   protected
 
@@ -14,7 +16,7 @@ class ApplicationController < ActionController::Base
 
     helper_method :current_user_session, :current_user
     before_filter :set_current_user
-    before_filter :require_login, :only => [:new, :create, :edit, :update, :destroy]
+    before_filter :require_login
 
     def store_location
       session[:return_to] = request.fullpath

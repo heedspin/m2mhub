@@ -10,16 +10,22 @@ local_config: &local_config
   
 shared_config: &shared_config
   <% if lxd %>
+  lxd: true
+  lxd_or_smt: LXD
   email_name: LXD WebBot
   email_address: tharrison@lxdinc.com
   email_domain: lxdinc.com
-  company_name: LXD Research & Display
+  website: www.lxdinc.com
+  company_name: LXD Research &amp; Display
   hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'lxd_m2mhub.dev' %>
   <% else %>
+  lxd: false
+  lxd_or_smt: SMT
   email_name: SMT WebBot
   email_address: tharrison@smtcoinc.com
   email_domain: smtcoinc.com
-  company_name: SMT
+  website: www.smtcoinc.com
+  company_name: SMT, Inc.
   hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'lxd_m2mhub.dev' %>
   <% end %>
   email_password: <%= ENV['email_password'] %>

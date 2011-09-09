@@ -1,0 +1,9 @@
+<% s3_local = File.join(Rails.root, 'config/s3_local.yml') %>
+<% if File.exists?(s3_local) %>
+<%= File.open(s3_local).read %>
+<% else %>
+production:
+  bucket: <%= AppConfig.lxd? ? 'lxd-m2mhub' : 'smt-m2mhub' %>
+  access_key_id: <%= ENV['S3_KEY'] %>
+  secret_access_key: <%= ENV['S3_SECRET'] %>
+<% end %>
