@@ -35,11 +35,14 @@
 			<div class="nav">    
 				<ul>
 					<li class="<%= controller_selected(:home) %>">
-						<%= link_to 'Home', root_url(nocache) %>
+						<%= link_to 'Home', root_url %>
 					</li>
 					<% if current_user %>
 					<li class="<%= controller_selected(:sales_orders) %>">
-						<%= link_to 'Sales Orders', sales_orders_url(nocache) %>
+						<%= link_to 'Sales Orders', sales_orders_url %>
+					</li>
+					<li class="<%= controller_selected(:user_activities) %>">
+						<%= link_to 'User Activity', user_activities_url %>
 					</li>
 					<% end %>
 				</ul>        

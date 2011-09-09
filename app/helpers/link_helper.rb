@@ -18,10 +18,4 @@ module LinkHelper
     link_to image_tag(image_path, args), "/images/#{image_path}", :class => 'wide_popup'  
   end
   
-  def nocache(args={})
-    if current_user
-      args[:nocache] = 1
-    end
-    args
-  end
 end

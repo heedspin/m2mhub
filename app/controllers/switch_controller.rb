@@ -8,6 +8,6 @@ class SwitchController < ApplicationController
         logger.info("switch: from #{old_user} to #{switch_to.to_trace}")
       end
     end
-    redirect_to root_url(:nocache=>1)
+    redirect_to root_url
   end
 end

@@ -34,7 +34,7 @@ class UsersController < ApplicationController
           else
             flash[:notice] = 'A verification email has been sent.'
             @user.deliver_verification_instructions!
-            redirect_to root_url(:nocache=>1)
+            redirect_to root_url
           end
         }
         format.json { render :nothing => true, :status => :created }
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
     if @user.id == current_user.id
       current_user_session.destroy
       flash[:notice] = "Account deleted"
-      redirect_to(root_url(:nocache=>1))
+      redirect_to(root_url)
     else
       redirect_to(users_url)
     end

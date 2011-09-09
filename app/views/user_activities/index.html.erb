@@ -1,5 +1,7 @@
 
-<h2>Recent Activity</h2>
+<%= will_paginate @user_activities %>
+
+<h2>User Activity</h2>
 
 <table class="data">
 	<thead>
@@ -8,6 +10,7 @@
 			<th>User</th>
 			<th>IP Address</th>
 			<th>Activity</th>
+			<th>Params</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -16,8 +19,12 @@
 			<td><%= ua.created_at.to_s(:number_date_time) %></td>
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
-			<td><%= link_to_unless ua.login?, ua.report_name, '#', :title => ua.params %></td>
+			<td><%= ua.report_name %></td>
+			<td><%= h ua.params unless ua.login? %></td>
 		</tr>
 		<% end %>
 	</tbody>
 </table>
+
+<%= will_paginate @user_activities %>
+

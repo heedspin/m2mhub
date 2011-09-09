@@ -15,13 +15,13 @@ authorization do
       if_attribute :user_id => is {user.id}
     end
     has_permission_on :sales_orders, :to => :read
+    has_permission_on :user_activities, :to => :read
   end
 
   role :admin do
     includes :user, :guest
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
-    has_permission_on :log_events, :to => :manage
     has_permission_on :content_modules, :to => :manage
   end
 end

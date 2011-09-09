@@ -29,6 +29,10 @@ class UserActivity < ActiveRecord::Base
     {:conditions => {:report_name => report_name}}
   }
   
+  def login?
+    self.report_name == 'user_sessions / create'
+  end
+  
   def params_hash
     JSON.parse(read_attribute(:params))
   end
