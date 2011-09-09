@@ -38,9 +38,14 @@ production:
   <<: *local_config
   shared_company_config:
     <<: *_shared_company_config
+  company_config:
+    lxd:
+    smt:
   
 test:
   <<: *local_config
   shared_company_config:
     <<: *_shared_company_config
-
+  company_config:
+    lxd:
+    smt:
