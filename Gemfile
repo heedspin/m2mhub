@@ -24,6 +24,7 @@ gem 'userstamp', '2.0.1'
 group :development do
   gem 'ruby-debug'
   gem 'ruby-debug-base'
+  gem 'annotate'
 end
 
 group :test do

@@ -8,4 +8,5 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :password #, :controller => "users/password"
   end
   map.resources :password_resets
+  map.resources :sales_orders, :only => [:index, :show]
 end

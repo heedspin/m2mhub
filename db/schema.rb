@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101219214946) do
+ActiveRecord::Schema.define(:version => 20110909150352) do
 
   create_table "content_modules", :force => true do |t|
     t.string   "key"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(:version => 20101219214946) do
     t.datetime "updated_at"
     t.string   "meta_title"
     t.boolean  "has_meta_title"
+  end
+
+  create_table "user_activities", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "remote_ip"
+    t.string   "report_name"
+    t.string   "format"
+    t.text     "params"
+    t.float    "elapsed_time"
+    t.datetime "created_at"
   end
 
   create_table "users", :force => true do |t|

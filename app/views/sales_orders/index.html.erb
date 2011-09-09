@@ -1,0 +1,30 @@
+
+
+<%= will_paginate @sales_orders %>
+
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>SO #</th>
+				<th>Company</th>
+				<th>Date</th>
+				<th>Rep</th>
+				<th>Coord</th>
+			</tr>
+		</thead>
+<% @sales_orders.each do |so| %>
+		<tr>
+			<td><%= link_to so.fsono, sales_order_url(so) %></td>
+			<td><%= so.fcompany %></td>
+			<td><%= so.forderdate.to_s(:number_date) %></td>
+			<td><%= so.fsoldby %></td>
+			<td><%= so.fsocoord %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<%= will_paginate @sales_orders %>
+
+<%= request.remote_ip %>

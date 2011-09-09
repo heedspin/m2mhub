@@ -7,6 +7,34 @@ class ApplicationController < ActionController::Base
 
   protected
 
+    NO_USER_ACTIVITY_CONTROLLERS = %w()
+
+    around_filter :log_user_activity
+    # Log all requests unless one has been explicity logged.
+    def log_user_activity
+      @log_user_activity_start_time = Time.now.to_f
+      yield
+      if @last_user_activity.nil? and (not request.xhr?) and (not NO_USER_ACTIVITY_CONTROLLERS.include?(controller_name))
+        user_activity do
+          { :elapsed_time => Time.current.to_f - @log_user_activity_start_time }
+        end
+      end
+    end
+
+    def user_activity
+      begin
+        options = yield
+        options[:user_id] ||= current_user.try(:id)
+        options[:remote_ip] ||= request.remote_ip
+        options[:params] ||= params.to_json
+        options[:report_name] ||= controller_name + ' / ' + action_name
+        options[:format] ||= params[:format]# || 'html'
+        @last_user_activity = UserActivity.create(options)
+      rescue
+        RAILS_DEFAULT_LOGGER.error "Ignoring UserActivity exception: #{$!}"
+      end
+    end
+
     def set_stamper
       User.stamper ||= current_user
     end

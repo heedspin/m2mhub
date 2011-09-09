@@ -1,5 +1,6 @@
 class M2m::Base < ApplicationModel
   self.abstract_class = true
+  set_primary_key 'identity_column'
 
   m2m_key = "#{Rails.env}_m2m"
   msg = if config = ActiveRecord::Base.configurations[m2m_key]

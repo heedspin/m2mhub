@@ -18,6 +18,7 @@ GEM
     airbrake (3.0.3)
       activesupport
       builder
+    annotate (2.4.0)
     authlogic (2.1.6)
       activesupport
     builder (3.0.0)
@@ -66,6 +67,7 @@ DEPENDENCIES
   active_hash
   activerecord-sqlserver-adapter (= 2.3.20)
   airbrake
+  annotate
   authlogic (= 2.1.6)
   declarative_authorization (= 0.4)
   delayed_job (= 2.0.3)

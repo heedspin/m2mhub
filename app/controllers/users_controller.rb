@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   filter_access_to_defaults
-  before_filter :require_login, :only => [:index, :show]
+  # before_filter :require_login, :only => [:index, :show]
 
   # GET /users
   def index

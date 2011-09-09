@@ -1,2 +1,3 @@
-Time::DATE_FORMATS[:news_item] = '%B %d, %Y'
-Time::DATE_FORMATS[:post] = '%m/%d/%Y'
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS[:number_date] = '%m-%d-%Y'
+
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:number_date_time] = '%m-%d-%Y %I:%M:%S%p'

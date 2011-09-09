@@ -1,1 +1,23 @@
-<h1>Hello world</h1>
+
+<h2>Recent Activity</h2>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Time</th>
+			<th>User</th>
+			<th>IP Address</th>
+			<th>Activity</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @user_activities.each do |ua| %>
+		<tr>
+			<td><%= ua.created_at.to_s(:number_date_time) %></td>
+			<td><%= ua.user.try(:full_name) %></td>
+			<td><%= ua.remote_ip %></td>
+			<td><%= link_to ua.report_name, '#', :title => ua.params %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

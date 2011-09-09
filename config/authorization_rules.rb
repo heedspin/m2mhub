@@ -14,6 +14,7 @@ authorization do
     has_permission_on :user_messages, :to => :manage do
       if_attribute :user_id => is {user.id}
     end
+    has_permission_on :sales_orders, :to => :read
   end
 
   role :admin do
