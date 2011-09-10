@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20110909150352) do
     t.boolean  "has_attachment"
     t.text     "meta_description"
     t.boolean  "has_meta_description"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "meta_title"
