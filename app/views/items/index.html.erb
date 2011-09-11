@@ -1,0 +1,37 @@
+<% semantic_form_for :item, @search_item, :url => items_path, :html => {:method => :get} do |f| %>
+	<% f.inputs do %>
+	  <%= f.input :fpartno %>
+	<% end %>
+  <% f.buttons do %>
+	  <%= f.commit_button 'Search' %>
+	<% end %>
+<% end %>
+
+<% if @items %>
+<%= will_paginate @items %>
+<table class="data">
+<thead>
+	<tr>
+		<th>LXD Part</th>
+		<th>Vendor Part</th>
+		<th>Description</th>
+		<th>Bin</th>
+		<th>On Hand</th>
+		<th>On Order</th>
+	</tr>
+</thead>
+<tbody>
+<% @items.each do |i| %>
+	<tr>
+		<td><%= i.fpartno %></td>
+		<td><%= i.vendors.map { |v| v.fvpartno }.join(', ') %></td>
+		<td><%= h i.fdescript %></td>
+		<td><%= i.fbin1 %></td>
+		<td><%= cm i.fonhand, :item_quantity %></td>
+		<td><%= cm i.fonorder, :item_quantity %></td>
+	</tr>
+<% end %>
+</ul>
+</tbody>
+</table>
+<% end %>

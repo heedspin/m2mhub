@@ -9,6 +9,7 @@ local_config: &local_config
 _shared_company_config: &_shared_company_config
   lxd:
     sales_order_quantity: "%.0f"
+    item_quantity: "%.0f"
     google_analytics_key: UA-25625566-1
     email_name: LXD WebBot
     email_address: tharrison@lxdinc.com
@@ -18,6 +19,7 @@ _shared_company_config: &_shared_company_config
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'lxd_m2mhub.dev' %>
   smt:
     sales_order_quantity: "%.1f"
+    item_quantity: "%.1f"
     google_analytics_key:
     email_name: SMT WebBot
     email_address: tharrison@smtcoinc.com

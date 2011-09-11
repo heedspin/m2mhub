@@ -70,6 +70,7 @@ class ContentModule < ApplicationModel
 end
 
 
+
 # == Schema Information
 #
 # Table name: content_modules
@@ -91,6 +92,8 @@ end
 #  has_attachment          :boolean(1)
 #  meta_description        :text
 #  has_meta_description    :boolean(1)
+#  creator_id              :integer(4)
+#  updater_id              :integer(4)
 #  created_at              :datetime
 #  updated_at              :datetime
 #  meta_title              :string(255)

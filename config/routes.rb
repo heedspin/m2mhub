@@ -10,4 +10,5 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :user_activities, :only => [:index]
+  map.resources :items, :only => [:index]
 end
