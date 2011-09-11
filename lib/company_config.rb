@@ -2,15 +2,15 @@ require 'singleton'
 
 class CompanyConfigClass
   def initialize
-    @current_company_key = if Rails.root.to_s.include?('lxd_m2mhub')
+    @company_key = if Rails.root.to_s.include?('lxd_m2mhub')
       'lxd'
     else
       'smt'
     end
   end
   
-  def current_company_key
-    @current_company_key
+  def company_key
+    @company_key
   end
   
   def method_missing(mid, *args)
@@ -31,9 +31,9 @@ class CompanyConfigClass
   # Check environment-specific setting first.  Then check shared setting.
   def get(key)
     key = key.to_s
-    if (c = AppConfig.company_config[@current_company_key]) && (value = c[key]).present?
+    if (c = AppConfig.company_config[@company_key]) && (value = c[key]).present?
       value
-    elsif (c = AppConfig.shared_company_config[@current_company_key]) && (value = c[key]).present?
+    elsif (c = AppConfig.shared_company_config[@company_key]) && (value = c[key]).present?
       value
     else
       nil
