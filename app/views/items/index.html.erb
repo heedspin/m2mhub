@@ -24,7 +24,7 @@
 <% @items.each do |i| %>
 	<tr>
 		<td><%= search_excerpt(i.fpartno, @search_item.fpartno) %></td>
-		<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno, @search_item.fpartno) }.join(', ') %></td>
+		<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.fpartno) }.join(', ') %></td>
 		<td><%= h i.fdescript %></td>
 		<td><%= i.fbin1 %></td>
 		<td><%= cm i.fonhand, :item_quantity %></td>

@@ -3,9 +3,15 @@ class M2m::Item < M2m::Base
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   
   named_scope :part_number_like, lambda { |text|
+    text = ActiveRecord::Base.quote_value('%' + (text || '') + '%')
     {
-      :joins => :vendors,
-      :conditions => [ 'inmast.fpartno like ? OR invend.fvpartno like ?', '%' + text.strip + '%', '%' + text.strip + '%']
+      :joins => <<-SQL
+      INNER JOIN
+      ( SELECT distinct [inmast].identity_column FROM [inmast] 
+        INNER JOIN [invend] ON invend.fpartno = inmast.fpartno 
+        WHERE (inmast.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
+      on inmast.identity_column = tmp1.identity_column
+      SQL
     }
   }
   
