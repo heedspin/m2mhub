@@ -16,7 +16,7 @@
 			<td><%= ua.created_at.to_s(:number_date_time) %></td>
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
-			<td><%= link_to_unless ua.login?, ua.report_name, '#', :title => ua.params %></td>
+			<td><%= link_to_unless ua.password_related?, ua.report_name, '#', :title => ua.params %></td>
 		</tr>
 		<% end %>
 	</tbody>

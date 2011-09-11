@@ -58,12 +58,12 @@ class User < ApplicationModel
 
   def deliver_verification_instructions!
     reset_perishable_token!
-    UserVerification.verification_instructions(self).deliver
+    UserVerification.deliver_verification_instructions(self)
   end
 
   def deliver_password_reset_instructions!
     reset_perishable_token!
-    PasswordResetNotifier.password_reset_instructions(self).deliver
+    PasswordResetNotifier.deliver_password_reset_instructions(self)
   end
 
   def verify!

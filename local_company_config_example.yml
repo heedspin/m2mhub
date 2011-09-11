@@ -1,0 +1,5 @@
+_local_company_config: &_local_company_config
+  lxd:
+    email_password: 
+  smt:
+    email_password:

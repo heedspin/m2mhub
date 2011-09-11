@@ -31,7 +31,9 @@ class CompanyConfigClass
   # Check environment-specific setting first.  Then check shared setting.
   def get(key)
     key = key.to_s
-    if (c = AppConfig.company_config[@company_key]) && (value = c[key]).present?
+    if (c = AppConfig.local_company_config[@company_key]) && (value = c[key]).present?
+      value
+    elsif (c = AppConfig.company_config[@company_key]) && (value = c[key]).present?
       value
     elsif (c = AppConfig.shared_company_config[@company_key]) && (value = c[key]).present?
       value

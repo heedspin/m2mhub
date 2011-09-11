@@ -1,8 +1,8 @@
-<% local_config = File.join(Rails.root, 'config/app_config_local.yml') %>
-<% if File.exists?(local_config) %>
-<%= File.open(local_config).read %>
+<% local_company_config = File.join(Rails.root, 'config/local_company_config.yml') %>
+<% if File.exists?(local_company_config) %>
+<%= File.open(local_company_config).read %>
 <% else %>
-local_config: &local_config
+_local_company_config: &_local_company_config
   nothing: here
 <% end %>
   
@@ -12,11 +12,11 @@ _shared_company_config: &_shared_company_config
     item_quantity: "%.0f"
     google_analytics_key: UA-25625566-1
     email_name: LXD WebBot
-    email_address: tharrison@lxdinc.com
+    email_address: webmin@lxdinc.com
     email_domain: lxdinc.com
     website: www.lxdinc.com
     company_name: LXD Research &amp; Display
-    hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'lxd_m2mhub.dev' %>
+    hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
   smt:
     sales_order_quantity: "%.1f"
     item_quantity: "%.1f"
@@ -26,10 +26,11 @@ _shared_company_config: &_shared_company_config
     email_domain: smtcoinc.com
     website: www.smtcoinc.com
     company_name: SMT, Inc.
-    hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'lxd_m2mhub.dev' %>
+    hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
 
 development:
-  <<: *local_config
+  local_company_config:
+    <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
   company_config:
@@ -37,7 +38,8 @@ development:
     smt:
   
 production:
-  <<: *local_config
+  local_company_config:
+    <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
   company_config:
@@ -45,7 +47,8 @@ production:
     smt:
   
 test:
-  <<: *local_config
+  local_company_config:
+    <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
   company_config:
