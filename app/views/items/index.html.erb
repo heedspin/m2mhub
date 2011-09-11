@@ -23,8 +23,8 @@
 <tbody>
 <% @items.each do |i| %>
 	<tr>
-		<td><%= i.fpartno %></td>
-		<td><%= i.vendors.map { |v| v.fvpartno }.join(', ') %></td>
+		<td><%= search_excerpt(i.fpartno, @search_item.fpartno) %></td>
+		<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno, @search_item.fpartno) }.join(', ') %></td>
 		<td><%= h i.fdescript %></td>
 		<td><%= i.fbin1 %></td>
 		<td><%= cm i.fonhand, :item_quantity %></td>

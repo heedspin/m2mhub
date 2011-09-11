@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
     if @search_item.fpartno.present?
       @items = M2m::Item.part_number_like(@search_item.fpartno).paginate(:all, :page => params[:page],
                                                                          :per_page => 20,
-                                                                         :order => 'fpartno',
+                                                                         :order => 'inmast.fpartno',
                                                                          :include => :vendors)
     end
   end

@@ -4,7 +4,8 @@ class M2m::Item < M2m::Base
   
   named_scope :part_number_like, lambda { |text|
     {
-      :conditions => [ 'inmast.fpartno like ?', '%' + text.strip + '%']
+      :joins => :vendors,
+      :conditions => [ 'inmast.fpartno like ? OR invend.fvpartno like ?', '%' + text.strip + '%', '%' + text.strip + '%']
     }
   }
   
