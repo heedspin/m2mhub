@@ -1,0 +1,18 @@
+<%= will_paginate @customers %>
+
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Company</th>
+			</tr>
+		</thead>
+<% @customers.each do |c| %>
+		<tr>
+			<td><%= link_to c.name, customer_url(c.fcustno) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<%= will_paginate @customers %>

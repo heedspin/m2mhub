@@ -11,7 +11,12 @@ class M2m::Quote < M2m::Base
     M2m::Terms.find_by_key(self.fterm.try(:strip))
   end
   
+  def customer_name
+    M2m::Customer.customer_name(self.fcompany)
+  end
+  
   alias_attribute :discount_rate, :fdisrate
+  alias_attribute :quote_number, :fquoteno
 end
 
 # == Schema Information

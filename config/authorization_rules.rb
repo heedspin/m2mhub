@@ -12,6 +12,7 @@ authorization do
     end
     has_permission_on :items, :to => :read
     has_permission_on :user_activities, :to => :read
+    has_permission_on :customers, :to => :read
   end
 
   role :sales do

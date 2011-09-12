@@ -1,16 +1,16 @@
 
 <div class="paging">
-	<% if previous_page %>
-	<%= link_to "&laquo; #{previous_page.menu_title}", previous_page.url %>
-	<% end %>
+	<%= link_to("&laquo; #{@previous_sales_order.customer_name} &lt;#{@previous_sales_order.order_number}&gt;", sales_order_url(@previous_sales_order.order_number)) if @previous_sales_order %>
 	<%= link_to 'Sales Orders', sales_orders_url %>
-	<% if next_page %>
-	<%= link_to "#{next_page.menu_title} &raquo;", next_page.url %>
-	<% end %>
+	<%= link_to("#{@next_sales_order.customer_name} &lt;#{@next_sales_order.order_number}&gt; &raquo;", sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
 </div>
 
 <p>
 	Sales Order: <%= @sales_order.fsono %>
+	Customer: <strong><%= @sales_order.customer_name %></strong><br />
+	Date: <%= @sales_order.forderdate.to_s(:number_date) %><br />
+	Sales Rep: <%= @sales_order.fsoldby %><br />
+	Coord: <%= @sales_order.fsocoord %><br />
 </p>
 
 <h2>Items</h2>

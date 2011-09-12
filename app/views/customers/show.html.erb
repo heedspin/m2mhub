@@ -1,0 +1,11 @@
+
+<div class="paging">
+	<%= link_to('&laquo; ' +  @previous_customer.name, customer_url(@previous_customer.fcustno)) if @previous_customer %>
+	<%= link_to 'Customers', customers_url %>
+	<%= link_to(@next_customer.name + ' &raquo;', customer_url(@next_customer.fcustno)) if @next_customer %>
+</div>
+
+<p>
+	Customer Number: <%= @customer.fcustno %><br />
+	Company Name: <strong><%= @customer.name %></strong><br />
+</p>

@@ -1,19 +1,13 @@
 
 <div class="paging">
-	<% if previous_page %>
-	<%= link_to "&laquo; #{previous_page.menu_title}", previous_page.url %>
-	<%= link_to 'Quotes', quotes_url %>
-	<% else %>
-	<%= link_to "&laquo; Quotes", quotes_url %>
-	<% end %>
-	<% if next_page %>
-	<%= link_to "#{next_page.menu_title} &raquo;", next_page.url %>
-	<% end %>
+	<%= link_to("&laquo; #{@previous_quote.quote_number} (#{@previous_quote.customer_name})", quote_url(@previous_quote.quote_number)) if @previous_quote %>
+	<%= link_to "Quotes", quotes_url %>
+	<%= link_to("#{@next_quote.quote_number} (#{@next_quote.customer_name}) &raquo;", quote_url(@next_quote.quote_number)) if @next_quote %>
 </div>
 
 <p>
 	Quote: <%= @quote.fquoteno %><br />
-	Company: <strong><%= @quote.fcompany %></strong><br />
+	Company: <strong><%= @quote.customer_name %></strong><br />
 	Date: <%= @quote.fquotedate.to_s(:number_date) %><br />
 	Terms: <%= @quote.terms.try(:name) %><br />
 	Estimator: <%= @quote.festimator %><br />

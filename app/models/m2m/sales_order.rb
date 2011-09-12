@@ -7,6 +7,12 @@ class M2m::SalesOrder < M2m::Base
   named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
   named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  
+  alias_attribute :order_number, :fsono
+
+  def customer_name
+    M2m::Customer.customer_name(self.fcompany)
+  end
 end
 # == Schema Information
 #

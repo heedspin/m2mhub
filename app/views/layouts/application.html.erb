@@ -47,6 +47,11 @@
 						<%= link_to 'Sales Orders', sales_orders_url %>
 					</li>
 					<% end %>
+					<% if permitted_to?(:read, :customers) %>
+					<li class="<%= controller_selected(:customers) %>">
+						<%= link_to 'Customers', customers_url %>
+					</li>
+					<% end %>
 					<% if permitted_to?(:read, :items) %>
 					<li class="<%= controller_selected(:items) %>">
 						<%= link_to 'Items', items_url %>
