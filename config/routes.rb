@@ -10,4 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :user_activities, :only => [:index]
+  
+  # Specify thing regular expression because the routes use '.' as separator.
+  map.switch 'switch/:thing', :controller => 'switch', :action => 'switch', :thing => /.+/
 end
