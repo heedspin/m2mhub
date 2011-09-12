@@ -3,24 +3,25 @@ authorization do
   role :guest do
   end
 
-  role :user do
+  role :shipping do
     has_permission_on [:users, :passwords], :to => [:show,:update,:destroy] do
       if_attribute :id => is {user.id}
     end
-    has_permission_on :log_events, :to => :create
     if !Rails.env.production?
       has_permission_on :users, :to => :switch
     end
-    has_permission_on :user_messages, :to => :manage do
-      if_attribute :user_id => is {user.id}
-    end
-    has_permission_on :sales_orders, :to => :read
+    has_permission_on :items, :to => :read
     has_permission_on :user_activities, :to => :read
+  end
+
+  role :sales do
+    includes :shipping
+    has_permission_on :sales_orders, :to => :read
     has_permission_on :items, :to => :read
   end
 
   role :admin do
-    includes :user, :guest
+    includes :shipping, :sales
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :content_modules, :to => :manage
