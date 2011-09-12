@@ -12,7 +12,7 @@ module FormatHelper
         comma(company_sprintf(thing, company_config_key))
       else
         comma(thing)
-      end        
+      end
     else
       nil
     end
@@ -36,4 +36,11 @@ module FormatHelper
     num && sprintf(company_format, num)
   end
 
+  def percent0(num)
+    num && sprintf("%.0f",num * 100)
+  end
+
+  def percent1(num)
+    num && sprintf("%.1f",num * 100)
+  end
 end

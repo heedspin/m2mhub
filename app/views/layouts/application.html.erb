@@ -37,6 +37,11 @@
 					<li class="<%= controller_selected(:home) %>">
 						<%= link_to 'Home', root_url %>
 					</li>
+					<% if permitted_to?(:read, :quotes) %>
+					<li class="<%= controller_selected(:quotes) %>">
+						<%= link_to 'Quotes', quotes_url %>
+					</li>
+					<% end %>
 					<% if permitted_to?(:read, :sales_orders) %>
 					<li class="<%= controller_selected(:sales_orders) %>">
 						<%= link_to 'Sales Orders', sales_orders_url %>

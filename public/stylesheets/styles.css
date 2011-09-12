@@ -678,3 +678,16 @@ span.search_match {
   background: yellow;
   color: #000;
   }    
+
+.paging {
+	margin: 0 0 10px;
+}
+.paging a {
+	font-size: 14px;
+	padding: 0 10px;
+}
+
+table.data p {
+	font-size: 1em;
+	padding-bottom: .5em;
+}

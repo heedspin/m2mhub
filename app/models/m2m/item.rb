@@ -1,6 +1,8 @@
 class M2m::Item < M2m::Base
   set_table_name 'inmast'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
+
+  alias_attribute :total_cost, :fdisptcost
   
   named_scope :part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text || '') + '%')

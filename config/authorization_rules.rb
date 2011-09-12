@@ -16,6 +16,7 @@ authorization do
 
   role :sales do
     includes :shipping
+    has_permission_on :quotes, :to => :read
     has_permission_on :sales_orders, :to => :read
     has_permission_on :items, :to => :read
   end

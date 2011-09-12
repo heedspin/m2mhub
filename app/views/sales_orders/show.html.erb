@@ -1,4 +1,14 @@
 
+<div class="paging">
+	<% if previous_page %>
+	<%= link_to "&laquo; #{previous_page.menu_title}", previous_page.url %>
+	<% end %>
+	<%= link_to 'Sales Orders', sales_orders_url %>
+	<% if next_page %>
+	<%= link_to "#{next_page.menu_title} &raquo;", next_page.url %>
+	<% end %>
+</div>
+
 <p>
 	Sales Order: <%= @sales_order.fsono %>
 </p>
@@ -22,7 +32,7 @@
 			<td><%= item.fenumber %></td>
 			<td><%= item.fpartno %></td>
 			<td><%= item.fgroup.strip %></td>
-			<td><%= item.fdesc.strip %></td>
+			<td><%= simple_format item.fdesc.strip %></td>
 			<td><%= cm item.fquantity, :sales_order_quantity %></td>
 			<td><%= item.fcustpart %></td>
 			<td><%= item.fduedate.to_s(:number_date) %></td>

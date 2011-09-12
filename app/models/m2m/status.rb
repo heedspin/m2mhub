@@ -1,5 +1,5 @@
 require 'active_hash_methods'
-class M2m::SalesOrderStatus < ActiveHash::Base
+class M2m::Status < ActiveHash::Base
   self.data = [
     {:name => 'Open'},
     {:name => 'Closed'},

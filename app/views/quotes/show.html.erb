@@ -1,0 +1,59 @@
+
+<div class="paging">
+	<% if previous_page %>
+	<%= link_to "&laquo; #{previous_page.menu_title}", previous_page.url %>
+	<%= link_to 'Quotes', quotes_url %>
+	<% else %>
+	<%= link_to "&laquo; Quotes", quotes_url %>
+	<% end %>
+	<% if next_page %>
+	<%= link_to "#{next_page.menu_title} &raquo;", next_page.url %>
+	<% end %>
+</div>
+
+<p>
+	Quote: <%= @quote.fquoteno %><br />
+	Company: <strong><%= @quote.fcompany %></strong><br />
+	Date: <%= @quote.fquotedate.to_s(:number_date) %><br />
+	Terms: <%= @quote.terms.try(:name) %><br />
+	Estimator: <%= @quote.festimator %><br />
+	Discount: <%= percent0 @quote.discount_rate %>%
+</p>
+
+<h2>Items</h2>
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Item #</th>
+				<th>LXD Part No.</th>
+				<th>Description</th>
+				<th>Quantity</th>
+				<th>Cust Part No.</th>
+				<th>Cost</th>
+				<th>Unit Price</th>
+				<th>Total Price</th>
+				<th>Sales Order</th>
+			</tr>
+		</thead>
+<% @quote.items.each do |item| %>
+		<tr>
+			<td><%= item.fenumber %></td>
+			<td><%= item.fpartno %></td>
+			<td><%= simple_format item.fdesc.strip %></td>
+			<td><%= cm item.quantity, :sales_order_quantity %></td>
+			<td><%= item.fcustpart %></td>
+			<td>$<%= cm item.item.try(:total_cost), :dollars %></td>
+			<td>$<%= cm item.unit_price, :dollars %></td>
+			<td>$<%= cm (item.unit_price * item.quantity), :dollars %></td>
+			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<hr />
+<p>
+	<strong>Memo:</strong>
+</p>
+<%= simple_format(@quote.fclosmemo) %>
