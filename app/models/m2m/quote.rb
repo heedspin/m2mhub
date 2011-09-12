@@ -8,7 +8,7 @@ class M2m::Quote < M2m::Base
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
   
   def terms
-    M2m::PaymentTerms.find_by_key(self.fterm.try(:strip))
+    M2m::Terms.find_by_key(self.fterm.try(:strip))
   end
   
   alias_attribute :discount_rate, :fdisrate
