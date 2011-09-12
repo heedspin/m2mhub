@@ -26,10 +26,10 @@
 			<% end %>
 			<div class="banner">
 				<div class="logo">
-					<%= link_to image_tag("companies/#{CompanyConfig.current_company_key}/logo.gif", :alt => CompanyConfig.company_name, :title => 'Home'), root_url %>
+					<%= link_to image_tag("companies/#{CompanyConfig.company_key}/logo.gif", :alt => CompanyConfig.company_name, :title => 'Home'), root_url %>
 					<%= image_tag 'm2m.gif', :alt => 'm2m', :title => 'm2m rocks' %>
 				</div> 
-				<div class="tagline"><%= CompanyConfig.current_company_key.upcase %>'s Made2Manage Hub</div>				
+				<div class="tagline"><%= CompanyConfig.company_key.upcase %>'s Made2Manage Hub</div>				
 			</div><!-- banner -->
 			<div class="clear"></div>  
 			<div class="nav">    
@@ -40,6 +40,9 @@
 					<% if current_user %>
 					<li class="<%= controller_selected(:sales_orders) %>">
 						<%= link_to 'Sales Orders', sales_orders_url %>
+					</li>
+					<li class="<%= controller_selected(:items) %>">
+						<%= link_to 'Items', items_url %>
 					</li>
 					<li class="<%= controller_selected(:user_activities) %>">
 						<%= link_to 'User Activity', user_activities_url %>

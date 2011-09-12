@@ -29,8 +29,8 @@ class UserActivity < ActiveRecord::Base
     {:conditions => {:report_name => report_name}}
   }
   
-  def login?
-    self.report_name == 'user_sessions / create'
+  def password_related?
+    ['user_sessions / create', 'password_resets / update'].include?(self.report_name)
   end
   
   def params_hash

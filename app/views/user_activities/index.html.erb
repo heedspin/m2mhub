@@ -20,7 +20,7 @@
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
 			<td><%= ua.report_name %></td>
-			<td><%= h ua.params unless ua.login? %></td>
+			<td><%= h ua.params unless ua.password_related? %></td>
 		</tr>
 		<% end %>
 	</tbody>

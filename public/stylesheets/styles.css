@@ -673,3 +673,8 @@ div.flash_notice  {
 	font-size: 1.5em;
 }
 div.flash_error ul, div.flash_notice ul { list-style-type:decimal;list-style-position:inside;}
+
+span.search_match {
+  background: yellow;
+  color: #000;
+  }    

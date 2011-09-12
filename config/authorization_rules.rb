@@ -16,6 +16,7 @@ authorization do
     end
     has_permission_on :sales_orders, :to => :read
     has_permission_on :user_activities, :to => :read
+    has_permission_on :items, :to => :read
   end
 
   role :admin do

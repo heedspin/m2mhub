@@ -1,0 +1,13 @@
+<% title "Change Password" %>
+
+<% semantic_form_for @user, :url => password_reset_path, :method => :put do |f| %>
+  
+  <% f.inputs do %>
+    <%= f.input :password, :required => true %>
+    <%= f.input :password_confirmation, :required => true %>
+  <% end %>
+  
+  <% f.buttons do %>
+    <%= f.commit_button "Update my password and log me in" %>
+  <% end %>
+<% end %>
