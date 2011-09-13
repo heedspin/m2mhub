@@ -1,14 +1,14 @@
 <%= will_paginate @quotes %>
 
 <table class="data">
+	<thead>
+		<tr>
+			<th>Quote #</th>
+			<th>Company</th>
+			<th>Date</th>
+		</tr>
+	</thead>
 	<tbody>
-		<thead>
-			<tr>
-				<th>Quote #</th>
-				<th>Company</th>
-				<th>Date</th>
-			</tr>
-		</thead>
 <% @quotes.each do |q| %>
 		<tr>
 			<td><%= link_to q.fquoteno, quote_url(q.fquoteno) %></td>

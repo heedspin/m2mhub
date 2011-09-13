@@ -10,28 +10,27 @@
 <% if @items %>
 <%= will_paginate @items %>
 <table class="data">
-<thead>
-	<tr>
-		<th>LXD Part</th>
-		<th>Vendor Part</th>
-		<th>Description</th>
-		<th>Bin</th>
-		<th>On Hand</th>
-		<th>On Order</th>
-	</tr>
-</thead>
-<tbody>
-<% @items.each do |i| %>
-	<tr>
-		<td><%= search_excerpt(i.fpartno, @search_item.fpartno) %></td>
-		<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.fpartno) }.join(', ') %></td>
-		<td><%= h i.fdescript %></td>
-		<td><%= i.fbin1 %></td>
-		<td><%= cm i.fonhand, :item_quantity %></td>
-		<td><%= cm i.fonorder, :item_quantity %></td>
-	</tr>
-<% end %>
-</ul>
-</tbody>
+	<thead>
+		<tr>
+			<th>LXD Part</th>
+			<th>Vendor Part</th>
+			<th>Description</th>
+			<th>Bin</th>
+			<th>On Hand</th>
+			<th>On Order</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @items.each do |i| %>
+		<tr>
+			<td><%= search_excerpt(i.fpartno, @search_item.fpartno) %></td>
+			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.fpartno) }.join(', ') %></td>
+			<td><%= h i.fdescript %></td>
+			<td><%= i.fbin1 %></td>
+			<td><%= cm i.fonhand, :item_quantity %></td>
+			<td><%= cm i.fonorder, :item_quantity %></td>
+		</tr>
+	<% end %>
+	</tbody>
 </table>
 <% end %>

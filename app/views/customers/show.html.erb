@@ -9,3 +9,43 @@
 	Customer Number: <%= @customer.fcustno %><br />
 	Company Name: <strong><%= @customer.name %></strong><br />
 </p>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Sales Order</th>
+			<th>Item #</th>
+			<th>LXD Part No.</th>
+			<th>Type</th>
+			<th>Description</th>
+			<th>Quantity</th>
+			<th>Cust Part No.</th>
+			<th>Due Date</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @customer.sales_orders.by_order_number_desc.all(:include => :items).each do |so| %>
+		<% so_style = cycle('odd', 'even') %>
+		<tr class="<%= so_style %>">
+			<td rowspan="<%= so.items.size %>">
+				SO #:<%= link_to so.fsono, sales_order_url(so.fsono) %><br />
+				Sold By: <%= so.fsoldby %><br />
+				Coord: <%= so.fsocoord %><br />
+				Status: <%= so.fstatus %><br />
+			</td>
+			<% so.items.each do |item| %>
+			<% unless item == so.items.first %>
+		<tr class="<%= so_style %>">
+			<% end %>
+			<td><%= item.fenumber %></td>
+			<td><%= item.fpartno %></td>
+			<td><%= item.fgroup.strip %></td>
+			<td><%= simple_format item.fdesc.strip %></td>
+			<td><%= cm item.fquantity, :sales_order_quantity %></td>
+			<td><%= item.fcustpart %></td>
+			<td><%= item.fduedate.to_s(:number_date) %></td>
+		</tr>			
+		<% end %>
+	<% end %>
+	</tbody>
+</table>
