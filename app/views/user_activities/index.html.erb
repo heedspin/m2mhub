@@ -3,28 +3,7 @@
 
 <h2>User Activity</h2>
 
-<table class="data">
-	<thead>
-		<tr>
-			<th>Time</th>
-			<th>User</th>
-			<th>IP Address</th>
-			<th>Activity</th>
-			<th>Params</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% @user_activities.each do |ua| %>
-		<tr>
-			<td><%= ua.created_at.to_s(:number_date_time) %></td>
-			<td><%= ua.user.try(:full_name) %></td>
-			<td><%= ua.remote_ip %></td>
-			<td><%= ua.report_name %></td>
-			<td><%= h ua.params unless ua.password_related? %></td>
-		</tr>
-		<% end %>
-	</tbody>
-</table>
+<%= render 'list' %>
 
 <%= will_paginate @user_activities %>
 

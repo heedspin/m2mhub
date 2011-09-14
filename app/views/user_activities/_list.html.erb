@@ -1,0 +1,21 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Time</th>
+			<th>User</th>
+			<th>IP Address</th>
+			<th>Activity</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @user_activities.each do |ua| %>
+		<tr>
+			<td><%= ua.created_at.day == Date.current.day ? ua.created_at.to_s(:time) : ua.created_at.to_s(:event_date) %></td>
+			<td><%= ua.user.try(:full_name) %></td>
+			<td><%= ua.remote_ip %></td>
+			<td><%= link_to_unless ua.password_related?, ua.report_name, '#', :title => ua.params %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+

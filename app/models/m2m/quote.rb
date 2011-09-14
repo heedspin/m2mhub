@@ -9,7 +9,14 @@ class M2m::Quote < M2m::Base
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
 
   named_scope :by_quote_number_desc, :order => 'fquoteno desc'  
-  
+
+  named_scope :since, lambda { |day|
+    {
+      :conditions => ['qtmast.fquotedate >= ?', day],
+      :order => 'fquotedate desc, fquoteno desc'
+    }
+  }
+
   def terms
     M2m::Terms.find_by_key(self.fterm.try(:strip))
   end

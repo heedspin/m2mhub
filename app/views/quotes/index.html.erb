@@ -1,22 +1,5 @@
 <%= will_paginate @quotes %>
 
-<table class="data">
-	<thead>
-		<tr>
-			<th>Quote #</th>
-			<th>Company</th>
-			<th>Date</th>
-		</tr>
-	</thead>
-	<tbody>
-<% @quotes.each do |q| %>
-		<tr>
-			<td><%= link_to q.fquoteno, quote_url(q.fquoteno) %></td>
-			<td><%= link_to q.customer_name, customer_url(q.fcustno) %></td>
-			<td><%= q.fquotedate.to_s(:sales_date) %></td>
-		</tr>
-<% end %>
-	</tbody>
-</table>
+<%= render 'list' %>
 
 <%= will_paginate @quotes %>

@@ -713,3 +713,15 @@ table.data td.centered {
 .submenu li.current {
 	border-bottom: 1px dotted #c00;
 }
+
+div.column1 {
+	float: left;
+}
+
+div.column2 {
+	float: right;
+}
+
+.small table.data td {
+	font-size: .9em;
+}

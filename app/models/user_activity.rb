@@ -1,6 +1,5 @@
 class UserActivity < ActiveRecord::Base
   belongs_to :user
-  named_scope :recent, :order => 'id desc', :limit => 40
   named_scope :year_in, lambda { |year|
     {
       :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', year.start_date, year.start_date.advance(:years => 1) ]
