@@ -5,6 +5,10 @@ class M2m::SalesOrder < M2m::Base
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   
+  def filtered_releases
+    self.releases.select { |r| (r.frelease != 0) || !r.item.multiple_releases? }
+  end
+  
   named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
   named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }

@@ -7,6 +7,8 @@ class M2m::SalesOrderItem < M2m::Base
 
   alias_attribute :quantity, :fquantity
   alias_attribute :unit_price, :fprice
+  
+  alias_attribute :multiple_releases, :fmultiple
 end
 
 # == Schema Information

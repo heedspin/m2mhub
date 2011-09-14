@@ -5,9 +5,16 @@ class M2m::SalesOrderRelease < M2m::Base
   belongs_to :item, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'soitem.fenumber = \'#{fenumber}\''
 
   named_scope :by_due_date, :order => :fduedate
+
+  # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
+  # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
   
   def quantity
-    self.fquant > 0 ? self.fquant : self.item.quantity
+    self.forderqty > 0 ? self.forderqty : self.item.quantity
+  end
+  
+  def release_price
+    self.quantity * self.unit_price
   end
   
   alias_attribute :due_date, :fduedate

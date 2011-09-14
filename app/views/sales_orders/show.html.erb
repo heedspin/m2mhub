@@ -27,16 +27,16 @@
 				<th>Total Price</th>
 			</tr>
 		</thead>
-<% @sales_order.releases.by_due_date.each do |r| %>
+<% @sales_order.filtered_releases.sort_by(&:due_date).each do |r| %>
 		<tr>
-			<td><%= r.due_date.to_s(:number_date) %></td>
+			<td><%= r.frelease %> - <%= r.due_date.to_s(:number_date) %></td>
 			<td><%= r.fpartno %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
 			<td>$<%= cm r.item.item.total_cost, :dollars %></td>
 			<td>$<%= cm r.unit_price, :dollars %></td>
 			<td><%= cm(r.quantity, :sales_order_quantity) %></td>
-			<td>$<%= cm r.total_price, :dollars %></td>
+			<td>$<%= cm(r.release_price, :dollars) %></td>
 		</tr>
 <% end %>
 	</tbody>
