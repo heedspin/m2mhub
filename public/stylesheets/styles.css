@@ -692,3 +692,14 @@ table.data p {
 	padding-bottom: .5em;
 }
 
+table.data td.monitary {
+	text-align: right;
+}
+
+span.currency_symbol {
+	float: left;
+}
+
+table.data td.centered {
+	text-align: center;
+}

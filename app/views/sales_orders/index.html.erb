@@ -4,8 +4,9 @@
 	<thead>
 		<tr>
 			<th>SO #</th>
-			<th>Company</th>
 			<th>Date</th>
+			<th>Company</th>
+			<th>Total Price</th>
 			<th>Rep</th>
 			<th>Coord</th>
 			<th>Status</th>
@@ -15,11 +16,12 @@
 <% @sales_orders.each do |so| %>
 		<tr>
 			<td><%= link_to so.fsono, sales_order_url(so.fsono) %></td>
+			<td><%= so.order_date.to_s(:sales_date) %></td>
 			<td><%= link_to so.customer_name, customer_url(so.fcustno) %></td>
-			<td><%= so.forderdate.to_s(:number_date) %></td>
-			<td><%= so.fsoldby %></td>
-			<td><%= so.fsocoord %></td>
-			<td><%= so.fstatus %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm so.total_price, :rounded_dollars %></td>
+			<td class="centered"><%= so.fsoldby %></td>
+			<td class="centered"><%= so.fsocoord %></td>
+			<td class="centered"><%= so.fstatus %></td>
 		</tr>
 <% end %>
 	</tbody>

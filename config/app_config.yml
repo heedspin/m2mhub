@@ -8,6 +8,7 @@ _local_company_config: &_local_company_config
   
 _shared_company_config: &_shared_company_config
   lxd:
+    rounded_dollars: "%.0f"
     dollars: "%.2f"
     sales_order_quantity: "%.0f"
     item_quantity: "%.0f"
@@ -19,6 +20,7 @@ _shared_company_config: &_shared_company_config
     company_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
   smt:
+    rounded_dollars: "%.0f"
     dollars: "%.2f"
     sales_order_quantity: "%.1f"
     item_quantity: "%.1f"

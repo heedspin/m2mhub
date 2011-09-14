@@ -13,7 +13,7 @@
 		<tr>
 			<td><%= link_to q.fquoteno, quote_url(q.fquoteno) %></td>
 			<td><%= link_to q.customer_name, customer_url(q.fcustno) %></td>
-			<td><%= q.fquotedate.to_s(:number_date) %></td>
+			<td><%= q.fquotedate.to_s(:sales_date) %></td>
 		</tr>
 <% end %>
 	</tbody>

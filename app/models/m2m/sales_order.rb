@@ -6,7 +6,7 @@ class M2m::SalesOrder < M2m::Base
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   
   def filtered_releases
-    self.releases.select { |r| (r.frelease != 0) || !r.item.multiple_releases? }
+    self.releases.select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
   end
   
   named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
@@ -16,9 +16,14 @@ class M2m::SalesOrder < M2m::Base
   named_scope :by_order_number_desc, :order => 'fsono desc'  
   
   alias_attribute :order_number, :fsono
+  alias_attribute :order_date, :forderdate
 
   def customer_name
     M2m::Customer.customer_name(self.fcompany)
+  end
+  
+  def total_price
+    self.filtered_releases.sum(&:total_price)
   end
 end
 # == Schema Information

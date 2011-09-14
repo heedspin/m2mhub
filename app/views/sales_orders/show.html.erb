@@ -6,9 +6,10 @@
 </div>
 
 <p>
-	Sales Order: <%= @sales_order.fsono %>
+	Sales Order: <%= @sales_order.fsono %><br />
 	Customer: <strong><%= link_to @sales_order.customer_name, customer_url(@sales_order.fcustno) %></strong><br />
-	Date: <%= @sales_order.forderdate.to_s(:number_date) %><br />
+	Date: <%= @sales_order.order_date.to_s(:sales_date) %><br />
+	Total: $<%= cm @sales_order.total_price, :dollars %><br />
 	Sales Rep: <%= @sales_order.fsoldby %><br />
 	Coord: <%= @sales_order.fsocoord %><br />
 </p>
@@ -29,7 +30,7 @@
 		</thead>
 <% @sales_order.filtered_releases.sort_by(&:due_date).each do |r| %>
 		<tr>
-			<td><%= r.frelease %> - <%= r.due_date.to_s(:number_date) %></td>
+			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= r.fpartno %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
