@@ -1,11 +1,14 @@
 class M2m::Quote < M2m::Base
   set_table_name 'qtmast'
+  set_primary_key 'fquoteno'
   
   has_many :items, :class_name => 'M2m::QuoteItem', :foreign_key => :fquoteno, :primary_key => :fquoteno
   
   named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
   named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+
+  named_scope :by_quote_number_desc, :order => 'fquoteno desc'  
   
   def terms
     M2m::Terms.find_by_key(self.fterm.try(:strip))

@@ -1,5 +1,6 @@
 class M2m::SalesOrder < M2m::Base
   set_table_name 'somast'
+  set_primary_key 'fsono'
   
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
@@ -8,8 +9,7 @@ class M2m::SalesOrder < M2m::Base
   named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
   
-  named_scope :by_order_number_desc, :order => 'fsono desc'
-  
+  named_scope :by_order_number_desc, :order => 'fsono desc'  
   
   alias_attribute :order_number, :fsono
 

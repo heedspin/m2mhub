@@ -2,6 +2,17 @@ class M2m::SalesOrderRelease < M2m::Base
   default_scope :order => :fenumber
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
+  belongs_to :item, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'soitem.fenumber = \'#{fenumber}\''
+
+  named_scope :by_due_date, :order => :fduedate
+  
+  def quantity
+    self.fquant > 0 ? self.fquant : self.item.quantity
+  end
+  
+  alias_attribute :due_date, :fduedate
+  alias_attribute :unit_price, :funetprice
+  alias_attribute :total_price, :fnetprice
 end
 
 # == Schema Information

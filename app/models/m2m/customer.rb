@@ -2,6 +2,7 @@ class M2m::Customer < M2m::Base
   set_table_name 'slcdpm'
   set_primary_key 'fcustno'
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno
+  has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
 
   def self.customer_name(txt)
     if (txt =~ /[a-z]/)
