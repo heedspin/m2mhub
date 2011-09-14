@@ -26,16 +26,16 @@
 	</thead>
 	<tbody>
 	<% @customer.sales_orders.by_order_number_desc.all(:include => :releases).each do |so| %>
+		<% releases = so.releases.all.sort_by(&:due_date) %>
 		<% so_style = cycle('odd', 'even') %>
 		<tr class="<%= so_style %>">
-			<td rowspan="<%= so.items.size %>">
+			<td rowspan="<%= releases.size %>">
 				<%= so.forderdate.to_s(:number_date) %><br />
 				<%= link_to so.fsono, sales_order_url(so.fsono) %><br />
 				Sold By: <%= so.fsoldby %><br />
 				Coord: <%= so.fsocoord %><br />
 				Status: <%= so.fstatus %><br />
 			</td>
-			<% releases = so.releases.sort_by(&:due_date) %>
 			<% releases.each do |r| %>
 			<% unless r == releases.first %>
 		<tr class="<%= so_style %>">
