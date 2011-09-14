@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :password_resets
   map.resources :sales_orders, :only => [:index, :show]
+  map.resources :sales_order_items, :only => [:index, :show]
   map.resources :user_activities, :only => [:index]
   map.resources :items, :only => [:index]
   map.resources :quotes, :only => [:index, :show]

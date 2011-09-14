@@ -7,8 +7,17 @@ class M2m::SalesOrderItem < M2m::Base
 
   alias_attribute :quantity, :fquantity
   alias_attribute :unit_price, :fprice
+  alias_attribute :customer_part_number, :fcustpart
+  alias_attribute :due_date, :fduedate
   
   alias_attribute :multiple_releases, :fmultiple
+  
+  named_scope :customer_part_number_like, lambda { |text| 
+    {
+      :conditions => [ 'soitem.fcustpart like ?', '%' + (text || '') + '%']
+    }
+  }
+
 end
 
 # == Schema Information

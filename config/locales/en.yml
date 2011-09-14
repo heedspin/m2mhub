@@ -9,4 +9,5 @@ en:
     attributes:
       m2m/item:
         fpartno: Part Number
-  
+      m2m/sales_order_item:
+        fcustpart: Customer Part Number

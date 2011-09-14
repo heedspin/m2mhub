@@ -1,0 +1,40 @@
+<%= render 'sales_orders/submenu' %>
+
+<% semantic_form_for :search, @search_item, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
+	<% f.inputs do %>
+	  <%= f.input :fcustpart %>
+	<% end %>
+  <% f.buttons do %>
+	  <%= f.commit_button 'Search' %>
+	<% end %>
+<% end %>
+
+<% if @sales_order_items %>
+<%= will_paginate @sales_order_items %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Sales Order</th>
+			<th>Due Date</th>
+			<th>Customer</th>
+			<th>Customer Part</th>
+			<th>LXD Part</th>
+			<th>Vendor Part</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @sales_order_items.each do |i| %>
+		<tr>
+			<td><%= link_to i.sales_order.order_number, sales_order_url(i.sales_order) %></td>
+			<td><%= i.due_date.to_s(:sales_date) %></td>
+			<td><%= link_to i.sales_order.customer_name, customer_url(i.sales_order.fcustno) %></td>
+			<td><%= search_excerpt(i.fcustpart, @search_item.fcustpart) %></td>
+			<td><%= i.item.fpartno %></td>
+			<td><%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
+			<td><%= h i.item.fdescript %></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+<% end %>

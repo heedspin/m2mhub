@@ -703,3 +703,13 @@ span.currency_symbol {
 table.data td.centered {
 	text-align: center;
 }
+
+.submenu li {
+	display: inline;
+	margin: 0 10px;
+	clear: none;
+}
+
+.submenu li.current {
+	border-bottom: 1px dotted #c00;
+}
