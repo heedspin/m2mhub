@@ -25,6 +25,7 @@ class M2m::SalesOrder < M2m::Base
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
+  alias_attribute :customer_po, :fcustpono
 
   def customer_name
     M2m::Customer.customer_name(self.fcompany)

@@ -4,4 +4,8 @@
 <% @items = [@item] %>
 <%= render 'list' %>
 
+<h3>Sales Orders:</h3>
 <%= render 'sales_order_items/list' %>
+
+<h3>Quotes:</h3>
+<%= render 'quote_items/list', :quote_items => @item.quote_items, :show_quotes => true %>

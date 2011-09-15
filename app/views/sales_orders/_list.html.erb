@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th>SO #</th>
+			<th>Cust Po#</th>
 			<th>Date</th>
 			<th>Company</th>
 			<th>Total Price</th>
@@ -14,6 +15,7 @@
 <% @sales_orders.each do |so| %>
 		<tr>
 			<td><%= link_to so.fsono, sales_order_url(so.fsono) %></td>
+			<td><%= so.customer_po %></td>
 			<td><%= so.order_date.to_s(:sales_date) %></td>
 			<td><%= link_to so.customer_name, customer_url(so.fcustno) %></td>
 			<td class="monitary"><span class="currency_symbol">$</span><%= cm so.total_price, :rounded_dollars %></td>

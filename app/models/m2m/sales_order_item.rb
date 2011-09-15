@@ -12,9 +12,18 @@ class M2m::SalesOrderItem < M2m::Base
   
   alias_attribute :multiple_releases, :fmultiple
   
-  named_scope :customer_part_number_like, lambda { |text| 
+  named_scope :part_number_like, lambda { |text| 
+    text = '%' + (text || '') + '%'
     {
-      :conditions => [ 'soitem.fcustpart like ?', '%' + (text || '') + '%']
+      :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
+    }
+  }
+  
+  named_scope :order_number_like, lambda { |text|
+    text = '%' + (text || '') + '%'
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.fcustpono like ? OR somast.fsono like ?', text, text]
     }
   }
 

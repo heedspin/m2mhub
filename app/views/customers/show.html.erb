@@ -30,11 +30,10 @@
 		<% so_style = cycle('odd', 'even') %>
 		<tr class="<%= so_style %>">
 			<td rowspan="<%= releases.size %>">
-				<%= so.forderdate.to_s(:sales_date) %><br />
-				<%= link_to so.fsono, sales_order_url(so.fsono) %><br />
-				Sold By: <%= so.fsoldby %><br />
-				Coord: <%= so.fsocoord %><br />
-				Status: <%= so.fstatus %><br />
+				<%= so.forderdate.to_s(:sales_date) %> - <%= so.fstatus %><br />
+				SO#: <%= link_to so.fsono, sales_order_url(so.fsono) %><br />
+				Cust PO#: <%= so.customer_po %><br />
+				<%= so.fsoldby.strip %>, <%= so.fsocoord.strip %><br />
 			</td>
 			<% releases.each do |r| %>
 			<% unless r == releases.first %>

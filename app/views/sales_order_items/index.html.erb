@@ -2,7 +2,8 @@
 
 <% semantic_form_for :search, @search_item, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
 	<% f.inputs do %>
-	  <%= f.input :fcustpart %>
+  	<%= f.input :order_number, :as => :string, :label => 'Sales/Purchase Order' %>
+	  <%= f.input :part_number, :as => :string, :label => 'Part Number' %>
 	<% end %>
   <% f.buttons do %>
 	  <%= f.commit_button 'Search' %>
