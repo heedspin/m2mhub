@@ -1,8 +1,15 @@
 class M2m::Item < M2m::Base
   set_table_name 'inmast'
+  set_primary_key 'fpartno'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
 
   alias_attribute :total_cost, :fdisptcost
+  alias_attribute :description, :fdescript
+
+  def part_number
+    self.fpartno.strip
+  end
   
   named_scope :part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text || '') + '%')

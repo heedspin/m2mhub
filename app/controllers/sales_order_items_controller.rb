@@ -8,7 +8,7 @@ class SalesOrderItemsController < ApplicationController
     if @search_item.customer_part_number.present?
       @sales_order_items = M2m::SalesOrderItem.customer_part_number_like(@search_item.customer_part_number).paginate(:all, :page => params[:page],
                                                                                                                      :per_page => 20,
-                                                                                                                     :order => 'soitem.fcustpart',
+                                                                                                                     :order => 'soitem.fsono desc',
                                                                                                                      :include => :sales_order)
     end
   end

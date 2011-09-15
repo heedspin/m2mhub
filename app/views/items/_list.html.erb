@@ -1,0 +1,24 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>LXD Part</th>
+			<th>Vendor Part</th>
+			<th>Description</th>
+			<th>Bin</th>
+			<th>On Hand</th>
+			<th>On Order</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @items.each do |i| %>
+		<tr>
+			<td><%= link_to search_excerpt(i.part_number, @search_item.try(:fpartno)), item_url(i.part_number) %></td>
+			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.try(:fpartno)) }.join(', ') %></td>
+			<td><%= h i.fdescript %></td>
+			<td><%= i.fbin1 %></td>
+			<td><%= cm i.fonhand, :item_quantity %></td>
+			<td><%= cm i.fonorder, :item_quantity %></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>

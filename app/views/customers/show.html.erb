@@ -41,13 +41,13 @@
 		<tr class="<%= so_style %>">
 			<% end %>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
-			<td><%= r.fpartno %></td>
+			<td><%= link_to r.part_number, item_url(r.part_number.strip) %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
-			<td>$<%= cm r.item.item.total_cost, :dollars %></td>
-			<td>$<%= cm r.unit_price, :dollars %></td>
-			<td><%= cm(r.quantity, :sales_order_quantity) %></td>
-			<td>$<%= cm r.total_price, :dollars %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.item.item.total_cost, :dollars %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.unit_price, :dollars %></td>
+			<td class="centered"><%= cm(r.quantity, :sales_order_quantity) %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.total_price, :dollars %></td>
 		</tr>			
 		<% end %>
 	<% end %>

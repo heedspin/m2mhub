@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :sales_order_items, :only => [:index, :show]
   map.resources :user_activities, :only => [:index]
-  map.resources :items, :only => [:index]
+  map.resources :items, :only => [:index, :show]
   map.resources :quotes, :only => [:index, :show]
   map.resources :customers, :only => [:index, :show]
 
