@@ -8,6 +8,10 @@
 <% end %>
 
 <% if @items %>
+<% if @items.size > 0 %>
 <%= will_paginate @items %>
 <%= render 'list' %>
+<% else %>
+<h3>No matches</h3>
+<% end %>
 <% end %>

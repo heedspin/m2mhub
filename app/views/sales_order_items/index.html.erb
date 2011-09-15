@@ -11,6 +11,10 @@
 <% end %>
 
 <% if @sales_order_items %>
+<% if @sales_order_items.size > 0 %>
 <%= will_paginate @sales_order_items %>
 <%= render 'list' %>
+<% else %>
+<h3>No matches</h3>
+<% end %>
 <% end %>
