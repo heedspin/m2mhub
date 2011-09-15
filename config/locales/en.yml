@@ -11,3 +11,5 @@ en:
         fpartno: Part Number
       m2m/sales_order_item:
         fcustpart: Customer Part Number
+        order_number: Sales / Purchase Order Number
+        part_number: LXD / Customer Part Number
