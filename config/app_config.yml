@@ -12,7 +12,7 @@ _shared_company_config: &_shared_company_config
     dollars: "%.2f"
     sales_order_quantity: "%.0f"
     item_quantity: "%.0f"
-    google_analytics_key: UA-25625566-1
+    google_analytics_key: UA-25768569-1
     email_name: LXD WebBot
     email_address: webmin@lxdinc.com
     email_domain: lxdinc.com
