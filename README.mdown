@@ -1,0 +1,44 @@
+== M2mhub: Web-based views of the Made2Manage databsae
+
+Building custom reports in Made2Manage (M2M) is difficult and require logging in to M2M to use. M2mhub is a simple web-based interface to the M2M databse.  Though it is not a turn-key application, I would be interested in collaborating with others to make it more useful. Let me know if you're writing custom reports with Made2Manage and have any interest in sharing.
+
+== Connecting to SQLServer
+
+The hardest part about any of this is just connecting your Rails app to a SQLServer database.  If you get discouraged, just remember this: "You can DO IT! I believe in you!"  Here are the main points in my setup. 
+
+1. M2m 5.x.  Right now we're working with the old 5.54 version of M2M.  We'll be upgrading to the latest 6.x version over the next few months.  But for now my models are written against 5.x.
+2. Rails 2 - The database we're connecting to is MSSQL 2000.  Woohoo!  activerecord-sqlserver-adapter 2.x is the only adapter I could get working with MSSQL 2000.  So we're Rails 2.  Again, in the next few months we'll be upgrading to SQLServer 2005 or 2008.  At that time I will be able to upgrade everything to Rails 3.
+3. <a href="https://github.com/rails-sqlserver/tiny_tds">tiny_tds</a> and <a href="https://github.com/rails-sqlserver/activerecord-sqlserver-adapter">activerecord-sqlserver-adapter</a> - In the past, I've been able to activerecord-sqlserver-adapter to connect to SQLServer without tiny_tds. But it's a lot easier with tiny_tds.
+4. <a href="http://www.freetds.org/">FreeTDS</a> - Your best option for an ODBC driver on Linux or Mac OS.
+
+== Basic Architecture
+
+Our M2M databases run in our building. I believe this is a typical setup for M2M. So I setup a small Ubuntu server behind our firewall and give it a public IP address. Though I'm a big believer in the cloud, I don't see another way to do this. I feel ok opening up HTTPS access to my Ubuntu box. I would be much more nervous opening up access to our M2M database to some web app in the cloud.  
+
+== Configuration with CompanyConfig
+
+There are a lot of company-specific configuration needs in an ERP system. Everything from company name to how you want quantities and dates formatted. My abstraction for this is the CompanyConfig singleton. It's basically just a little method_missing wrapper around AppConfig which is an OpenStruct on top of yaml files.  app_config.yml is the starting point of all configurations. It contains configurations for all companies.
+
+As I said, m2mhub is not a turn-key application. You'll notice that my two companies are referenced in the app_config.yml
+
+== Reports
+
+Here are the reports I've got so far.
+
+=== Quotes
+
+=== Sales Orders
+
+=== Customers
+
+=== Items
+
+=== Home & User Activity
+
+== Future Plans
+
+I'm planning on doing something with RMA's and integrating with Lighthouseapp.  I'm also planning on doing a custom shipping report.
+
+== How To Share m2mhub
+
+If people actually surfaced wanting to use m2mhub, we'd have to discuss the best way to collaborate. I see a lot of challenges in packaging something that can be easily dropped into another project. It's not clear to me how gems or plugins would be useful. At this point, I think copying each others code is a good option. :-) 
