@@ -81,14 +81,14 @@
 		<% end %>
 		<div id="footer">
 			<p>
-				&#169; <%= Date.current.year %> <%= AppConfig.company_name %> <span>&#149;</span> 7300 ACC Boulevard  
+				&#169; <%= Date.current.year %> <%= CompanyConfig.company_name %> <span>&#149;</span> 7300 ACC Boulevard  
 				<span>&#149;</span> Raleigh, North Carolina 27617 <span>&#149;</span>
-				<%= link_to AppConfig.website, "http://#{CompanyConfig.website}" %>
+				<%= link_to CompanyConfig.website, "http://#{CompanyConfig.website}" %>
 			</p>
 		</div><!-- footer -->
 	</div><!-- end wrapper -->
 </body>
-<% if Rails.env.production? and AppConfig.lxd? %>
+<% if Rails.env.production? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', <%= CompanyConfig.google_analytics_key %>]);

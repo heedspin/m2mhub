@@ -2,8 +2,5 @@
 <% if File.exists?(s3_local) %>
 <%= File.open(s3_local).read %>
 <% else %>
-production:
-  bucket: <%= AppConfig.lxd? ? 'lxd-m2mhub' : 'smt-m2mhub' %>
-  access_key_id: <%= ENV['S3_KEY'] %>
-  secret_access_key: <%= ENV['S3_SECRET'] %>
+<%# You can do an ENV[] approach here (like heroku) %>
 <% end %>

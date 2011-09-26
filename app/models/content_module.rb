@@ -4,14 +4,12 @@ class ContentModule < ApplicationModel
                      :storage => :s3,
                      :s3_credentials => "#{Rails.root}/config/s3.yml",
                      :url => ':s3_domain_url',
-                     :path => ":class/:attachment/:id/:style/:basename.:extension",
-                     :bucket => AppConfig.s3_bucket )
+                     :path => ":class/:attachment/:id/:style/:basename.:extension" )
   has_attached_file( :attachment,
                      :storage => :s3,
                      :s3_credentials => "#{Rails.root}/config/s3.yml",
                      :url => ':s3_domain_url',
-                     :path => ":class/:attachment/:id/:style/:basename.:extension",
-                     :bucket => AppConfig.s3_bucket )
+                     :path => ":class/:attachment/:id/:style/:basename.:extension" )
   
   validates_uniqueness_of :key
   

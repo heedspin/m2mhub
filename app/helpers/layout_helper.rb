@@ -28,7 +28,7 @@ module LayoutHelper
     txt = content_for(:meta_title)
     txt = content_for(:title) unless txt.present?
     txt = if txt.present?
-      "#{txt} | #{AppConfig.company_name}"
+      "#{txt} | #{CompanyConfig.company_name}"
     else
       CompanyConfig.company_name
     end

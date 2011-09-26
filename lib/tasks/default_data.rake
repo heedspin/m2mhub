@@ -5,8 +5,8 @@ namespace :default_data do
   desc "Load default users"
   task :users => :environment do
     users = [
-      ['Robo', 'Mailer', AppConfig.email_address],
-      ['Tim', 'Harrison', 'tharrison@lxdinc.com', 'password123']
+      ['Robo', 'Mailer', CompanyConfig.email_address],
+      ['Tim', 'Harrison', 'tharrison@lxdinc.com']
     ]
 
     users.each do |user|
@@ -26,17 +26,10 @@ namespace :default_data do
 
   desc 'Create all the content modules'
   task :content_modules => [ :environment ] do
-    configs = AppConfig.lxd? ? lxd_content_modules : smt_content_modules
-    configs.each do |config|
-      ContentModule.make! config
-    end
-  end
-  
-  def lxd_content_modules
-    [ ]
-  end
-  
-  def smt_content_modules
-    [ ]
+    #TODO: How to initialize company-specific content modules?
+    # configs = AppConfig.lxd? ? lxd_content_modules : smt_content_modules
+    # configs.each do |config|
+    #   ContentModule.make! config
+    # end
   end
 end
