@@ -11,7 +11,7 @@
 				<% else %>
 				<th>Item #</th>
 				<% end %>
-				<th>LXD Part No.</th>
+				<th><%= CompanyConfig.short_name %> Part No.</th>
 				<th>Description</th>
 				<th>Quantity</th>
 				<th>Cust Part No.</th>
@@ -34,8 +34,8 @@
 			<td><%= cm item.quantity, :sales_order_quantity %></td>
 			<td><%= item.fcustpart %></td>
 			<td>$<%= cm item.item.try(:total_cost), :dollars %></td>
-			<td>$<%= cm item.unit_price, :dollars %></td>
-			<td>$<%= cm (item.unit_price * item.quantity), :dollars %></td>
+			<td class="monitary">$<%= cm item.unit_price, :dollars %></td>
+			<td class="monitary">$<%= cm (item.unit_price * item.quantity), :dollars %></td>
 			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>
 		</tr>
 <% end %>
