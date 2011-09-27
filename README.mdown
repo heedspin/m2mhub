@@ -1,4 +1,4 @@
-## M2mhub: Web-based views of the Made2Manage databsae
+# M2mhub: Web-based views of the Made2Manage database
 
 Building custom reports in Made2Manage (M2M) is difficult and require logging in to M2M to use. M2mhub is a simple web-based interface to the M2M databse.  Though it is not a turn-key application, I would be interested in collaborating with others to make it more useful. Let me know if you're writing custom reports with Made2Manage and have any interest in sharing.
 
