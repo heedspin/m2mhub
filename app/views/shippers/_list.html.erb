@@ -3,7 +3,8 @@
 		<p>
 			<%= s.status %>: <%= s.fshipno %> to 
 			<%= link_to s.customer_name, customer_url(s.customer_number) %> on 
-			<%= link_to_unless s.ship_date == @date, s.ship_date.to_s(:sales_date), shippers_url(:date => s.ship_date.to_s(:day_month_year)) %>
+			<%= link_to_unless s.ship_date == @date, s.ship_date.to_s(:sales_date), shippers_url(:date => s.ship_date.to_s(:day_month_year)) %> via
+			<%= s.ship_via.strip %> <%= s.bill_of_lading %>
 		</p>
 		<%= render 'shippers/items', :shipper => s %>
 	</div>

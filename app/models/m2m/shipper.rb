@@ -10,6 +10,8 @@ class M2m::Shipper < M2m::Base
   alias_attribute :customer_number, :fcnumber
   alias_attribute :confirmation_date, :start
   alias_attribute :ship_date, :fshipdate
+  alias_attribute :bill_of_lading, :fbl_lading
+  alias_attribute :ship_via, :fshipvia
 
   def customer_name
     M2m::Customer.customer_name(self.fccompany)
