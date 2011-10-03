@@ -5,6 +5,7 @@
 			<th>Vendor Part</th>
 			<th>Description</th>
 			<th>Bin</th>
+			<th>On Hand</th>
 			<th>Committed</th>
 			<th>Available</th>
 			<th>On Order</th>
@@ -17,6 +18,7 @@
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.try(:fpartno)) }.join(', ') %></td>
 			<td><%= h i.fdescript %></td>
 			<td><%= i.fbin1 %></td>
+			<td><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
 			<td><%= cm i.quantity_committed, :item_quantity, 0 %></td>
 			<td><%= cm i.quantity_available, :item_quantity %></td>
 			<td><%= cm i.quantity_on_order, :item_quantity, 0 %></td>
