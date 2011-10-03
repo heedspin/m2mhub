@@ -49,6 +49,12 @@ At this point items page is just a search. It searches by company and vendor par
 
 The item show page lists all previous orders for the item. So you can quickly find customers that buy that part.
 
+### Shippers
+
+The shippers tab is organized by day. Each day shows all the shippers created for that day. Right now it's only showing basic information. Sales people find this useful to let the customer know that their product shipped, and the respective tracking number.
+
+Each sales order page also shows any shippers for that order.  Likewise, an item page shows all past shippers.
+
 ### Home & User Activity
 
 Right now the home page shows recent sales orders and quotes. This is just the quickest and easiest dashboard I could think of.  
