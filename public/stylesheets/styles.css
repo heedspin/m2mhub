@@ -725,3 +725,12 @@ div.column2 {
 .small table.data td {
 	font-size: .9em;
 }
+
+div.shipper p {
+	margin-top: 5px;
+	margin-bottom: 2px;
+	padding-bottom: 0;
+}
+div.shipper table.data {
+	margin-top: 0;
+}

@@ -5,8 +5,8 @@ class M2m::SalesOrder < M2m::Base
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   
-  def filtered_releases
-    self.releases.select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
+  def filtered_releases(*args)
+    self.releases(*args).select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
   end
   
   named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
@@ -33,6 +33,10 @@ class M2m::SalesOrder < M2m::Base
   
   def total_price
     self.filtered_releases.sum(&:total_price)
+  end
+  
+  def status
+    self.fstatus.downcase.capitalize
   end
 end
 # == Schema Information

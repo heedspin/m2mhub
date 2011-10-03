@@ -1,5 +1,5 @@
 class M2m::SalesOrderItem < M2m::Base
-  default_scope :order => :fenumber
+  default_scope :order => 'soitem.fenumber'
   set_table_name 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno

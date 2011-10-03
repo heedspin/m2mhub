@@ -8,6 +8,7 @@
 <p>
 	Date: <%= @sales_order.order_date.to_s(:sales_date) %><br />
 	Sales Order: <%= @sales_order.fsono %><br />
+	Status: <%= @sales_order.status %><br />
 	Customer: <strong><%= link_to @sales_order.customer_name, customer_url(@sales_order.fcustno) %></strong><br />
 	Customer PO#: <%= @sales_order.customer_po %><br />
 	Total: $<%= cm @sales_order.total_price, :dollars %><br />
@@ -16,31 +17,35 @@
 </p>
 
 <table class="data">
+	<thead>
+		<tr>
+			<th>Due Date</th>
+			<th><%= CompanyConfig.short_name %> Part No.</th>
+			<th>Description</th>
+			<th>Cust Part No.</th>
+			<th>Cost</th>
+			<th>Unit Price</th>
+			<th>Quantity</th>
+			<th>Total Price</th>
+		</tr>
+	</thead>
 	<tbody>
-		<thead>
-			<tr>
-				<th>Due Date</th>
-				<th><%= CompanyConfig.short_name %> Part No.</th>
-				<th>Description</th>
-				<th>Cust Part No.</th>
-				<th>Cost</th>
-				<th>Unit Price</th>
-				<th>Quantity</th>
-				<th>Total Price</th>
-			</tr>
-		</thead>
-<% @sales_order.filtered_releases.sort_by(&:due_date).each do |r| %>
+<% @releases.sort_by(&:due_date).each do |r| %>
 		<tr>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to r.part_number, item_url(r.part_number) %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
-			<td>$<%= cm r.item.item.total_cost, :dollars %></td>
-			<td>$<%= cm r.unit_price, :dollars %></td>
+			<td class="monitary">$<%= cm r.item.item.total_cost, :dollars %></td>
+			<td class="monitary">$<%= cm r.unit_price, :dollars %></td>
 			<td><%= cm(r.quantity, :sales_order_quantity) %></td>
-			<td>$<%= cm(r.release_price, :dollars) %></td>
+			<td class="monitary">$<%= cm(r.release_price, :dollars) %></td>
 		</tr>
 <% end %>
 	</tbody>
 </table>
 
+<% if @shippers.size > 0 %>
+<h3>Shippers</h3>
+<%= render 'shippers/list' %>
+<% end %>

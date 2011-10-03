@@ -57,6 +57,11 @@
 						<%= link_to 'Items', items_url %>
 					</li>
 					<% end %>
+					<% if permitted_to?(:read, :shippers) %>
+					<li class="<%= controller_selected(:shippers) %>">
+						<%= link_to 'Shippers', shippers_url %>
+					</li>
+					<% end %>
 					<% if permitted_to?(:read, :user_activities) %>
 					<li class="<%= controller_selected(:user_activities) %>">
 						<%= link_to 'User Activity', user_activities_url %>

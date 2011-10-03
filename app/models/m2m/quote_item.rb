@@ -1,5 +1,5 @@
 class M2m::QuoteItem < M2m::Base
-  default_scope :order => :fenumber
+  default_scope :order => 'qtitem.fenumber'
   set_table_name 'qtitem'
   belongs_to :quote, :class_name => 'M2m::Quote', :foreign_key => :fquoteno, :primary_key => :fquoteno
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno

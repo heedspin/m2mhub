@@ -1,8 +1,20 @@
 class M2m::SalesOrderRelease < M2m::Base
-  default_scope :order => :fenumber
+  default_scope :order => 'sorels.fenumber'
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to :item, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'soitem.fenumber = \'#{fenumber}\''
+
+  has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
+
+  named_scope :for_shipper_items, lambda { |shipper_items|
+    if shipper_items.is_a?(M2m::ShipperItem)
+      shipper_items = [shipper_items]
+    end
+    {
+      :joins => 'inner join shitem on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)',
+      :conditions => ['shitem.identity_column in (?)', shipper_items.map(&:id)]
+    }
+  }
 
   named_scope :by_due_date, :order => :fduedate
 
@@ -20,6 +32,9 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :unit_price, :funetprice
   alias_attribute :total_price, :fnetprice
+  alias_attribute :sales_order_number, :fsono
+  alias_attribute :sales_order_release_id, :finumber
+  alias_attribute :sales_order_release_number, :frelease
   
   def part_number
     self.fpartno.strip

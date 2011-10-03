@@ -11,9 +11,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :sales_order_items, :only => [:index, :show]
   map.resources :user_activities, :only => [:index]
-  map.resources :items, :only => [:index, :show]
+  map.resources :items, :only => [:index]
+  map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/
   map.resources :quotes, :only => [:index, :show]
   map.resources :customers, :only => [:index, :show]
+  map.resources :shippers, :only => [:index, :show]
 
   # Specify thing regular expression because the routes use '.' as separator.
   map.switch 'switch/:thing', :controller => 'switch', :action => 'switch', :thing => /.+/

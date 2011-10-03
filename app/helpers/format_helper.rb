@@ -5,7 +5,7 @@ module FormatHelper
     thing.to_s.gsub(/(\d)(?=\d{3}+(?:\D|$))/, '\\1,')
   end
 
-  def cm(thing, company_config_key=nil)
+  def cm(thing, company_config_key=nil, default=nil)
     if thing and (thing.to_i > 0)
       case thing
       when BigDecimal, Float
@@ -14,7 +14,7 @@ module FormatHelper
         comma(thing)
       end
     else
-      nil
+      default
     end
   end
 
