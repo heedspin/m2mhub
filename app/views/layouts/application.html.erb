@@ -62,6 +62,11 @@
 						<%= link_to 'Shippers', shippers_url %>
 					</li>
 					<% end %>
+					<% if permitted_to?(:read, :sales_backlog_reports) %>
+					<li class="<%= controller_selected(:sales_backlog_reports) %>">
+						<%= link_to 'backlog', sales_backlog_reports_url %>
+					</li>
+					<% end %>
 					<% if permitted_to?(:read, :user_activities) %>
 					<li class="<%= controller_selected(:user_activities) %>">
 						<%= link_to 'User Activity', user_activities_url %>

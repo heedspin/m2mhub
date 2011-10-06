@@ -16,7 +16,22 @@ class M2m::SalesOrderRelease < M2m::Base
     }
   }
 
+  named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
+  named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
+  named_scope :cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
+
   named_scope :by_due_date, :order => :fduedate
+  named_scope :by_due_date_desc, :order => 'sorels.fduedate desc'
+  
+  named_scope :due_by, lambda { |date|
+    {
+      :conditions => [ 'sorels.fduedate <= ?', date ]
+    }
+  }
+
+  named_scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]  
+  
+  named_scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -36,6 +51,10 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :sales_order_release_id, :finumber
   alias_attribute :sales_order_release_number, :frelease
   
+  def quantity_shipped
+    self.fshipbook + self.fshipbuy + self.fshipmake
+  end
+  
   def part_number
     self.fpartno.strip
   end
@@ -43,6 +62,18 @@ class M2m::SalesOrderRelease < M2m::Base
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)
     self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+  end
+  
+  def backorder_quantity
+    quantity - quantity_shipped
+  end
+  
+  def can_be_fully_shipped?
+    (backorder_quantity > 0) && (item.item.quantity_on_hand >= backorder_quantity)
+  end
+
+  def can_be_partially_shipped?
+    (backorder_quantity > 0) && (item.item.quantity_on_hand > 0) && (item.item.quantity_on_hand < backorder_quantity)
   end
 end
 

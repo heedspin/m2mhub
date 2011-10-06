@@ -4,6 +4,7 @@ class M2m::SalesOrder < M2m::Base
   
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
+  has_one :sales_customer_master, :class_name => 'M2m::SalesCustomerMaster', :foreign_key => :fcustno, :primary_key => :fcustno
   
   def filtered_releases(*args)
     self.releases(*args).select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
@@ -26,6 +27,9 @@ class M2m::SalesOrder < M2m::Base
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
   alias_attribute :customer_po, :fcustpono
+  alias_attribute :due_date, :fduedate
+  alias_attribute :freight_on_board, :ffob
+  alias_attribute :ship_via, :fshipvia
 
   def customer_name
     M2m::Customer.customer_name(self.fcompany)

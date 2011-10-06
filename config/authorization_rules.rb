@@ -14,6 +14,7 @@ authorization do
     has_permission_on :user_activities, :to => :read
     has_permission_on :customers, :to => :read
     has_permission_on :shippers, :to => :read
+    has_permission_on :sales_backlog_reports, :to => :manage
   end
 
   role :sales do
