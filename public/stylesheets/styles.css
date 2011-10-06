@@ -319,6 +319,11 @@ additional styles
 /* -------- Formtastic Changes -------- */
 /* forms
 ---------------------------------------------*/
+
+form.formtastic fieldset.inlinebuttons {
+	display: inline;
+}
+
 form.formtastic fieldset.inputs > ol > li {
 	display: block;
 }
@@ -343,6 +348,15 @@ form.formtastic li.string input {
 	padding:4px;
 	font-size:1.1em;
 	width: 399px;
+}
+form.formtastic li.calendar input {
+	padding:4px;
+	font-size:1.1em;
+	width: 100px;
+}
+form.formtastic img.ui-datepicker-trigger {
+	margin: 0 10px 0 5px;
+	height: 20px;
 }
 form.formtastic li.select select {
 	font-size:1em;
@@ -839,3 +853,10 @@ table.backlog td.right {
 	text-align: right;
 }
 
+form.formtastic fieldset.flatform label {
+	display: inline;
+}
+
+form.formtastic fieldset.flatform li.commit input {
+	padding: .2em 1em .2em;
+}

@@ -43,11 +43,12 @@ class M2m::SalesOrder < M2m::Base
     self.fstatus.downcase.capitalize
   end
 end
+
 # == Schema Information
 #
 # Table name: somast
 #
-#  fsono            :string(6)       not null
+#  fsono            :string(6)       not null, primary key
 #  fcustno          :string(6)       not null
 #  fcompany         :string(35)      default(" "), not null
 #  fcity            :string(20)      not null
@@ -112,7 +113,7 @@ end
 #  flchgpnd         :boolean         not null
 #  fllasteco        :string(25)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  fackmemo         :text            default(" "), not null
 #  fmstreet         :text            default(" "), not null
 #  fmusrmemo1       :text            default(" "), not null

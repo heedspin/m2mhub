@@ -37,11 +37,12 @@ class M2m::Item < M2m::Base
   }
   
 end
+
 # == Schema Information
 #
 # Table name: inmast
 #
-#  fpartno          :string(25)      not null
+#  fpartno          :string(25)      not null, primary key
 #  frev             :string(3)       not null
 #  fcstscode        :string(1)       not null
 #  fdescript        :string(35)      default(" "), not null
@@ -154,7 +155,7 @@ end
 #  fcclass          :string(12)      not null
 #  fidims           :integer(4)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  fcomment         :text            default(" "), not null
 #  fgimage          :binary          default("0x"), not null
 #  fmusrmemo1       :text            default(" "), not null

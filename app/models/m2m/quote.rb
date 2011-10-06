@@ -29,12 +29,13 @@ class M2m::Quote < M2m::Base
   alias_attribute :quote_number, :fquoteno
 end
 
+
 # == Schema Information
 #
 # Table name: qtmast
 #
 #  fcompany         :string(35)      default(" "), not null
-#  fquoteno         :string(6)       not null
+#  fquoteno         :string(6)       not null, primary key
 #  fackdate         :datetime        not null
 #  fccurid          :string(3)       not null
 #  fcfactor         :decimal(17, 5)  not null
@@ -87,7 +88,7 @@ end
 #  fcshipto         :string(4)       not null
 #  fltotal          :boolean         not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  fclosmemo        :text            default(" "), not null
 #  fmstreet         :text            default(" "), not null
 #  fmusermemo       :text            default(" "), not null

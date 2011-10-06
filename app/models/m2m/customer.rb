@@ -21,7 +21,7 @@ end
 #
 # Table name: slcdpm
 #
-#  fcustno          :string(6)       not null
+#  fcustno          :string(6)       not null, primary key
 #  fcompany         :string(35)      default(" "), not null
 #  fcity            :string(20)      not null
 #  fphone           :string(20)      not null
@@ -84,7 +84,7 @@ end
 #  fcemail          :string(60)      default(" "), not null
 #  flisfcast        :boolean         not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  fbus_type        :text            default(" "), not null
 #  fmnotes          :text            default(" "), not null
 #  fmstreet         :text            default(" "), not null
@@ -93,6 +93,7 @@ end
 #  fccrmacct        :string(12)      default(""), not null
 #  fscmprty         :integer(4)      default(4), not null
 #
+
 
 # == Schema Information
 #

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110909150352) do
+ActiveRecord::Schema.define(:version => 20111006152609) do
 
   create_table "content_modules", :force => true do |t|
     t.string   "key"
@@ -34,6 +34,30 @@ ActiveRecord::Schema.define(:version => 20110909150352) do
     t.datetime "updated_at"
     t.string   "meta_title"
     t.boolean  "has_meta_title"
+  end
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "sales_backlog_reports", :force => true do |t|
+    t.date     "due_date"
+    t.integer  "report_status_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
   end
 
   create_table "user_activities", :force => true do |t|
