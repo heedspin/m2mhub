@@ -1,0 +1,27 @@
+############################################################
+# Staging
+
+check process lxd_m2mhub_staging with pidfile /home/tim/Dropbox/p/lxd_m2mhub/tmp/pids/dww_delayed_job.pid
+  start program = "/bin/bash /home/tim/Dropbox/p/lxd_m2mhub/script/monit_delayed_job.sh start"
+    as uid www-data and gid www-data
+  stop program = "/bin/bash  /home/tim/Dropbox/p/lxd_m2mhub/script/monit_delayed_job.sh stop"
+    as uid www-data and gid www-data
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if totalmem > 200.0 MB for 5 cycles then restart
+  if 3 restarts within 5 cycles then timeout
+  group background_tasks
+
+############################################################
+# Production
+
+check process lxd_m2mhub with pidfile /var/www/lxd_m2mhub/current/tmp/pids/dww_delayed_job.pid
+  start program = "/bin/bash /var/www/lxd_m2mhub/current/script/monit_delayed_job.sh start"
+    as uid www-data and gid www-data
+  stop program = "/bin/bash  /var/www/lxd_m2mhub/current/script/monit_delayed_job.sh stop"
+    as uid www-data and gid www-data
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if totalmem > 200.0 MB for 5 cycles then restart
+  if 3 restarts within 5 cycles then timeout
+  group background_tasks
