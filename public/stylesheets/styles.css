@@ -852,10 +852,17 @@ table.backlog td.right {
 	text-align: right;
 }
 
-form.formtastic fieldset.flatform label {
+form.formtastic table.flatform label {
 	display: inline;
+	margin: 0 5px;
 }
 
-form.formtastic fieldset.flatform li.commit input {
+form.formtastic table.flatform ol > li {
+	display: inline;
+	margin: 0;
+}
+
+form.formtastic table.flatform li.commit input {
 	padding: .2em 1em .2em;
 }
+

@@ -16,6 +16,9 @@
 	<tbody style="page-break-inside:avoid">
 		<tr class="<%= sbl_shippable(r, 'r1') %>">
 			<td class="<%= sbl_shippable(r, 'c1') %>" rowspan="2">
+				<% if r.sales_order.sales_customer_master.status.try(:credit_hold?) %>
+					<strong>Credit Hold</strong><br />
+				<% end %>
 				<%= link_to r.sales_order.customer_name, customer_url(r.sales_order.fcustno) %><br />
 				SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
 				Due: <%= r.due_date.to_s(:sales_date) %>

@@ -28,6 +28,6 @@ group :development do
 end
 
 group :test do
-  # gem 'factory_girl', '=1.2.3'
-  # gem 'transactional-factories', '0.5.0'
+  gem 'factory_girl', '=1.2.3'
+  gem 'transactional-factories', '0.5.0'
 end

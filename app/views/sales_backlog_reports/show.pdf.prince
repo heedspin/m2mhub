@@ -7,7 +7,7 @@
 				@top-center { 
 					content: '<%= @title %>';
 				}
-			  @top-right {
+			  @bottom-center {
 			    content: counter(page) " of " counter(pages)
 			  }
 			}

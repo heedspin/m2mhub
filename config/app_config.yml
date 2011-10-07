@@ -20,6 +20,16 @@ _shared_company_config: &_shared_company_config
     short_name: LXD
     long_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
+    fob_groups:
+      - id: 1
+        name: Raleigh
+        members:
+          - our plant
+          - raleigh nc
+      - id: 2
+        name: China
+        default: true
+    
   smt:
     rounded_dollars: "%.0f"
     dollars: "%.2f"

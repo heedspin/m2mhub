@@ -29,6 +29,7 @@ GEM
       rails (>= 2.1.0)
     delayed_job (2.0.3)
       daemons
+    factory_girl (1.2.3)
     formtastic (0.9.10)
       actionpack (>= 2.3.0)
       activesupport (>= 2.3.0)
@@ -57,6 +58,9 @@ GEM
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
     tiny_tds (0.4.5)
+    transactional-factories (0.5.0)
+      activerecord (>= 2.3.2)
+      activesupport (>= 2.3.2)
     userstamp (2.0.1)
     will_paginate (2.3.12)
 
@@ -71,6 +75,7 @@ DEPENDENCIES
   authlogic (= 2.1.6)
   declarative_authorization (= 0.4)
   delayed_job (= 2.0.3)
+  factory_girl (= 1.2.3)
   formtastic (= 0.9.10)
   mysql (= 2.8.1)
   paperclip (= 2.4.1)
@@ -78,5 +83,6 @@ DEPENDENCIES
   ruby-debug
   ruby-debug-base
   tiny_tds
+  transactional-factories (= 0.5.0)
   userstamp (= 2.0.1)
   will_paginate (= 2.3.12)

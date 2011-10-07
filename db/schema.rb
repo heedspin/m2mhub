@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111006152609) do
+ActiveRecord::Schema.define(:version => 20111007124817) do
 
   create_table "content_modules", :force => true do |t|
     t.string   "key"
@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(:version => 20111006152609) do
     t.datetime "updated_at"
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "fob_group_id"
+    t.integer  "customer_status_id"
   end
 
   create_table "user_activities", :force => true do |t|

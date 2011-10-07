@@ -1,18 +1,22 @@
-<%#= will_paginate @releases %>
-
 <% semantic_form_for :search, @search, :url => sales_backlog_reports_path, :html => {:method => :get} do |f| %>
-<table>
+<table class="flatform">
 	<tbody>
 		<tr>
 			<td>
-				<% f.inputs :class => 'flatform' do %>
-				  <%= f.input :due_date, :as => :calendar, :value => @search.due_date.to_s(:backorder_date), :label => 'Due: ' %>
+				<% f.inputs do %>
+				  <%= f.input :due_date, :as => :calendar, :value => @search.due_date.to_s(:backorder_date), :label => 'Due' %>
 				<% end %>
 			</td>
 			<td>
-				<% f.buttons :class => 'buttons flatform' do %>
-				  <%= f.commit_button 'Go' %>
+				<% f.buttons do %>
+				  <%= f.commit_button 'View' %>
 					<%= f.commit_button 'Print' %>
+				<% end %>
+			</td>
+			<td>
+				<% f.inputs do %>
+					<%= f.input :customer_status %>
+					<%= f.input :fob_group %>
 				<% end %>
 			</td>
 		</tr>
@@ -20,6 +24,7 @@
 </table>
 <% end %>
 
+<% if @search_performed %>
 <%= render 'list' %>
+<% end %>
 
-<%#= will_paginate @sales_orders %>

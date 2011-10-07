@@ -3,6 +3,11 @@ class M2m::SalesCustomerMaster < M2m::Base
   set_primary_key 'fcustno'
   
   alias_attribute :notes, :fmnotes
+  alias_attribute :fob, :ffob
+  
+  def status
+    M2m::CustomerStatus.find_by_key(self.fcstatus)
+  end
 end
 
 # == Schema Information
