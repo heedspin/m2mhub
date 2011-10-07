@@ -1,0 +1,20 @@
+/home/tim/Dropbox/p/lxd_m2mhub/log/*.log {
+  weekly
+  missingok
+  rotate 10
+  compress
+	copytruncate
+  delaycompress
+  sharedscripts
+}
+
+/var/www/lxd_m2mhub/current/log/*.log {
+  weekly
+  missingok
+  rotate 10
+  compress
+	copytruncate
+  delaycompress
+  sharedscripts
+}
+

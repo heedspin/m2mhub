@@ -1,0 +1,4 @@
+#!/bin/sh                                                                                                                                                    
+                                                                                                                                                             
+# Delete pdfgenerator files that have not been modified in more than 2 days.
+find /tmp/pdfgenerator* -type f -mtime +2 -exec rm {} \;
