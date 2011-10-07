@@ -34,7 +34,7 @@ class PdfGenerator
   require 'uri'
   include LoggerUtils
 
-  attr_accessor :file_name, :file, :success, :command_output
+  attr_accessor :file, :success, :command_output
 
   def initialize(xml)
     tempfile = Tempfile.new('pdfgenerator_')
@@ -52,27 +52,13 @@ class PdfGenerator
     File.open(logfile) do |input|
       self.command_output = input.read
     end
-    # FileUtils.rm logfile    
     if self.success
       logger.info "Prince success: #{self.command_output}"
       @file = File.new(destination)
     else
       logger.error "Prince error: #{status}: #{self.command_output}"
     end
-    # FileUtils.rm source
+    FileUtils.rm source
   end
-
-  def size
-    @size ||= File.size(path)
-  end
-
-  def path
-    @file.path
-  end
-
-  def delete_file
-    if @file and @file.path and File.exists?(@file.path)
-      File.delete(@file.path)
-    end
-  end
+  
 end
