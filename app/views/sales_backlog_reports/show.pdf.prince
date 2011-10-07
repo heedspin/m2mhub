@@ -3,7 +3,7 @@
     <style>
 			@page {
 			  size: US-Letter landscape;
-				margin: .6in;
+				margin: .7in .5in .7in .7in;
 				@top-center { 
 					content: '<%= @title %>';
 				}
