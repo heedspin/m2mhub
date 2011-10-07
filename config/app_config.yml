@@ -11,6 +11,7 @@ _shared_company_config: &_shared_company_config
     rounded_dollars: "%.0f"
     dollars: "%.2f"
     sales_order_quantity: "%.0f"
+    purchase_order_quantity: "%.0f"
     item_quantity: "%.0f"
     google_analytics_key: UA-25768569-1
     email_name: LXD WebBot
@@ -35,6 +36,7 @@ _shared_company_config: &_shared_company_config
     rounded_dollars: "%.0f"
     dollars: "%.2f"
     sales_order_quantity: "%.1f"
+    purchase_order_quantity: "%.1f"
     item_quantity: "%.1f"
     google_analytics_key:
     email_name: SMT WebBot

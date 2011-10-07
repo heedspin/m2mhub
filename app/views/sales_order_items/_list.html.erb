@@ -2,6 +2,8 @@
 	<thead>
 		<tr>
 			<th>Sales Order</th>
+			<th>Quantity</th>
+			<th>Status</th>
 			<th>Customer PO #</th>
 			<th>Due Date</th>
 			<th>Customer</th>
@@ -15,6 +17,8 @@
 	<% @sales_order_items.each do |i| %>
 		<tr>
 			<td><%= link_to search_excerpt(i.sales_order.order_number, @search_item.try(:order_number)), sales_order_url(i.sales_order) %></td>
+			<td><%= cm i.quantity, :sales_order_quantity %></td>
+			<td><%= i.sales_order.status %></td>
 			<td><%= search_excerpt(i.sales_order.customer_po, @search_item.try(:order_number)) %></td>
 			<td><%= i.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to i.sales_order.customer_name, customer_url(i.sales_order.fcustno) %></td>
