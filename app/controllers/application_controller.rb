@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   include NavigationSystem
   include Userstamp
+  include PdfGeneration
 
   protected
 

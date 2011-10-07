@@ -2,42 +2,41 @@
 	<thead>
 		<tr>
 			<th>Company / SO</th>
-			<th>Cust Po#</th>
+			<th>Cust PO</th>
 			<th>LXD Part</th>
 			<th>Cust Part</th>
 			<th>Ordered</th>
 			<th>Shipped</th>
 			<th>On Hand</th>
-			<th>Available</th>
-			<th>Loc/Bin</th>
+			<th>Avail</th>
+			<th>Bin</th>
 		</tr>
 	</thead>
-	<tbody>
-		<tr class="spacer"><td></td></tr>
 <% @releases.each do |r| %>
+	<tbody style="page-break-inside:avoid">
 		<tr class="<%= sbl_shippable(r, 'r1') %>">
 			<td class="<%= sbl_shippable(r, 'c1') %>" rowspan="2">
 				<%= link_to r.sales_order.customer_name, customer_url(r.sales_order.fcustno) %><br />
 				SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
 				Due: <%= r.due_date.to_s(:sales_date) %>
 			</td>
-			<td class="<%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
-			<td class="<%= sbl_shippable(r, 'top') %>"><%= link_to r.part_number, item_url(r.part_number) %></td>
+			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
+			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= link_to r.part_number, item_url(r.part_number) %></td>
 			<td class="<%= sbl_shippable(r, 'top') %>"><%= r.item.customer_part_number %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity_shipped, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.item.item.quantity_on_hand, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.item.item.quantity_available, :sales_order_quantity, 0 %></td>
-			<td class="<%= sbl_shippable(r, 'cr') %>"><%= r.item.item.fbin1 %></td>
+			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= r.item.item.fbin1 %></td>
 		</tr>
 		<tr class="<%= sbl_shippable(r, 'r2') %>">
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
 				FOB: <%= r.sales_order.freight_on_board %>, 
 				via: <%= r.sales_order.ship_via %><br />
-				notes: <%= r.sales_order.sales_customer_master.notes %>
+				notes: <%= h r.sales_order.sales_customer_master.notes %>
 			</td>
 		</tr>
 		<tr class="spacer"><td></td></tr>
-<% end %>
 	</tbody>
+<% end %>
 </table>

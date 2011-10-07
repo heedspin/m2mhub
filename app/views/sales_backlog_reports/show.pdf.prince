@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <style>
+			@page {
+			  size: US-Letter landscape;
+				margin: .6in;
+				@top-center { 
+					content: '<%= @title %>';
+				}
+			  @top-right {
+			    content: counter(page) " of " counter(pages)
+			  }
+			}
+    </style>
+  </head>
+  <body>
+    <%= render 'sales_backlog_reports/list' %>
+  </body>
+</html>

@@ -762,8 +762,7 @@ table.backlog {
   border-spacing: 0;
   margin: 15px 0 15px 0;
   }
-table.backlog thead {
-  background: #dcdcdc;
+table.backlog thead tr th {
   }
 table.backlog tr.even {
   background-color: #ededed;
