@@ -26,6 +26,7 @@ _shared_company_config: &_shared_company_config
         members:
           - our plant
           - raleigh nc
+          - yd
       - id: 2
         name: China
         default: true

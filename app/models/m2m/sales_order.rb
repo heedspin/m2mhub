@@ -28,9 +28,8 @@ class M2m::SalesOrder < M2m::Base
   alias_attribute :order_date, :forderdate
   alias_attribute :customer_po, :fcustpono
   alias_attribute :due_date, :fduedate
-  alias_attribute :freight_on_board, :ffob
   alias_attribute :ship_via, :fshipvia
-
+  
   def customer_name
     M2m::Customer.customer_name(self.fcompany)
   end
@@ -42,6 +41,16 @@ class M2m::SalesOrder < M2m::Base
   def status
     self.fstatus.downcase.capitalize
   end
+  
+  # Default to customer sales master
+  def fob
+    if (r = self.ffob.strip).present?
+      self.ffob
+    else
+      self.sales_customer_master.ffob
+    end
+  end
+  
 end
 
 # == Schema Information

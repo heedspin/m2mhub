@@ -34,7 +34,7 @@
 		</tr>
 		<tr class="<%= sbl_shippable(r, 'r2') %>">
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
-				FOB: <%= r.sales_order.freight_on_board %>, 
+				FOB: <%= r.sales_order.fob %>, 
 				via: <%= r.sales_order.ship_via %><br />
 				notes: <%= h r.sales_order.sales_customer_master.notes %>
 			</td>
