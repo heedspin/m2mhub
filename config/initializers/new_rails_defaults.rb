@@ -20,4 +20,4 @@ ActiveSupport.use_standard_json_time_format = true
 # if you're including raw json in an HTML page.
 ActiveSupport.escape_html_entities_in_json = false
 
-ActionView::Helpers::AssetTagHelper.register_javascript_expansion :defaults => %w(jquery.min jquery-ui-1.8.6.custom.min application jrails)
+ActionView::Helpers::AssetTagHelper.register_javascript_expansion :defaults => %w(jquery-1.6.4.min jquery-ui-1.8.6.custom.min application jrails)

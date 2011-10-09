@@ -4,7 +4,7 @@ class M2m::SalesOrder < M2m::Base
   
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
-  has_one :sales_customer_master, :class_name => 'M2m::SalesCustomerMaster', :foreign_key => :fcustno, :primary_key => :fcustno
+  has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
   
   def filtered_releases(*args)
     self.releases(*args).select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
@@ -47,7 +47,7 @@ class M2m::SalesOrder < M2m::Base
     if (r = self.ffob.strip).present?
       self.ffob
     else
-      self.sales_customer_master.ffob
+      self.customer.ffob
     end
   end
   

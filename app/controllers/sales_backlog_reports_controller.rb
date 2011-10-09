@@ -9,12 +9,11 @@ class SalesBacklogReportsController < ApplicationController
     @search.fob_group ||= FobGroup.first
 
     if @search_performed
-      @releases = M2m::SalesOrderRelease.filtered.open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :sales_customer_master}, :order => 'somast.fcompany, sorels.fpartno')
+      @releases = M2m::SalesOrderRelease.filtered.open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fpartno')
       # Filter out by fob and status
       @releases = @releases.select do |r|
-        customer = r.sales_order.sales_customer_master
         correct_group = @search.fob_group.nil? || @search.fob_group.member?(r.sales_order.fob)
-        correct_status = @search.customer_status.nil? || (customer.status == @search.customer_status)
+        correct_status = @search.customer_status.nil? || (r.sales_order.customer.status == @search.customer_status)
         # debugger if Breakpoints.buc && (customer.fcstatus == 'H')
         correct_group && correct_status
       end

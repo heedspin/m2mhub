@@ -4,6 +4,19 @@ class M2m::Customer < M2m::Base
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
 
+  alias_attribute :notes, :fmnotes
+  alias_attribute :fob, :ffob
+  
+  named_scope :name_like, lambda { |text|
+    {
+      :conditions => [ 'slcdpm.fcompany like ?', '%' + (text || '') + '%' ]
+    }
+  }
+  
+  def status
+    M2m::CustomerStatus.find_by_key(self.fcstatus)
+  end
+
   def self.customer_name(txt)
     if (txt =~ /[a-z]/)
       txt
@@ -15,6 +28,10 @@ class M2m::Customer < M2m::Base
   def name
     @name ||= M2m::Customer.customer_name(self.fcompany)
   end
+  
+  def self.all_names
+    self.all(:select => 'slcdpm.fcompany', :order => 'slcdpm.fcompany').map(&:name)
+  end  
 end
 
 # == Schema Information

@@ -852,6 +852,10 @@ table.backlog td.right {
 	text-align: right;
 }
 
+form.formtastic table.flatform {
+	margin: 0 0 5px 0;
+}
+
 form.formtastic table.flatform label {
 	display: inline;
 	margin: 0 5px;
@@ -866,3 +870,16 @@ form.formtastic table.flatform li.commit input {
 	padding: .2em 1em .2em;
 }
 
+div.searchresults {
+	margin-top: 5px;
+}
+
+form.formtastic .flatform fieldset {
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+input#search_fcompany {
+	width: 200px;
+}

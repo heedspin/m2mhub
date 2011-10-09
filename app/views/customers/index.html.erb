@@ -1,18 +1,40 @@
-<%= will_paginate @customers %>
-
-<table class="data">
-	<tbody>
-		<thead>
-			<tr>
-				<th>Company</th>
-			</tr>
-		</thead>
-<% @customers.each do |c| %>
-		<tr>
-			<td><%= link_to c.name, customer_url(c.fcustno) %></td>
-		</tr>
+<% content_for :javascripts do %>
+<% field_map = Proc.new { |fld| ['sites', 'grade_levels'].include?(fld) ? fld.singularize + '_ids' : fld } %>
+<script type="text/javascript">
+$(function() {
+	$("input#search_fcompany").autocomplete({
+  	source: <%= @customer_names.to_json %>
+	});
+})
+</script>
 <% end %>
-	</tbody>
-</table>
 
+<% semantic_form_for :search, @search, :url => customers_path, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<% f.inputs do %>
+				  <%= f.input :fcompany, :label => 'Name' %>
+				<% end %>
+			</td>
+			<td>				
+			  <% f.buttons do %>
+				  <%= f.commit_button 'Search' %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>			
+<% end %>
+
+<% if @customers %>
+<% if @customers.size > 0 %>
 <%= will_paginate @customers %>
+<div class="searchresults">
+<%= render 'list' %>
+</div>
+<% else %>
+<h3>No matches</h3>
+<% end %>
+<% end %>
