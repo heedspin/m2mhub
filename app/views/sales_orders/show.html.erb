@@ -17,10 +17,12 @@
 	Coord: <%= @sales_order.fsocoord %><br />
 </p>
 
+<h3>Releases</h3>
 <table class="data">
 	<thead>
 		<tr>
 			<th>Due Date</th>
+			<th>Delivery<br />Committment</th>
 			<th><%= CompanyConfig.short_name %> Part No.</th>
 			<th>Description</th>
 			<th>Cust Part No.</th>
@@ -34,6 +36,7 @@
 <% @releases.sort_by(&:due_date).each do |r| %>
 		<tr>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
+			<td><%= h r.fdelivery.strip %></td>
 			<td><%= link_to r.part_number, item_url(r.part_number) %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
