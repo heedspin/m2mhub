@@ -17,8 +17,10 @@ class ItemsController < ApplicationController
   def show
     @item = current_object
     @sales_order_items = @item.sales_order_items.all(:order => 'soitem.fsono desc, soitem.fenumber', :include => :sales_order)
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).all(:include => :sales_order)
     @purchase_order_items = @item.purchase_order_items.all(:order => 'poitem.fpono desc, poitem.fitemno', :include => :purchase_order)
     @shippers = M2m::Shipper.for_item(@item).all(:order => 'shmast.fshipdate desc')
+    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases, @purchase_order_items)
   end
   
   protected

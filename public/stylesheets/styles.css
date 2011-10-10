@@ -883,3 +883,15 @@ form.formtastic .flatform fieldset {
 input#search_fcompany {
 	width: 200px;
 }
+
+table.data td.current_on_hand {
+	background-color: #afa;
+	text-align: center;
+	font-weight:bold;	
+}
+
+table.data td.current_on_hand_error {
+	background-color: #faa;
+	text-align: center;
+	font-weight:bold;	
+}

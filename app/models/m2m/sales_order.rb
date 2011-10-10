@@ -42,6 +42,10 @@ class M2m::SalesOrder < M2m::Base
     self.fstatus.downcase.capitalize
   end
   
+  def closed?
+    self.fstatus.downcase.strip == 'closed'
+  end
+  
   # Default to customer sales master
   def fob
     if (r = self.ffob.strip).present?
