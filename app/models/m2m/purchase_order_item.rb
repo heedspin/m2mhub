@@ -8,7 +8,43 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :ship_date, :fdateship
   alias_attribute :quantity, :fordqty
   alias_attribute :quantity_received, :frcpqty
-  alias_attribute :date_received, :frcpdate
+  alias_attribute :item_number, :fitemno
+
+  def date_received
+    self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate
+  end
+  
+  def last_promise_date
+    self.flstpdate == M2m::Constants.null_date ? nil : self.flstpdate
+  end
+  
+  def backorder_quantity
+    quantity - quantity_received
+  end
+  
+  def status
+    if self.closed?
+      if quantity_received == 0
+        'Cancelled'
+      elsif backorder_quantity <= 0
+        'Received'
+      else
+        'Closed Short'
+      end
+    else
+      if quantity_received == 0
+        'Open'
+      elsif backorder_quantity == 0
+        'Receiving'
+      else
+        'Partial'
+      end
+    end
+  end
+  
+  def closed?
+    self.purchase_order.closed?
+  end
 end
 # == Schema Information
 #

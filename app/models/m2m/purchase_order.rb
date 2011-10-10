@@ -12,6 +12,10 @@ class M2m::PurchaseOrder < M2m::Base
     self.fstatus.downcase.capitalize
   end
   
+  def closed?
+    self.fstatus.downcase.strip == 'closed'
+  end
+  
 end
 
 # == Schema Information

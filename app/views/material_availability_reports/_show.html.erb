@@ -1,0 +1,62 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th colspan="2">SO / PO</th>
+			<th>Supply</th>
+			<th>Demand</th>
+			<th>Status</th>
+			<th>Date</th>
+			<th>Net Availability</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @material_availability_report.line_items.each do |line_item| %>
+		<tr>
+			<% if line_item.today? %>
+			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
+			<td class="current_on_hand<%= descrepency ? '_error' : '' %>" colspan="7">
+				Today's On Hand:
+				<% if descrepency %>
+				<strong>
+					Discrepency! History shows <%= cm line_item.net_availability, :sales_order_quantity, 0 %>, 
+					but M2M reports <%= cm @material_availability_report.item.quantity_on_hand, :sales_order_quantity, 0 %>
+				</strong>
+				<% else %>
+				<%= cm line_item.net_availability, :sales_order_quantity, 0 %>
+				<% end %>
+			</td>
+			<% else %>
+			<td>
+				<% if line_item.sales_order? %>
+				<%= link_to "SO #{line_item.order.sales_order_number}", sales_order_url(line_item.order.sales_order_number) %>
+				<% elsif line_item.purchase_order? %>
+				PO <%= line_item.order.purchase_order_number %>
+				<%#= link_to "PO #{line_item.order.purchase_order_number}", purchase_order_url(line_item.order.purchase_order_number) %>
+				<% else %>
+				<%= line_item.order.transaction_type.name %>
+				<% end %>
+			</td>
+			<td>
+				<%= line_item.number %>
+			</td>
+			<td class="right">
+				<%= cm line_item.supply, :sales_order_quantity %>
+			</td>
+			<td class="right">
+				<%= cm line_item.demand, :sales_order_quantity %>
+			</td>
+			<td><%= line_item.status %></td>
+			<td class="right">
+				<%= line_item.date.to_s(:sales_date) if line_item.date %>
+			</td>
+			<td class="right"><%= cm line_item.net_availability, :sales_order_quantity, 0 %></td>
+			<% end %>
+		</tr>	
+		<% end %>
+		<tr>
+			<th colspan="2">Totals</th>
+			<th><%= cm @material_availability_report.total_supply, :sales_order_quantity, 0 %></th>
+			<th><%= cm @material_availability_report.total_demand, :sales_order_quantity, 0 %></th>
+		</tr>
+	</tbody>
+</table>

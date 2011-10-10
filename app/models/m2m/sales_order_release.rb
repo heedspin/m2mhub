@@ -32,6 +32,14 @@ class M2m::SalesOrderRelease < M2m::Base
   named_scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]  
   
   named_scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
+  
+  named_scope :for_item, lambda { |item|
+    fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
+    {
+      :joins => 'inner join soitem on soitem.fenumber = sorels.fenumber and soitem.fsono = sorels.fsono',
+      :conditions => { :soitem => { :fpartno => fpartno } }
+    }
+  }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -44,17 +52,28 @@ class M2m::SalesOrderRelease < M2m::Base
     self.quantity * self.unit_price
   end
   
-  alias_attribute :due_date, :fduedate
   alias_attribute :unit_price, :funetprice
   alias_attribute :total_price, :fnetprice
   alias_attribute :sales_order_number, :fsono
   alias_attribute :sales_order_release_id, :finumber
   alias_attribute :sales_order_release_number, :frelease
   
+  def last_ship_date
+    self.flshipdate == M2m::Constants.null_date ? nil : self.flshipdate
+  end
+  
+  def due_date
+    self.fduedate == M2m::Constants.null_date ? nil : self.fduedate
+  end
+  
   def quantity_shipped
     self.fshipbook + self.fshipbuy + self.fshipmake
   end
   
+  def backorder_quantity
+    quantity - quantity_shipped
+  end
+    
   def part_number
     self.fpartno.strip
   end
@@ -64,8 +83,28 @@ class M2m::SalesOrderRelease < M2m::Base
     self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
   end
   
-  def backorder_quantity
-    quantity - quantity_shipped
+  def status
+    if self.closed?
+      if quantity_shipped == 0
+        'Cancelled'
+      elsif backorder_quantity <= 0
+        'Shipped'
+      else
+        'Closed Short'
+      end
+    else
+      if quantity_shipped == 0
+        'Open'
+      elsif backorder_quantity == 0
+        'Shipping'
+      else
+        'Partial'
+      end
+    end
+  end
+    
+  def closed?
+    self.sales_order.closed?
   end
   
   def can_be_fully_shipped?

@@ -5,6 +5,7 @@ class M2m::Item < M2m::Base
   has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :quote_items, :class_name => 'M2m::QuoteItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
 
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
