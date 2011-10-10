@@ -11,6 +11,7 @@
 	</thead>
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
+		<% next if line_item.closed? and !params.member?(:show_history) %>
 		<tr>
 			<% if line_item.today? %>
 			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>

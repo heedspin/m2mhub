@@ -14,11 +14,14 @@ class MaterialAvailabilityReport
     def inventory_transactions?
       order.is_a?(M2m::InventoryTransaction)
     end
+    def closed?
+      today? || inventory_transactions? || order.closed?
+    end
     def date
       self.actual_date || self.target_date
     end
     def <=>(rhs)
-      [self.date, self.type_weighting, self.number || 0] <=> [rhs.date, rhs.type_weighting, rhs.number || 0]
+      [self.date.to_s, self.type_weighting, self.number || 0] <=> [rhs.date.to_s, rhs.type_weighting, rhs.number || 0]
     end
   end
   
@@ -59,6 +62,7 @@ class MaterialAvailabilityReport
     end
     today = LineItem.new
     today.actual_date = Date.current
+    today.type_weighting = 4
     @line_items.push today
 
     @line_items.sort!
