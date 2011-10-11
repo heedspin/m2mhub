@@ -24,9 +24,9 @@ class MaterialAvailabilityReport
       [self.date.to_s, self.type_weighting, self.number || 0] <=> [rhs.date.to_s, rhs.type_weighting, rhs.number || 0]
     end
   end
-  
-  attr_reader :item, :line_items, :total_supply, :total_demand
-  
+
+  attr_reader :item, :line_items, :total_future_supply, :total_future_demand
+
   def initialize(item, sales_order_releases, purchase_order_items)
     @item = item
     @line_items = []
@@ -49,11 +49,10 @@ class MaterialAvailabilityReport
       i.number = p.item_number
       i.supply = p.closed? ? p.quantity_received : (p.quantity_received > 0 ? p.quantity_received : p.quantity)
       i.status = p.status
-      i.target_date = p.last_promise_date      
+      i.target_date = p.last_promise_date
       i.actual_date = p.date_received
     end
     item.inventory_transactions.each do |t|
-      next if (t.transaction_type.receipts? or t.transaction_type.issues? or t.transaction_type.transfers?)
       @line_items.push i = LineItem.new
       i.order = t
       i.type_weighting = 0
@@ -69,14 +68,21 @@ class MaterialAvailabilityReport
 
     # Calculate net availability
     net_availability = 0.0 #item.quantity_on_hand || 0
-    @total_supply = item.quantity_on_hand
-    @total_demand = 0
+    @total_future_supply = item.quantity_on_hand
+    @total_future_demand = 0
     @line_items.each do |line_item|
       supply = (line_item.supply || 0.0)
       demand = (line_item.demand || 0.0)
-      net_availability = line_item.net_availability = net_availability + supply - demand
-      @total_supply += supply
-      @total_demand += demand
+      if (line_item.inventory_transactions? and
+          (line_item.order.transaction_type.receipts? or line_item.order.transaction_type.issues? or line_item.order.transaction_type.transfers?))
+        line_item.net_availability = net_availability
+      else
+        net_availability = line_item.net_availability = net_availability + supply - demand
+      end
+      unless line_item.closed?
+        @total_future_supply += supply
+        @total_future_demand += demand
+      end
     end
   end
 end
