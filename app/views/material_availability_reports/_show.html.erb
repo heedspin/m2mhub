@@ -56,8 +56,8 @@
 		<% end %>
 		<tr>
 			<th colspan="2">Totals</th>
-			<th><%= cm @material_availability_report.total_supply, :sales_order_quantity, 0 %></th>
-			<th><%= cm @material_availability_report.total_demand, :sales_order_quantity, 0 %></th>
+			<th><%= cm @material_availability_report.total_future_supply, :sales_order_quantity, 0 %></th>
+			<th><%= cm @material_availability_report.total_future_demand, :sales_order_quantity, 0 %></th>
 		</tr>
 	</tbody>
 </table>
