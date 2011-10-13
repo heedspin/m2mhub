@@ -12,7 +12,7 @@
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
 		<% next if line_item.closed? and !params.member?(:show_history) %>
-		<tr>
+		<tr class="<%= !line_item.count_supply_and_demand? ? 'not_counted' : '' %>">
 			<% if line_item.today? %>
 			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
 			<td class="current_on_hand<%= descrepency ? '_error' : '' %>" colspan="7">
@@ -29,12 +29,14 @@
 			<% else %>
 			<td>
 				<% if line_item.sales_order? %>
-				<%= link_to "SO #{line_item.order.sales_order_number}", sales_order_url(line_item.order.sales_order_number) %>
+				<%= link_to "SO #{line_item.sales_order.sales_order_number.to_i}", sales_order_url(line_item.sales_order.sales_order_number) %>
 				<% elsif line_item.purchase_order? %>
-				PO <%= line_item.order.purchase_order_number %>
-				<%#= link_to "PO #{line_item.order.purchase_order_number}", purchase_order_url(line_item.order.purchase_order_number) %>
+				PO <%= line_item.purchase_order_item.purchase_order_number.to_i %>
+				<% elsif line_item.receiver? %>
+				PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>, 
+				Recv <%= line_item.receiver_item.receiver_number.to_i %>
 				<% else %>
-				<%= line_item.order.transaction_type.name %>
+				<%= line_item.inventory_transaction.transaction_type.name %>
 				<% end %>
 			</td>
 			<td>
@@ -50,7 +52,9 @@
 			<td class="right">
 				<%= line_item.date.to_s(:sales_date) if line_item.date %>
 			</td>
+			<% if line_item.count_supply_and_demand? %>
 			<td class="right"><%= cm line_item.net_availability, :sales_order_quantity, 0 %></td>
+			<% end %>
 			<% end %>
 		</tr>	
 		<% end %>

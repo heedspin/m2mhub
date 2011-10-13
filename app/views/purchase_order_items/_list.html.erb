@@ -1,8 +1,11 @@
 <table class="data">
 	<thead>
 		<tr>
-			<th>Purchase Order</th>
+			<th>PO No</th>
+			<th>Item No</th>
+			<th>Rel</th>
 			<th>Quantity</th>
+			<th>Promise<br />Date</th>
 			<th>Status</th>
 			<th>Received</th>
 			<th>Date Received</th>
@@ -14,9 +17,12 @@
 	<% @purchase_order_items.each do |i| %>
 		<tr>
 			<td><%= i.purchase_order_number %></td>
-			<td><%= cm i.quantity, :purchase_order_quantity %></td>
+			<td><%= i.item_number %></td>
+			<td><%= i.release %></td>
+			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
+			<td><%= i.last_promise_date.to_s(:purchase_date) %></td>
 			<td><%= i.purchase_order.status %></td>
-			<td><%= cm i.quantity_received, :purchase_order_quantity %></td>
+			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
 			<td><%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
 			<td><%= h i.item.fdescript %></td>

@@ -895,3 +895,7 @@ table.data td.current_on_hand_error {
 	text-align: center;
 	font-weight:bold;	
 }
+
+table.data tr.not_counted {
+	background-color: #eee;	
+}

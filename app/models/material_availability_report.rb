@@ -1,27 +1,109 @@
 class MaterialAvailabilityReport
 
   class LineItem
-    attr_accessor :order, :number, :type_weighting, :supply, :demand, :status, :target_date, :actual_date, :net_availability
+    attr_accessor :number, :type_weighting, :supply, :demand, :status, :target_date, :actual_date, :net_availability, :count_supply_and_demand
     def today?
-      order.nil?
+      self.is_a?(TodayLineItem)
     end
     def sales_order?
-      order.is_a?(M2m::SalesOrderRelease)
+      self.is_a?(SalesLineItem)
     end
     def purchase_order?
-      order.is_a?(M2m::PurchaseOrderItem)
+      self.is_a?(PurchaseLineItem)
     end
     def inventory_transactions?
-      order.is_a?(M2m::InventoryTransaction)
+      self.is_a?(InventoryLineItem)
+    end
+    def receiver?
+      self.is_a?(ReceiverLineItem)
     end
     def closed?
-      today? || inventory_transactions? || order.closed?
+      true
     end
     def date
       self.actual_date || self.target_date
     end
     def <=>(rhs)
-      [self.date.to_s, self.type_weighting, self.number || 0] <=> [rhs.date.to_s, rhs.type_weighting, rhs.number || 0]
+      [self.date.to_s, self.type_weighting, (self.number || 0).to_s] <=> [rhs.date.to_s, rhs.type_weighting, (rhs.number || 0).to_s]
+    end
+    def count_supply_and_demand?
+      @count_supply_and_demand
+    end
+  end
+
+  class TodayLineItem < LineItem
+    def initialize
+      self.actual_date = Date.current
+      self.type_weighting = 4
+    end
+  end
+
+  class SalesLineItem < LineItem
+    attr :sales_order
+    def initialize(sales_order)
+      @sales_order = sales_order
+      self.type_weighting = 3
+      self.number = @sales_order.sales_order_release_id
+      self.demand = if @sales_order.closed?
+        @sales_order.quantity_shipped
+      elsif @sales_order.quantity_shipped > 0
+        @sales_order.quantity_shipped
+      else
+        @sales_order.quantity
+      end
+      self.status = @sales_order.status
+      self.target_date = @sales_order.due_date
+      self.actual_date = @sales_order.last_ship_date
+      self.count_supply_and_demand = true #self.target_date >= Date.current
+    end
+    def closed?
+      @sales_order.closed?
+    end
+  end
+
+  class PurchaseLineItem < LineItem
+    attr :purchase_order_item
+    def initialize(purchase_order_item)
+      @purchase_order_item = purchase_order_item
+      self.type_weighting = 2
+      self.number = @purchase_order_item.item_number
+      self.supply = if @purchase_order_item.closed?
+        @purchase_order_item.quantity_received
+      elsif @purchase_order_item.quantity_received > 0
+        @purchase_order_item.quantity_received
+      else
+        @purchase_order_item.quantity
+      end
+      self.status = @purchase_order_item.status
+      self.target_date = @purchase_order_item.last_promise_date
+      self.actual_date = @purchase_order_item.date_received
+      self.count_supply_and_demand = ((self.actual_date || self.target_date) >= Date.current)
+    end
+    def closed?
+      @purchase_order_item.closed?
+    end
+  end
+
+  class InventoryLineItem < LineItem
+    attr :inventory_transaction
+    def initialize(inventory_transaction)
+      @inventory_transaction = inventory_transaction
+      self.type_weighting = 1
+      self.supply = @inventory_transaction.quantity
+      self.actual_date = @inventory_transaction.date
+      self.count_supply_and_demand = !(@inventory_transaction.transaction_type.receipts? or @inventory_transaction.transaction_type.issues? or @inventory_transaction.transaction_type.transfers?)
+    end
+  end
+
+  class ReceiverLineItem < LineItem
+    attr :receiver_item
+    def initialize(receiver_item)
+      @receiver_item = receiver_item
+      self.type_weighting = 0
+      self.supply = @receiver_item.quantity
+      self.actual_date = @receiver_item.receiver.date_received
+      self.count_supply_and_demand = true
+      self.number = "#{@receiver_item.purchase_order_item_number}-#{@receiver_item.release_number}"
     end
   end
 
@@ -31,38 +113,19 @@ class MaterialAvailabilityReport
     @item = item
     @line_items = []
     sales_order_releases.each do |r|
-      # next unless r.backorder_quantity <= 0
-      @line_items.push i = LineItem.new
-      i.order = r
-      i.type_weighting = 2
-      i.number = r.sales_order_release_id
-      i.demand = r.closed? ? r.quantity_shipped : (r.quantity_shipped > 0 ? r.quantity_shipped : r.quantity)
-      i.status = r.status
-      i.target_date = r.due_date
-      i.actual_date = r.last_ship_date
+      @line_items.push SalesLineItem.new(r)
     end
     purchase_order_items.each do |p|
-      # next unless p.backorder_quantity <= 0
-      @line_items.push i = LineItem.new
-      i.order = p
-      i.type_weighting = 1
-      i.number = p.item_number
-      i.supply = p.closed? ? p.quantity_received : (p.quantity_received > 0 ? p.quantity_received : p.quantity)
-      i.status = p.status
-      i.target_date = p.last_promise_date
-      i.actual_date = p.date_received
+      @line_items.push i = PurchaseLineItem.new(p)
     end
     item.inventory_transactions.each do |t|
-      @line_items.push i = LineItem.new
-      i.order = t
-      i.type_weighting = 0
-      i.supply = t.quantity
-      i.actual_date = t.date
+      next if t.transaction_type.receipts?
+      @line_items.push i = InventoryLineItem.new(t)
     end
-    today = LineItem.new
-    today.actual_date = Date.current
-    today.type_weighting = 4
-    @line_items.push today
+    item.receiver_items.each do |r|
+      @line_items.push ReceiverLineItem.new(r)
+    end
+    @line_items.push TodayLineItem.new
 
     @line_items.sort!
 
@@ -71,17 +134,16 @@ class MaterialAvailabilityReport
     @total_future_supply = item.quantity_on_hand
     @total_future_demand = 0
     @line_items.each do |line_item|
-      supply = (line_item.supply || 0.0)
-      demand = (line_item.demand || 0.0)
-      if (line_item.inventory_transactions? and
-          (line_item.order.transaction_type.receipts? or line_item.order.transaction_type.issues? or line_item.order.transaction_type.transfers?))
-        line_item.net_availability = net_availability
-      else
+      if line_item.count_supply_and_demand?
+        supply = (line_item.supply || 0.0)
+        demand = (line_item.demand || 0.0)
         net_availability = line_item.net_availability = net_availability + supply - demand
-      end
-      unless line_item.closed?
-        @total_future_supply += supply
-        @total_future_demand += demand
+        unless line_item.closed?
+          @total_future_supply += supply
+          @total_future_demand += demand
+        end
+      else
+        line_item.net_availability = net_availability
       end
     end
   end

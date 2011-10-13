@@ -9,6 +9,8 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :quantity, :fordqty
   alias_attribute :quantity_received, :frcpqty
   alias_attribute :item_number, :fitemno
+  alias_attribute :requisition_date, :freqdate
+  alias_attribute :release, :frelsno
 
   def date_received
     self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate
