@@ -1,5 +1,6 @@
 class M2m::InventoryVendor < M2m::Base
-  set_table_name 'invend'  
+  set_table_name 'invend'
+  alias_attribute :vendor_part_number, :fvpartno
 end
 
 # == Schema Information
