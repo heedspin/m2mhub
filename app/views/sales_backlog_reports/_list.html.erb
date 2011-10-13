@@ -23,7 +23,10 @@
 				Due: <%= r.due_date.to_s(:sales_date) %>
 			</td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
-			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= link_to r.part_number, item_url(r.part_number) %></td>
+			<td class="centered <%= sbl_shippable(r, 'top') %>">
+				<%= link_to r.part_number, item_url(r.part_number) %>
+				<%= r.part_rev unless r.part_rev == '000' %>
+			</td>
 			<td class="<%= sbl_shippable(r, 'top') %>"><%= r.item.customer_part_number %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity_shipped, :sales_order_quantity, 0 %></td>

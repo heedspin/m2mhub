@@ -77,7 +77,11 @@ class M2m::SalesOrderRelease < M2m::Base
   def part_number
     self.fpartno.strip
   end
-  
+
+  def part_rev
+    self.fpartrev.strip
+  end
+    
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)
     self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
