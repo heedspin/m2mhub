@@ -6,4 +6,8 @@ class UserRole < ActiveHash::Base
     { :id => 3, :name => 'Shipping'}
   ]
   include ActiveHashMethods  
+  
+  def self.default
+    UserRole.find(2)
+  end
 end

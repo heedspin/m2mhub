@@ -84,7 +84,7 @@ class User < ApplicationModel
 
     before_validation :set_default_status_and_role, :on => :create
     def set_default_status_and_role
-      self.user_role_id ||= UserRole.user.id
+      self.user_role_id ||= UserRole.default.id
       self.user_status_id ||= UserStatus.unconfirmed.id
     end
 end

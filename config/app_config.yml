@@ -46,6 +46,10 @@ _shared_company_config: &_shared_company_config
     short_name: SMT
     long_name: SMT, Inc.
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
+    fob_groups:
+      - id: 1
+        name: Unknown
+        default: true
 
 development:
   local_company_config:
