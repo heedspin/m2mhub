@@ -5,8 +5,7 @@ namespace :default_data do
   desc "Load default users"
   task :users => :environment do
     users = [
-      ['Robo', 'Mailer', CompanyConfig.email_address],
-      ['Tim', 'Harrison', 'tharrison@lxdinc.com']
+      ['Robo', 'Mailer', CompanyConfig.email_address, 'betterchangemequick']
     ]
 
     users.each do |user|
