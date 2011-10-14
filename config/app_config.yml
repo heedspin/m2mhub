@@ -48,8 +48,18 @@ _shared_company_config: &_shared_company_config
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
     fob_groups:
       - id: 1
-        name: Unknown
         default: true
+        name: SMT
+        members:
+          - our plant
+      - id: 2
+        name: Third Party
+        members:
+          - 3rd party
+      - id: 3
+        name: Your Dock
+        members:
+          - your dock
 
 development:
   local_company_config:
