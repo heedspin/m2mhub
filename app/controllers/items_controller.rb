@@ -19,7 +19,7 @@ class ItemsController < ApplicationController
     @sales_order_items = @item.sales_order_items.all(:order => 'soitem.fsono desc, soitem.fenumber', :include => :sales_order)
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).all#(:include => [:sales_order, :item])
     @sales_order_releases.each do |r|
-      if i = @sales_order_items.detect { |i| i.fenumber == r.fenumber }
+      if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
         r.item = i
         r.sales_order = i.sales_order
       end
