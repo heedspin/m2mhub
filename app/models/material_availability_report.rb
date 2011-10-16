@@ -83,7 +83,10 @@ class MaterialAvailabilityReport
       self.count_supply_and_demand = ((self.actual_date || self.target_date) >= Date.current)
     end
     def closed?
-      @purchase_order_item.closed?
+      # TODO: Perhaps make this policy a configuration option.
+      # We're considering purchase orders closed when the last promise date passes.
+      # I don't understand this policy, but M2M's ma report appears to run this way.
+      @purchase_order_item.closed? || (@purchase_order_item.last_promise_date < Date.current)
     end
   end
 
