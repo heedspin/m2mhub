@@ -57,7 +57,10 @@ class MaterialAvailabilityReport
       self.count_supply_and_demand = true #self.target_date >= Date.current
     end
     def closed?
-      @sales_order.closed?
+      # TODO: Perhaps make this policy a configuration option.
+      # We're considering sales orders closed when the last ship date passes.
+      # I don't understand this policy, but M2M's ma report appears to run this way.
+      @sales_order.closed? || ((@sales_order.last_ship_date || @sales_order.due_date) < Date.current)
     end
   end
 
