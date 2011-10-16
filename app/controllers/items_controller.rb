@@ -1,7 +1,9 @@
 class ItemsController < ApplicationController
+  filter_access_to_defaults
 
   class SearchItem < M2m::Item
-    set_primary_key :_disabled # Allows search[:fpartno] to be mass-assigned.
+    # Allows search[:fpartno] to be mass-assigned.
+    set_primary_keys '_disabled_fpartno', '_disabled_frev'
   end
 
   def index
