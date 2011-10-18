@@ -9,7 +9,7 @@ class SalesOrderReleasesController < ApplicationController
   def index
     @search = SearchItem.new(:fpartno => params[:item], :filter_status => params[:status])
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@search.part_number).by_due_date_desc
-    if @search.filter_status
+    if @search.filter_status.present?
       @sales_order_releases = @sales_order_releases.with_status(@search.filter_status)
     end
     @sales_order_releases = @sales_order_releases.all(:include => [:sales_order])

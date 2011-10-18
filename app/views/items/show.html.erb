@@ -1,10 +1,7 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
-	$("#purchase_order_items").load('<%= purchase_order_items_url(:item => @item.part_number) %>')
-
-	// replace_html_and_trap("<%= sales_order_releases_url(:item => @item.part_number, :status => M2m::Status.open.name) %>", '#sales_order_releases');
-
+	ajax_load_content('<%= purchase_order_items_url(:item => @item.part_number, :status => M2m::Status.open.to_s) %>', '#purchase_order_items');
 	ajax_link('#shippers');
 });
 

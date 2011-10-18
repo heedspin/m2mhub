@@ -12,12 +12,23 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :requisition_date, :freqdate
   alias_attribute :release, :frelsno
   
+  def part_number
+    self.fpartno.strip
+  end
+  
   named_scope :for_item, lambda { |part_number|
     {
       :joins => :item,
       :conditions => { :inmast => { :fpartno => part_number } }
     }
   }
+  
+  named_scope :with_status, lambda { |status|
+    status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
+    {
+      :conditions => { :pomast => { :fstatus => status_name.upcase } }
+    }
+  }  
 
   def date_received
     self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate
@@ -32,27 +43,29 @@ class M2m::PurchaseOrderItem < M2m::Base
   end
   
   def status
-    if self.closed?
+    if self.purchase_order.status.closed?
       if quantity_received == 0
-        'Cancelled'
+        M2m::Status.cancelled
       elsif backorder_quantity <= 0
-        'Received'
+        M2m::Status.received
       else
-        'Closed Short'
+        M2m::Status.closed_short
+      end
+    elsif self.purchase_order.status.open?
+      if quantity_received == 0
+        M2m::Status.open
+      elsif backorder_quantity == 0
+        M2m::Status.receiving
+      else
+        M2m::Status.partial
       end
     else
-      if quantity_received == 0
-        'Open'
-      elsif backorder_quantity == 0
-        'Receiving'
-      else
-        'Partial'
-      end
+      self.purchase_order.status
     end
   end
   
   def closed?
-    self.purchase_order.closed?
+    self.purchase_order.status.closed?
   end
 end
 # == Schema Information

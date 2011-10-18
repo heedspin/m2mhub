@@ -1,5 +1,12 @@
 <% if @purchase_order_items.size == 0 %>
-<p>None</p>
+<% if @search && @search.filter_status.present? %>
+	<p>
+		No <%= @search.filter_status %> purchase orders.
+		<%= link_to "Show all", purchase_order_items_path(:item => @search.part_number), :class => 'ajax_link' %>
+	</p>
+<% else %>
+	<p>No sales orders</p>
+<% end %>
 <% else %>
 <table class="data">
 	<thead>
@@ -30,6 +37,13 @@
 			<td><%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
 			<td><%= h i.item.fdescript %></td>
 		</tr>
+	<% end %>
+	<% if @search.filter_status.present? %>
+	<tr>
+		<td class="ninjaborders">
+			<%= link_to "Show all", purchase_order_items_path(:item => @search.part_number), :class => 'ajax_link' %>
+		</td>
+	</tr>
 	<% end %>
 	</tbody>
 </table>

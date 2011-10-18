@@ -6,7 +6,7 @@
 <% if search && search.filter_status.present? %>
 	<p>
 		No <%= search.filter_status %> sales orders.
-		<%= link_to "Show all", sales_order_releases_path(:item => search.part_number), :class => 'show_more' %>
+		<%= link_to "Show all", sales_order_releases_path(:item => search.part_number), :class => 'ajax_link' %>
 	</p>
 <% else %>
 	<p>No sales orders</p>

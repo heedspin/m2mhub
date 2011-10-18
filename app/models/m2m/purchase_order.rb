@@ -9,7 +9,7 @@ class M2m::PurchaseOrder < M2m::Base
   named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
 
   def status
-    self.fstatus.downcase.capitalize
+    M2m::Status.find_by_name(self.fstatus)
   end
   
   def closed?
