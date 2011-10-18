@@ -39,11 +39,11 @@ class M2m::SalesOrder < M2m::Base
   end
   
   def status
-    self.fstatus.downcase.capitalize
+    M2m::Status.find_by_name(self.fstatus)
   end
   
   def closed?
-    self.fstatus.downcase.strip == 'closed'
+    self.status.closed?
   end
   
   # Default to customer sales master

@@ -26,6 +26,13 @@ class M2m::SalesOrderItem < M2m::Base
       :conditions => [ 'somast.fcustpono like ? OR somast.fsono like ?', text, text]
     }
   }
+  
+  named_scope :for_item, lambda { |part_number|
+    {
+      :joins => :item,
+      :conditions => { 'inmast' => {:fpartno => part_number}}
+    }
+  }
 
 end
 

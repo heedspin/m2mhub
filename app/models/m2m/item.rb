@@ -1,6 +1,7 @@
 class M2m::Item < M2m::Base
   set_table_name 'inmast'
-  set_primary_key 'fpartno'
+  # set_primary_key 'fpartno'
+  set_primary_keys 'fpartno', 'frev'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -8,6 +9,7 @@ class M2m::Item < M2m::Base
   has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
 
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
@@ -17,6 +19,7 @@ class M2m::Item < M2m::Base
   alias_attribute :quantity_non_nettable, :fnonnetqty
   alias_attribute :quantity_in_process, :fproqty
   alias_attribute :quantity_in_inspection, :fqtyinspec
+  alias_attribute :revision, :frev
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -27,13 +30,16 @@ class M2m::Item < M2m::Base
     self.fpartno.strip
   end
   
+  named_scope :with_part_number, lambda { |pn| {:conditions => { :fpartno => pn }} }
+  named_scope :by_rev_desc, :order => 'inmast.frev desc'
+  
   named_scope :part_number_like, lambda { |text|
-    text = ActiveRecord::Base.quote_value('%' + (text || '') + '%')
+    text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {
       :joins => <<-SQL
       INNER JOIN
       ( SELECT distinct [inmast].identity_column FROM [inmast] 
-        INNER JOIN [invend] ON invend.fpartno = inmast.fpartno 
+        LEFT JOIN [invend] ON invend.fpartno = inmast.fpartno 
         WHERE (inmast.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
       on inmast.identity_column = tmp1.identity_column
       SQL

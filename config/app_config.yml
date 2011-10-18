@@ -35,12 +35,12 @@ _shared_company_config: &_shared_company_config
   smt:
     rounded_dollars: "%.0f"
     dollars: "%.2f"
-    sales_order_quantity: "%.1f"
-    purchase_order_quantity: "%.1f"
-    item_quantity: "%.1f"
+    sales_order_quantity: "%.0f"
+    purchase_order_quantity: "%.0f"
+    item_quantity: "%.0f"
     google_analytics_key:
     email_name: SMT WebBot
-    email_address: tharrison@smtcoinc.com
+    email_address: smtcoinc@gmail.com
     email_domain: smtcoinc.com
     website: www.smtcoinc.com
     short_name: SMT

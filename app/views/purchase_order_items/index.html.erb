@@ -1,3 +1,6 @@
+<% if @purchase_order_items.size == 0 %>
+<p>None</p>
+<% else %>
 <table class="data">
 	<thead>
 		<tr>
@@ -30,3 +33,4 @@
 	<% end %>
 	</tbody>
 </table>
+<% end %>

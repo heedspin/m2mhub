@@ -1,4 +1,5 @@
 
+<% if @date %>
 <div class="submenu">
 	<ul>
 		<li class="datenav">
@@ -20,9 +21,9 @@
 		</li>
 	</ul>
 </div>
-
 <br />
-
 <h2>Shippers for <%= @date.to_s(:shipper_date) %></h2>
+<% end %>
+
 <%= render 'list' %>
 

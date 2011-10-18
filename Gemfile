@@ -20,6 +20,7 @@ gem "airbrake"
 #gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
 gem 'active_hash' #, '0.9.1'
 gem 'userstamp', '2.0.1'
+gem 'composite_primary_keys', '2.3.5.1'
 
 group :development do
   gem 'ruby-debug'

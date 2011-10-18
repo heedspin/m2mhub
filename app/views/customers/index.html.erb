@@ -1,5 +1,4 @@
 <% content_for :javascripts do %>
-<% field_map = Proc.new { |fld| ['sites', 'grade_levels'].include?(fld) ? fld.singularize + '_ids' : fld } %>
 <script type="text/javascript">
 $(function() {
 	$("input#search_fcompany").autocomplete({

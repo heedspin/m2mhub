@@ -54,7 +54,7 @@ class MaterialAvailabilityReport
       self.status = @sales_order.status
       self.target_date = @sales_order.due_date
       self.actual_date = @sales_order.last_ship_date
-      self.count_supply_and_demand = true #self.target_date >= Date.current
+      self.count_supply_and_demand = (!self.status.on_hold?) #self.target_date >= Date.current
     end
     def closed?
       # TODO: Perhaps make this policy a configuration option.
@@ -114,21 +114,23 @@ class MaterialAvailabilityReport
   end
 
   attr_reader :item, :line_items, :total_future_supply, :total_future_demand
+  attr_reader :sales_order_releases
 
-  def initialize(item, sales_order_releases, purchase_order_items)
+  def initialize(item, sales_order_releases)
     @item = item
     @line_items = []
-    sales_order_releases.each do |r|
+    @sales_order_releases = sales_order_releases
+    @sales_order_releases.each do |r|
       @line_items.push SalesLineItem.new(r)
     end
-    purchase_order_items.each do |p|
+    item.purchase_order_items.each do |p|
       @line_items.push i = PurchaseLineItem.new(p)
     end
     item.inventory_transactions.each do |t|
       next if t.transaction_type.receipts?
       @line_items.push i = InventoryLineItem.new(t)
     end
-    item.receiver_items.each do |r|
+    item.receiver_items.all(:include => :receiver).each do |r|
       @line_items.push ReceiverLineItem.new(r)
     end
     @line_items.push TodayLineItem.new

@@ -659,7 +659,9 @@ table.data td.right {
 	text-align: right;
 }
 
-
+table.data td.ninjaborders {
+	border: none;
+}
 
 /* NEWS
 -------------------------------------------------------------------- */
@@ -898,4 +900,10 @@ table.data td.current_on_hand_error {
 
 table.data tr.not_counted {
 	background-color: #eee;	
+}
+
+p.inprogress {
+	background:url(../images/inprogress.gif) top left no-repeat;
+	padding-left: 2em;
+	font-size: 1em;
 }

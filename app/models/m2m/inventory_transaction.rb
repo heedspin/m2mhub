@@ -9,6 +9,8 @@ class M2m::InventoryTransaction < M2m::Base
   
   alias_attribute :quantity, :fqty
   alias_attribute :date, :fdate
+  alias_attribute :revision, :fcpartrev
+  alias_attribute :comment, :fcomment
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 	

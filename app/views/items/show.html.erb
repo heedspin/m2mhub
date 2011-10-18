@@ -1,24 +1,48 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("#purchase_order_items").load('<%= purchase_order_items_url(:item => @item.part_number) %>')
+
+	// replace_html_and_trap("<%= sales_order_releases_url(:item => @item.part_number, :status => M2m::Status.open.name) %>", '#sales_order_releases');
+
+	ajax_link('#shippers');
+});
+
+</script>
+<% end %>
 
 <h3><%= @item.fpartno %></h3>
 
-<% @items = [@item] %>
 <%= render 'list' %>
 
 <h3>Material Availability</h3>
 <%= render 'material_availability_reports/show' %>
 
 <h3>Purchase Orders:</h3>
-<%= render 'purchase_order_items/list' %>
+<div id="purchase_order_items">
+	<%= image_tag 'inprogress.gif', :alt => "In Progress" %>
+</div>
 
-<h3>Sales Orders:</h3>
-<%= render 'sales_order_releases/list' %>
+<h3>Sales Orders</h3>
+<div id="sales_order_releases">
+	<%= render 'sales_order_releases/list', :sales_order_releases => @sales_order_releases %>
+	<%#= image_tag 'inprogress.gif', :alt => "In Progress" %>
+</div>
 
-<% if @item.quote_items.size > 0 %>
+<% if @quote_items.size > 0 %>
 <h3>Quotes:</h3>
-<%= render 'quote_items/list', :quote_items => @item.quote_items, :show_quotes => true %>
+<div id="quote_items">
+<%= render 'quote_items/list', :quote_items => @quote_items, :show_quotes => true %>
+</div>
 <% end %>
 
-<% if @shippers.size > 0 %>
 <h3>Shippers</h3>
-<%= render 'shippers/list' %>
-<% end %>
+<div id="shippers">
+	<p>
+	<% if @shippers_count == 0 %>
+	No Shippers
+	<% else %>
+	<%= link_to "Show #{@shippers_count} Shippers", shippers_url(:item => @item.part_number), :class => 'ajax_link' %>	
+	<% end %>
+	</p>
+</div>

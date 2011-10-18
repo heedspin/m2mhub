@@ -10,6 +10,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :sales_order_items, :only => [:index, :show]
+  map.resources :sales_order_releases, :only => [:index]
+  map.resources :purchase_order_items, :only => [:index]
+  map.resources :quote_items, :only => [:index]
   map.resources :user_activities, :only => [:index]
   map.resources :items, :only => [:index]
   map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/

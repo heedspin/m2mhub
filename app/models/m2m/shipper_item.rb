@@ -7,6 +7,7 @@ class M2m::ShipperItem < M2m::Base
   
   alias_attribute :quantity_shipped, :fshipqty
   alias_attribute :quantity_ordered, :forderqty
+  alias_attribute :revision, :frev
 
   attr_accessor :sales_order_release
   def sales_order_release

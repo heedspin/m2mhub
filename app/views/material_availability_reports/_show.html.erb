@@ -37,6 +37,9 @@
 				Recv <%= line_item.receiver_item.receiver_number.to_i %>
 				<% else %>
 				<%= line_item.inventory_transaction.transaction_type.name %>
+				<% if line_item.inventory_transaction.comment.present? %>
+				<br /><%= h line_item.inventory_transaction.comment %>
+				<% end %>
 				<% end %>
 			</td>
 			<td>

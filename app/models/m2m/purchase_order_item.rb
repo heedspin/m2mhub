@@ -11,6 +11,13 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :item_number, :fitemno
   alias_attribute :requisition_date, :freqdate
   alias_attribute :release, :frelsno
+  
+  named_scope :for_item, lambda { |part_number|
+    {
+      :joins => :item,
+      :conditions => { :inmast => { :fpartno => part_number } }
+    }
+  }
 
   def date_received
     self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate

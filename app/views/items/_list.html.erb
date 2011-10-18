@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th><%= CompanyConfig.short_name %> Part</th>
+			<th>Rev</th>
 			<th>Vendor Part</th>
 			<th>Description</th>
 			<th>Bin</th>
@@ -14,14 +15,15 @@
 	<tbody>
 	<% @items.each do |i| %>
 		<tr>
-			<td><%= link_to search_excerpt(i.part_number, @search_item.try(:fpartno)), item_url(i.part_number) %></td>
+			<td><%= link_to_unless @search_item.nil?, search_excerpt(i.part_number, @search_item.try(:fpartno)), item_url(i.part_number) %></td>
+			<td><%= i.revision %></td>
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.try(:fpartno)) }.join(', ') %></td>
 			<td><%= h i.fdescript %></td>
 			<td><%= i.fbin1 %></td>
-			<td><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
-			<td><%= cm i.quantity_committed, :item_quantity, 0 %></td>
-			<td><%= cm i.quantity_available, :item_quantity %></td>
-			<td><%= cm i.quantity_on_order, :item_quantity, 0 %></td>
+			<td class="right"><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
+			<td class="right"><%= cm i.quantity_committed, :item_quantity, 0 %></td>
+			<td class="right"><%= cm i.quantity_available, :item_quantity %></td>
+			<td class="right"><%= cm i.quantity_on_order, :item_quantity, 0 %></td>
 		</tr>
 	<% end %>
 	</tbody>
