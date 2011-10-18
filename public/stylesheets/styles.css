@@ -907,3 +907,7 @@ p.inprogress {
 	padding-left: 2em;
 	font-size: 1em;
 }
+
+tr.closed_so {
+	display: none;
+}

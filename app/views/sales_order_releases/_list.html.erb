@@ -1,16 +1,19 @@
-<% if !defined?(search) %>
-<% search = nil %>
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("#show_closed_so").toggle(function() { 
+	  $(".closed_so").show();
+	  $(this).html("Hide Closed Sales Orders");
+	}, function() {
+	  $(".closed_so").hide();
+	  $(this).html("Show Closed Sales Orders");
+	});
+});
+</script>
 <% end %>
 
 <% if sales_order_releases.size == 0 %>
-<% if search && search.filter_status.present? %>
-	<p>
-		No <%= search.filter_status %> sales orders.
-		<%= link_to "Show all", sales_order_releases_path(:item => search.part_number), :class => 'ajax_link' %>
-	</p>
-<% else %>
 	<p>No sales orders</p>
-<% end %>
 <% else %>
 <table class="data">
 	<thead>
@@ -32,7 +35,7 @@
 	</thead>
 	<tbody>
 	<% sales_order_releases.each do |r| %>
-		<tr>
+		<tr class="<%= r.closed? ? 'closed_so' : '' %>">
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
 			<td><%= cm r.quantity, :sales_order_quantity %></td>
@@ -48,10 +51,10 @@
 			<td class="monitary">$<%= cm r.unit_price, :dollars %></td>
 		</tr>
 	<% end %>
-	<% if search.try(:filter_status) %>
+	<% if sales_order_releases.count { |r| r.closed? } > 0 %>
 	<tr>
-		<td class="ninjaborders">
-			<%= link_to "Show all", sales_order_releases_path(:item => search.part_number), :class => 'ajax_link' %>
+		<td class="ninjaborders" colspan="13">
+			<%= link_to "Show Closed Sales Orders", '#', :id => 'show_closed_so' %>
 		</td>
 	</tr>
 	<% end %>
