@@ -1,16 +1,8 @@
-<% if !defined?(show_quotes) %>
-<% show_quotes = false %>
-<% end %>
 <table class="data">
 	<tbody>
 		<thead>
 			<tr>
-				<% if show_quotes %>
 				<th>Quote</th>
-				<th>Customer</th>
-				<% else %>
-				<th>Item #</th>
-				<% end %>
 				<th><%= CompanyConfig.short_name %> Part No.</th>
 				<th>Description</th>
 				<th>Qty</th>
@@ -21,14 +13,9 @@
 				<th>Sales<br />Order</th>
 			</tr>
 		</thead>
-<% quote_items.each do |item| %>
+<% @quote_items.each do |item| %>
 		<tr>
-			<% if show_quotes %>
 			<td><%= link_to item.quote.quote_number, quote_url(item.quote) %></td>
-			<td><%= link_to item.quote.customer_name, customer_url(item.quote.fcustno) %></td>
-			<% else %>
-			<td><%= item.fenumber %></td>
-			<% end %>
 			<td><%= link_to_if item.item.present?, item.part_number, item_url(item.part_number) %></td>
 			<td><%= simple_format item.fdesc.strip %></td>
 			<td><%= cm item.quantity, :sales_order_quantity %></td>

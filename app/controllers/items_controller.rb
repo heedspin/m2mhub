@@ -31,7 +31,7 @@
     @shippers_count = M2m::Shipper.for_item(@item).count
     @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases)
     @total_sales_order_releases = @sales_order_releases.size
-    @sales_order_releases = @sales_order_releases[0..10]
+    @sales_order_releases = @sales_order_releases[0..4]
     @quote_items = @item.quote_items.all
   end
 

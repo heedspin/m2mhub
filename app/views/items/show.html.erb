@@ -10,8 +10,6 @@ $(function() {
 
 <%= render 'summary' %>
 
-<%= render 'list' %>
-
 <h3>Material Availability</h3>
 <%= render 'material_availability_reports/show' %>
 
@@ -23,13 +21,12 @@ $(function() {
 <h3>Sales Orders</h3>
 <div id="sales_order_releases">
 	<%= render 'items/sales_order_releases/list' %>
-	<%#= image_tag 'inprogress.gif', :alt => "In Progress" %>
 </div>
 
 <% if @quote_items.size > 0 %>
 <h3>Quotes:</h3>
 <div id="quote_items">
-<%= render 'quote_items/list', :quote_items => @quote_items, :show_quotes => true %>
+<%= render 'items/quote_items/list' %>
 </div>
 <% end %>
 
