@@ -23,6 +23,8 @@ class M2m::QuoteItem < M2m::Base
       :conditions => { :qtmast => { :fstatus => status_name.upcase } }
     }
   }
+  
+  named_scope :reverse_order, :order => 'fsono desc, fenumber'
 
 
   alias_attribute :quantity, :festqty

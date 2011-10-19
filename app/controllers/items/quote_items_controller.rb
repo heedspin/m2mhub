@@ -1,14 +1,23 @@
-class Customers::QuotesController < ApplicationController
+class Items::QuoteItemsController < ApplicationController
   filter_access_to_defaults
 
   def index
-    @customer = M2m::Customer.find(params[:customer_id])
-    @quotes = @customer.quotes.by_quote_number_desc.paginate(:all, :page => params[:page], :per_page => 10)
+    @item = parent_object
+    @quote_items = @item.quote_items.reverse_order.paginate(:all, :page => params[:page], :per_page => 10)
   end
 
   protected
 
     def model_class
-      M2m::Quote
+      M2m::QuoteItem
     end
+    
+    def parent_object
+      if @parent_object.nil?
+        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
+        @parent_object = @items.first
+      end
+      @parent_object
+    end
+    
 end

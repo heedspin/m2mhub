@@ -50,7 +50,7 @@ function ajax_load_content(href, target_id) {
 		ajax_link(target_id);
   },
   error: function(){
-    alert('Unable to load. Please try again later.');
+    // alert('Unable to load. Please try again later.');
   }
 })
 }

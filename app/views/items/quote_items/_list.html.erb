@@ -26,5 +26,12 @@
 			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>
 		</tr>
 <% end %>
+<% if (@total_quote_items || 0) > @quote_items.size %>
+<tr>
+	<td class="ninjaborders" colspan="8">
+		<%= link_to "Browse all #{@total_quote_items} Quote Items", item_quote_items_url(@item.part_number) %>
+	</td>
+</tr>
+<% end %>
 	</tbody>
 </table>

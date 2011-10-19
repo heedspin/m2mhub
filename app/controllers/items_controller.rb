@@ -32,7 +32,8 @@
     @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases)
     @total_sales_order_releases = @sales_order_releases.size
     @sales_order_releases = @sales_order_releases[0..4]
-    @quote_items = @item.quote_items.all
+    @total_quote_items = @item.quote_items.count
+    @quote_items = @item.quote_items.reverse_order.all(:limit => 1)
   end
 
   protected

@@ -1,1 +1,8 @@
-<%= render 'list', :quote_items => @quote_items, :show_quotes => true %>
+<%= render 'items/summary' %>
+
+<h2>Quote Items</h2>
+<%= will_paginate @quote_items %>
+
+<%= render 'list' %>
+
+<%= will_paginate @quote_items %>
