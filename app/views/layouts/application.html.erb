@@ -40,9 +40,9 @@
 						<%= link_to 'Quotes', quotes_url %>
 					</li>
 					<% end %>
-					<% if permitted_to?(:read, :sales_orders) %>
-					<li class="<%= controller_selected(:sales_orders) %>">
-						<%= link_to 'Sales Orders', sales_orders_url %>
+					<% if permitted_to?(:read, :sales_order_items) %>
+					<li class="<%= controller_selected(:sales_order_items) %>">
+						<%= link_to 'Sales Orders', sales_order_items_url %>
 					</li>
 					<% end %>
 					<% if permitted_to?(:read, :customers) %>

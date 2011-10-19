@@ -1,0 +1,48 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Sales Order</th>
+			<th>Due Date</th>
+			<th><%= CompanyConfig.short_name %> Part No.</th>
+			<th>Description</th>
+			<th>Cust Part No.</th>
+			<th>Cost</th>
+			<th>Unit Price</th>
+			<th>Quantity</th>
+			<th>Total Price</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @sales_orders.each do |so| %>
+		<% releases = so.releases.all.sort_by(&:due_date) %>
+		<% so_style = cycle('odd', 'even') %>
+		<tr class="<%= so_style %>">
+			<td rowspan="<%= releases.size %>">
+				<%= so.forderdate.to_s(:sales_date) %> - <%= so.fstatus %><br />
+				SO#: <%= link_to so.fsono, sales_order_url(so.fsono) %><br />
+				Cust PO#: <%= so.customer_po %>
+			</td>
+			<% releases.each do |r| %>
+			<% unless r == releases.first %>
+		<tr class="<%= so_style %>">
+			<% end %>
+			<td><%= r.due_date.to_s(:sales_date) %></td>
+			<td><%= link_to r.part_number, item_url(r.part_number) %></td>
+			<td><%= simple_format r.item.fdesc.strip %></td>
+			<td><%= r.item.fcustpart %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.item.item.total_cost, :dollars %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.unit_price, :dollars %></td>
+			<td class="centered"><%= cm(r.quantity, :sales_order_quantity) %></td>
+			<td class="monitary"><span class="currency_symbol">$</span><%= cm r.total_price, :dollars %></td>
+		</tr>			
+		<% end %>
+	<% end %>
+	<% if (@total_sales_orders || 0) > @sales_orders.size %>
+	<tr>
+		<td class="ninjaborders" colspan="8">
+			<%= link_to "Browse all #{@total_sales_orders} Sales Orders", customer_sales_orders_url(@customer) %>
+		</td>
+	</tr>
+	<% end %>
+	</tbody>
+</table>
