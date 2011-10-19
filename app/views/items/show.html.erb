@@ -8,7 +8,7 @@ $(function() {
 </script>
 <% end %>
 
-<h3><%= @item.fpartno %></h3>
+<%= render 'summary' %>
 
 <%= render 'list' %>
 
@@ -22,7 +22,7 @@ $(function() {
 
 <h3>Sales Orders</h3>
 <div id="sales_order_releases">
-	<%= render 'sales_order_releases/list', :sales_order_releases => @sales_order_releases %>
+	<%= render 'items/sales_order_releases/list' %>
 	<%#= image_tag 'inprogress.gif', :alt => "In Progress" %>
 </div>
 

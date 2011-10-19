@@ -30,6 +30,8 @@
     # @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse
     @shippers_count = M2m::Shipper.for_item(@item).count
     @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases)
+    @total_sales_order_releases = @sales_order_releases.size
+    @sales_order_releases = @sales_order_releases[0..10]
     @quote_items = @item.quote_items.all
   end
 
