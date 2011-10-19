@@ -1,12 +1,5 @@
 <% if @purchase_order_items.size == 0 %>
-<% if @search && @search.filter_status.present? %>
-	<p>
-		No <%= @search.filter_status %> purchase orders.
-		<%= link_to "Show all", purchase_order_items_path(:item => @search.part_number), :class => 'ajax_link' %>
-	</p>
-<% else %>
 	<p>No purchase orders</p>
-<% end %>
 <% else %>
 <table class="data">
 	<thead>
@@ -38,10 +31,10 @@
 			<td><%= h i.item.fdescript %></td>
 		</tr>
 	<% end %>
-	<% if @search.filter_status.present? %>
+	<% if (@total_purchase_order_items || 0) > @purchase_order_items.size %>
 	<tr>
-		<td class="ninjaborders">
-			<%= link_to "Show all", purchase_order_items_path(:item => @search.part_number), :class => 'ajax_link' %>
+		<td class="ninjaborders" colspan="8">
+			<%= link_to "Browse all #{@total_purchase_order_items} Purchase Order Items", item_purchase_order_items_url(@item.part_number) %>
 		</td>
 	</tr>
 	<% end %>

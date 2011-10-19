@@ -16,8 +16,8 @@ authorization do
     has_permission_on :shippers, :to => :read
     has_permission_on :sales_backlog_reports, :to => :manage
     has_permission_on :sales_order_releases, :to => :read
-    has_permission_on :purchase_order_items, :to => :read
     has_permission_on :quote_items, :to => :read
+    has_permission_on :items_history, :to => :read
   end
 
   role :sales do
@@ -29,6 +29,7 @@ authorization do
     has_permission_on :customers_quotes, :to => :read
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
+    has_permission_on :items_purchase_order_items, :to => :read
   end
 
   role :admin do

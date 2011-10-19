@@ -117,23 +117,23 @@ class MaterialAvailabilityReport
   attr_reader :item, :line_items, :total_future_supply, :total_future_demand
   attr_reader :sales_order_releases
 
-  def initialize(item, sales_order_releases)
+  def initialize(item, sales_order_releases, purchase_order_items)
     @item = item
     @line_items = []
-    @sales_order_releases = sales_order_releases
+    @sales_order_releases = sales_order_releases || M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.all(:include => [:sales_order])
     @sales_order_releases.each do |r|
       @line_items.push SalesLineItem.new(r)
     end
-    item.purchase_order_items.each do |p|
+    purchase_order_items.each do |p|
       @line_items.push i = PurchaseLineItem.new(p)
     end
-    item.inventory_transactions.each do |t|
+    @item.inventory_transactions.each do |t|
       next if t.ftype.blank?
       raise "Unhandled transaction type: #{t.ftype}" if t.transaction_type.nil? 
       next if t.transaction_type.receipts?
       @line_items.push i = InventoryLineItem.new(t)
     end
-    item.receiver_items.all(:include => :receiver).each do |r|
+    @item.receiver_items.all(:include => :receiver).each do |r|
       @line_items.push ReceiverLineItem.new(r)
     end
     @line_items.push TodayLineItem.new

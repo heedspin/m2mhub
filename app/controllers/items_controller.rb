@@ -17,8 +17,10 @@
 
   def show
     @item = current_object
-    @sales_order_items = @item.sales_order_items.all(:include => :sales_order)
-    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.all#(:include => [:sales_order, :item])
+
+    oldest_open_sales_order = M2m::SalesOrderItem.for_item(@item).open.scoped(:order => 'soitem.fsono desc').first
+    @sales_order_items = @item.sales_order_items.since_order(oldest_open_sales_order).all(:include => :sales_order)
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).since_order(oldest_open_sales_order).by_due_date_desc.all#(:include => [:sales_order, :item])
     @sales_order_releases.each do |r|
       if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
         r.item = i
@@ -26,14 +28,20 @@
         i.item = @item
       end
     end
-    # @purchase_order_items = @item.purchase_order_items.all(:include => :purchase_order)
-    # @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse
-    @shippers_count = M2m::Shipper.for_item(@item).count
-    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases)
     @total_sales_order_releases = @sales_order_releases.size
+
+    oldest_open_purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.scoped(:order => 'poitem.fpono desc').first
+    @purchase_order_items = @item.purchase_order_items.since_order(oldest_open_purchase_order_items).all(:include => :purchase_order)
+    @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse[0..4]
+    @total_purchase_order_items = @item.purchase_order_items.count
+
+    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases, @purchase_order_items)
+
     @sales_order_releases = @sales_order_releases[0..4]
+    @purchase_order_items = @purchase_order_items[0..4]
     @total_quote_items = @item.quote_items.count
-    @quote_items = @item.quote_items.reverse_order.all(:limit => 1)
+    @shippers_count = M2m::Shipper.for_item(@item).count
+    @quote_items = @item.quote_items.reverse_order.all(:limit => 3)
   end
 
   protected

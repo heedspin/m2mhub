@@ -1,7 +1,6 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
-	ajax_load_content('<%= purchase_order_items_url(:item => @item.part_number, :status => M2m::Status.open.to_s) %>', '#purchase_order_items');
 	ajax_link('#shippers');
 });
 
@@ -11,11 +10,11 @@ $(function() {
 <%= render 'summary' %>
 
 <h3>Material Availability</h3>
-<%= render 'material_availability_reports/show' %>
+<%= render 'items/availability/show' %>
 
 <h3>Purchase Orders:</h3>
 <div id="purchase_order_items">
-	<%= image_tag 'inprogress.gif', :alt => "In Progress" %>
+	<%= render 'items/purchase_order_items/list' %>
 </div>
 
 <h3>Sales Orders</h3>

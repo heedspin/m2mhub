@@ -16,19 +16,31 @@ class M2m::PurchaseOrderItem < M2m::Base
     self.fpartno.strip
   end
   
-  named_scope :for_item, lambda { |part_number|
+  named_scope :open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
+  named_scope :closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
+  named_scope :cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
+  
+  named_scope :for_item, lambda { |item|
     {
-      :joins => :item,
-      :conditions => { :inmast => { :fpartno => part_number } }
+      :conditions => { :fpartno => item.part_number, :frev => item.revision }
     }
   }
-  
+    
   named_scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :pomast => { :fstatus => status_name.upcase } }
     }
-  }  
+  }
+  
+  named_scope :since_order, lambda { |purchase_order_item|
+    fpono = purchase_order_item.is_a?(M2m::PurchaseOrderItem) ? purchase_order_item.fpono : purchase_order_item.to_i
+    {
+      :conditions => [ 'poitem.fpono >= ?', fpono ]
+    }
+  }
+  
+  named_scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
 
   def date_received
     self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate

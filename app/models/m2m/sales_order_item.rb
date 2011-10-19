@@ -11,6 +11,10 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :due_date, :fduedate
   
   alias_attribute :multiple_releases, :fmultiple
+
+  named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
+  named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
+  named_scope :cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
   
   named_scope :part_number_like, lambda { |text| 
     text = '%' + (text || '') + '%'
@@ -27,10 +31,16 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   
-  named_scope :for_item, lambda { |part_number|
+  named_scope :for_item, lambda { |item|
     {
-      :joins => :item,
-      :conditions => { 'inmast' => {:fpartno => part_number}}
+      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
+    }
+  }
+  
+  named_scope :since_order, lambda { |sales_order_item|
+    fsono = sales_order_item.is_a?(M2m::SalesOrderItem) ? sales_order_item.fsono : sales_order_item.to_i
+    {
+      :conditions => [ 'soitem.fsono >= ?', fsono ]
     }
   }
 
