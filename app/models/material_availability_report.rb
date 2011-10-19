@@ -127,6 +127,8 @@ class MaterialAvailabilityReport
       @line_items.push i = PurchaseLineItem.new(p)
     end
     item.inventory_transactions.each do |t|
+      next if t.ftype.blank?
+      raise "Unhandled transaction type: #{t.ftype}" if t.transaction_type.nil? 
       next if t.transaction_type.receipts?
       @line_items.push i = InventoryLineItem.new(t)
     end
