@@ -80,7 +80,8 @@ class MaterialAvailabilityReport
       self.status = @purchase_order_item.status
       self.target_date = @purchase_order_item.last_promise_date
       self.actual_date = @purchase_order_item.date_received
-      self.count_supply_and_demand = ((self.actual_date || self.target_date) >= Date.current)
+      d = self.actual_date || self.target_date
+      self.count_supply_and_demand = d.present? && (d >= Date.current)
     end
     def closed?
       # TODO: Perhaps make this policy a configuration option.
