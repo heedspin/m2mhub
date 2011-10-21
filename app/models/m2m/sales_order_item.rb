@@ -37,12 +37,22 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   
-  named_scope :since_order, lambda { |sales_order_item|
-    fsono = sales_order_item.is_a?(M2m::SalesOrderItem) ? sales_order_item.fsono : sales_order_item.to_i
+  named_scope :for_releases, lambda { |sales_order_releases|
     {
-      :conditions => [ 'soitem.fsono >= ?', fsono ]
+      :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
     }
   }
+  
+  def self.attach_to_releases(sales_order_releases, item)
+    sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
+    sales_order_releases.each do |r|
+      if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
+        r.item = i
+        r.sales_order = i.sales_order
+        i.item = item
+      end
+    end
+  end
 
 end
 
