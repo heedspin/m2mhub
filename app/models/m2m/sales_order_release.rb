@@ -48,13 +48,6 @@ class M2m::SalesOrderRelease < M2m::Base
     }
   }
 
-  named_scope :since_order, lambda { |sales_order_item|
-    fsono = sales_order_item.is_a?(M2m::SalesOrderItem) ? sales_order_item.fsono : sales_order_item.to_i
-    {
-      :conditions => [ 'sorels.fsono >= ?', fsono ]
-    }
-  }
-
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
 

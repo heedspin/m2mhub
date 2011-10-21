@@ -33,13 +33,6 @@ class M2m::PurchaseOrderItem < M2m::Base
     }
   }
   
-  named_scope :since_order, lambda { |purchase_order_item|
-    fpono = purchase_order_item.is_a?(M2m::PurchaseOrderItem) ? purchase_order_item.fpono : purchase_order_item.to_i
-    {
-      :conditions => [ 'poitem.fpono >= ?', fpono ]
-    }
-  }
-  
   named_scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
 
   def date_received
