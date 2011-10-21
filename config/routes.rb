@@ -18,6 +18,7 @@ ActionController::Routing::Routes.draw do |map|
     item.resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'
     item.resources :quote_items, :only => [:index], :controller => 'items/quote_items'
     item.resource :history, :controller => 'items/history'
+    item.resources :shippers, :only => [:index], :controller => 'items/shippers'
   end
   map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/
   map.resources :quotes, :only => [:index, :show]

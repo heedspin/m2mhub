@@ -18,6 +18,7 @@ authorization do
     has_permission_on :sales_order_releases, :to => :read
     has_permission_on :quote_items, :to => :read
     has_permission_on :items_history, :to => :read
+    has_permission_on :items_shippers, :to => :read
   end
 
   role :sales do

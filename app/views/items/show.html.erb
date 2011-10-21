@@ -35,7 +35,7 @@ $(function() {
 	<% if @shippers_count == 0 %>
 	No Shippers
 	<% else %>
-	<%= link_to "Show #{@shippers_count} Shippers", shippers_url(:item => @item.part_number), :class => 'ajax_link' %>	
+	<%= link_to "Show #{[@shippers_count, 5].min} of #{@shippers_count} Shippers", item_shippers_url(@item.part_number, :limit => 5), :class => 'ajax_link' %>	
 	<% end %>
 	</p>
 </div>

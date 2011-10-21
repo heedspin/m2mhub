@@ -1,0 +1,29 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>SO #</th>
+			<th>Part #</td>
+			<th>Cust Po#</th>
+			<th>Qty Shipped / Ordered</th>
+			<th>Due Date</th>
+			<th>Ship Date</th>
+		</tr>
+	</thead>
+	<tbody>
+<% shipper.items.each do |i| %>
+		<tr>			
+			<% release = i.sales_order_release %>
+			<% if release.nil? %>
+			<td colspan="3">Bad shipper</td>
+			<% else %>
+			<td><%= link_to_unless !permitted_to?(:read, :sales_orders), release.sales_order.id, sales_order_url(i.sales_order_release.sales_order.id) %></td>
+			<td><%= link_to i.sales_order_release.part_number, item_url(i.sales_order_release.part_number) %>
+			<td><%= i.sales_order_release.sales_order.customer_po %></td>
+			<% end %>
+			<td class="centered"><%= cm(i.quantity_shipped, :sales_order_quantity, 0) %> / <%= cm i.quantity_ordered, :sales_order_quantity %></td>
+			<td><%= i.sales_order_release.due_date.to_s(:sales_date) if release %></td>
+			<td><%= shipper.ship_date.to_s(:sales_date) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
