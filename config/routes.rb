@@ -10,11 +10,22 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :sales_order_items, :only => [:index, :show]
+  map.resources :sales_order_releases, :only => [:index]
+  map.resources :quote_items, :only => [:index]
   map.resources :user_activities, :only => [:index]
-  map.resources :items, :only => [:index]
+  map.resources :items, :only => [:index] do |item|
+    item.resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
+    item.resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'
+    item.resources :quote_items, :only => [:index], :controller => 'items/quote_items'
+    item.resource :history, :controller => 'items/history'
+    item.resources :shippers, :only => [:index], :controller => 'items/shippers'
+  end
   map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/
   map.resources :quotes, :only => [:index, :show]
-  map.resources :customers, :only => [:index, :show]
+  map.resources :customers, :only => [:index, :show] do |customer|
+    customer.resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
+    customer.resources :quotes, :only => [:index], :controller => 'customers/quotes'
+  end
   map.resources :shippers, :only => [:index, :show]
   map.resources :sales_backlog_reports, :only => [:index, :show]  
 

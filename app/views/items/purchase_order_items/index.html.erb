@@ -1,0 +1,8 @@
+<%= render 'items/summary' %>
+
+<h2>Purchase Orders Items for <%= @item.part_number %></h2>
+<%= will_paginate @purchase_order_items %>
+
+<%= render 'list' %>
+
+<%= will_paginate @purchase_order_items %>

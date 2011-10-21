@@ -1,4 +1,5 @@
 class M2m::SalesOrderRelease < M2m::Base
+  
   default_scope :order => 'sorels.fenumber'
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
@@ -39,6 +40,20 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :fpartno => fpartno } 
     }
   }
+  
+  named_scope :with_status, lambda { |status|
+    status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
+    {
+      :conditions => { :somast => { :fstatus => status_name.upcase } }
+    }
+  }
+
+  named_scope :since_order, lambda { |sales_order_item|
+    fsono = sales_order_item.is_a?(M2m::SalesOrderItem) ? sales_order_item.fsono : sales_order_item.to_i
+    {
+      :conditions => [ 'sorels.fsono >= ?', fsono ]
+    }
+  }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -56,7 +71,8 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :sales_order_number, :fsono
   alias_attribute :sales_order_release_id, :finumber
   alias_attribute :sales_order_release_number, :frelease
-
+  alias_attribute :revision, :fpartrev
+  
   def last_ship_date
     self.flshipdate == M2m::Constants.null_date ? nil : self.flshipdate
   end
@@ -66,7 +82,7 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def quantity_shipped
-    self.fshipbook + self.fshipbuy + self.fshipmake
+    (self.fshipbook || 0) + (self.fshipbuy || 0) + (self.fshipmake || 0)
   end
 
   def backorder_quantity
@@ -87,27 +103,29 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def status
-    if self.closed?
+    if self.sales_order.status.closed?
       if quantity_shipped == 0
-        'Cancelled'
+        M2m::Status.cancelled
       elsif backorder_quantity <= 0
-        'Shipped'
+        M2m::Status.shipped
       else
-        'Closed Short'
+        M2m::Status.closed_short
+      end
+    elsif self.sales_order.status.open?
+      if quantity_shipped == 0
+        M2m::Status.open
+      elsif backorder_quantity == 0
+        M2m::Status.shipping
+      else
+        M2m::Status.partial
       end
     else
-      if quantity_shipped == 0
-        'Open'
-      elsif backorder_quantity == 0
-        'Shipping'
-      else
-        'Partial'
-      end
+      self.sales_order.status
     end
   end
 
   def closed?
-    self.sales_order.closed?
+    self.sales_order.try(:closed?)
   end
 
   def can_be_fully_shipped?

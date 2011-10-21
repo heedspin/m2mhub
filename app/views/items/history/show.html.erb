@@ -1,3 +1,7 @@
+<%= render 'items/summary' %>
+
+<h2>History</h2>
+
 <table class="data">
 	<thead>
 		<tr>
@@ -11,7 +15,6 @@
 	</thead>
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
-		<% next if line_item.closed? and !params.member?(:show_history) %>
 		<tr class="<%= !line_item.count_supply_and_demand? ? 'not_counted' : '' %>">
 			<% if line_item.today? %>
 			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
@@ -37,6 +40,9 @@
 				Recv <%= line_item.receiver_item.receiver_number.to_i %>
 				<% else %>
 				<%= line_item.inventory_transaction.transaction_type.name %>
+				<% if line_item.inventory_transaction.comment.present? %>
+				<br /><%= h line_item.inventory_transaction.comment %>
+				<% end %>
 				<% end %>
 			</td>
 			<td>

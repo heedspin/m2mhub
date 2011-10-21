@@ -33,7 +33,7 @@ class UserActivity < ActiveRecord::Base
   end
   
   def params_hash
-    JSON.parse(read_attribute(:params))
+    ActiveSupport::JSON.decode(read_attribute(:params))
   end
  
 end

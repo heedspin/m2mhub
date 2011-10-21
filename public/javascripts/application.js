@@ -31,3 +31,26 @@ $(document).ready(function(){
 		theme_advanced_resizing : true,
 	});
 });
+
+function ajax_link(target_id) {
+	$(target_id + ' a.ajax_link').bind('click', function(event){
+    event.preventDefault();
+		$(this).replaceWith('<p class="inprogress">Fetching...</p>');
+		ajax_load_content($(this).attr('href'), target_id)
+	});	
+}
+
+function ajax_load_content(href, target_id) {
+	$.ajax({
+  url: href,
+  type: 'GET',
+  dataType: 'html',
+  success: function(data) {
+		$(target_id).html(data);
+		ajax_link(target_id);
+  },
+  error: function(){
+    // alert('Unable to load. Please try again later.');
+  }
+})
+}

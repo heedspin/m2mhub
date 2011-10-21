@@ -1,0 +1,8 @@
+<%= render 'items/summary' %>
+
+<h2>Shippers for <%= @item.part_number %></h2>
+<%= will_paginate @shippers %>
+
+<%= render 'list' %>
+
+<%= will_paginate @shippers %>

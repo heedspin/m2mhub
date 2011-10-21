@@ -41,7 +41,7 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :by_shipper_number_desc, :order => 'fshipno desc'
+  named_scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
 
   named_scope :next_shipper, lambda { |shipper| 
     {
@@ -60,9 +60,10 @@ class M2m::Shipper < M2m::Base
   }
   
   named_scope :for_item, lambda { |item|
+    part_number = item.is_a?(M2m::Item) ? item.part_number : item.to_s.strip
     {
       :joins => :items,
-      :conditions => [ 'shitem.fpartno = ?', item.fpartno ]
+      :conditions => [ 'shitem.fpartno = ?', part_number ]
     }
   }
   

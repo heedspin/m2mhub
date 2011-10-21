@@ -24,6 +24,8 @@ GEM
     builder (3.0.0)
     cocaine (0.2.0)
     columnize (0.3.4)
+    composite_primary_keys (2.3.5.1)
+      activerecord (>= 2.3.5)
     daemons (1.1.4)
     declarative_authorization (0.4)
       rails (>= 2.1.0)
@@ -73,6 +75,7 @@ DEPENDENCIES
   airbrake
   annotate
   authlogic (= 2.1.6)
+  composite_primary_keys (= 2.3.5.1)
   declarative_authorization (= 0.4)
   delayed_job (= 2.0.3)
   factory_girl (= 1.2.3)

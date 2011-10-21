@@ -1,24 +1,41 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	ajax_link('#shippers');
+});
 
-<h3><%= @item.fpartno %></h3>
+</script>
+<% end %>
 
-<% @items = [@item] %>
-<%= render 'list' %>
+<%= render 'summary' %>
 
 <h3>Material Availability</h3>
-<%= render 'material_availability_reports/show' %>
+<%= render 'items/availability/show' %>
 
 <h3>Purchase Orders:</h3>
-<%= render 'purchase_order_items/list' %>
+<div id="purchase_order_items">
+	<%= render 'items/purchase_order_items/list' %>
+</div>
 
-<h3>Sales Orders:</h3>
-<%= render 'sales_order_releases/list' %>
+<h3>Sales Orders</h3>
+<div id="sales_order_releases">
+	<%= render 'items/sales_order_releases/list' %>
+</div>
 
-<% if @item.quote_items.size > 0 %>
+<% if @quote_items.size > 0 %>
 <h3>Quotes:</h3>
-<%= render 'quote_items/list', :quote_items => @item.quote_items, :show_quotes => true %>
+<div id="quote_items">
+<%= render 'items/quote_items/list' %>
+</div>
 <% end %>
 
-<% if @shippers.size > 0 %>
 <h3>Shippers</h3>
-<%= render 'shippers/list' %>
-<% end %>
+<div id="shippers">
+	<p>
+	<% if @shippers_count == 0 %>
+	No Shippers
+	<% else %>
+	<%= link_to "Show #{[@shippers_count, 5].min} of #{@shippers_count} Shippers", item_shippers_url(@item.part_number, :limit => 5), :class => 'ajax_link' %>	
+	<% end %>
+	</p>
+</div>

@@ -1,4 +1,5 @@
 class SalesOrderItemsController < ApplicationController
+  filter_access_to_defaults
 
   class SearchItem < M2m::SalesOrderItem
     attr_accessor :order_number

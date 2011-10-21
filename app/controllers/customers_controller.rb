@@ -19,8 +19,12 @@ class CustomersController < ApplicationController
 
   def show
     @customer = current_object
-    @previous_customer = M2m::Customer.find(:first, :conditions => ['fcompany < ?', current_object.fcompany], :order => 'fcompany desc')
-    @next_customer = M2m::Customer.find(:first, :conditions => ['fcompany > ?', current_object.fcompany], :order => 'fcompany')
+    @total_sales_orders = @customer.sales_orders.count
+    @sales_orders = @customer.sales_orders.by_order_number_desc.all(:include => :releases, :limit => 5)
+    @total_quotes = @customer.quotes.count
+    @quotes = @customer.quotes.by_quote_number_desc.all(:include => :items, :limit => 1)
+    # @previous_customer = M2m::Customer.find(:first, :conditions => ['fcompany < ?', current_object.fcompany], :order => 'fcompany desc')
+    # @next_customer = M2m::Customer.find(:first, :conditions => ['fcompany > ?', current_object.fcompany], :order => 'fcompany')
   end
 
   protected

@@ -4,8 +4,10 @@
 	<h3>Recent Sales Orders</h3>
 	<%= render 'sales_orders/list' %>
 
+	<% if @quotes.size > 0 %>
 	<h3>Recent Quotes</h3>
 	<%= render 'quotes/list' %>
+	<% end %>
 </div>
 
 <div class="column2 small">

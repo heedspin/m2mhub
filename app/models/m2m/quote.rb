@@ -27,6 +27,7 @@ class M2m::Quote < M2m::Base
   
   alias_attribute :discount_rate, :fdisrate
   alias_attribute :quote_number, :fquoteno
+  alias_attribute :date, :fdcurdate
 end
 
 
