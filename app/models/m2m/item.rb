@@ -19,7 +19,6 @@ class M2m::Item < M2m::Base
   alias_attribute :quantity_non_nettable, :fnonnetqty
   alias_attribute :quantity_in_process, :fproqty
   alias_attribute :quantity_in_inspection, :fqtyinspec
-  alias_attribute :revision, :frev
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -28,6 +27,10 @@ class M2m::Item < M2m::Base
 
   def part_number
     self.fpartno.strip
+  end
+  
+  def revision
+    self.frev.strip
   end
   
   named_scope :with_part_number, lambda { |pn| {:conditions => { :fpartno => pn }} }

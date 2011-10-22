@@ -44,12 +44,14 @@ class M2m::SalesOrderItem < M2m::Base
   }
   
   def self.attach_to_releases(sales_order_releases, item)
-    sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
-    sales_order_releases.each do |r|
-      if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
-        r.item = i
-        r.sales_order = i.sales_order
-        i.item = item
+    if sales_order_releases.size > 0
+      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
+      sales_order_releases.each do |r|
+        if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
+          r.item = i
+          r.sales_order = i.sales_order
+          i.item = item
+        end
       end
     end
   end

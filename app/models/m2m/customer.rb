@@ -5,7 +5,6 @@ class M2m::Customer < M2m::Base
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
 
   alias_attribute :notes, :fmnotes
-  alias_attribute :fob, :ffob
   
   named_scope :name_like, lambda { |text|
     {
@@ -32,6 +31,10 @@ class M2m::Customer < M2m::Base
   def self.all_names
     self.all(:select => 'slcdpm.fcompany', :order => 'slcdpm.fcompany').map(&:name)
   end  
+  
+  def fob
+    self.ffob.strip
+  end
 end
 
 # == Schema Information

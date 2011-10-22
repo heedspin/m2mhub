@@ -1,5 +1,11 @@
+<% if (@total_purchase_order_items || 0) > @purchase_order_items.size %>
+<% browse_all_link = link_to("Browse all #{@total_purchase_order_items} Purchase Order Items", item_purchase_order_items_url(@item.part_number)) %>
+<% end %>
 <% if @purchase_order_items.size == 0 %>
-	<p>No purchase orders</p>
+	<p>No <%= @total_purchase_order_items > 0 ? 'open' : '' %> purchase orders</p>
+	<% if browse_all_link %>
+		<p><%= browse_all_link %></p>
+	<% end %>
 <% else %>
 <table class="data">
 	<thead>
@@ -31,12 +37,8 @@
 			<td><%= h i.item.fdescript %></td>
 		</tr>
 	<% end %>
-	<% if (@total_purchase_order_items || 0) > @purchase_order_items.size %>
-	<tr>
-		<td class="ninjaborders" colspan="8">
-			<%= link_to "Browse all #{@total_purchase_order_items} Purchase Order Items", item_purchase_order_items_url(@item.part_number) %>
-		</td>
-	</tr>
+	<% if browse_all_link %>
+		<tr><td class="ninjaborders" colspan="8"><%= browse_all_link %></td></tr>
 	<% end %>
 	</tbody>
 </table>

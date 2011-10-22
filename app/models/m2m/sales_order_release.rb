@@ -25,8 +25,9 @@ class M2m::SalesOrderRelease < M2m::Base
   named_scope :by_due_date_desc, :order => 'sorels.fduedate desc'
 
   named_scope :due_by, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate <= ?', date ]
+      :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
     }
   }
 
@@ -37,7 +38,7 @@ class M2m::SalesOrderRelease < M2m::Base
   named_scope :for_item, lambda { |item|
     fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
-      :conditions => { :fpartno => fpartno } 
+      :conditions => { :fpartno => fpartno.strip } 
     }
   }
   

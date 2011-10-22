@@ -20,11 +20,11 @@
 
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).open.by_due_date_desc.all#(:include => [:sales_order, :item])
     M2m::SalesOrderItem.attach_to_releases(@sales_order_releases, @item)
-    @total_sales_order_releases = @sales_order_releases.size
+    @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-    @purchase_order_items = @item.purchase_order_items.open.all(:include => :purchase_order)
+    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.all(:include => :purchase_order)
     @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse[0..4]
-    @total_purchase_order_items = @item.purchase_order_items.count
+    @total_purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).count
 
     @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases, @purchase_order_items)
 
