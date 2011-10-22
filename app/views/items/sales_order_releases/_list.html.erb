@@ -1,5 +1,11 @@
+<% if (@total_sales_order_releases || 0) > @sales_order_releases.size %>
+<% browse_all_link = link_to("Browse all #{@total_sales_order_releases} Sales Orders", item_sales_order_releases_url(@item.part_number)) %>
+<% end %>
 <% if @sales_order_releases.size == 0 %>
-	<p>No sales orders</p>
+	<p>No <%= @total_sales_order_releases > 0 ? 'open' : '' %> sales orders</p>
+	<% if browse_all_link %>
+		<p><%= browse_all_link %></p>
+	<% end %>
 <% else %>
 <table class="data">
 	<thead>
@@ -37,14 +43,9 @@
 			<td class="monitary">$<%= cm r.unit_price, :dollars %></td>
 		</tr>
 	<% end %>
-	<% if (@total_sales_order_releases || 0) > @sales_order_releases.size %>
-	<tr>
-		<td class="ninjaborders" colspan="13">
-			<%= link_to "Browse all #{@total_sales_order_releases} Sales Orders", item_sales_order_releases_url(@item.part_number) %>
-		</td>
-	</tr>
-	<% end %>
-	
+	<% if browse_all_link %>
+		<tr><td class="ninjaborders" colspan="13"><%= browse_all_link %></td></tr>
+	<% end %>	
 	</tbody>
 </table>
 <% end %>

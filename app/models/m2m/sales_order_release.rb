@@ -38,7 +38,7 @@ class M2m::SalesOrderRelease < M2m::Base
   named_scope :for_item, lambda { |item|
     fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
-      :conditions => { :fpartno => fpartno } 
+      :conditions => { :fpartno => fpartno.strip } 
     }
   }
   
