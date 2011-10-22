@@ -22,21 +22,24 @@ class M2m::Shipper < M2m::Base
   end
   
   named_scope :with_ship_date, lambda { |ship_date|
+    ship_date = ship_date.is_a?(String) ? Date.parse(ship_date) : ship_date
     {
-      :conditions => { :fshipdate => ship_date }
+      :conditions => [ 'shmast.fshipdate = ?', ship_date.to_s(:database) ],
     }
   }
   
   named_scope :for_next_day, lambda { |ship_date|
+    ship_date = ship_date.is_a?(String) ? Date.parse(ship_date) : ship_date
     {
-      :conditions => [ 'shmast.fshipdate > ?', ship_date ],
+      :conditions => [ 'shmast.fshipdate > ?', ship_date.to_s(:database) ],
       :order => :fshipdate
     }
   }
   
   named_scope :for_previous_day, lambda { |ship_date|
+    ship_date = ship_date.is_a?(String) ? Date.parse(ship_date) : ship_date
     {
-      :conditions => [ 'shmast.fshipdate < ?', ship_date ],
+      :conditions => [ 'shmast.fshipdate < ?', ship_date.to_s(:database) ],
       :order => 'shmast.fshipdate desc'
     }
   }

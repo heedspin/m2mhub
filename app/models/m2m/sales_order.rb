@@ -48,11 +48,7 @@ class M2m::SalesOrder < M2m::Base
   
   # Default to customer sales master
   def fob
-    if (r = self.ffob.strip).present?
-      self.ffob
-    else
-      self.customer.ffob
-    end
+    self.ffob.present? ? self.ffob.strip : self.customer.ffob
   end
   
 end

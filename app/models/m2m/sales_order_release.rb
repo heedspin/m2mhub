@@ -25,8 +25,9 @@ class M2m::SalesOrderRelease < M2m::Base
   named_scope :by_due_date_desc, :order => 'sorels.fduedate desc'
 
   named_scope :due_by, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate <= ?', date ]
+      :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
     }
   }
 
