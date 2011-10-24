@@ -10,6 +10,10 @@ class M2m::Item < M2m::Base
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
+  
+  def locations
+    M2m::InventoryLocation.for_item(self)
+  end
 
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
@@ -33,7 +37,11 @@ class M2m::Item < M2m::Base
     self.frev.strip
   end
   
-  named_scope :with_part_number, lambda { |pn| {:conditions => { :fpartno => pn }} }
+  named_scope :with_part_number, lambda { |pn| 
+    {
+      :conditions => { :fpartno => pn }
+    } 
+  }
   named_scope :by_rev_desc, :order => 'inmast.frev desc'
   
   named_scope :part_number_like, lambda { |text|
@@ -48,6 +56,10 @@ class M2m::Item < M2m::Base
       SQL
     }
   }
+  
+  def self.latest(part_number)
+    self.with_part_number(part_number).by_rev_desc.first
+  end
   
 end
 

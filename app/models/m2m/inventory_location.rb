@@ -1,6 +1,15 @@
 class M2m::InventoryLocation < M2m::Base
   set_table_name 'inonhd'
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno    
+  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev] #, :primary_key => :fpartno    
+
+  alias_attribute :quantity_on_hand, :fonhand
+  alias_attribute :bin, :fbinno
+
+  named_scope :for_item, lambda { |item|
+    {
+      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision } 
+    }
+  }
 end
 
 # == Schema Information

@@ -19,7 +19,7 @@
 			<td><%= i.revision %></td>
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.try(:fpartno)) }.join(', ') %></td>
 			<td><%= h i.fdescript %></td>
-			<td><%= i.fbin1 %></td>
+			<td><%= render 'locations', :item => i %></td>
 			<td class="right"><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
 			<td class="right"><%= cm i.quantity_committed, :item_quantity, 0 %></td>
 			<td class="right"><%= cm i.quantity_available, :item_quantity %></td>
