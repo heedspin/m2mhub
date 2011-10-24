@@ -108,8 +108,8 @@ class M2m::SalesOrderRelease < M2m::Base
     elsif self.sales_order.status.open?
       if quantity_shipped == 0
         M2m::Status.open
-      elsif backorder_quantity == 0
-        M2m::Status.shipping
+      elsif backorder_quantity <= 0
+        M2m::Status.shipped
       else
         M2m::Status.partial
       end

@@ -8,9 +8,8 @@ class M2m::Status < ActiveHash::Base
     {:id => 5,  :name => 'Shipped',      :groups => [:shipping]},
     {:id => 6,  :name => 'Received',     :groups => [:shipping]},
     {:id => 7,  :name => 'Closed Short', :groups => [:shipping, :purchasing]},
-    {:id => 8,  :name => 'Shipping',     :groups => [:shipping, :purchasing]},
-    {:id => 9,  :name => 'Receiving',    :groups => [:shipping, :purchasing]},
-    {:id => 10, :name => 'Partial',      :groups => [:shipping, :purchasing]}
+    {:id => 8,  :name => 'Receiving',    :groups => [:shipping, :purchasing]},
+    {:id => 9,  :name => 'Partial',      :groups => [:shipping, :purchasing]}
   ]
   include ActiveHashMethods
   
