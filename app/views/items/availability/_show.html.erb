@@ -11,7 +11,6 @@
 	</thead>
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
-		<% next if line_item.closed? and !params.member?(:show_history) %>
 		<tr class="<%= !line_item.count_supply_and_demand? ? 'not_counted' : '' %>">
 			<% if line_item.today? %>
 			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
@@ -32,6 +31,9 @@
 				<%= link_to "SO #{line_item.sales_order.sales_order_number.to_i}", sales_order_url(line_item.sales_order.sales_order_number) %>
 				<% elsif line_item.purchase_order? %>
 				PO <%= line_item.purchase_order_item.purchase_order_number.to_i %>
+				<% if line_item.purchase_order_item.master_release? %>
+				<br />Master Release
+				<% end %>
 				<% elsif line_item.receiver? %>
 				PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>, 
 				Recv <%= line_item.receiver_item.receiver_number.to_i %>
