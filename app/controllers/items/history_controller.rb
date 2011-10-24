@@ -12,7 +12,8 @@ class Items::HistoryController < ApplicationController
         i.item = @item
       end
     end
-    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases)
+    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.all(:include => :purchase_order)
+    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases, @purchase_order_items)
   end
   
   protected
