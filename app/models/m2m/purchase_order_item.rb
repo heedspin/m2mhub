@@ -25,6 +25,12 @@ class M2m::PurchaseOrderItem < M2m::Base
       :conditions => { :fpartno => item.part_number }
     }
   }
+  
+  named_scope :for_itemno, lambda { |itemno|
+    {
+      :conditions => { :fitemno => itemno }
+    }
+  }
     
   named_scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
@@ -34,6 +40,29 @@ class M2m::PurchaseOrderItem < M2m::Base
   }
   
   named_scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
+
+  named_scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
+
+  def master_release?
+    (self.fmultirls.strip == 'Y') && (self.frelsno.to_i == 0)
+  end
+  
+  # The master release carries all undelivered quantities from previous releases.
+  def master_remainder_quantity
+    return 0 unless self.master_release?
+    self.purchase_order.items.filtered.for_itemno(self.fitemno).all.sum do |i|
+      i.quantity_for_master_remainder
+    end
+  end
+  
+  def quantity_for_master_remainder
+    consider_past_date = self.date_received || self.last_promise_date
+    if (self.quantity_received > 0) || (self.last_promise_date < Date.current)
+      self.backorder_quantity
+    else
+      0
+    end
+  end
 
   def date_received
     self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate

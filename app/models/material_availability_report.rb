@@ -54,13 +54,13 @@ class MaterialAvailabilityReport
       self.status = @sales_order.status
       self.target_date = @sales_order.due_date
       self.actual_date = @sales_order.last_ship_date
-      self.count_supply_and_demand = (!self.status.on_hold?) #self.target_date >= Date.current
+      self.count_supply_and_demand = !self.status.on_hold?
     end
     def closed?
       # TODO: Perhaps make this policy a configuration option.
       # We're considering sales orders closed when the last ship date passes.
       # I don't understand this policy, but M2M's ma report appears to run this way.
-      @sales_order.closed? || ((@sales_order.last_ship_date || @sales_order.due_date) < Date.current)
+      !@status.open? || ((@sales_order.last_ship_date || @sales_order.due_date) < Date.current)
     end
   end
 
@@ -69,14 +69,8 @@ class MaterialAvailabilityReport
     def initialize(purchase_order_item)
       @purchase_order_item = purchase_order_item
       self.type_weighting = 2
-      self.number = @purchase_order_item.item_number
-      self.supply = if @purchase_order_item.closed?
-        @purchase_order_item.quantity_received
-      elsif @purchase_order_item.quantity_received > 0
-        @purchase_order_item.quantity_received
-      else
-        @purchase_order_item.quantity
-      end
+      self.number = @purchase_order_item.release
+      self.supply = get_supply
       self.status = @purchase_order_item.status
       self.target_date = @purchase_order_item.last_promise_date
       self.actual_date = @purchase_order_item.date_received
@@ -87,8 +81,22 @@ class MaterialAvailabilityReport
       # TODO: Perhaps make this policy a configuration option.
       # We're considering purchase orders closed when the last promise date passes.
       # I don't understand this policy, but M2M's ma report appears to run this way.
-      @purchase_order_item.closed? || (@purchase_order_item.last_promise_date < Date.current)
+      !@status.open? || (@purchase_order_item.last_promise_date < Date.current)
     end
+
+    protected
+
+      def get_supply
+        if @purchase_order_item.closed?
+          @purchase_order_item.quantity_received
+        elsif @purchase_order_item.master_release?
+          @purchase_order_item.master_remainder_quantity
+        elsif @purchase_order_item.quantity_received > 0
+          @purchase_order_item.quantity_received
+        else
+          @purchase_order_item.quantity
+        end
+      end
   end
 
   class InventoryLineItem < LineItem
@@ -117,31 +125,41 @@ class MaterialAvailabilityReport
   attr_reader :item, :line_items, :total_future_supply, :total_future_demand
   attr_reader :sales_order_releases
 
-  def initialize(item, sales_order_releases, purchase_order_items)
-    @item = item
+  def initialize(args)
+    @item = args[:item] || (raise ':item required')
+    @sales_order_releases = args[:sales_order_releases] || (raise ':sales_order_releases required')
+    @purchase_order_items = args[:purchase_order_items] || (raise ':purchase_order_items required')
+    @show_history = args[:show_history] || false
     @line_items = []
-    @sales_order_releases = sales_order_releases || M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.all(:include => [:sales_order])
+    run
+  end
+
+  def run
     @sales_order_releases.each do |r|
-      @line_items.push SalesLineItem.new(r)
+      i = SalesLineItem.new(r)
+      @line_items.push i unless i.closed?
     end
-    purchase_order_items.each do |p|
-      @line_items.push i = PurchaseLineItem.new(p)
+    @purchase_order_items.each do |p|
+      i = PurchaseLineItem.new(p)
+      @line_items.push i unless i.closed?
     end
-    @item.inventory_transactions.each do |t|
-      next if t.ftype.blank?
-      raise "Unhandled transaction type: #{t.ftype}" if t.transaction_type.nil? 
-      next if t.transaction_type.receipts?
-      @line_items.push i = InventoryLineItem.new(t)
+    if @show_history
+      @item.inventory_transactions.each do |t|
+        next if t.ftype.blank?
+        raise "Unhandled transaction type: #{t.ftype}" if t.transaction_type.nil?
+        next if t.transaction_type.receipts?
+        @line_items.push i = InventoryLineItem.new(t)
+      end
+      @item.receiver_items.all(:include => :receiver).each do |r|
+        @line_items.push ReceiverLineItem.new(r)
+      end
+      @line_items.push TodayLineItem.new
     end
-    @item.receiver_items.all(:include => :receiver).each do |r|
-      @line_items.push ReceiverLineItem.new(r)
-    end
-    @line_items.push TodayLineItem.new
 
     @line_items.sort!
 
     # Calculate net availability
-    net_availability = 0.0 #item.quantity_on_hand || 0
+    net_availability = @show_history ? 0.0 : item.quantity_on_hand || 0.0
     @total_future_supply = item.quantity_on_hand
     @total_future_demand = 0
     @line_items.each do |line_item|

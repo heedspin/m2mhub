@@ -1,4 +1,4 @@
-  class ItemsController < ApplicationController
+class ItemsController < ApplicationController
   filter_access_to_defaults
 
   class SearchItem < M2m::Item
@@ -23,9 +23,12 @@
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
     @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.all(:include => :purchase_order)
-    @total_purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).count
+    @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
 
-    @material_availability_report = MaterialAvailabilityReport.new(@item, @sales_order_releases, @purchase_order_items)
+    @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
+                                                                    :sales_order_releases => @sales_order_releases,
+                                                                    :purchase_order_items => @purchase_order_items,
+                                                                    :show_history => false )
 
     @sales_order_releases = @sales_order_releases[0..4]
     @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse[0..4]

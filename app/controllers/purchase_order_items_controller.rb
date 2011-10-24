@@ -8,7 +8,7 @@ class PurchaseOrderItemsController < ApplicationController
 
   def index
     @search = SearchItem.new(:fpartno => params[:item], :filter_status => params[:status])
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@search.fpartno)
+    @purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@search.fpartno)
     if @search.filter_status.present?
       @purchase_order_items = @purchase_order_items.with_status(@search.filter_status)
     end
