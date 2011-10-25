@@ -30,8 +30,8 @@ class ItemsController < ApplicationController
                                                                     :purchase_order_items => @purchase_order_items,
                                                                     :show_history => false )
 
-    @sales_order_releases = @sales_order_releases[0..4]
-    @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }.reverse[0..4]
+    @sales_order_releases = @sales_order_releases.select { |s| s.status.open? }
+    @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }
     @total_quote_items = @item.quote_items.count
     @shippers_count = M2m::Shipper.for_item(@item).count
     @quote_items = @item.quote_items.reverse_order.all(:limit => 3)
