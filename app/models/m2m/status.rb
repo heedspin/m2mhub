@@ -5,11 +5,13 @@ class M2m::Status < ActiveHash::Base
     {:id => 2,  :name => 'Closed'},
     {:id => 3,  :name => 'Cancelled'},
     {:id => 4,  :name => 'On Hold'},
-    {:id => 5,  :name => 'Shipped',      :groups => [:shipping]},
-    {:id => 6,  :name => 'Received',     :groups => [:shipping]},
-    {:id => 7,  :name => 'Closed Short', :groups => [:shipping, :purchasing]},
-    {:id => 8,  :name => 'Receiving',    :groups => [:shipping, :purchasing]},
-    {:id => 9,  :name => 'Partial',      :groups => [:shipping, :purchasing]}
+    {:id => 5,  :name => 'Shipped'},
+    {:id => 6,  :name => 'Received'},    
+    {:id => 7,  :name => 'Closed Short'},
+    {:id => 8,  :name => 'Receiving'},
+    {:id => 9,  :name => 'Partial'},
+    {:id => 10, :name => 'Released'},
+    {:id => 11, :name => 'Completed'}
   ]
   include ActiveHashMethods
   
