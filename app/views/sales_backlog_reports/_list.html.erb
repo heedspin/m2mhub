@@ -31,7 +31,7 @@
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity_shipped, :sales_order_quantity, 0 %></td>
 			<td class="sblcq right <%= sbl_shippable(r, 'top') %>"><%= cm r.item.item.quantity_on_hand, :sales_order_quantity, 0 %></td>
-			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= r.item.item.fbin1 %></td>
+			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= render 'items/locations', :item => r.item.item %></td>
 		</tr>
 		<tr class="<%= sbl_shippable(r, 'r2') %>">
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
