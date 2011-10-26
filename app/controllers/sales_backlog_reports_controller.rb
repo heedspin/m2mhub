@@ -8,7 +8,7 @@ class SalesBacklogReportsController < ApplicationController
     @search.due_date ||= (today = Date.current) && today.advance(:days => (today.wday <= 5 ? 5 - today.wday : 6))
 
     if @search_performed
-      @releases = M2m::SalesOrderRelease.filtered.open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fpartno')
+      @releases = M2m::SalesOrderRelease.filtered.open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fsono, sorels.fpartno')
       # Filter out by fob and status
       @releases = @releases.select do |r|
         correct_group = @search.fob_group.nil? || @search.fob_group.member?(r.sales_order.fob)
