@@ -1,13 +1,10 @@
 class ItemsController < ApplicationController
   filter_access_to_defaults
 
-  class SearchItem < M2m::Item
-    # Allows search[:fpartno] to be mass-assigned.
-    set_primary_keys '_disabled_fpartno', '_disabled_frev'
-  end
-
   def index
-    @search_item = SearchItem.new(params[:search])
+    @search_item = M2m::Item.new
+    search_params = params[:search] || {}
+    @search_item.fpartno = search_params['fpartno']
     if @search_item.fpartno.present?
       @items = M2m::Item.part_number_like(@search_item.fpartno).paginate(:all, :page => params[:page],
                                                                          :per_page => 20,
