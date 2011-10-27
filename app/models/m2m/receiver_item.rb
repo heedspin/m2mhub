@@ -1,7 +1,7 @@
 class M2m::ReceiverItem < M2m::Base
   set_table_name 'rcitem'
   belongs_to :receiver, :class_name => 'M2m::Receiver', :foreign_key => :freceiver, :primary_key => :freceiver
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno  
+  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
   
   alias_attribute :quantity, :fqtyrecv
   alias_attribute :receiver_number, :freceiver

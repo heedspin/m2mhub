@@ -2,6 +2,7 @@ class M2m::InventoryTransaction < M2m::Base
   set_table_name 'intran'
   
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno  
+  # belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
   
   def transaction_type
     M2m::InventoryTransactionType.find_by_key(self.ftype)
