@@ -3,6 +3,7 @@ class M2m::PurchaseOrderItem < M2m::Base
 
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
+  # belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
   
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :ship_date, :fdateship
