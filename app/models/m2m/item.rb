@@ -10,6 +10,7 @@ class M2m::Item < M2m::Base
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
+  has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
   
   def locations
     M2m::InventoryLocation.for_item(self)
