@@ -8,10 +8,14 @@ class M2m::Job < M2m::Base
   }
 
   named_scope :released, :conditions => { :fstatus => M2m::Status.released.name }
+  
+  named_scope :by_due_date_desc, :order => 'jomast.fddue_date desc'
 
   def status
     M2m::Status.find_by_name(self.fstatus)
   end
+  
+  alias_attribute :job_number, :fjobno
   
 end
 # == Schema Information

@@ -23,6 +23,9 @@ class M2m::Item < M2m::Base
   alias_attribute :quantity_non_nettable, :fnonnetqty
   alias_attribute :quantity_in_process, :fproqty
   alias_attribute :quantity_in_inspection, :fqtyinspec
+  alias_attribute :average_cost, :favgcost
+  alias_attribute :rolled_material_cost, :f2matlcost
+  alias_attribute :rolled_labor_cost, :f2labcost
   
   # Uses same calculation that m2m uses.
   def quantity_available
