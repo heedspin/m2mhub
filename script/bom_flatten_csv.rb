@@ -19,7 +19,7 @@ class BomFlattenCsv
     @input_csv = File.join('/home/tim/Dropbox/temp/cleaned_catalog_orders.csv')
     @exploded_output_csv = File.join('/home/tim/Dropbox/temp/exploded_catalog_orders.csv')
     @summarized_output_csv = File.join('/home/tim/Dropbox/temp/exploded_summary.csv')
-    @summary_headers = [ 'PartNo', 'Rev', 'TotalShipQty' ]
+    @summary_headers = [ 'PartNo', 'TotalShipQty', 'Description' ]
   end
 
   def run
@@ -112,10 +112,9 @@ class BomFlattenCsv
   
   def summarize(row_hash)
     part_number = row_hash['PartNo']
-    revision = row_hash['Rev']
     ship_quantity = row_hash['ShipQty'].to_i
-    key = [part_number, revision]
-    summary = @summaries[key] ||= { 'PartNo' => part_number, 'Rev' => revision, 'TotalShipQty' => 0 }
+    description = row_hash['Descript'].gsub('"','""')
+    summary = @summaries[part_number] ||= { 'PartNo' => part_number, 'TotalShipQty' => 0, 'Description' => description }
     summary['TotalShipQty'] += ship_quantity
   end
   
@@ -125,13 +124,12 @@ class BomFlattenCsv
   
   def get_bom_items(part_number, revision)
     @cache ||= {}
-    key = [part_number, revision]
-    if found = @cache[key]
+    if found = @cache[part_number]
       found
     else
       # Explode
       bom_items = M2m::BomItem.for_parent_item(part_number, revision).all      
-      puts "Exploded #{part_number} into " + bom_items.map(&:part_number).map(&:strip).join(', ')
+      puts "Exploded #{part_number} into " + bom_items.map { |i| "#{i.quantity.to_i} #{i.part_number.strip}" }.join(', ')
 
       # Find if all the bom items have a common parent
       common = nil
@@ -146,11 +144,11 @@ class BomFlattenCsv
       # Implode
       if common.present? and (common.size > 0)
         # Let's be lazy and assume it's a match.
-        @cache[key] = generic_kit = common.first
+        @cache[part_number] = generic_kit = common.first
         puts "Found generic kit #{generic_kit} for lineage #{part_number}"
         generic_kit
       else
-        @cache[key] = bom_items
+        @cache[part_number] = bom_items
       end
     end
   end
