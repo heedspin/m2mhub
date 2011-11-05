@@ -1,0 +1,10 @@
+<div class="closewindow"><a href="javascript:window.close();">Close Window</a></div>
+
+<h2>Jobs for <%= @item.part_number %></h2>
+<%= will_paginate @jobs %>
+
+<%= render 'list' %>
+
+<%= will_paginate @jobs %>
+
+<div class="closewindow"><a href="javascript:window.close();">Close Window</a></div>

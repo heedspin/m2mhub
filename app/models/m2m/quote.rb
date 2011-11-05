@@ -31,6 +31,7 @@ class M2m::Quote < M2m::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: qtmast
@@ -94,8 +95,8 @@ end
 #  fmstreet         :text            default(" "), not null
 #  fmusermemo       :text            default(" "), not null
 #  fsalumemo        :text            default(" "), not null
+#  fndbrmod         :integer(1)      not null
 #  fccontkey        :string(10)      default(" "), not null
 #  flcontract       :boolean         default(FALSE), not null
-#  fndbrmod         :integer(1)      not null
 #
 

@@ -58,6 +58,7 @@ h1 {
 h2 {
 	font-size:2em;
 	color:#000;
+	margin: 5px 0 5px 0;
 }
 h3 {
 	font-size:1.5em;
@@ -910,4 +911,16 @@ p.inprogress {
 
 tr.closed_so {
 	display: none;
+}
+
+div.job {
+	margin: 5px 0 0 0;
+}
+
+span.jobstatus {
+	float:right;
+}
+
+div.closewindow {
+	float:right;
 }

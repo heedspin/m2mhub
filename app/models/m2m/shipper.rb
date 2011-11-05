@@ -71,6 +71,7 @@ class M2m::Shipper < M2m::Base
   }
   
 end
+
 # == Schema Information
 #
 # Table name: shmast
@@ -83,6 +84,8 @@ end
 #  fcpono           :string(6)       not null
 #  fcpro_id         :string(7)       not null
 #  fcsono           :string(6)       not null
+#  fcso_inum        :string(3)       not null
+#  fcsono_rel       :string(3)       not null
 #  fcsorev          :string(2)       not null
 #  fcvendno         :string(6)       not null
 #  fenter           :string(3)       not null
@@ -113,14 +116,12 @@ end
 #  fporev           :string(2)       not null
 #  fcbcompany       :string(35)      default(" "), not null
 #  flpremcv         :boolean         not null
-#  fcso_inum        :string(3)       not null
-#  fcsono_rel       :string(3)       not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
 #  fmreferenc       :text            default(" "), not null
 #  fmstreet         :text            default(" "), not null
-#  fmtrckno         :text            default(" "), not null
 #  fshipmemo        :text            default(" "), not null
+#  fmtrckno         :text            default(" "), not null
 #  upsdate          :datetime        not null
 #  upsaddr2         :text            default(""), not null
 #  upsaddr3         :text            default(""), not null

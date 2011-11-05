@@ -131,6 +131,7 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: sorels
@@ -193,14 +194,15 @@ end
 #  fljrdif          :boolean         not null
 #  flistaxabl       :boolean         not null
 #  flatp            :boolean         not null
-#  fcbin            :string(14)      not null
-#  fcloc            :string(14)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null, primary key
 #  fdelivery        :text            default(" "), not null
 #  fcpbtype         :string(1)       default(""), not null
+#  fcbin            :string(14)      default(" "), not null
+#  fcloc            :string(14)      default(" "), not null
 #  fcudrev          :string(3)       default(" "), not null
 #  fndbrmod         :integer         default(0), not null
 #  fpriority        :integer(4)      default(4), not null
 #  SchedDate        :datetime        not null
 #
+

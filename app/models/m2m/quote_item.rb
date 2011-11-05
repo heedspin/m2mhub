@@ -36,6 +36,7 @@ class M2m::QuoteItem < M2m::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: qtitem
@@ -96,8 +97,8 @@ end
 #  sfac             :string(20)      not null
 #  fcpbtype         :string(1)       default(""), not null
 #  ITCCOST          :decimal(17, 5)  not null
-#  fcudrev          :string(3)       default(" "), not null
 #  fndbrmod         :integer(1)      not null
+#  fcudrev          :string(3)       default(" "), not null
 #  fctpdate         :datetime        not null
 #  fctptrans        :datetime        not null
 #
