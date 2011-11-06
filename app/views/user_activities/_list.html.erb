@@ -2,8 +2,10 @@
 	<thead>
 		<tr>
 			<th>Time</th>
+			<% if permitted_to?(:manage, :user_activities) %>
 			<th>User</th>
 			<th>IP Address</th>
+			<% end %>
 			<th>Activity</th>
 		</tr>
 	</thead>
@@ -11,8 +13,10 @@
 		<% @user_activities.each do |ua| %>
 		<tr>
 			<td><%= ua.created_at.day == Date.current.day ? ua.created_at.to_s(:time) : ua.created_at.to_s(:event_date) %></td>
+			<% if permitted_to?(:manage, :user_activities) %>
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
+			<% end %>
 			<td><%= link_to_unless ua.password_related?, ua.report_name, url_for(ua.params_hash), :title => ua.params %></td>
 		</tr>
 		<% end %>

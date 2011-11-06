@@ -8,6 +8,7 @@ class M2m::Receiver < M2m::Base
   alias_attribute :date_received, :fdaterecv  
   alias_attribute :purchase_order_number, :fpono
 end
+
 # == Schema Information
 #
 # Table name: rcmast
@@ -18,7 +19,7 @@ end
 #  fcstatus         :string(1)       not null
 #  fdaterecv        :datetime        not null
 #  fpono            :string(6)       not null
-#  freceiver        :string(6)       not null
+#  freceiver        :string(6)       not null, primary key
 #  fvendno          :string(6)       not null
 #  faccptby         :string(3)       not null
 #  fbilllad         :string(18)      not null
@@ -37,7 +38,7 @@ end
 #  fdeurodate       :datetime        not null
 #  feurofctr        :decimal(17, 5)  not null
 #  flpremcv         :boolean         not null
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  timestamp_column :binary
 #  docstatus        :string(10)      default("STARTED")
 #

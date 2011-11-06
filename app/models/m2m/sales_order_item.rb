@@ -58,6 +58,7 @@ class M2m::SalesOrderItem < M2m::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: soitem
@@ -125,10 +126,10 @@ end
 #  fac              :string(20)      not null
 #  sfac             :string(20)      not null
 #  ITCCOST          :decimal(17, 5)  not null
-#  fcudrev          :string(3)       default(" "), not null
-#  fndbrmod         :integer         default(0), not null
 #  FcAltUM          :string(3)       default(""), not null
 #  FnAltQty         :decimal(17, 5)  default(0.0), not null
+#  fcudrev          :string(3)       default(" "), not null
+#  fndbrmod         :integer         default(0), not null
 #  fnlatefact       :decimal(4, 2)   not null
 #  fnsobuf          :integer         not null
 #  ManualPlan       :boolean         not null

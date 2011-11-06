@@ -1,5 +1,7 @@
 class M2m::Job < M2m::Base
   set_table_name 'jomast'
+  
+  has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
 
   named_scope :for_item, lambda { |item|
     {
@@ -8,11 +10,34 @@ class M2m::Job < M2m::Base
   }
 
   named_scope :released, :conditions => { :fstatus => M2m::Status.released.name }
+  
+  named_scope :by_date_desc, :order => 'jomast.fhold_dt desc'
 
   def status
     M2m::Status.find_by_name(self.fstatus)
   end
   
+  def status_date
+    if self.status.released?
+      self.release_date
+    elsif self.status.open?
+      self.open_date
+    elsif (self.status.cancelled? or self.status.on_hold? or self.status.closed?)
+      self.hold_date
+    elsif self.status.completed?
+      self.finish_date
+    else
+      nil
+    end
+  end
+  
+  alias_attribute :job_number, :fjobno
+  alias_attribute :release_date, :fact_rel
+  alias_attribute :finish_date, :fdfnshdate
+  alias_attribute :hold_date, :fhold_dt
+  alias_attribute :last_labor_date, :flastlab
+  alias_attribute :open_date, :fopen_dt
+  alias_attribute :created_at, :fdstart
 end
 # == Schema Information
 #

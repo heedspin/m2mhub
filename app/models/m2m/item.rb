@@ -10,6 +10,7 @@ class M2m::Item < M2m::Base
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
+  has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
   
   def locations
     M2m::InventoryLocation.for_item(self)
@@ -23,6 +24,9 @@ class M2m::Item < M2m::Base
   alias_attribute :quantity_non_nettable, :fnonnetqty
   alias_attribute :quantity_in_process, :fproqty
   alias_attribute :quantity_in_inspection, :fqtyinspec
+  alias_attribute :average_cost, :favgcost
+  alias_attribute :rolled_material_cost, :f2matlcost
+  alias_attribute :rolled_labor_cost, :f2labcost
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -63,11 +67,12 @@ class M2m::Item < M2m::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: inmast
 #
-#  fpartno          :string(25)      not null, primary key
+#  fpartno          :string(25)      not null
 #  frev             :string(3)       not null
 #  fcstscode        :string(1)       not null
 #  fdescript        :string(35)      default(" "), not null
@@ -178,7 +183,6 @@ end
 #  fnfanaglvl       :integer         not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
-#  fidims           :integer(4)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
 #  fcomment         :text            default(" "), not null
@@ -191,14 +195,15 @@ end
 #  itcunit          :decimal(17, 5)
 #  fnPOnHand        :decimal(16, 5)  default(0.0), not null
 #  fnLndToMfg       :decimal(16, 5)  default(0.0), not null
+#  fiPcsOnHd        :integer(4)      default(0), not null
 #  fcudrev          :string(3)       default(" "), not null
+#  fidims           :integer(4)      default(0), not null
 #  fluseudrev       :boolean         default(FALSE), not null
 #  fndbrmod         :integer         default(0), not null
-#  fiPcsOnHd        :integer(4)      default(0), not null
+#  fnonnetqty       :decimal(15, 5)  default(0.0), not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null
-#  fnonnetqty       :decimal(15, 5)  default(0.0), not null
 #  fnlatefact       :decimal(4, 2)   not null
 #  fnsobuf          :integer         not null
 #  fnpurbuf         :integer         not null
