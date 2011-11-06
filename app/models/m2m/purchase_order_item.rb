@@ -66,11 +66,11 @@ class M2m::PurchaseOrderItem < M2m::Base
   end
 
   def date_received
-    self.frcpdate == M2m::Constants.null_date ? nil : self.frcpdate
+    M2m::Constants.sanitize_date(self.frcpdate)
   end
   
   def last_promise_date
-    self.flstpdate == M2m::Constants.null_date ? nil : self.flstpdate
+    M2m::Constants.sanitize_date(self.flstpdate)
   end
   
   def backorder_quantity
@@ -103,6 +103,7 @@ class M2m::PurchaseOrderItem < M2m::Base
     self.purchase_order.status.closed?
   end
 end
+
 # == Schema Information
 #
 # Table name: poitem
@@ -178,13 +179,13 @@ end
 #  fucostonly       :decimal(17, 5)  not null
 #  futxncston       :decimal(17, 5)  not null
 #  fueurcston       :decimal(17, 5)  not null
-#  fcbin            :string(14)      not null
-#  fcloc            :string(14)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null, primary key
 #  fcomments        :text            default(" "), not null
 #  fdescript        :text            default(" "), not null
 #  Fac              :string(20)      not null
+#  fcbin            :string(14)      default(" "), not null
+#  fcloc            :string(14)      default(" "), not null
 #  fcudrev          :string(3)       default(" "), not null
 #  fndbrmod         :integer         default(0), not null
 #

@@ -31,7 +31,7 @@ class BomFlattenCsv
       write_summary
     end
   end
-  
+
   def write_summary
     @current_headers = @summary_headers
     File.open(@summarized_output_csv, 'w+') do |output|
@@ -104,12 +104,12 @@ class BomFlattenCsv
       end
     end
   end
-  
+
   def filter_part?(part_number)
     part_number = part_number.downcase
     %w(hn lw fw hhc etlw cb).any? { |fs| part_number[0..(fs.size-1)] == fs }
   end
-  
+
   def summarize(row_hash)
     part_number = row_hash['PartNo']
     ship_quantity = row_hash['ShipQty'].to_i
@@ -117,34 +117,32 @@ class BomFlattenCsv
     summary = @summaries[part_number] ||= { 'PartNo' => part_number, 'TotalShipQty' => 0, 'Description' => description }
     summary['TotalShipQty'] += ship_quantity
   end
-  
+
   def write_row(row_hash)
     @current_output.puts @current_headers.map { |h| "\"#{row_hash[h]}\"" }.join(',')
   end
-  
+
   def get_bom_items(part_number, revision)
     @cache ||= {}
     if found = @cache[part_number]
       found
     else
       # Explode
-      bom_items = M2m::BomItem.for_parent_item(part_number, revision).all      
+      bom_items = M2m::BomItem.for_parent_item(part_number, revision).all
       puts "Exploded #{part_number} into " + bom_items.map { |i| "#{i.quantity.to_i} #{i.part_number.strip}" }.join(', ')
 
       # Find if all the bom items have a common parent
-      common = nil
+      common_parents = nil
       bom_items.each do |bom_item|
         parent_part_numbers = bom_item.item.bom_items.map(&:parent_part_number).map(&:strip).select { |pn| !M2m::Item.lineage?(pn) }
-        if common.nil?
-          common = parent_part_numbers
+        if common_parents.nil?
+          common_parents = parent_part_numbers
         else
-          common &= parent_part_numbers
+          common_parents &= parent_part_numbers
         end
       end
-      # Implode
-      if common.present? and (common.size > 0)
-        # Let's be lazy and assume it's a match.
-        @cache[part_number] = generic_kit = common.first
+      if common_parents.present? and (common_parents.size > 0) and (generic_kit = implode(common_parents, bom_items))
+        @cache[part_number] = generic_kit
         puts "Found generic kit #{generic_kit} for lineage #{part_number}"
         generic_kit
       else
@@ -152,6 +150,20 @@ class BomFlattenCsv
       end
     end
   end
+
+  def implode(common_parents, bom_items)
+    # We're looking for parents that have boms that match our own bom.
+    bom_part_numbers = bom_items.map(&:part_number).sort
+    common_parents.each do |part_number|
+      if parent = M2m::Item.latest(part_number)
+        if parent.bom_items.map(&:part_number).sort == bom_part_numbers
+          return parent.part_number
+        end
+      end
+    end
+    nil
+  end
+
 end
 
 exit BomFlattenCsv.new.run

@@ -6,6 +6,8 @@ en:
     errors:
       full_messages:
         format: "{{attribute}}: {{message}}."
+    models:
+      m2m/item: Part
     attributes:
       m2m/item:
         fpartno: Part Number

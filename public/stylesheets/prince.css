@@ -173,3 +173,7 @@ table.backlog td.centered {
 table.backlog td.right {
 	text-align: right;
 }
+
+.sbl_jobs_link {
+	display: none;
+}

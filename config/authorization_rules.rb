@@ -19,6 +19,7 @@ authorization do
     has_permission_on :quote_items, :to => :read
     has_permission_on :items_history, :to => :read
     has_permission_on :items_shippers, :to => :read
+    has_permission_on :items_jobs, :to => :read
   end
 
   role :sales do

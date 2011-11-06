@@ -47,6 +47,7 @@ _shared_company_config: &_shared_company_config
     sales_order_quantity: "%.0f"
     purchase_order_quantity: "%.0f"
     item_quantity: "%.0f"
+    job_quantity: "%.0f"
     google_analytics_key:
     email_name: SMT WebBot
     email_address: smtcoinc@gmail.com

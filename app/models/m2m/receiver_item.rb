@@ -8,6 +8,7 @@ class M2m::ReceiverItem < M2m::Base
   alias_attribute :purchase_order_item_number, :fpoitemno
   alias_attribute :release_number, :frelsno
 end
+
 # == Schema Information
 #
 # Table name: rcitem
@@ -56,11 +57,11 @@ end
 #  identity_column  :integer(4)      not null, primary key
 #  fcomments        :text            default(" "), not null
 #  fdescript        :text            default(" "), not null
+#  fac              :string(20)      not null
+#  sfac             :string(20)      not null
 #  FCORIGUM         :string(3)       default(" "), not null
 #  fcudrev          :string(3)       default(" "), not null
 #  FNORIGQTY        :decimal(18, 5)  default(0.0), not null
-#  fac              :string(20)      not null
-#  sfac             :string(20)      not null
 #  Iso              :string(10)      default(""), not null
 #  Ship_Link        :integer(4)      default(0), not null
 #  ShsrceLink       :integer(4)      default(0), not null

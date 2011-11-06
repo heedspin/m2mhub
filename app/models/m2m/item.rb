@@ -67,11 +67,12 @@ class M2m::Item < M2m::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: inmast
 #
-#  fpartno          :string(25)      not null, primary key
+#  fpartno          :string(25)      not null
 #  frev             :string(3)       not null
 #  fcstscode        :string(1)       not null
 #  fdescript        :string(35)      default(" "), not null
@@ -182,7 +183,6 @@ end
 #  fnfanaglvl       :integer         not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
-#  fidims           :integer(4)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
 #  fcomment         :text            default(" "), not null
@@ -195,14 +195,15 @@ end
 #  itcunit          :decimal(17, 5)
 #  fnPOnHand        :decimal(16, 5)  default(0.0), not null
 #  fnLndToMfg       :decimal(16, 5)  default(0.0), not null
+#  fiPcsOnHd        :integer(4)      default(0), not null
 #  fcudrev          :string(3)       default(" "), not null
+#  fidims           :integer(4)      default(0), not null
 #  fluseudrev       :boolean         default(FALSE), not null
 #  fndbrmod         :integer         default(0), not null
-#  fiPcsOnHd        :integer(4)      default(0), not null
+#  fnonnetqty       :decimal(15, 5)  default(0.0), not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null
-#  fnonnetqty       :decimal(15, 5)  default(0.0), not null
 #  fnlatefact       :decimal(4, 2)   not null
 #  fnsobuf          :integer         not null
 #  fnpurbuf         :integer         not null

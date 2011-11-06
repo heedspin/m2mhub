@@ -467,7 +467,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "FNUSRQTY1",                      :precision => 16, :scale => 5,                  :null => false
     t.decimal  "FNUSRCUR1",                      :precision => 19, :scale => 5,                  :null => false
     t.datetime "FDUSRDATE1",                                                                     :null => false
-    t.text     "FMUSRMEMO1",                                                    :default => " ", :null => false
+    t.text     "FMUSRMEMO1",                                                    :null => false
   end
 
   add_index "INUM", ["identity_column"], :name => "identity_column_idx1", :unique => true
@@ -636,7 +636,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fccurid",          :limit => 3,                                                  :null => false
     t.string  "fccurlabel",       :limit => 35,                                :default => " ", :null => false
     t.binary  "timestamp_column"
-    t.text    "fcchecklay",                                                    :default => " ", :null => false
+    t.text    "fcchecklay",                                                     :null => false
   end
 
   add_index "apchac", ["fcacctno"], :name => "apchac_fcacctno", :unique => true
@@ -719,9 +719,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fctaxitemno",      :limit => 6,                                                  :null => false
     t.string   "fctaxcode",        :limit => 10,                                                 :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdescr",                                                       :default => " ", :null => false
-    t.text     "fmnotes",                                                       :default => " ", :null => false
-    t.text     "fvptdes",                                                       :default => " ", :null => false
+    t.text     "fmdescr",                                                       :null => false
+    t.text     "fmnotes",                                                       :null => false
+    t.text     "fvptdes",                                                       :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
   end
@@ -807,8 +807,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flpremcv",                                                                       :null => false
     t.datetime "fdtaxpoint",                                                                     :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                                                       :default => " ", :null => false
-    t.text     "fmstreet",                                                      :default => " ", :null => false
+    t.text     "fmnotes",                                                       :null => false
+    t.text     "fmstreet",                                                      :null => false
   end
 
   add_index "apmast", ["fccompany"], :name => "company"
@@ -885,8 +885,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flistaxabl",                                                                     :null => false
     t.string   "fcemail",          :limit => 60,                                :default => " ", :null => false
     t.binary   "timestamp_column"
-    t.text     "fmstreet",                                                      :default => " ", :null => false
-    t.text     "fmuser1",                                                       :default => " ", :null => false
+    t.text     "fmstreet",                                                      :null => false
+    t.text     "fmuser1",                                                       :null => false
   end
 
   add_index "apvend", ["fcity"], :name => "city"
@@ -999,7 +999,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean "fljrdif",                                                                          :null => false
     t.decimal "fncompct",                       :precision => 8,  :scale => 3,                    :null => false
     t.binary  "timestamp_column"
-    t.text    "fmdescript",                                                    :default => " ",   :null => false
+    t.text    "fmdescript",                                                      :null => false
     t.string  "fac",              :limit => 20,                                                   :null => false
     t.string  "fpbitem",          :limit => 3,                                 :default => "",    :null => false
     t.boolean "fpbfinal",                                                      :default => false, :null => false
@@ -1076,11 +1076,11 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdtaxpoint",                                                                       :null => false
     t.boolean  "fldifmsg",                                                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "fmbstreet",                                                     :default => " ",   :null => false
-    t.text     "fmnotes",                                                       :default => " ",   :null => false
-    t.text     "fmremarks",                                                     :default => " ",   :null => false
-    t.text     "fmstreet",                                                      :default => " ",   :null => false
-    t.text     "fmtermsmsg",                                                    :default => " ",   :null => false
+    t.text     "fmbstreet",                                                       :null => false
+    t.text     "fmnotes",                                                         :null => false
+    t.text     "fmremarks",                                                       :null => false
+    t.text     "fmstreet",                                                        :null => false
+    t.text     "fmtermsmsg",                                                      :null => false
     t.string   "fccontkey",        :limit => 10,                                :default => " ",   :null => false
     t.boolean  "flcontract",                                                    :default => false, :null => false
     t.boolean  "flduechng",                                                                        :null => false
@@ -1363,7 +1363,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcshipno",         :limit => 6,                                                  :null => false
     t.decimal "fnweight2",                      :precision => 12, :scale => 4,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fcnmfcdesc",                                                    :default => " ", :null => false
+    t.text    "fcnmfcdesc",                                                    :null => false
   end
 
   add_index "bolitem", ["fcbolno", "fcitemno"], :name => "ITEMNO"
@@ -1396,8 +1396,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flprinted",                                                                       :null => false
     t.decimal  "fnfreight",                       :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcomment",                                                      :default => " ", :null => false
-    t.text     "fmreceived",                                                     :default => " ", :null => false
+    t.text     "fmcomment",                                                      :null => false
+    t.text     "fmreceived",                                                     :null => false
   end
 
   add_index "bolmast", ["fcbolno"], :name => "bolno"
@@ -1422,7 +1422,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "Fcecoto",          :limit => 25,                                 :default => "",  :null => false
     t.string   "Fcrevision",       :limit => 3,                                  :default => "",  :null => false
     t.datetime "Ftasof",                                                                          :null => false
-    t.text     "Fmnotes",                                                        :default => "",  :null => false
+    t.text     "Fmnotes",                                                        :null => false
     t.binary   "timestamp_column"
   end
 
@@ -1455,7 +1455,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fitem",            :limit => 6,                                :default => "",  :null => false
     t.string   "fsorel",           :limit => 3,                                :default => "",  :null => false
     t.string   "fpartno",          :limit => 25,                               :default => "",  :null => false
-    t.text     "fmdescript",                                                   :default => "",  :null => false
+    t.text     "fmdescript",                                                   :null => false
     t.string   "frev",             :limit => 3,                                :default => "",  :null => false
     t.string   "fac",              :limit => 20,                                                :null => false
     t.string   "fcstatus",         :limit => 1,                                :default => "",  :null => false
@@ -1516,7 +1516,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "fntpeople",                                                                     :null => false
     t.integer  "fnuncol",                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "fmtrend",                                                      :default => " ", :null => false
+    t.text     "fmtrend",                                                      :null => false
   end
 
   add_index "crhead", ["crheadid"], :name => "crhead_crheadid", :unique => true
@@ -1535,7 +1535,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flissource",                                      :null => false
     t.decimal  "fnamount",                                        :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                        :default => " ", :null => false
+    t.text     "fmnotes",                        :null => false
   end
 
   add_index "critem", ["crheadid", "crmastid", "fctype", "fddate"], :name => "report"
@@ -1565,7 +1565,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fnstepamt",                                                                     :null => false
     t.datetime "fdglfrom",                                                                      :null => false
     t.binary   "timestamp_column"
-    t.text     "fmglarray",                                                    :default => " ", :null => false
+    t.text     "fmglarray",                                                    :null => false
   end
 
   add_index "crmast", ["crheadid", "fnlineno"], :name => "report"
@@ -1634,7 +1634,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdarchdate",                        :null => false
     t.datetime "fdgldate",                          :null => false
     t.binary   "timestamp_column"
-    t.text     "fmgenlinfo",       :default => " ", :null => false
+    t.text     "fmgenlinfo",       :null => false
   end
 
   add_index "csarch", ["identity_column"], :name => "identity_column_idx1", :unique => true
@@ -1672,7 +1672,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "fltaxdisct",                                                                       :null => false
     t.boolean  "flvrpost",                                                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "finvmemo",                                                      :default => " ",   :null => false
+    t.text     "finvmemo",                                                        :null => false
     t.string   "fglunrev",         :limit => 25,                                :default => "",    :null => false
     t.boolean  "flunrev",                                                       :default => false, :null => false
     t.boolean  "flaskfirst",                                                    :default => false, :null => false
@@ -1943,7 +1943,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fckey",            :limit => 20,                  :null => false
     t.string "fcmnemonic",       :limit => 8,                   :null => false
     t.binary "timestamp_column"
-    t.text   "fmmemotext",                     :default => " ", :null => false
+    t.text   "fmmemotext",                     :null => false
   end
 
   add_index "csmemo", ["fckey"], :name => "armemos"
@@ -2068,8 +2068,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flhasmdi",                                                                                         :null => false
     t.boolean  "flerbadqty",                                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "fmrfq",                                                         :default => " ",                   :null => false
-    t.text     "fpoclmemo",                                                     :default => " ",                   :null => false
+    t.text     "fmrfq",                                                                           :null => false
+    t.text     "fpoclmemo",                                                                       :null => false
     t.boolean  "PostAtRecv",                                                    :default => true
     t.boolean  "fldbrisup",                                                     :default => false,                 :null => false
     t.boolean  "fluseudrev",                                                    :default => false,                 :null => false
@@ -2120,9 +2120,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean "fprtqttax",                                                                      :null => false
     t.string  "fcdfudef",         :limit => 1,                                                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fqclos",                                                        :default => " ", :null => false
-    t.text    "fqsalu",                                                        :default => " ", :null => false
-    t.text    "fsalesmemo",                                                    :default => " ", :null => false
+    t.text    "fqclos",                                                        :null => false
+    t.text    "fqsalu",                                                        :null => false
+    t.text    "fsalesmemo",                                                    :null => false
     t.integer "fnstatus",         :limit => nil, :precision => 1, :scale => 0, :default => 0,   :null => false
     t.string  "fcctpsetup",       :limit => 1,                                 :default => "D", :null => false
     t.integer "fncalcparm",       :limit => nil, :precision => 1, :scale => 0, :default => 0,   :null => false
@@ -2788,7 +2788,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcmsgid",          :limit => 35, :default => " ", :null => false
     t.string   "fcuser",           :limit => 10,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmmessage",                      :default => " ", :null => false
+    t.text     "fmmessage",                      :null => false
   end
 
   add_index "ecmlog", ["fcmsgid"], :name => "msgid"
@@ -2830,8 +2830,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "ftstarted",                                                                      :null => false
     t.boolean  "fltemplt",                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "fmchginfo",                                                     :default => " ", :null => false
-    t.text     "fmusrmemo1",                                                    :default => " ", :null => false
+    t.text     "fmchginfo",                                                     :null => false
+    t.text     "fmusrmemo1",                                                    :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " "
   end
@@ -2855,7 +2855,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcuser",           :limit => 10,                  :null => false
     t.datetime "ftdate",                                          :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcmnts",                        :default => " ", :null => false
+    t.text     "fmcmnts",                        :null => false
   end
 
   add_index "ecosth", ["fceco"], :name => "eco"
@@ -2945,7 +2945,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdavwhen",                                       :null => false
     t.boolean  "flavupload",                                     :null => false
     t.binary   "timestamp_column"
-    t.text     "fmavinfo",                      :default => " ", :null => false
+    t.text     "fmavinfo",                      :null => false
   end
 
   add_index "foactvty", ["identity_column"], :name => "identity_column_idx1", :unique => true
@@ -2965,7 +2965,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "fnftsplen",        :limit => nil, :precision => 2, :scale => 0,                  :null => false
     t.boolean "flftcalc",                                                                       :null => false
     t.binary  "timestamp_column"
-    t.text    "fmfthlp",                                                       :default => " ", :null => false
+    t.text    "fmfthlp",                                                       :null => false
   end
 
   add_index "fofeatur", ["fcftdesc"], :name => "fofeatur_desc_", :unique => true
@@ -3000,8 +3000,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "fndefqty",                        :precision => 15, :scale => 5,                  :null => false
     t.boolean "flopcalc",                                                                        :null => false
     t.binary  "timestamp_column"
-    t.text    "fmopcalc",                                                       :default => " ", :null => false
-    t.text    "fmophelp",                                                       :default => " ", :null => false
+    t.text    "fmopcalc",                                                       :null => false
+    t.text    "fmophelp",                                                       :null => false
   end
 
   add_index "fooption", ["fcopdesc"], :name => "fooption_desc_", :unique => true
@@ -3018,7 +3018,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcipsmpart",       :limit => 25,                  :null => false
     t.boolean "flipgenmst",                                      :null => false
     t.binary  "timestamp_column"
-    t.text    "fmipdesc",                       :default => " ", :null => false
+    t.text    "fmipdesc",                       :null => false
   end
 
   add_index "foprinsa", ["fcipcust"], :name => "cust"
@@ -3054,13 +3054,13 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fctoprev",         :limit => 3,                   :null => false
     t.boolean "flcalcost",                                       :null => false
     t.binary  "timestamp_column"
-    t.text    "fmprinfo",                       :default => " ", :null => false
+    t.text    "fmprinfo",                       :null => false
     t.string  "fctopudrev",       :limit => 3,  :default => " ", :null => false
     t.string  "topfac",           :limit => 20,                  :null => false
     t.string  "prfac",            :limit => 20,                  :null => false
     t.string  "prsfac",           :limit => 20,                  :null => false
     t.string  "prclsfac",         :limit => 20,                  :null => false
-    t.text    "fmdyndesc",                      :default => "",  :null => false
+    t.text    "fmdyndesc",                      :null => false
   end
 
   add_index "foproduc", ["fcprdesc"], :name => "foproduc_desc_", :unique => true
@@ -3087,7 +3087,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "fndfsplen",        :limit => nil, :precision => 2, :scale => 0,                  :null => false
     t.string  "fcdfsmsect",       :limit => 10,                                                 :null => false
     t.binary  "timestamp_column"
-    t.text    "fmdfhlp",                                                       :default => " ", :null => false
+    t.text    "fmdfhlp",                                                       :null => false
   end
 
   add_index "foproutl", ["fcdfobjid"], :name => "byobj"
@@ -3133,10 +3133,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcvroper",         :limit => 1,                  :null => false
     t.string "fcvrobj2",         :limit => 6,                  :null => false
     t.binary "timestamp_column"
-    t.text   "fmvrdesc",                      :default => " ", :null => false
-    t.text   "fmvrelse",                      :default => " ", :null => false
-    t.text   "fmvroplst",                     :default => " ", :null => false
-    t.text   "fmvrthen",                      :default => " ", :null => false
+    t.text   "fmvrdesc",                      :null => false
+    t.text   "fmvrelse",                      :null => false
+    t.text   "fmvroplst",                     :null => false
+    t.text   "fmvrthen",                      :null => false
   end
 
   add_index "fovirule", ["fcvrlink"], :name => "link"
@@ -3198,7 +3198,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fccontactl",       :limit => 20, :default => "", :null => false
     t.datetime "fcdatetime",                                     :null => false
     t.string   "fcuserid",         :limit => 3,  :default => "", :null => false
-    t.text     "fmnotes",                        :default => "", :null => false
+    t.text     "fmnotes",                        :null => false
     t.binary   "timestamp_column"
   end
 
@@ -3247,7 +3247,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdmailby",                                                                         :null => false
     t.boolean  "fllabor",                                                       :default => false, :null => false
     t.boolean  "flparts",                                                       :default => false, :null => false
-    t.text     "fmnotes",                                                       :default => "",    :null => false
+    t.text     "fmnotes",                                                         :null => false
     t.decimal  "fnesthrs",                       :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnneedqty",                      :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.string   "udrev",            :limit => 3,                                 :default => "",    :null => false
@@ -3272,10 +3272,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcvendno",         :limit => 6,                                 :default => "",  :null => false
     t.datetime "fdinstalle",                                                                     :null => false
     t.datetime "fdremoved",                                                                      :null => false
-    t.text     "fmfailcode",                                                    :default => "",  :null => false
-    t.text     "fmpartdesc",                                                    :default => "",  :null => false
-    t.text     "fmproblem",                                                     :default => "",  :null => false
-    t.text     "fmrepair",                                                      :default => "",  :null => false
+    t.text     "fmfailcode",                                                    :null => false
+    t.text     "fmpartdesc",                                                    :null => false
+    t.text     "fmproblem",                                                     :null => false
+    t.text     "fmrepair",                                                      :null => false
     t.decimal  "fnqtyused",                      :precision => 16, :scale => 5, :default => 0.0, :null => false
     t.string   "udrev",            :limit => 3,                                 :default => "",  :null => false
     t.integer  "fnlevel",                                                       :default => 0,   :null => false
@@ -3301,7 +3301,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcstatus",         :limit => 1,  :default => "", :null => false
     t.string   "fcatcompan",       :limit => 35, :default => "", :null => false
     t.string   "fccurcust",        :limit => 6,  :default => "", :null => false
-    t.text     "fmatstreet",                     :default => "", :null => false
+    t.text     "fmatstreet",                     null => false
     t.string   "fcattype",         :limit => 1,  :default => "", :null => false
     t.string   "fcataddr",         :limit => 4,  :default => "", :null => false
     t.string   "fcatcity",         :limit => 25, :default => "", :null => false
@@ -3315,8 +3315,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcshipper",        :limit => 6,  :default => "", :null => false
     t.datetime "fdinstalle",                                     :null => false
     t.datetime "fdshipped",                                      :null => false
-    t.text     "fmdescript",                     :default => "", :null => false
-    t.text     "fmnotes",                        :default => "", :null => false
+    t.text     "fmdescript",                     null => false
+    t.text     "fmnotes",                        null => false
     t.string   "udrev",            :limit => 3,  :default => "", :null => false
     t.binary   "timestamp_column"
   end
@@ -3366,7 +3366,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdlast",                                         :null => false
     t.datetime "fdnext",                                         :null => false
     t.datetime "fdstart",                                        :null => false
-    t.text     "fmnotes",                        :default => "", :null => false
+    t.text     "fmnotes",                        null => false
     t.integer  "fnacttimes",                     :default => 0,  :null => false
     t.integer  "fnendevent",                     :default => 0,  :null => false
     t.integer  "fnschtimes",                     :default => 0,  :null => false
@@ -3385,9 +3385,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fctechid",         :limit => 10, :default => "", :null => false
     t.datetime "fcdatetime",                                     :null => false
     t.datetime "fdsvcdate",                                      :null => false
-    t.text     "fmaction",                       :default => "", :null => false
-    t.text     "fmnextstep",                     :default => "", :null => false
-    t.text     "fmresults",                      :default => "", :null => false
+    t.text     "fmaction",                       null => false
+    t.text     "fmnextstep",                     null => false
+    t.text     "fmresults",                      null => false
     t.binary   "timestamp_column"
   end
 
@@ -3470,8 +3470,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fctypeitem",       :limit => 1,                                 :default => "",    :null => false
     t.datetime "fdlship",                                                                          :null => false
     t.boolean  "flbillflag",                                                    :default => false, :null => false
-    t.text     "fmdescr",                                                       :default => "",    :null => false
-    t.text     "fmnotes",                                                       :default => "",    :null => false
+    t.text     "fmdescr",                                                         :null => false
+    t.text     "fmnotes",                                                         :null => false
     t.decimal  "fnqtyrecv",                      :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnqtyship",                      :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnquantity",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
@@ -3523,9 +3523,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdusrdate1",                                                                       :null => false
     t.boolean  "flmgrappro",                                                    :default => false, :null => false
     t.boolean  "flwarranty",                                                    :default => false, :null => false
-    t.text     "fminternal",                                                    :default => "",    :null => false
-    t.text     "fmproblem",                                                     :default => "",    :null => false
-    t.text     "fmresolved",                                                    :default => "",    :null => false
+    t.text     "fminternal",                                                      :null => false
+    t.text     "fmproblem",                                                       :null => false
+    t.text     "fmresolved",                                                      :null => false
     t.decimal  "fnactkthrs",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnactpmhrs",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnactschrs",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
@@ -3540,14 +3540,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcAtZip",          :limit => 10,                                :default => "",    :null => false
     t.string   "fcAtPhone",        :limit => 20,                                :default => "",    :null => false
     t.string   "fcAtFax",          :limit => 20,                                :default => "",    :null => false
-    t.text     "fmAtStreet",                                                    :default => "",    :null => false
+    t.text     "fmAtStreet",                                                      :null => false
     t.string   "udrev",            :limit => 3,                                 :default => "",    :null => false
     t.string   "fcusrchr1",        :limit => 20,                                :default => "",    :null => false
     t.string   "fcusrchr2",        :limit => 40,                                :default => "",    :null => false
     t.string   "fcusrchr3",        :limit => 40,                                :default => "",    :null => false
     t.decimal  "fnusrcur1",                      :precision => 15, :scale => 4, :default => 0.0,   :null => false
     t.decimal  "fnusrqty1",                      :precision => 14, :scale => 5, :default => 0.0,   :null => false
-    t.text     "fmusrmemo1",                                                    :default => "",    :null => false
+    t.text     "fmusrmemo1",                                                      :null => false
     t.decimal  "fnduratn",                       :precision => 6,  :scale => 2, :default => 0.0,   :null => false
     t.binary   "timestamp_column"
     t.datetime "fdexpires",                                                                        :null => false
@@ -3569,7 +3569,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcserialno",       :limit => 20, :default => "", :null => false
     t.string "fcfailclas",       :limit => 3,  :default => "", :null => false
     t.string "fcfailcode",       :limit => 3,  :default => "", :null => false
-    t.text   "fmfailure",                      :default => "", :null => false
+    t.text   "fmfailure",                      null => false
     t.string "udrev",            :limit => 3,  :default => "", :null => false
     t.binary "timestamp_column"
   end
@@ -3584,8 +3584,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcstatus",         :limit => 1,  :default => "", :null => false
     t.string "fcarea",           :limit => 3,  :default => "", :null => false
     t.string "fcprobtype",       :limit => 3,  :default => "", :null => false
-    t.text   "fmkitproc",                      :default => "", :null => false
-    t.text   "fmpmproc",                       :default => "", :null => false
+    t.text   "fmkitproc",                      null => false
+    t.text   "fmpmproc",                       null => false
     t.binary "timestamp_column"
   end
 
@@ -3601,7 +3601,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcusernm",         :limit => 10,                                :default => "",  :null => false
     t.string  "fctype",           :limit => 1,                                 :default => "",  :null => false
     t.string  "fcterr",           :limit => 3,                                 :default => "",  :null => false
-    t.text    "fmstreet",                                                      :default => "",  :null => false
+    t.text    "fmstreet",                                                      :null => false
     t.string  "fccity",           :limit => 25,                                :default => "",  :null => false
     t.string  "fcstate",          :limit => 10,                                :default => "",  :null => false
     t.string  "fczip",            :limit => 10,                                :default => "",  :null => false
@@ -3614,7 +3614,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcstatus",         :limit => 1,                                 :default => "",  :null => false
     t.string  "fctaxcode",        :limit => 10,                                :default => "",  :null => false
     t.string  "fcwhse",           :limit => 14,                                :default => "",  :null => false
-    t.text    "fmnotes",                                                       :default => "",  :null => false
+    t.text    "fmnotes",                                                       :null => false
     t.decimal "fncostrate",                     :precision => 15, :scale => 4, :default => 0.0, :null => false
     t.decimal "fnhrrate",                       :precision => 15, :scale => 4, :default => 0.0, :null => false
     t.binary  "timestamp_column"
@@ -3640,7 +3640,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcwhse",           :limit => 14,                                :default => "",  :null => false
     t.datetime "fdeurodate",                                                                     :null => false
     t.datetime "fdfactdate",                                                                     :null => false
-    t.text     "fmdescr",                                                       :default => "",  :null => false
+    t.text     "fmdescr",                                                       :null => false
     t.decimal  "fncurrfact",                     :precision => 16, :scale => 5, :default => 0.0, :null => false
     t.decimal  "fneurocost",                     :precision => 16, :scale => 5, :default => 0.0, :null => false
     t.decimal  "fneurofact",                     :precision => 16, :scale => 5, :default => 0.0, :null => false
@@ -3699,8 +3699,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fccurid",          :limit => 3,                                  :default => "",  :null => false
     t.string   "fctaxcode",        :limit => 10,                                 :default => "",  :null => false
     t.binary   "fgexcelhoo"
-    t.text     "fmnotes",                                                        :default => "",  :null => false
-    t.text     "fmother",                                                        :default => "",  :null => false
+    t.text     "fmnotes",                                                        :null => false
+    t.text     "fmother",                                                        :null => false
     t.decimal  "fnairrail",                       :precision => 15, :scale => 4, :default => 0.0, :null => false
     t.decimal  "fnautorent",                      :precision => 15, :scale => 4, :default => 0.0, :null => false
     t.decimal  "fncurrfact",                      :precision => 16, :scale => 5, :default => 0.0, :null => false
@@ -3760,7 +3760,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdscrapped",                                     :null => false
     t.datetime "fdtostock",                                      :null => false
     t.datetime "fdwarnexp",                                      :null => false
-    t.text     "fmnotes",                        :default => "", :null => false
+    t.text     "fmnotes",                        null => false
     t.integer  "fnwarnmo",                       :default => 0,  :null => false
     t.integer  "fnwarnyrs",                      :default => 0,  :null => false
     t.string   "udrev",            :limit => 3,  :default => "", :null => false
@@ -3782,7 +3782,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean "flincllabo",                     :default => false, :null => false
     t.boolean "flinclpart",                     :default => false, :null => false
     t.boolean "flinclsw",                       :default => false, :null => false
-    t.text    "fmnotes",                        :default => "",    :null => false
+    t.text    "fmnotes",                          :null => false
     t.string  "udrev",            :limit => 3,  :default => "",    :null => false
     t.binary  "timestamp_column"
   end
@@ -3807,7 +3807,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdeurodate",                                                                       :null => false
     t.datetime "fdfactdate",                                                                       :null => false
     t.binary   "fgcalcpay"
-    t.text     "fmnotes",                                                       :default => "",    :null => false
+    t.text     "fmnotes",                                                         :null => false
     t.decimal  "fncurrfact",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fneurofact",                     :precision => 16, :scale => 5, :default => 0.0,   :null => false
     t.decimal  "fnpayamt",                       :precision => 15, :scale => 4, :default => 0.0,   :null => false
@@ -3841,7 +3841,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcacctnum",        :limit => 25,                  :null => false
     t.string "fcstatus",         :limit => 1,                   :null => false
     t.binary "timestamp_column"
-    t.text   "fmarray",                        :default => " ", :null => false
+    t.text   "fmarray",                        :null => false
   end
 
   add_index "glauto", ["fcacctnum"], :name => "account"
@@ -3937,7 +3937,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fccashacc",        :limit => 25,                                                 :null => false
     t.string   "fcgnlsacc",        :limit => 25,                                                 :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdetail",                                                      :default => " ", :null => false
+    t.text     "fmdetail",                                                      :null => false
   end
 
   add_index "glcshm", ["fccashnum"], :name => "fccashnum"
@@ -4069,7 +4069,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "fnorder",          :limit => nil, :precision => 5, :scale => 0,                    :null => false
     t.boolean "flrevlcurr",                                                                       :null => false
     t.binary  "timestamp_column"
-    t.text    "fmnote",                                                        :default => " ",   :null => false
+    t.text    "fmnote",                                                          :null => false
     t.string  "fcactcat",         :limit => 1,                                 :default => " ",   :null => false
     t.boolean "flcash",                                                        :default => false, :null => false
   end
@@ -4106,7 +4106,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fntotalamt",                                      :null => false
     t.string   "fcurrpaid",        :limit => 1,                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                        :default => " ", :null => false
+    t.text     "fmnotes",                        :null => false
   end
 
   add_index "glremast", ["fcacctid", "fcref", "fdrefdate"], :name => "EVENTKEY"
@@ -4139,8 +4139,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcacctnum",        :limit => 25,                  :null => false
     t.string  "fcparent",         :limit => 25,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fmcalc",                         :default => " ", :null => false
-    t.text    "fmlaaccts",                      :default => " ", :null => false
+    t.text    "fmcalc",                         :null => false
+    t.text    "fmlaaccts",                      :null => false
   end
 
   add_index "glrpti", ["fccode", "fcband"], :name => "BAND"
@@ -4163,9 +4163,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "fnnegno",                                         :null => false
     t.integer  "fnround",                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcomp",                         :default => " ", :null => false
-    t.text     "fmdescr",                        :default => " ", :null => false
-    t.text     "fmfilter",                       :default => " ", :null => false
+    t.text     "fmcomp",                         :null => false
+    t.text     "fmdescr",                        :null => false
+    t.text     "fmfilter",                       :null => false
   end
 
   add_index "glrptm", ["fcreport"], :name => "glrptm_reportkey", :unique => true
@@ -4222,7 +4222,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fyusrcur1",                                                                      :null => false
     t.datetime "fdusrdate1",                                                                     :null => false
     t.binary   "timestamp_column"
-    t.text     "fmusrmemo1",                                                    :default => " ", :null => false
+    t.text     "fmusrmemo1",                                                    :null => false
     t.decimal  "fytxnjetot",                                                    :default => 0.0, :null => false
     t.decimal  "fyeurjetot",                                                    :default => 0.0, :null => false
   end
@@ -4272,7 +4272,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "ftxntrsamt",                                                                     :null => false
     t.boolean  "flreverse",                                                                      :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcocons",                                                      :default => " ", :null => false
+    t.text     "fmcocons",                                                      :null => false
   end
 
   add_index "gltran", ["fcacctnum", "fddate"], :name => "acct_date"
@@ -4359,7 +4359,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "fltooling",                                                                       :null => false
     t.integer  "fnoperno",         :limit => nil, :precision => 4,  :scale => 0,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fbommemo",                                                       :default => " ", :null => false
+    t.text     "fbommemo",                                                       :null => false
     t.string   "cfacilityid",      :limit => 20,                                                  :null => false
     t.string   "pfacilityid",      :limit => 20,                                                  :null => false
     t.string   "fcompudrev",       :limit => 3,                                  :default => " ", :null => false
@@ -4753,10 +4753,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcclass",          :limit => 12,                                                    :null => false
     t.integer  "fidims",                                                                            :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomment",                                                       :default => " ",   :null => false
+    t.text     "fcomment",                                                         :null => false
     t.binary   "fgimage",                                                        :default => "0x",  :null => false
-    t.text     "fmusrmemo1",                                                     :default => " ",   :null => false
-    t.text     "fstdmemo",                                                       :default => " ",   :null => false
+    t.text     "fmusrmemo1",                                                       :null => false
+    t.text     "fstdmemo",                                                         :null => false
     t.string   "fac",              :limit => 20
     t.string   "sfac",             :limit => 20
     t.decimal  "itcfixed",                        :precision => 17, :scale => 5
@@ -4883,7 +4883,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "fnstd_prod",                     :precision => 11, :scale => 6,                  :null => false
     t.decimal "fnstd_set",                      :precision => 7,  :scale => 2,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fopmemo",                                                       :default => " ", :null => false
+    t.text    "fopmemo",                                                       :null => false
     t.string  "fac",              :limit => 20,                                                 :null => false
   end
 
@@ -4947,7 +4947,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flisprinted",                                                                     :null => false
     t.datetime "fdfinish",                                                                        :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdescr",                                                        :default => " ", :null => false
+    t.text     "fmdescr",                                                        :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
   end
@@ -5212,7 +5212,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean "fllotreqd",                                                                          :null => false
     t.string  "fccharcode",       :limit => 10,                                                     :null => false
     t.binary  "timestamp_column"
-    t.text    "fopermemo",                                                       :default => " ",   :null => false
+    t.text    "fopermemo",                                                         :null => false
     t.string  "fac",              :limit => 20,                                                     :null => false
     t.string  "fcudrev",          :limit => 3,                                   :default => " ",   :null => false
     t.integer "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0,  :default => 0,     :null => false
@@ -5254,7 +5254,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fctime_ts",                                                                       :null => false
     t.decimal  "fnnewonhd",                       :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomment",                                                       :default => " ", :null => false
+    t.text     "fcomment",                                                       :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "ffromfac",         :limit => 20,                                                  :null => false
     t.string   "ftofac",           :limit => 20,                                                  :null => false
@@ -5316,7 +5316,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fclastpono",       :limit => 6,                                                  :null => false
     t.string   "fcjrdict",         :limit => 10,                                                 :null => false
     t.binary   "timestamp_column"
-    t.text     "fvcomment",                                                     :default => " ", :null => false
+    t.text     "fvcomment",                                                     :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
   end
@@ -5335,7 +5335,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcuser",           :limit => 10, :default => " ",                   :null => false
     t.datetime "ftdate",                         :default => '1900-01-01 00:00:00', :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcmnts",                        :default => " ",                   :null => false
+    t.text     "fmcmnts",                                          :null => false
     t.string   "fac",              :limit => 20,                                    :null => false
     t.string   "fcudrev",          :limit => 3,  :default => " ",                   :null => false
   end
@@ -5548,7 +5548,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "fipopieces",                                                                                        :null => false
     t.integer  "fiissdpcs",                                                                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "fstdmemo",                                                       :default => " ",                   :null => false
+    t.text     "fstdmemo",                                                                         :null => false
     t.string   "Cfac",             :limit => 20,                                 :default => " ",                   :null => false
     t.string   "fcbomudrev",       :limit => 3,                                  :default => " ",                   :null => false
     t.string   "fcparudrev",       :limit => 3,                                  :default => " ",                   :null => false
@@ -5671,7 +5671,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fccharcode",       :limit => 10,                                                     :null => false
     t.datetime "fdplanstdt",                                                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "fopermemo",                                                       :default => " ",   :null => false
+    t.text     "fopermemo",                                                         :null => false
     t.string   "fac",              :limit => 20,                                                     :null => false
     t.boolean  "flsaveprec",                                                      :default => false, :null => false
     t.boolean  "flusesetup",                                                      :default => false, :null => false
@@ -5722,8 +5722,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fulabcost1",                     :precision => 7,  :scale => 2,                  :null => false
     t.decimal  "fuprice",                        :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fdesc",                                                         :default => " ", :null => false
-    t.text     "fdescmemo",                                                     :default => " ", :null => false
+    t.text     "fdesc",                                                         :null => false
+    t.text     "fdescmemo",                                                     :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
     t.decimal  "fidoshpqty",                     :precision => 15, :scale => 5
@@ -5868,8 +5868,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flisapl",                                                                          :null => false
     t.binary   "timestamp_column"
     t.binary   "fgimage",                                                        :default => "0x", :null => false
-    t.text     "fjob_mem",                                                       :default => " ",  :null => false
-    t.text     "fmusermemo",                                                     :default => " ",  :null => false
+    t.text     "fjob_mem",                                                        :null => false
+    t.text     "fmusermemo",                                                      :null => false
     t.string   "fac",              :limit => 20,                                                   :null => false
     t.string   "idono",            :limit => 10
     t.string   "sfac",             :limit => 20
@@ -5919,7 +5919,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "faddedlsti",                     :precision => 7,  :scale => 2,                  :null => false
     t.decimal  "ftotlstime",                     :precision => 14, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fpmemo",                                                        :default => " ", :null => false
+    t.text     "fpmemo",                                                        :null => false
   end
 
   add_index "jopact", ["fjobno"], :name => "jobnum"
@@ -5988,7 +5988,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fntxnqty",                       :precision => 17, :scale => 5,                  :null => false
     t.decimal  "fnucost",                        :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdesc",                                                        :default => " ", :null => false
+    t.text     "fmdesc",                                                        :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
     t.string   "fcIdoNo",          :limit => 10,                                :default => "",  :null => false
@@ -6128,7 +6128,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "mfr", :primary_key => "identity_column", :force => true do |t|
     t.string "fcmfrno",          :limit => 6,  :default => "", :null => false
     t.string "fcmfrname",        :limit => 35, :default => "", :null => false
-    t.text   "fmaddress",                      :default => "", :null => false
+    t.text   "fmaddress",                      null => false
     t.string "fccity",           :limit => 20, :default => "", :null => false
     t.string "fcstate",          :limit => 20, :default => "", :null => false
     t.string "fczip",            :limit => 10, :default => "", :null => false
@@ -6145,8 +6145,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcsrext",          :limit => 4,  :default => "", :null => false
     t.string "fcsrfax",          :limit => 20, :default => "", :null => false
     t.string "fcsremail",        :limit => 60, :default => "", :null => false
-    t.text   "fmnotes",                        :default => "", :null => false
-    t.text   "fmcomments",                     :default => "", :null => false
+    t.text   "fmnotes",                        null => false
+    t.text   "fmcomments",                     null => false
     t.binary "timestamp_column"
   end
 
@@ -6161,7 +6161,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcpartno",         :limit => 25, :default => "", :null => false
     t.string "fcrev",            :limit => 3,  :default => "", :null => false
     t.string "fcuom",            :limit => 3,  :default => "", :null => false
-    t.text   "fmcomments",                     :default => "", :null => false
+    t.text   "fmcomments",                     null => false
     t.binary "timestamp_column"
   end
 
@@ -6216,7 +6216,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "ftrantype",        :limit => nil, :precision => 1,  :scale => 0,                  :null => false
     t.boolean  "fjob_splt",                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "fdesc",                                                          :default => " ", :null => false
+    t.text     "fdesc",                                                          :null => false
     t.string   "fac",              :limit => 20
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
   end
@@ -6391,14 +6391,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fparent",          :limit => 6,                                  :default => "",   :null => false
     t.string  "ffeatureid",       :limit => 6,                                  :default => "",   :null => false
     t.string  "foptionid",        :limit => 6,                                  :default => "",   :null => false
-    t.text    "fexpr",                                                          :default => "",   :null => false
+    t.text    "fexpr",                                                           :null => false
     t.string  "frule",            :limit => 25,                                 :default => "",   :null => false
     t.decimal "fmin",                            :precision => 16, :scale => 5, :default => 0.0,  :null => false
     t.decimal "fmax",                            :precision => 16, :scale => 5, :default => 0.0,  :null => false
     t.decimal "fminchose",                       :precision => 16, :scale => 5, :default => 0.0,  :null => false
     t.decimal "fmaxchose",                       :precision => 16, :scale => 5, :default => 0.0,  :null => false
     t.string  "fsmartpart",       :limit => 20,                                 :default => "",   :null => false
-    t.text    "fhelp",                                                          :default => "",   :null => false
+    t.text    "fhelp",                                                           :null => false
     t.string  "fdocument",        :limit => 25,                                 :default => "",   :null => false
     t.boolean "fallparts",                                                      :default => true, :null => false
     t.string  "fdefopt",          :limit => 6,                                  :default => "",   :null => false
@@ -6411,9 +6411,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "fpricevar",                       :precision => 16, :scale => 5, :default => 0.0,  :null => false
     t.string  "fbasedon",         :limit => 6,                                  :default => "",   :null => false
     t.boolean "fvisible",                                                       :default => true, :null => false
-    t.text    "flist",                                                          :default => "",   :null => false
-    t.text    "fselprop",                                                       :default => "",   :null => false
-    t.text    "fcomments",                                                      :default => "",   :null => false
+    t.text    "flist",                                                           :null => false
+    t.text    "fselprop",                                                        :null => false
+    t.text    "fcomments",                                                       :null => false
     t.integer "fspstart",         :limit => nil, :precision => 3,  :scale => 0, :default => 0,    :null => false
     t.integer "fsplength",        :limit => nil, :precision => 3,  :scale => 0, :default => 0,    :null => false
     t.integer "flistwidth",       :limit => nil, :precision => 3,  :scale => 0, :default => 0,    :null => false
@@ -6426,9 +6426,9 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "pccfgmst", :primary_key => "identity_column", :force => true do |t|
     t.string  "fconfig",          :limit => 40,                                 :default => "",  :null => false
     t.string  "fprodid",          :limit => 6,                                  :default => "",  :null => false
-    t.text    "fdesc",                                                          :default => "",  :null => false
-    t.text    "ffulldesc",                                                      :default => "",  :null => false
-    t.text    "fcomments",                                                      :default => "",  :null => false
+    t.text    "fdesc",                                                          :null => false
+    t.text    "ffulldesc",                                                      :null => false
+    t.text    "fcomments",                                                      :null => false
     t.string  "fcustno",          :limit => 6,                                  :default => "",  :null => false
     t.string  "fdistno",          :limit => 6,                                  :default => "",  :null => false
     t.string  "fsalespn",         :limit => 3,                                  :default => "",  :null => false
@@ -6451,8 +6451,8 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "pcconstr", :primary_key => "identity_column", :force => true do |t|
     t.string "fprodid",          :limit => 6, :default => "", :null => false
     t.string "foptionid",        :limit => 6, :default => "", :null => false
-    t.text   "fminimum",                      :default => "", :null => false
-    t.text   "fmaximum",                      :default => "", :null => false
+    t.text   "fminimum",                      null => false
+    t.text   "fmaximum",                      null => false
     t.binary "timestamp_column"
   end
 
@@ -6491,7 +6491,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "pcuom", :primary_key => "identity_column", :force => true do |t|
     t.string "ffromuom",         :limit => 3, :default => "", :null => false
     t.string "ftouom",           :limit => 3, :default => "", :null => false
-    t.text   "fconvexpr",                     :default => "", :null => false
+    t.text   "fconvexpr",                     null => false
     t.binary "timestamp_column"
   end
 
@@ -6624,8 +6624,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcbin",            :limit => 14,                                                  :null => false
     t.string   "fcloc",            :limit => 14,                                                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomments",                                                      :default => " ", :null => false
-    t.text     "fdescript",                                                      :default => " ", :null => false
+    t.text     "fcomments",                                                      :null => false
+    t.text     "fdescript",                                                      :null => false
     t.string   "Fac",              :limit => 20,                                                  :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
     t.integer  "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,   :null => false
@@ -6772,12 +6772,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "feurofctr",                       :precision => 17, :scale => 5,                  :null => false
     t.string   "fctype",           :limit => 1,                                                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fmpaytype",                                                      :default => " ", :null => false
-    t.text     "fmshstreet",                                                     :default => " ", :null => false
-    t.text     "fmsnstreet",                                                     :default => " ", :null => false
-    t.text     "fmusrmemo1",                                                     :default => " ", :null => false
-    t.text     "fpoclosing",                                                     :default => " ", :null => false
-    t.text     "freasoncng",                                                     :default => " ", :null => false
+    t.text     "fmpaytype",                                                      :null => false
+    t.text     "fmshstreet",                                                     :null => false
+    t.text     "fmsnstreet",                                                     :null => false
+    t.text     "fmusrmemo1",                                                     :null => false
+    t.text     "fpoclosing",                                                     :null => false
+    t.text     "freasoncng",                                                     :null => false
     t.integer  "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,   :null => false
   end
 
@@ -6791,7 +6791,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "poqfltr", :primary_key => "identity_column", :force => true do |t|
     t.string "fcname",           :limit => 25,                  :null => false
     t.binary "timestamp_column"
-    t.text   "fmfltr",                         :default => " ", :null => false
+    t.text   "fmfltr",                         :null => false
   end
 
   add_index "poqfltr", ["fcname"], :name => "poqfltr"
@@ -6869,7 +6869,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fonorder",                        :precision => 15, :scale => 5, :default => 0.0,                   :null => false
     t.decimal  "fqtyinspec",                      :precision => 15, :scale => 5, :default => 0.0,                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdesc",                                                         :default => " ",                   :null => false
+    t.text     "fmdesc",                                                                           :null => false
     t.string   "fac",              :limit => 20,                                                                    :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ",                   :null => false
   end
@@ -6900,7 +6900,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fpurchcost",                     :precision => 17, :scale => 5,                  :null => false
     t.datetime "frevdate",                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "frevmemo",                                                      :default => " ", :null => false
+    t.text     "frevmemo",                                                      :null => false
   end
 
   add_index "porevm", ["fpono", "fporev"], :name => "POREVM"
@@ -6921,8 +6921,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "frfqqty5",                       :precision => 15, :scale => 5, :default => 0.0,   :null => false
     t.boolean "fstandard",                                                     :default => false, :null => false
     t.binary  "timestamp_column"
-    t.text    "fcomments",                                                     :default => " ",   :null => false
-    t.text    "fdescript",                                                     :default => " ",   :null => false
+    t.text    "fcomments",                                                       :null => false
+    t.text    "fdescript",                                                       :null => false
     t.string  "fac",              :limit => 20,                                                   :null => false
     t.string  "fcudrev",          :limit => 3,                                 :default => " ",   :null => false
   end
@@ -6962,9 +6962,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "fnlastitem",       :limit => nil, :precision => 3, :scale => 0,                  :null => false
     t.string   "fccurid",          :limit => 3,                                                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmstreet",                                                      :default => " ", :null => false
-    t.text     "frfqclsing",                                                    :default => " ", :null => false
-    t.text     "frmstreet",                                                     :default => " ", :null => false
+    t.text     "fmstreet",                                                      :null => false
+    t.text     "frfqclsing",                                                    :null => false
+    t.text     "frmstreet",                                                     :null => false
   end
 
   add_index "porfqm", ["frfqno"], :name => "porfqm"
@@ -7070,8 +7070,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flvndno",                                                                        :null => false
     t.decimal  "fnextcstth",                     :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmadvfilt",                                                     :default => " ", :null => false
-    t.text     "fmfiltexpr",                                                    :default => " ", :null => false
+    t.text     "fmadvfilt",                                                     :null => false
+    t.text     "fmfiltexpr",                                                    :null => false
     t.string   "fcfacfrm",         :limit => 20,                                                 :null => false
     t.string   "fcfacthr",         :limit => 20,                                                 :null => false
     t.boolean  "flfacility",                                                                     :null => false
@@ -7182,7 +7182,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcountry",         :limit => 25,                                                  :null => false
     t.string   "fcemail",          :limit => 60,                                 :default => " ", :null => false
     t.binary   "timestamp_column"
-    t.text     "faddress",                                                       :default => " ", :null => false
+    t.text     "faddress",                                                       :null => false
     t.datetime "fhiredate",                                                                       :null => false
   end
 
@@ -7343,7 +7343,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flacttkn",                                                                       :null => false
     t.string   "fcplanner",        :limit => 3,                                                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmmsg",                                                         :default => " ", :null => false
+    t.text     "fmmsg",                                                         :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
   end
@@ -7380,7 +7380,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fdtxndate",                                                                       :null => false
     t.decimal  "fntxnqty",                        :precision => 17, :scale => 4,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                                                        :default => " ", :null => false
+    t.text     "fmnotes",                                                        :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
     t.integer  "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,   :null => false
@@ -7419,7 +7419,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcaddby",          :limit => 4,                                                   :null => false
     t.integer  "fnrecno",          :limit => nil, :precision => 15, :scale => 0,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomment",                                                       :default => " ", :null => false
+    t.text     "fcomment",                                                       :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
   end
@@ -7479,7 +7479,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fseqno",           :limit => 3,                                                 :null => false
     t.decimal "fmatlcost",                     :precision => 21, :scale => 9,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fbomdesc",                                                     :default => " ", :null => false
+    t.text    "fbomdesc",                                                     :null => false
   end
 
   add_index "qtcbom", ["fquoteno", "finumber", "fseqno"], :name => "SEQNO"
@@ -7494,7 +7494,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fccontact",        :limit => 20,                  :null => false
     t.string   "fcfname",          :limit => 15,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmreason",                       :default => " ", :null => false
+    t.text     "fmreason",                       :null => false
   end
 
   add_index "qtchng", ["fquoteno", "fdate"], :name => "date"
@@ -7507,7 +7507,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "ftime",                         :precision => 15, :scale => 5,                  :null => false
     t.decimal "frate",                         :precision => 15, :scale => 5,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "frtgdesc",                                                     :default => " ", :null => false
+    t.text    "frtgdesc",                                                     :null => false
   end
 
   add_index "qtcrtg", ["fquoteno", "finumber", "fseqno"], :name => "SEQNO"
@@ -7550,8 +7550,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fclotext",         :limit => 1,                                  :default => " ",   :null => false
     t.integer "fnoperno",         :limit => nil, :precision => 4,  :scale => 0, :default => 0,     :null => false
     t.binary  "timestamp_column"
-    t.text    "fbomdesc",                                                       :default => " ",   :null => false
-    t.text    "fstdmemo",                                                       :default => " ",   :null => false
+    t.text    "fbomdesc",                                                         :null => false
+    t.text    "fstdmemo",                                                         :null => false
     t.string  "fac",              :limit => 20,                                                    :null => false
     t.string  "fcbomudrev",       :limit => 3,                                  :default => "",    :null => false
     t.integer "fndbrmod",         :limit => 1,                                                     :null => false
@@ -7607,8 +7607,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "fusubcost",                       :precision => 17, :scale => 5,                   :null => false
     t.boolean "fllotreqd",                                                                        :null => false
     t.binary  "timestamp_column"
-    t.text    "fdescript",                                                       :default => " ", :null => false
-    t.text    "fopermemo",                                                       :default => " ", :null => false
+    t.text    "fdescript",                                                       :null => false
+    t.text    "fopermemo",                                                       :null => false
     t.integer "fndbrmod",         :limit => 1,                                                    :null => false
     t.integer "fnsimulops",                                                                       :null => false
   end
@@ -7665,9 +7665,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flistaxabl",                                                                      :null => false
     t.boolean  "fljrdif",                                                                         :null => false
     t.binary   "timestamp_column"
-    t.text     "fdelivery",                                                      :default => " ", :null => false
-    t.text     "fdesc",                                                          :default => " ", :null => false
-    t.text     "fdescmemo",                                                      :default => " ", :null => false
+    t.text     "fdelivery",                                                      :null => false
+    t.text     "fdesc",                                                          :null => false
+    t.text     "fdescmemo",                                                      :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "sfac",             :limit => 20,                                                  :null => false
     t.string   "fcpbtype",         :limit => 1,                                  :default => "",  :null => false
@@ -7737,10 +7737,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcshipto",         :limit => 4,                                                    :null => false
     t.boolean  "fltotal",                                                                          :null => false
     t.binary   "timestamp_column"
-    t.text     "fclosmemo",                                                     :default => " ",   :null => false
-    t.text     "fmstreet",                                                      :default => " ",   :null => false
-    t.text     "fmusermemo",                                                    :default => " ",   :null => false
-    t.text     "fsalumemo",                                                     :default => " ",   :null => false
+    t.text     "fclosmemo",                                                       :null => false
+    t.text     "fmstreet",                                                        :null => false
+    t.text     "fmusermemo",                                                      :null => false
+    t.text     "fsalumemo",                                                       :null => false
     t.string   "fccontkey",        :limit => 10,                                :default => " ",   :null => false
     t.boolean  "flcontract",                                                    :default => false, :null => false
     t.integer  "fndbrmod",         :limit => 1,                                                    :null => false
@@ -7843,7 +7843,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcnewbin",         :limit => 14,                                :default => " ",                   :null => false
     t.string   "fclot",            :limit => 20,                                :default => " ",                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fmcomments",                                                    :default => " ",                   :null => false
+    t.text     "fmcomments",                                                                      :null => false
     t.string   "fac",              :limit => 20,                                                                   :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ",                   :null => false
   end
@@ -7913,8 +7913,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fueurcston",                     :precision => 17, :scale => 5,                  :null => false
     t.boolean  "flconvovrd",                                                                     :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomments",                                                     :default => " ", :null => false
-    t.text     "fdescript",                                                     :default => " ", :null => false
+    t.text     "fcomments",                                                     :null => false
+    t.text     "fdescript",                                                     :null => false
     t.string   "FCORIGUM",         :limit => 3,                                 :default => " ", :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
     t.decimal  "FNORIGQTY",                      :precision => 18, :scale => 5, :default => 0.0, :null => false
@@ -8382,7 +8382,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcstatus",         :limit => 1,                                                  :null => false
     t.string  "fcmiscstat",       :limit => 1,                                                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fmdescript",                                                    :default => " ", :null => false
+    t.text    "fmdescript",                                                    :null => false
     t.string  "fac",              :limit => 20,                                                 :null => false
     t.string  "sfac",             :limit => 20,                                                 :null => false
     t.string  "fcudrev",          :limit => 3,                                 :default => " ", :null => false
@@ -8477,13 +8477,13 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcso_inum",        :limit => 3,                                                   :null => false
     t.string   "fcsono_rel",       :limit => 3,                                                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fmreferenc",                                                     :default => " ", :null => false
-    t.text     "fmstreet",                                                       :default => " ", :null => false
-    t.text     "fmtrckno",                                                       :default => " ", :null => false
-    t.text     "fshipmemo",                                                      :default => " ", :null => false
+    t.text     "fmreferenc",                                                     :null => false
+    t.text     "fmstreet",                                                       :null => false
+    t.text     "fmtrckno",                                                       :null => false
+    t.text     "fshipmemo",                                                      :null => false
     t.datetime "upsdate",                                                                         :null => false
-    t.text     "upsaddr2",                                                       :default => "",  :null => false
-    t.text     "upsaddr3",                                                       :default => "",  :null => false
+    t.text     "upsaddr2",                                                       :null => false
+    t.text     "upsaddr3",                                                       :null => false
   end
 
   add_index "shmast", ["fcjobno", "fshipno"], :name => "jobno"
@@ -8540,7 +8540,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fwho_to",          :limit => 25,                                                 :null => false
     t.string   "fwho_first",       :limit => 15,                                                 :null => false
     t.binary   "timestamp_column"
-    t.text     "fcomments",                                                     :default => " ", :null => false
+    t.text     "fcomments",                                                     :null => false
   end
 
   add_index "slcdpc", ["fcustno", "factn_date", "funique"], :name => "CUSTDATE"
@@ -8611,10 +8611,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcemail",          :limit => 60,                                 :default => " ", :null => false
     t.boolean  "flisfcast",                                                                       :null => false
     t.binary   "timestamp_column"
-    t.text     "fbus_type",                                                      :default => " ", :null => false
-    t.text     "fmnotes",                                                        :default => " ", :null => false
-    t.text     "fmstreet",                                                       :default => " ", :null => false
-    t.text     "fmusrmemo1",                                                     :default => " ", :null => false
+    t.text     "fbus_type",                                                      :null => false
+    t.text     "fmnotes",                                                        :null => false
+    t.text     "fmstreet",                                                       :null => false
+    t.text     "fmusrmemo1",                                                     :null => false
     t.integer  "fncrmmod",                                                       :default => 0,   :null => false
     t.string   "fccrmacct",        :limit => 12,                                 :default => "",  :null => false
     t.integer  "fscmprty",                                                       :default => 4,   :null => false
@@ -8691,10 +8691,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcemail",          :limit => 60,                                 :default => "",    :null => false
     t.boolean  "flisfcast",                                                      :default => false, :null => false
     t.binary   "timestamp_column"
-    t.text     "fbus_type",                                                      :default => " ",   :null => false
-    t.text     "fmnotes",                                                        :default => " ",   :null => false
-    t.text     "fmstreet",                                                       :default => " ",   :null => false
-    t.text     "fmusrmemo1",                                                     :default => " ",   :null => false
+    t.text     "fbus_type",                                                        :null => false
+    t.text     "fmnotes",                                                          :null => false
+    t.text     "fmstreet",                                                         :null => false
+    t.text     "fmusrmemo1",                                                       :null => false
     t.string   "fccrmacct",        :limit => 12,                                 :default => "",    :null => false
     t.integer  "fncrmmod",                                                       :default => 0,     :null => false
     t.string   "fcchange",         :limit => 1,                                  :default => "",    :null => false
@@ -8768,7 +8768,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean "flisfcast",                                                                     :null => false
     t.boolean "flterfcast",                                                                    :null => false
     t.binary  "timestamp_column"
-    t.text    "fmnotes",                                                      :default => " ", :null => false
+    t.text    "fmnotes",                                                      :null => false
     t.string  "fvendno",          :limit => 6,                                :default => "",  :null => false
     t.string  "fccommcode",       :limit => 10,                               :default => "",  :null => false
     t.decimal "fnrate2",                        :precision => 8, :scale => 3, :default => 0.0, :null => false
@@ -8912,7 +8912,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fsono",            :limit => 6,                                                 :null => false
     t.decimal "fmatlcost",                     :precision => 21, :scale => 9,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fbomdesc",                                                     :default => " ", :null => false
+    t.text    "fbomdesc",                                                     :null => false
   end
 
   add_index "socbom", ["fsono", "finumber", "fseqno"], :name => "SEQNO"
@@ -8933,8 +8933,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal  "fnpurcost",                       :precision => 21, :scale => 5,                  :null => false
     t.decimal  "fnlabor",                         :precision => 21, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmdisp",                                                         :default => " ", :null => false
-    t.text     "fmreason",                                                       :default => " ", :null => false
+    t.text     "fmdisp",                                                         :null => false
+    t.text     "fmreason",                                                       :null => false
   end
 
   add_index "sochng", ["fsono", "fdate"], :name => "date"
@@ -8948,7 +8948,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "ftime",                         :precision => 12, :scale => 5,                  :null => false
     t.decimal "frate",                         :precision => 12, :scale => 5,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "frtgdesc",                                                     :default => " ", :null => false
+    t.text    "frtgdesc",                                                     :null => false
   end
 
   add_index "socrtg", ["fsono", "finumber", "fseqno"], :name => "SEQNO"
@@ -8990,8 +8990,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fclotext",         :limit => 1,                                  :default => " ",   :null => false
     t.integer "fnoperno",         :limit => nil, :precision => 4,  :scale => 0, :default => 0,     :null => false
     t.binary  "timestamp_column"
-    t.text    "fbomdesc",                                                       :default => " ",   :null => false
-    t.text    "fstdmemo",                                                       :default => " ",   :null => false
+    t.text    "fbomdesc",                                                         :null => false
+    t.text    "fstdmemo",                                                         :null => false
     t.string  "fac",              :limit => 20,                                                    :null => false
     t.string  "fcbomudrev",       :limit => 3,                                  :default => "",    :null => false
     t.integer "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,     :null => false
@@ -9067,8 +9067,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.decimal "fusubcost",                       :precision => 17, :scale => 5,                     :null => false
     t.boolean "fllotreqd",                                                                          :null => false
     t.binary  "timestamp_column"
-    t.text    "fdescript",                                                       :default => " ",   :null => false
-    t.text    "fopermemo",                                                       :default => " ",   :null => false
+    t.text    "fdescript",                                                         :null => false
+    t.text    "fopermemo",                                                         :null => false
     t.integer "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0,  :default => 0,     :null => false
     t.integer "fnsimulops",       :limit => nil, :precision => 3,  :scale => 0,  :default => 0,     :null => false
     t.decimal "fyield",                          :precision => 12, :scale => 5,  :default => 100.0, :null => false
@@ -9147,8 +9147,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcprodid",         :limit => 6,                                                   :null => false
     t.string   "fschedtype",       :limit => 1,                                                   :null => false
     t.binary   "timestamp_column"
-    t.text     "fdesc",                                                          :default => " ", :null => false
-    t.text     "fdescmemo",                                                      :default => " ", :null => false
+    t.text     "fdesc",                                                          :null => false
+    t.text     "fdescmemo",                                                      :null => false
     t.string   "fac",              :limit => 20,                                                  :null => false
     t.string   "sfac",             :limit => 20,                                                  :null => false
     t.decimal  "ITCCOST",                         :precision => 17, :scale => 5,                  :null => false
@@ -9233,9 +9233,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.boolean  "flchgpnd",                                                                          :null => false
     t.string   "fllasteco",        :limit => 25,                                                    :null => false
     t.binary   "timestamp_column"
-    t.text     "fackmemo",                                                       :default => " ",   :null => false
-    t.text     "fmstreet",                                                       :default => " ",   :null => false
-    t.text     "fmusrmemo1",                                                     :default => " ",   :null => false
+    t.text     "fackmemo",                                                         :null => false
+    t.text     "fmstreet",                                                         :null => false
+    t.text     "fmusrmemo1",                                                       :null => false
     t.string   "fccontkey",        :limit => 10,                                 :default => " ",   :null => false
     t.boolean  "flcontract",                                                     :default => false, :null => false
     t.integer  "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,     :null => false
@@ -9325,7 +9325,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcbin",            :limit => 14,                                                  :null => false
     t.string   "fcloc",            :limit => 14,                                                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fdelivery",                                                      :default => " ", :null => false
+    t.text     "fdelivery",                                                      :null => false
     t.string   "fcpbtype",         :limit => 1,                                  :default => "",  :null => false
     t.string   "fcudrev",          :limit => 3,                                  :default => " ", :null => false
     t.integer  "fndbrmod",         :limit => nil, :precision => 1,  :scale => 0, :default => 0,   :null => false
@@ -9369,7 +9369,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcphone",          :limit => 20,                  :null => false
     t.string "fcfax",            :limit => 20,                  :null => false
     t.binary "timestamp_column"
-    t.text   "fmstreet",                       :default => " ", :null => false
+    t.text   "fmstreet",                       :null => false
   end
 
   add_index "soship", ["fcsono", "fcenumber"], :name => "ENUMBER"
@@ -9409,8 +9409,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcemail",          :limit => 60, :default => " ", :null => false
     t.string  "fcloc",            :limit => 14,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fmnotes",                        :default => " ", :null => false
-    t.text    "fmstreet",                       :default => " ", :null => false
+    t.text    "fmnotes",                        :null => false
+    t.text    "fmstreet",                       :null => false
     t.integer "fncrmmod",                       :default => 0,   :null => false
     t.string  "fccrmaddrs",       :limit => 12, :default => "",  :null => false
     t.string  "fac",              :limit => 20,                  :null => false
@@ -9447,8 +9447,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcemail",          :limit => 60, :default => "",    :null => false
     t.string   "fcloc",            :limit => 14, :default => "",    :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                        :default => " ",   :null => false
-    t.text     "fmstreet",                       :default => " ",   :null => false
+    t.text     "fmnotes",                          :null => false
+    t.text     "fmstreet",                         :null => false
     t.string   "fccrmaddrs",       :limit => 12, :default => "",    :null => false
     t.integer  "fncrmmod",                       :default => 0,     :null => false
     t.string   "fcchange",         :limit => 1,  :default => "",    :null => false
@@ -9506,7 +9506,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "fcdocset",         :limit => 3,                   :null => false
     t.string "fctxnno",          :limit => 10,                  :null => false
     t.binary "timestamp_column"
-    t.text   "fmreason",                       :default => " ", :null => false
+    t.text   "fmreason",                       :null => false
   end
 
   add_index "syarclog", ["fcdocid1"], :name => "docid"
@@ -9552,9 +9552,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "fnusrdate1",                                                                     :null => false
     t.decimal  "fnusrqty1",                      :precision => 17, :scale => 5,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmpblm",                                                        :default => " ", :null => false
-    t.text     "fmrltn",                                                        :default => " ", :null => false
-    t.text     "fmusrmemo1",                                                    :default => " ", :null => false
+    t.text     "fmpblm",                                                        :null => false
+    t.text     "fmrltn",                                                        :null => false
+    t.text     "fmusrmemo1",                                                    :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
   end
 
@@ -9573,7 +9573,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "sycsla", :primary_key => "identity_column", :force => true do |t|
     t.string "fcstddesc",        :limit => 4,                  :null => false
     t.binary "timestamp_column"
-    t.text   "fmstdact",                      :default => " ", :null => false
+    t.text   "fmstdact",                      :null => false
   end
 
   add_index "sycsla", ["fcstddesc"], :name => "fcstddesc"
@@ -9588,8 +9588,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcjobno",          :limit => 10,                  :null => false
     t.string   "fckbid",           :limit => 10,                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fmaction",                       :default => " ", :null => false
-    t.text     "fmintnotes",                     :default => " ", :null => false
+    t.text     "fmaction",                       :null => false
+    t.text     "fmintnotes",                     :null => false
   end
 
   add_index "sycslc", ["fcinqno", "fdactdate"], :name => "FCINQNO"
@@ -9647,8 +9647,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "finumber",         :limit => 3,                                                  :null => false
     t.string   "frelsno",          :limit => 3,                                                  :null => false
     t.binary   "timestamp_column"
-    t.text     "fminquiry",                                                     :default => " ", :null => false
-    t.text     "fmusrmemo1",                                                    :default => " ", :null => false
+    t.text     "fminquiry",                                                     :null => false
+    t.text     "fmusrmemo1",                                                    :null => false
     t.string   "fac",              :limit => 20,                                                 :null => false
     t.string   "fcudrev",          :limit => 3,                                 :default => " ", :null => false
   end
@@ -9670,8 +9670,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.binary   "timestamp_column"
     t.binary   "fgnewval",                        :default => "0x00",    :null => false
     t.binary   "fgoldval",                        :default => "0x00",    :null => false
-    t.text     "fmnewval",                        :default => " ",       :null => false
-    t.text     "fmoldval",                        :default => " ",       :null => false
+    t.text     "fmnewval",                              :null => false
+    t.text     "fmoldval",                              :null => false
     t.string   "fac",              :limit => 20,  :default => "Default", :null => false
   end
 
@@ -9703,8 +9703,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "flogtime",         :limit => 8,                                                  :null => false
     t.string   "floguser",         :limit => 10,                                                 :null => false
     t.binary   "timestamp_column"
-    t.text     "flogbefore",                                                    :default => " ", :null => false
-    t.text     "flogdata",                                                      :default => " ", :null => false
+    t.text     "flogbefore",                                                    :null => false
+    t.text     "flogdata",                                                      :null => false
   end
 
   add_index "sylog", ["flogcomp"], :name => "compid"
@@ -9750,7 +9750,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "ffax",             :limit => 20,                                                 :null => false
     t.boolean  "flprinted",                                                                      :null => false
     t.binary   "timestamp_column"
-    t.text     "fcmessage",                                                     :default => " ", :null => false
+    t.text     "fcmessage",                                                     :null => false
   end
 
   add_index "synoti", ["fcdoctype", "fcevent"], :name => "docevent"
@@ -9776,7 +9776,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fctitle",          :limit => 25,                  :null => false
     t.string  "fccountry",        :limit => 25,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fmnotes",                        :default => " ", :null => false
+    t.text    "fmnotes",                        :null => false
     t.integer "fncrmmod",                       :default => 0,   :null => false
     t.string  "fccrmcntct",       :limit => 12, :default => "",  :null => false
   end
@@ -9807,7 +9807,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fctitle",          :limit => 25, :default => "",    :null => false
     t.string   "fccountry",        :limit => 25, :default => "",    :null => false
     t.binary   "timestamp_column"
-    t.text     "fmnotes",                        :default => " ",   :null => false
+    t.text     "fmnotes",                          :null => false
     t.string   "fccrmcntct",       :limit => 12, :default => "",    :null => false
     t.integer  "fncrmmod",                       :default => 0,     :null => false
     t.string   "fcchange",         :limit => 1,  :default => "",    :null => false
@@ -9863,8 +9863,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  "fcdockey",         :limit => 50,                                :default => " ", :null => false
     t.integer "fnnumber",         :limit => nil, :precision => 3, :scale => 0,                  :null => false
     t.binary  "timestamp_column"
-    t.text    "fmcomment",                                                     :default => " ", :null => false
-    t.text    "fmlink",                                                        :default => " ", :null => false
+    t.text    "fmcomment",                                                     :null => false
+    t.text    "fmlink",                                                        :null => false
   end
 
   add_index "sywlnk", ["fcdoctype", "fcdockey", "fnnumber"], :name => "number"
@@ -9959,14 +9959,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "fcbcompany",       :limit => 35,                                 :default => " ", :null => false
     t.boolean  "flpremcv",                                                                        :null => false
     t.binary   "timestamp_column"
-    t.text     "fmreferenc",                                                     :default => " ", :null => false
-    t.text     "fmstreet",                                                       :default => " ", :null => false
-    t.text     "fshipmemo",                                                      :default => " ", :null => false
-    t.text     "FMTRCKNO",                                                       :default => " ", :null => false
+    t.text     "fmreferenc",                                                     :null => false
+    t.text     "fmstreet",                                                       :null => false
+    t.text     "fshipmemo",                                                      :null => false
+    t.text     "FMTRCKNO",                                                       :null => false
     t.datetime "ftsnddttm",                                                                       :null => false
-    t.text     "upsaddr2",                                                       :default => "",  :null => false
+    t.text     "upsaddr2",                                                       :null => false
     t.datetime "upsdate",                                                                         :null => false
-    t.text     "upsaddr3",                                                       :default => "",  :null => false
+    t.text     "upsaddr3",                                                       :null => false
     t.string   "fcustpono",        :limit => 20,                                 :default => "",  :null => false
     t.string   "fcemail",          :limit => 60,                                 :default => "",  :null => false
     t.string   "qvnoption",        :limit => 1,                                  :default => "",  :null => false
