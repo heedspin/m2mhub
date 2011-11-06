@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_order_items, :only => [:index, :show]
   map.resources :sales_order_releases, :only => [:index]
   map.resources :quote_items, :only => [:index]
-  map.resources :user_activities, :only => [:index]
+  map.resources :user_activities, :as => 'history', :only => [:index]
   map.resources :items, :only => [:index] do |item|
     item.resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
     item.resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'

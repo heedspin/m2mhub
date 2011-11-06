@@ -10,20 +10,13 @@ class UserActivity < ActiveRecord::Base
       :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', month, month.advance(:months => 1) ]
     }
   }
-  named_scope :for_agency, lambda { |thing|
-    agency_id = thing.is_a?(Agency) ? thing.id : thing.to_i
-    if agency_id > 0
-      {
-        :joins => :user,
-        :conditions => { :user => { :agency_id => agency_id } }
-      }
-    else
-      {
-        :joins => :user,
-        :conditions => 'users.agency_id is null'
-      }
-    end
+  named_scope :for_user, lambda { |user|
+    {
+      :conditions => { :user_id => user.id }
+    }
   }
+  named_scope :by_date_desc, :order => 'user_activities.created_at desc'
+  
   named_scope :with_name, lambda { |report_name|
     {:conditions => {:report_name => report_name}}
   }
