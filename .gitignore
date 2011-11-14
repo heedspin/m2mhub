@@ -5,3 +5,4 @@ tmp/
 config/database.yml*
 config/s3_local.yml
 config/local_company_config.yml
+data

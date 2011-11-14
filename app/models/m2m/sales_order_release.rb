@@ -123,11 +123,11 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def can_be_fully_shipped?
-    (backorder_quantity > 0) && (item.item.quantity_on_hand >= backorder_quantity)
+    (backorder_quantity > 0) && item.item && (item.item.quantity_on_hand >= backorder_quantity)
   end
 
   def can_be_partially_shipped?
-    (backorder_quantity > 0) && (item.item.quantity_on_hand > 0) && (item.item.quantity_on_hand < backorder_quantity)
+    (backorder_quantity > 0) && (item.item.quantity_on_hand > 0) && item.item && (item.item.quantity_on_hand < backorder_quantity)
   end
 end
 

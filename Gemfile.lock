@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/heedspin/batchbook.git
+  revision: c596d456150df6113cd3b3559475585270b73ef1
+  specs:
+    batchbook (1.0.5)
+      activeresource (>= 2.3.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -59,6 +66,9 @@ GEM
       ruby-debug-base (~> 0.10.4.0)
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
+    ruby-ole (1.2.11.2)
+    spreadsheet (0.6.5.2)
+      ruby-ole (>= 1.0)
     tiny_tds (0.4.5)
     transactional-factories (0.5.0)
       activerecord (>= 2.3.2)
@@ -75,6 +85,7 @@ DEPENDENCIES
   airbrake
   annotate
   authlogic (= 2.1.6)
+  batchbook!
   composite_primary_keys (= 2.3.5.1)
   declarative_authorization (= 0.4)
   delayed_job (= 2.0.3)
@@ -85,6 +96,7 @@ DEPENDENCIES
   rails (= 2.3.14)
   ruby-debug
   ruby-debug-base
+  spreadsheet (= 0.6.5.2)
   tiny_tds
   transactional-factories (= 0.5.0)
   userstamp (= 2.0.1)

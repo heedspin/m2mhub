@@ -23,6 +23,12 @@ class M2m::SalesOrder < M2m::Base
       :order => 'forderdate desc, fsono desc'
     }
   }
+
+  named_scope :ordered_after, lambda { |day|
+    {
+      :conditions => ['somast.forderdate >= ?', day],
+    }
+  }
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
