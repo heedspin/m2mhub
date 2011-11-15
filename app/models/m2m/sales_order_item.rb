@@ -11,6 +11,14 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :due_date, :fduedate
   
   alias_attribute :multiple_releases, :fmultiple
+  
+  def part_number
+    @part_number ||= self.fpartno.strip
+  end
+  
+  def revision
+    @revision ||= self.fpartrev.strip
+  end
 
   named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
@@ -52,6 +60,22 @@ class M2m::SalesOrderItem < M2m::Base
           r.sales_order = i.sales_order
           i.item = item
         end
+      end
+    end
+  end
+
+  def self.attach_to_releases_for_backlog(sales_order_releases, sales_order_items)
+    if (sales_order_releases.size > 0) and (sales_order_items.size > 0)
+      sales_order_releases.each do |r|
+        r.item = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
+      end
+    end
+  end
+  
+  def self.attach_items(sales_order_items, items)
+    if (items.size > 0) and (sales_order_items.size > 0)
+      sales_order_items.each do |soi|
+        soi.item = items.detect { |item| (soi.part_number == item.part_number) && (soi.revision == item.revision) }
       end
     end
   end

@@ -2,7 +2,7 @@ require 'singleton'
 
 class CompanyConfigClass
   def initialize
-    @company_key = if Rails.root.to_s.include?('lxd_m2mhub')
+    @company_key = if Rails.root.to_s.include?('lxd_')
       'lxd'
     else
       'smt'
