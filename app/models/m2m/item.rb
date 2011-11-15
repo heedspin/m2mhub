@@ -13,7 +13,10 @@ class M2m::Item < M2m::Base
   has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
   
   def locations
-    M2m::InventoryLocation.for_item(self)
+    @locations ||= M2m::InventoryLocation.for_item(self)
+  end
+  def locations=(v)
+    @locations = v
   end
 
   alias_attribute :total_cost, :fdisptcost
@@ -27,6 +30,8 @@ class M2m::Item < M2m::Base
   alias_attribute :average_cost, :favgcost
   alias_attribute :rolled_material_cost, :f2matlcost
   alias_attribute :rolled_labor_cost, :f2labcost
+  alias_attribute :facility, :fac
+  alias_attribute :source_facility, :sfac
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -34,16 +39,21 @@ class M2m::Item < M2m::Base
   end
 
   def part_number
-    self.fpartno.strip
+    @part_number ||= self.fpartno.strip
   end
   
   def revision
-    self.frev.strip
+    @revision ||= self.frev.strip
   end
   
   named_scope :with_part_number, lambda { |pn| 
     {
       :conditions => { :fpartno => pn }
+    } 
+  }
+  named_scope :with_part_numbers, lambda { |part_numbers| 
+    {
+      :conditions => [ 'inmast.fpartno in (?)', part_numbers]
     } 
   }
   named_scope :by_rev_desc, :order => 'inmast.frev desc'
