@@ -611,6 +611,24 @@ form.formtastic fieldset > ol > li.boolean label {
 	clear: none;
 }
 
+/* General Tables */
+
+td.monitary {
+	text-align: right;
+}
+
+td.centered {
+	text-align: center;
+}
+
+td.right {
+	text-align: right;
+}
+
+td.ninjaborders {
+	border: none;
+}
+
 /* DATA TABLES
 -------------------------------------------------------------------- */
 table.data {
@@ -648,10 +666,6 @@ table.data td.monitary {
 	text-align: right;
 }
 
-span.currency_symbol {
-	float: left;
-}
-
 table.data td.centered {
 	text-align: center;
 }
@@ -662,6 +676,22 @@ table.data td.right {
 
 table.data td.ninjaborders {
 	border: none;
+}
+
+table.data td.current_on_hand {
+	background-color: #afa;
+	text-align: center;
+	font-weight:bold;	
+}
+
+table.data td.current_on_hand_error {
+	background-color: #faa;
+	text-align: center;
+	font-weight:bold;	
+}
+
+table.data tr.not_counted {
+	background-color: #eee;	
 }
 
 /* NEWS
@@ -843,10 +873,6 @@ table.backlog td.monitary {
 	text-align: right;
 }
 
-span.currency_symbol {
-	float: left;
-}
-
 table.backlog td.centered {
 	text-align: center;
 }
@@ -887,22 +913,6 @@ input#search_fcompany {
 	width: 200px;
 }
 
-table.data td.current_on_hand {
-	background-color: #afa;
-	text-align: center;
-	font-weight:bold;	
-}
-
-table.data td.current_on_hand_error {
-	background-color: #faa;
-	text-align: center;
-	font-weight:bold;	
-}
-
-table.data tr.not_counted {
-	background-color: #eee;	
-}
-
 p.inprogress {
 	background:url(../images/inprogress.gif) top left no-repeat;
 	padding-left: 2em;
@@ -924,3 +934,51 @@ span.jobstatus {
 div.closewindow {
 	float:right;
 }
+
+span.currency_symbol {
+	float: left;
+}
+
+/* On Time Delivery Reports */
+table.closed_details {
+	display: none;
+}
+
+.otd_report_month {
+	margin: 15px 0 0 0;
+	font-size: 1.2em;
+}
+
+/* REPORT TABLES
+-------------------------------------------------------------------- */
+table.report {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 15px 0 15px 0;
+  }
+table.report thead {
+  background: #dcdcdc;
+  }
+table.report tr.even {
+  background-color: #ededed;
+  }
+table.report th {
+  font-size: 12px;
+  color: #646870;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #c5c5c5;
+  padding: 5px;
+  }
+table.report td {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #c5c5c5;
+  padding: 5px;
+  }
+table.report p {
+	font-size: 1em;
+	padding-bottom: .5em;
+}
+
