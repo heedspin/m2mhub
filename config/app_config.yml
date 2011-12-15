@@ -5,14 +5,18 @@
 _local_company_config: &_local_company_config
   nothing: here
 <% end %>
+
+_default_company_config: &_default_company_config
+  otd_grace_period_days: 5
+  rounded_dollars: "%.0f"
+  dollars: "%.2f"
+  sales_order_quantity: "%.0f"
+  purchase_order_quantity: "%.0f"
+  item_quantity: "%.0f"
+  job_quantity: "%.0f"
   
 _shared_company_config: &_shared_company_config
   lxd:
-    rounded_dollars: "%.0f"
-    dollars: "%.2f"
-    sales_order_quantity: "%.0f"
-    purchase_order_quantity: "%.0f"
-    item_quantity: "%.0f"
     google_analytics_key: UA-25768569-1
     email_name: LXD WebBot
     email_address: webmin@lxdinc.com
@@ -42,12 +46,6 @@ _shared_company_config: &_shared_company_config
           - BEIJING
     
   smt:
-    rounded_dollars: "%.0f"
-    dollars: "%.2f"
-    sales_order_quantity: "%.0f"
-    purchase_order_quantity: "%.0f"
-    item_quantity: "%.0f"
-    job_quantity: "%.0f"
     google_analytics_key:
     email_name: SMT WebBot
     email_address: smtcoinc@gmail.com
@@ -76,9 +74,8 @@ development:
     <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
-  company_config:
-    lxd:
-    smt:
+  default_company_config:
+    <<: *_default_company_config
   
 production:
   local_company_config:

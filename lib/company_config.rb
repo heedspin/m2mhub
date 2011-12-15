@@ -33,9 +33,9 @@ class CompanyConfigClass
     key = key.to_s
     if (c = AppConfig.local_company_config[@company_key]) && (value = c[key]).present?
       value
-    elsif (c = AppConfig.company_config[@company_key]) && (value = c[key]).present?
-      value
     elsif (c = AppConfig.shared_company_config[@company_key]) && (value = c[key]).present?
+      value
+    elsif (c = AppConfig.default_company_config) && (value = c[key]).present?
       value
     else
       nil
