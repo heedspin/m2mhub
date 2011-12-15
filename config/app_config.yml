@@ -82,15 +82,13 @@ production:
     <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
-  company_config:
-    lxd:
-    smt:
+  default_company_config:
+    <<: *_default_company_config
   
 test:
   local_company_config:
     <<: *_local_company_config
   shared_company_config:
     <<: *_shared_company_config
-  company_config:
-    lxd:
-    smt:
+  default_company_config:
+    <<: *_default_company_config
