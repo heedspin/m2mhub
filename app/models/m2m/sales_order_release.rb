@@ -66,15 +66,35 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :sales_order_release_id, :finumber
   alias_attribute :sales_order_release_number, :frelease
   alias_attribute :revision, :fpartrev
+  alias_attribute :due_date, :fduedate
+  alias_attribute :order_quantity, :forderqty
+  
+  # named_scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
+  named_scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]
+  named_scope :due_after, lambda { |date|
+    {
+      :conditions => ['sorels.fduedate >= ?', date]
+    }
+  }
+  
+  def days_late
+    return 0 unless self.due_date.present?
+    date = self.last_ship_date || Time.current
+    (date - self.due_date).to_i / 86400
+  end
   
   def last_ship_date
-    self.flshipdate == M2m::Constants.null_date ? nil : self.flshipdate
+    self.flshipdate == M2m::Constants.null_time ? nil : self.flshipdate
   end
 
   def due_date
-    self.fduedate == M2m::Constants.null_date ? nil : self.fduedate
+    self.fduedate == M2m::Constants.null_time ? nil : self.fduedate
   end
-
+  
+  # def due_date_month
+  #   @due_date_month ||= Date.new(self.due_date.year, self.due_date.month, 1)
+  # end
+  # 
   def quantity_shipped
     (self.fshipbook || 0) + (self.fshipbuy || 0) + (self.fshipmake || 0)
   end
