@@ -29,6 +29,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :shippers, :only => [:index, :show]
   map.resources :sales_backlog_reports, :only => [:index, :show]  
+  map.resources :customer_otd_reports, :only => [:new]
 
   # Specify thing regular expression because the routes use '.' as separator.
   map.switch 'switch/:thing', :controller => 'switch', :action => 'switch', :thing => /.+/

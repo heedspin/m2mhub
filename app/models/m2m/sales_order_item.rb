@@ -75,7 +75,7 @@ class M2m::SalesOrderItem < M2m::Base
   def self.attach_items(sales_order_items, items)
     if (items.size > 0) and (sales_order_items.size > 0)
       sales_order_items.each do |soi|
-        if found = items.detect { |item| (soi.part_number == item.part_number) && (soi.revision == item.revision) }
+        if soi.part_number.present? and soi.revision.present? and (found = items.detect { |item| (soi.part_number == item.part_number) && (soi.revision == item.revision) })
           soi.item = found
         end
       end

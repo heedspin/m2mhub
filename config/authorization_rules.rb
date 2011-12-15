@@ -32,6 +32,7 @@ authorization do
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
+    has_permission_on :customer_otd_reports, :to => :make
   end
 
   role :admin do
