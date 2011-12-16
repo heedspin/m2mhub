@@ -1,0 +1,26 @@
+<table class="details">
+	<thead>
+		<tr>
+			<th>SO</th>
+			<th>Qty</th>
+			<th>Days Late</th>
+			<th>Due</th>
+			<th>Shipped</th>
+			<th>Customer</th>
+			<th>Part</th>
+		</tr>
+	</thead>
+	<tbody>
+<% releases.sort_by(&:due_date).each do |r| %>
+		<tr>
+			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
+			<td><%= cm r.order_quantity, :sales_order_quantity %></td>
+			<td><%= cm r.days_late %></td>
+			<td><%= r.due_date.to_s(:shipper_date) %></td>
+			<td><%= r.last_ship_date.to_s(:shipper_date) %></td>
+			<td><%= link_to r.sales_order.customer_name, customer_url(r.sales_order.fcustno) %></td>
+			<td><%= link_to r.item.item.part_number, item_url(r.item.item.part_number) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>

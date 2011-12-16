@@ -694,6 +694,18 @@ table.data tr.not_counted {
 	background-color: #eee;	
 }
 
+table.data td.rma_details {
+	width: 85%;
+}
+
+table.data td.otd_details {
+	width: 75%;
+}
+
+table.fullsize {
+	width: 100%;
+}
+
 /* NEWS
 -------------------------------------------------------------------- */
 .post img, .last_post img {
@@ -940,7 +952,7 @@ span.currency_symbol {
 }
 
 /* On Time Delivery Reports */
-table.closed_details {
+div.closed_details {
 	display: none;
 }
 
@@ -951,34 +963,38 @@ table.closed_details {
 
 /* REPORT TABLES
 -------------------------------------------------------------------- */
-table.report {
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin: 15px 0 15px 0;
+table.details {
   }
-table.report thead {
-  background: #dcdcdc;
+table.details thead {
+	background-color: none;
   }
-table.report tr.even {
-  background-color: #ededed;
-  }
-table.report th {
+table.details th {
   font-size: 12px;
   color: #646870;
   text-align: left;
   vertical-align: top;
-  border: 1px solid #c5c5c5;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+  border-bottom: 1px dotted #c5c5c5;
   padding: 5px;
+	background-color: white;
   }
-table.report td {
+table.details td {
   font-size: 12px;
   text-align: left;
   vertical-align: top;
-  border: 1px solid #c5c5c5;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+  border-bottom: 1px dotted #c5c5c5;
   padding: 5px;
   }
-table.report p {
+table.details p {
 	font-size: 1em;
 	padding-bottom: .5em;
+}
+table.details td.fixed_width_text {
+	width: 250px;
 }
 

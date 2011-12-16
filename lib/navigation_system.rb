@@ -14,7 +14,12 @@ module NavigationSystem
   end
   
   def controller_selected(controller, action=nil)
-    controller_active?(controller, action) ? SELECTED_CSS_CLASS : ''
+    result = if controller.is_a?(Array)
+      controller.any? { |c| controller_active?(c, action) }
+    else
+      controller_active?(controller, action)
+    end
+    result ? SELECTED_CSS_CLASS : ''
   end
   
 end

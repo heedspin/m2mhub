@@ -33,6 +33,8 @@ authorization do
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
     has_permission_on :customer_otd_reports, :to => :make
+    has_permission_on :rma_reports, :to => :make
+    has_permission_on :quality, :to => :read
   end
 
   role :admin do
