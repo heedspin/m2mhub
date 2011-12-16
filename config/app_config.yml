@@ -13,6 +13,7 @@ _default_company_config: &_default_company_config
   sales_order_quantity: "%.0f"
   purchase_order_quantity: "%.0f"
   item_quantity: "%.0f"
+  rma_quantity: "%.0f"
   job_quantity: "%.0f"
   
 _shared_company_config: &_shared_company_config

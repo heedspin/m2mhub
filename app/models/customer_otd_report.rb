@@ -53,4 +53,8 @@ class CustomerOtdReport
     month_date = Date.new(date.year, date.month, 1)
     @months[month_date] ||= Month.new(month_date)
   end
+  
+  def all_late_releases
+    @months.values.map(&:late_releases).flatten
+  end
 end
