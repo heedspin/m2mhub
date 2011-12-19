@@ -60,24 +60,28 @@ class Quality::CreditMemoReport
       rma.invoice_number = 'CM-' + rma.invoice_number[/\d+/].to_i.to_s
       (rmas[rma.inquiry_number] ||= []).push(rma)
     end
-    # Try to choose correct CM corresponding to RMA.
     rmas.each do |inquiry_number, candidates|
-      winner = nil
-      candidates.each do |rma|
-        # pick first one by default
-        winner ||= rma unless rma.credit_memo_reference.present?
-        if rma.credit_memo_reference.present? and (rma.credit_memo_reference[/\d+/].to_i == rma.invoice_number[/\d+/].to_i)
-          winner = rma
-          break
+      winner = find_credit_memo_reference_match(candidates)
+      if winner.nil?
+        winner = candidates.first
+        if winner.open? or winner.credit_memo_reference.present?
+          # leave blank
+          winner.invoice_number = winner.invoice_date = nil
+          winner.invoice_amount = 0
         end
       end
-      month_for(winner.date).add_credit_memo(winner) if winner
+      month_for(winner.date).add_credit_memo(winner)
     end
-
-    # M2m::SalesOrderRelease.shipped_late.due_after(@start_date).each do |late_release|
-    #   month_for(late_release.due_date).add_late_release(late_release)
-    # end
     true
+  end
+  
+  def find_credit_memo_reference_match(candidates)
+    candidates.each do |rma|
+      if rma.credit_memo_reference.present? and (rma.credit_memo_reference[/\d+/].to_i == rma.invoice_number[/\d+/].to_i)
+        return rma
+      end
+    end
+    nil
   end
 
   def ordered_months

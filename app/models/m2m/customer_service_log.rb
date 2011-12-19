@@ -18,6 +18,9 @@ class M2m::CustomerServiceLog < M2m::Base
   def status
     M2m::Status.find_by_name(self.fcstatus)
   end
+  def open?
+    self.status.try(:open?)
+  end
     
   alias_attribute :date, :fdinqdate
   alias_attribute :quantity, :fnqty
@@ -59,6 +62,16 @@ class M2m::CustomerServiceLog < M2m::Base
 
   def revision
     @revision ||= self.fcpartrev.strip
+  end
+  
+  def invoice_number=(val)
+    write_attribute(:invoice_number, val)
+  end
+  def invoice_total=(val)
+    write_attribute(:invoice_total, val)
+  end
+  def invoice_date=(val)
+    write_attribute(:invoice_date, val)
   end
   
 end
