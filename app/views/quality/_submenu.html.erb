@@ -7,12 +7,12 @@
 		<% end %>
 		<% if permitted_to?(:make, :quality_rma_reports) %>
 		<li class="<%= controller_selected(:rma_reports) %>">
-			<%= link_to 'RMA Reports', new_rma_report_url %>
+			<%= link_to 'RMA Report', new_rma_report_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_customer_otd_reports) %>
 		<li class="<%= controller_selected(:customer_otd_reports) %>">
-			<%= link_to 'OTD Reports', new_customer_otd_report_url %>
+			<%= link_to 'OTD Report', new_customer_otd_report_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_credit_memo_reports) %>
