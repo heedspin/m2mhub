@@ -7,7 +7,7 @@ module UserActivitiesHelper
         phash['controller'] = 'quality/' + cs
       end
       url_for phash
-    rescue ActionView::TemplateError
+    rescue
       user_activity.report_name
     end
   end
