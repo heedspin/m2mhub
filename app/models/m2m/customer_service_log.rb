@@ -5,14 +5,6 @@ class M2m::CustomerServiceLog < M2m::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fcsono
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
-  
-  def part_number
-    @part_number ||= self.fpartno.strip
-  end
-  
-  def revision
-    @revision ||= self.fpartrev.strip
-  end
 
   named_scope :open,      :conditions => { :fcstatus => M2m::Status.open.name }
   named_scope :closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
@@ -22,11 +14,19 @@ class M2m::CustomerServiceLog < M2m::Base
       :conditions => [ 'sycslm.fdinqdate >= ?', date ]
     }
   }
-  
+
+  def status
+    M2m::Status.find_by_name(self.fcstatus)
+  end
+    
   alias_attribute :date, :fdinqdate
   alias_attribute :quantity, :fnqty
   alias_attribute :inquiry, :fminquiry
+  alias_attribute :inquiry_number, :fcinqno
   alias_attribute :category_code, :fccategory
+  alias_attribute :user_defined1, :fcusrchr1
+  alias_attribute :customer_name, :fccustomer
+  alias_attribute :customer_number, :fccustno
 
   def rma_number
     self.fcrmano.strip
@@ -35,6 +35,11 @@ class M2m::CustomerServiceLog < M2m::Base
   def company_rma_number
     # TODO: Make this configurable.
     self.other2
+  end
+  
+  def credit_memo_reference
+    # TODO: Make this configurable.
+    self.user_defined1
   end
   
   def other2

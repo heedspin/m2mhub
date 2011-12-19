@@ -1,0 +1,30 @@
+<table class="details">
+	<thead>
+		<tr>
+			<th>RMA</th>
+			<th>Status</th>
+			<th>Invoice</th>
+			<th>Invoice Date</th>
+			<th>Invoice Amount</th>
+			<th>Part Number</th>
+			<th>Customer</th>
+			<th>Quantity</th>
+			<th>Problem</th>
+		</tr>
+	</thead>
+	<tbody>
+<% credit_memos.sort_by(&:date).each do |credit_memo| %>
+		<tr>
+			<td><%= credit_memo.company_rma_number %></td>
+			<td><%= credit_memo.status.name %></td>
+			<td><%= credit_memo.invoice_number %></td>
+			<td><%= credit_memo.invoice_date.to_s(:invoice_date) %></td>
+			<td class="right">$<%= cm credit_memo.invoice_amount, :quality_credit_memo_total, 0 %></td>
+			<td><%= link_to credit_memo.part_number, item_url(credit_memo.part_number) %></td>
+			<td><%= link_to credit_memo.customer_name, customer_url(credit_memo.customer_number) %></td>
+			<td><%= cm credit_memo.quantity, :rma_quantity %></td>
+			<td><%= simple_format credit_memo.inquiry %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>

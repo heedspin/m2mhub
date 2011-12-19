@@ -1,4 +1,4 @@
-class CustomerOtdReport
+class Quality::CustomerOtdReport
   class Month
     attr_accessor :date, :num_releases, :late_releases
     def initialize(date)
