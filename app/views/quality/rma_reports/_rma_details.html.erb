@@ -1,9 +1,10 @@
 <table class="details">
 	<thead>
 		<tr>
+			<th>RMA Number</th>
+			<th>Status</th>
 			<th>Category</th>
 			<th>Date</th>
-			<th>RMA Number</th>
 			<th>Qty</th>
 			<th>Customer</th>
 			<th>Part</th>
@@ -14,11 +15,12 @@
 	<tbody>
 <% rmas.sort_by(&:date).each do |rma| %>
 		<tr>
+			<td><%= rma.company_rma_number %></td>
+			<td><%= rma.status.name %></td>
 			<td><%= rma.category_name %></td>
 			<td><%= rma.date.to_s(:rma_date) %></td>
-			<td><%= rma.company_rma_number %></td>
-			<td><%= cm rma.quantity, :rma_quantity %></td>
-			<td><%= link_to rma.sales_order.customer_name, customer_url(rma.sales_order.fcustno) if rma.sales_order.present? %></td>
+			<td class="right"><%= cm rma.quantity, :rma_quantity %></td>
+			<td><%= link_to rma.customer_name, customer_url(rma.customer_number) %></td>
 			<td><%= link_to rma.part_number, item_url(rma.item.part_number) if rma.item.present? %></td>
 			<td class="fixed_width_text"><%= h simple_format(rma.inquiry.strip) %></td>
 			<td><%= link_to rma.sales_order.order_number, sales_order_url(rma.sales_order) if rma.sales_order.present? %></td>

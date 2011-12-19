@@ -32,9 +32,10 @@ authorization do
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
-    has_permission_on :customer_otd_reports, :to => :make
-    has_permission_on :rma_reports, :to => :make
-    has_permission_on :quality, :to => :read
+    has_permission_on :quality_quality_dashboard, :to => :read
+    has_permission_on :quality_customer_otd_reports, :to => :make
+    has_permission_on :quality_rma_reports, :to => :make
+    has_permission_on :quality_credit_memo_reports, :to => :make
   end
 
   role :admin do

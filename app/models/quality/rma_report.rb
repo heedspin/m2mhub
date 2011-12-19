@@ -1,4 +1,4 @@
-class RmaReport
+class Quality::RmaReport
   class Month
     attr_accessor :date, :ship_quantity, :rma_quantity, :rmas
     def initialize(date)

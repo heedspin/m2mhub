@@ -34,8 +34,8 @@
 					<li class="<%= controller_selected(:home) %>">
 						<%= link_to 'Home', root_url %>
 					</li>
-					<% if permitted_to?(:read, :quality) %>
-					<li class="<%= controller_selected([:quality, :rma_reports, :customer_otd_reports]) %>">
+					<% if permitted_to?(:read, :quality_quality_dashboard) %>
+					<li class="<%= controller_selected([:quality_dashboard, :rma_reports, :customer_otd_reports]) %>">
 						<%= link_to 'Quality', quality_url %>
 					</li>
 					<% end %>
