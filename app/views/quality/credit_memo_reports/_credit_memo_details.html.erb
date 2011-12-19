@@ -20,7 +20,7 @@
 			<td><%= credit_memo.status.name %></td>
 			<td><%= credit_memo.category_name %></td>
 			<% if credit_memo.invoice_number.present? %>
-			<td><%= credit_memo.invoice_number %></td>
+			<td class="<%= credit_memo.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= credit_memo.invoice_number %></td>
 			<td><%= credit_memo.invoice_date.to_s(:invoice_date) %></td>
 			<td class="right">$<%= cm credit_memo.invoice_amount, :quality_credit_memo_total, 0 %></td>
 			<% else %>

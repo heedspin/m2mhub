@@ -998,3 +998,6 @@ table.details td.fixed_width_text {
 	width: 250px;
 }
 
+td.guessed_credit_memo {
+	background-color: #fa6;
+}
