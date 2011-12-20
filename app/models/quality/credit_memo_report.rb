@@ -23,7 +23,8 @@ class Quality::CreditMemoReport
 
   def initialize(args=nil)
     args ||= {}
-    @start_date = args[:start_date] ||= Date.current.beginning_of_year
+    @start_date = args[:start_date] || Date.current.beginning_of_year
+    @end_date = args[:end_date] || @start_date.advance(:years => 1)
     @months = {}
   end
 
@@ -33,6 +34,7 @@ class Quality::CreditMemoReport
       sum(fnamount) as month_invoice_totals
     from armast
     where finvdate >= '#{@start_date.to_s(:db)}'
+    and finvdate < '#{@end_date.to_s(:db)}'
     and (finvtype != 'C' and fcsource != 'P')
     group by year(finvdate), month(finvdate)
     order by invoice_year, invoice_month
@@ -53,6 +55,7 @@ class Quality::CreditMemoReport
     where armast.finvtype = 'C'
     and (sycslm.fccategory = 'Q' or sycslm.fccategory = '')
     and sycslm.fdinqdate >= '#{@start_date.to_s(:db)}'
+    and sycslm.fdinqdate < '#{@end_date.to_s(:db)}'
     order by sycslm.fdinqdate desc, sycslm.fcinqno, armast.finvdate
     SQL
     rmas = {}

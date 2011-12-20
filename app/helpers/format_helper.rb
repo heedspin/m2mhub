@@ -2,11 +2,14 @@ module FormatHelper
   # From http://rubyforge.org/snippet/detail.php?type=snippet&id=8
   def comma(thing)
     return '' if thing.nil?
-    thing.to_s.gsub(/(\d)(?=\d{3}+(?:\D|$))/, '\\1,')
+    parts = thing.to_s.split('.',2)
+    result = parts[0].gsub(/(\d)(?=\d{3}+(?:\D|$))/, '\\1,')
+    result += ('.' + parts[1]) if parts.size > 1
+    result
   end
 
   def cm(thing, company_config_key=nil, default=nil)
-    if thing and (thing.to_i != 0)
+    if thing and (thing.to_f != 0)
       case thing
       when BigDecimal, Float
         comma(company_sprintf(thing, company_config_key))
