@@ -2,7 +2,9 @@ class Quality::RmaReportsController < ApplicationController
   filter_access_to_defaults
 
   def new
-    @report = Quality::RmaReport.new
+    @search = Quality::ReportSearch.new(params[:search])
+    @search.year ||= Date.current.year.to_s
+    @report = Quality::RmaReport.new(:start_date => @search.to_date)
     @report.run
   end
 

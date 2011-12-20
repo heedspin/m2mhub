@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
     @item = current_object
 
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).open.by_due_date_desc.all#(:include => [:sales_order, :item])
-    M2m::SalesOrderItem.attach_to_releases(@sales_order_releases, @item)
+    M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
     @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.all(:include => :purchase_order)

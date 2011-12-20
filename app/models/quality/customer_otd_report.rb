@@ -24,6 +24,8 @@ class Quality::CustomerOtdReport
   def initialize(args=nil)
     args ||= {}
     @start_date = args[:start_date] ||= Date.current.beginning_of_year    
+    @end_date = args[:end_date] || @start_date.advance(:years => 1)
+    @months = {}
   end
   
   def run
@@ -31,6 +33,7 @@ class Quality::CustomerOtdReport
     select flshipdate, count(*) 
     from sorels
     where sorels.flshipdate >= '#{@start_date.to_s(:db)}'
+      and sorels.flshipdate < '#{@end_date.to_s(:db)}'
     group by sorels.flshipdate
     order by sorels.flshipdate
     SQL
@@ -38,7 +41,9 @@ class Quality::CustomerOtdReport
       ship_date, count = result_row
       month_for(ship_date).num_releases += count
     end
-    M2m::SalesOrderRelease.shipped_late.due_after(@start_date).each do |late_release|
+    late_releases = M2m::SalesOrderRelease.shipped_late.due(@start_date, @end_date)
+    M2m::SalesOrderItem.attach_to_releases(late_releases)
+    late_releases.each do |late_release|
       month_for(late_release.due_date).add_late_release(late_release)
     end
     true
@@ -49,7 +54,6 @@ class Quality::CustomerOtdReport
   end
   
   def month_for(date)
-    @months ||= {}
     month_date = Date.new(date.year, date.month, 1)
     @months[month_date] ||= Month.new(month_date)
   end
@@ -57,4 +61,21 @@ class Quality::CustomerOtdReport
   def all_late_releases
     @months.values.map(&:late_releases).flatten
   end
+  
+  def num_releases
+    @num_releases ||= @months.values.sum(&:num_releases)
+  end
+  
+  def num_late_releases
+    @num_late_releases ||= @months.values.sum(&:num_late_releases)
+  end
+
+  def percent_late
+    if (self.num_releases <= 0) or (self.num_releases < self.num_late_releases)
+      100
+    else
+      (self.num_late_releases.to_f / self.num_releases) * 100
+    end
+  end
+  
 end

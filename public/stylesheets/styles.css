@@ -621,7 +621,7 @@ td.centered {
 	text-align: center;
 }
 
-td.right {
+td.right, th.right {
 	text-align: right;
 }
 
@@ -670,7 +670,7 @@ table.data td.centered {
 	text-align: center;
 }
 
-table.data td.right {
+table.data td.right, table.data th.right {
 	text-align: right;
 }
 
@@ -889,7 +889,7 @@ table.backlog td.centered {
 	text-align: center;
 }
 
-table.backlog td.right {
+table.backlog td.right, table.backlog th.right {
 	text-align: right;
 }
 

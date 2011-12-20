@@ -51,7 +51,21 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   
-  def self.attach_to_releases(sales_order_releases, item)
+  def self.attach_to_releases(sales_order_releases)
+    if sales_order_releases.size > 0
+      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
+      items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number))
+      sales_order_releases.each do |r|
+        if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
+          r.item = i
+          r.sales_order = i.sales_order
+          i.item = items.detect { |c| (c.part_number == i.part_number) && (c.revision == i.revision) }
+        end
+      end
+    end
+  end
+
+  def self.attach_to_releases_with_item(sales_order_releases, item)
     if sales_order_releases.size > 0
       sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
       sales_order_releases.each do |r|
