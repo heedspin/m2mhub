@@ -2,6 +2,26 @@
 <%= render 'quality/submenu' %>
 <br />
 
+<% semantic_form_for :search, @search, :url => new_credit_memo_report_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<% f.inputs do %>
+				  <%= f.input :year, :as => :select, :collection => year_options, :label => 'Year', :include_blank => false %>
+				<% end %>
+			</td>
+			<td>
+				<% f.buttons do %>
+				  <%= f.commit_button 'View' %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<% end %>
+
+
 <table class="data fullsize">
 	<thead>
 		<tr>
