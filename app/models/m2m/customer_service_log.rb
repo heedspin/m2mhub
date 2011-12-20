@@ -9,9 +9,9 @@ class M2m::CustomerServiceLog < M2m::Base
   named_scope :open,      :conditions => { :fcstatus => M2m::Status.open.name }
   named_scope :closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
   named_scope :cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
-  named_scope :since, lambda { |date|
+  named_scope :between, lambda { |start_date, end_date|
     { 
-      :conditions => [ 'sycslm.fdinqdate >= ?', date ]
+      :conditions => [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
     }
   }
 
@@ -30,6 +30,7 @@ class M2m::CustomerServiceLog < M2m::Base
   alias_attribute :user_defined1, :fcusrchr1
   alias_attribute :customer_name, :fccustomer
   alias_attribute :customer_number, :fccustno
+  alias_attribute :sales_order_number, :fcsono
 
   def rma_number
     self.fcrmano.strip
@@ -50,7 +51,7 @@ class M2m::CustomerServiceLog < M2m::Base
   end
   
   def category
-    M2m::CsPopup.for_key('SYCSLM.FCCATEGORY').with_code(self.category_code).first
+    M2m::CsPopup.cached_lookup('SYCSLM.FCCATEGORY', self.category_code)
   end
   def category_name
     self.category.try(:text)

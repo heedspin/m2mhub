@@ -71,9 +71,9 @@ class M2m::SalesOrderRelease < M2m::Base
   
   # named_scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
   named_scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]
-  named_scope :due_after, lambda { |date|
+  named_scope :due, lambda { |start_date, end_date|
     {
-      :conditions => ['sorels.fduedate >= ?', date]
+      :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
     }
   }
   

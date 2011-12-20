@@ -17,11 +17,18 @@ class Quality::RmaReport
   def initialize(args=nil)
     args ||= {}
     @start_date = args[:start_date] ||= Date.current.beginning_of_year    
+    @end_date = args[:end_date] || @start_date.advance(:years => 1)
+    @months = {}
   end
   
   def run
-    M2m::CustomerServiceLog.since(@start_date).each do |rma|
+    rmas = M2m::CustomerServiceLog.between(@start_date, @end_date)
+    items = M2m::Item.with_part_numbers(rmas.map(&:part_number)).all
+    rmas.each do |rma|
       month_for(rma.date).add_rma(rma)
+      if found = items.detect { |c| (c.part_number == rma.part_number) && (c.revision == rma.revision) }
+        rma.item = found
+      end
     end
     true
   end
@@ -31,7 +38,6 @@ class Quality::RmaReport
   end
   
   def month_for(date)
-    @months ||= {}
     month_date = Date.new(date.year, date.month, 1)
     @months[month_date] ||= Month.new(month_date)
   end

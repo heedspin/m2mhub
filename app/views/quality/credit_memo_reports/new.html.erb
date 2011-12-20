@@ -2,25 +2,7 @@
 <%= render 'quality/submenu' %>
 <br />
 
-<% semantic_form_for :search, @search, :url => new_credit_memo_report_url, :html => {:method => :get} do |f| %>
-<table class="flatform">
-	<tbody>
-		<tr>
-			<td>
-				<% f.inputs do %>
-				  <%= f.input :year, :as => :select, :collection => year_options, :label => 'Year', :include_blank => false %>
-				<% end %>
-			</td>
-			<td>
-				<% f.buttons do %>
-				  <%= f.commit_button 'View' %>
-				<% end %>
-			</td>
-		</tr>
-	</tbody>
-</table>
-<% end %>
-
+<%= render 'quality/year_search', :search_url => new_credit_memo_report_url %>
 
 <table class="data fullsize">
 	<thead>
@@ -55,8 +37,7 @@
 			<th>Totals</th>
 			<th class="right">$<%= cm @report.invoice_total, :quality_credit_memo_quantity %></th>
 			<th class="right">$<%= cm @report.quality_credit_memo_total, :quality_credit_memo_quantity %></th>
-			<td class="right"><%= cm @report.percent_quality_credit_memos, :quality_credit_memo_percentage, 0 %>%</td>
-			<td>
+			<th class="right"><%= cm @report.percent_quality_credit_memos, :quality_credit_memo_percentage, 0 %>%</th>
 		</tr>
 	</tbody>
 </table>

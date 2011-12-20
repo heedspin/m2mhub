@@ -13,6 +13,13 @@ class M2m::CsPopup < M2m::Base
   def text
     self.fcpoptext.titleize
   end
+  
+  @@cache = {}
+  def self.cached_lookup(k, c)
+    return nil unless k.present? and c.present?
+    key = [k, c]
+    @@cache[key] ||= M2m::CsPopup.for_key(k).with_code(c).first  
+  end
 end
 # == Schema Information
 #

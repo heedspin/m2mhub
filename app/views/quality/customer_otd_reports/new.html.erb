@@ -2,6 +2,8 @@
 <%= render 'quality/submenu' %>
 <br />
 
+<%= render 'quality/year_search', :search_url => new_customer_otd_report_url %>
+
 <% count = 0 %>
 <table class="data">
 	<thead>
@@ -27,4 +29,8 @@
 		</td>
 	</tr>
 <% end %>
+	<tr>
+		<th>Total</th>
+		<th><%= cm @report.percent_late, :on_time_delivery_report %>% Late (<%= @report.num_late_releases %> / <%= @report.num_releases %>)</th>
+	</tr>
 </table>
