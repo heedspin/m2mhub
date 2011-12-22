@@ -31,14 +31,14 @@
 			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity_shipped, :sales_order_quantity, 0 %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>">
-				<%= cm r.item.item.quantity_on_hand, :sales_order_quantity, 0 %>
+				<%= cm r.item.item.try(:quantity_on_hand), :sales_order_quantity, 0 %>
 				<% unless r.can_be_fully_shipped? %>
 				<span class="sbl_jobs_link">
 				<%= link_to image_tag('search.png'), item_jobs_url(r.part_number, :layout => 'popup'), :class => 'jobspopup' %>
 				</span>
 				<% end %>
 			</td>
-			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= render 'items/locations', :item => r.item.item %></td>
+			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= render('items/locations', :item => r.item.item) if r.item.item %></td>
 		</tr>
 		<tr>
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
