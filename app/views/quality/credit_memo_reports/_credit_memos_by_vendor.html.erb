@@ -1,0 +1,31 @@
+<table class="data fullsize">
+	<thead>
+		<tr>
+			<th>Vendor</th>
+			<th>Total</th>
+			<th>Quality Credit Memos</th>
+			<th>Percent Quality Returns</th>
+			<th>Details</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @id_count ||= 0 %>
+	<% @report.ordered_vendor_reports.each do |vendor_report| %>
+		<% @id_count += 1 %>
+		<tr>
+			<td><%= vendor_report.vendor.name %></td>
+			<td class="right">$<%= cm vendor_report.invoice_total, :quality_credit_memo_quantity, 0 %></td>
+			<td class="right">$<%= cm vendor_report.quality_credit_memo_total, :quality_credit_memo_quantity, 0 %></td>
+			<td class="right"><%= cm vendor_report.percent_quality_credit_memos, :quality_credit_memo_percentage, 0 %>%</td>
+			<td class="rma_details">
+				<% if vendor_report.credit_memos.size > 0 %>
+				<a href="#"><span class="show_closed_details" id="closed_details_<%= @id_count %>">Show Details</span></a>
+				<div class="closed_details" id="xclosed_details_<%= @id_count %>">
+				<%= render 'credit_memo_details', :credit_memos => vendor_report.credit_memos %>
+				</div>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>

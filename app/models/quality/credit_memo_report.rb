@@ -20,12 +20,40 @@ class Quality::CreditMemoReport
       end
     end
   end
+  
+  class VendorReport
+    attr_accessor :vendor, :invoice_total, :credit_memos
+    def initialize(vendor)
+      @vendor = vendor
+      @invoice_total = 0
+      @credit_memos = []
+    end
+    def name
+      self.vendor.name
+    end
+    def add_credit_memo(cm)
+      @credit_memos.push cm
+    end
+    def quality_credit_memo_total
+      @quality_credit_memo_total ||= @credit_memos.sum { |cm| cm.invoice_amount.abs }
+    end
+    def percent_quality_credit_memos
+      if (self.quality_credit_memo_total == 0) or (self.invoice_total == 0)
+        0
+      else
+        (self.quality_credit_memo_total.to_f / self.invoice_total) * 100
+      end
+    end
+  end
+  
+  attr_accessor :vendor_reports
 
   def initialize(args=nil)
     args ||= {}
     @start_date = args[:start_date] || Date.current.beginning_of_year
     @end_date = args[:end_date] || @start_date.advance(:years => 1)
     @months = {}
+    @vendor_reports = {}
   end
 
   def run
@@ -44,18 +72,39 @@ class Quality::CreditMemoReport
       month_for(Date.new(invoice_year, invoice_month, 1)).invoice_total += month_invoice_totals
     end
 
+    results = M2m::Invoice.connection.select_rows <<-SQL
+    select invend.fvendno as vendor_number,
+           sum(aritem.ftotprice) as vendor_invoice_total
+    from aritem
+    left join armast on armast.fcinvoice = aritem.fcinvoice
+    left join invend on invend.fpartno = aritem.fpartno and invend.fpartrev = aritem.frev
+    where armast.finvdate >= '#{@start_date.to_s(:db)}'
+      and armast.finvdate < '#{@end_date.to_s(:db)}'
+      and (armast.finvtype != 'C' and armast.fcsource != 'P')
+    group by invend.fvendno
+    SQL
+    results.each do |result_row|
+      vendor_number, vendor_invoice_total = result_row
+      if vendor = vendor_for(vendor_number)
+        vendor.invoice_total += vendor_invoice_total
+      end
+    end
+
     results = M2m::CustomerServiceLog.find_by_sql <<-SQL
     select sycslm.*,
-      armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount
+      armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount,
+      invend.fvendno as vendor_number
     from armast
     left join aritem on armast.fcinvoice = aritem.fcinvoice
     left join sycslm on sycslm.fcpartno = aritem.fpartno
-    and sycslm.fcpartrev = aritem.frev
-    and sycslm.fdinqdate <= armast.finvdate
+                    and sycslm.fcpartrev = aritem.frev
+                    and sycslm.fdinqdate <= armast.finvdate
+    left join invend on invend.fpartno = sycslm.fcpartno 
+                    and invend.fpartrev = sycslm.fcpartrev    
     where armast.finvtype = 'C'
-    and (sycslm.fccategory = 'Q' or sycslm.fccategory = '')
-    and sycslm.fdinqdate >= '#{@start_date.to_s(:db)}'
-    and sycslm.fdinqdate < '#{@end_date.to_s(:db)}'
+      and (sycslm.fccategory = 'Q' or sycslm.fccategory = '')
+      and sycslm.fdinqdate >= '#{@start_date.to_s(:db)}'
+      and sycslm.fdinqdate < '#{@end_date.to_s(:db)}'
     order by sycslm.fdinqdate desc, sycslm.fcinqno, armast.finvdate
     SQL
     rmas = {}
@@ -74,6 +123,7 @@ class Quality::CreditMemoReport
         end
       end
       month_for(winner.date).add_credit_memo(winner)
+      vendor_for(winner.vendor_number).add_credit_memo(winner)
     end
     true
   end
@@ -95,6 +145,15 @@ class Quality::CreditMemoReport
     month_date = Date.new(date.year, date.month, 1)
     @months[month_date] ||= Month.new(month_date)
   end
+  
+  def vendor_for(vendor_number)
+    return nil unless vendor_number.present?
+    @vendor_reports[vendor_number] ||= VendorReport.new(M2m::Vendor.find(vendor_number))
+  end
+  
+  def ordered_vendor_reports
+    @vendor_reports.values.select { |vr| vr.quality_credit_memo_total > 0 }.sort_by(&:percent_quality_credit_memos).reverse
+  end
 
   def invoice_total
     @invoice_total ||= @months.values.sum(&:invoice_total)
@@ -115,5 +174,5 @@ class Quality::CreditMemoReport
   def all_credit_memos
     @months.values.map(&:credit_memos).flatten
   end
-
+  
 end
