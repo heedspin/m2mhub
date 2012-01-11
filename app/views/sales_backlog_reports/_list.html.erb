@@ -7,6 +7,7 @@
 			<th>Cust Part</th>
 			<th>Ordered</th>
 			<th>Shipped</th>
+			<th>BkOrd Qty</th>
 			<th>On Hand</th>
 			<th>Bin</th>
 		</tr>
@@ -30,6 +31,7 @@
 			<td class="<%= sbl_shippable(r, 'top') %>"><%= r.item.customer_part_number %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity_shipped, :sales_order_quantity, 0 %></td>
+			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.backorder_quantity, :sales_order_quantity, 0 %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>">
 				<%= cm r.item.item.try(:quantity_on_hand), :sales_order_quantity, 0 %>
 				<% unless r.can_be_fully_shipped? %>
