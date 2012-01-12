@@ -6,6 +6,6 @@
 			<%= link_to_unless s.ship_date == @date, s.ship_date.to_s(:sales_date), shippers_url(:date => s.ship_date.to_s(:day_month_year)) %> via
 			<%= s.ship_via.strip %> <%= s.bill_of_lading %>
 		</p>
-		<%= render 'shippers/items', :shipper => s %>
+		<%= render 'shipping/shippers/items', :shipper => s %>
 	</div>
 <% end %>
