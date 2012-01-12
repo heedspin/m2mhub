@@ -1,0 +1,10 @@
+<% @receivers.each do |r| %>
+	<div class="shipper">
+		<p>
+			<%= r.status %>: <%= r.id %>
+			Received By: <%= r.received_by %>
+			PO: <%= r.purchase_order_number %>
+		</p>
+		<%= render 'shipping/receivers/items', :receiver => r %>
+	</div>
+<% end %>

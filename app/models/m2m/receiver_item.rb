@@ -7,6 +7,28 @@ class M2m::ReceiverItem < M2m::Base
   alias_attribute :receiver_number, :freceiver
   alias_attribute :purchase_order_item_number, :fpoitemno
   alias_attribute :release_number, :frelsno
+  alias_attribute :purchase_order_item_number, :fpoitemno
+
+  def part_number
+    @part_number ||= self.fpartno.strip
+  end
+  
+  def revision
+    @revision ||= self.fpartrev.strip
+  end
+
+  def purchase_order_item
+    if self.receiver.purchase_order
+      self.receiver.purchase_order.items.detect { |i| i.item_number == self.purchase_order_item_number }
+    else
+      nil
+    end
+  end 
+  
+  def po_vendor_part_number
+    self.purchase_order_item.try(:vendor_part_number)
+  end
+  
 end
 
 # == Schema Information
