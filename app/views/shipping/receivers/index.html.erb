@@ -1,0 +1,31 @@
+<%= render 'shipping/submenu' %>
+<br />
+
+<% if @date %>
+<div class="submenu">
+	<ul>
+		<li class="datenav">
+			<% if @next_date %>
+			<%= link_to "<< #{@next_date.to_s(:shipper_date)}", receivers_url(:date => @next_date.to_s(:database)) %>
+			<% else %>
+			&lt;&lt;
+			<% end %>
+		</li>
+		<li class="datenav">
+			<%= @date.to_s(:shipper_date) %>
+		</li>
+		<li class="datenav">
+			<% if @previous_date %>
+			<%= link_to "#{@previous_date.to_s(:shipper_date)} >>", receivers_url(:date => @previous_date.to_s(:database)) %>
+			<% else %>
+			&gt;&gt;
+			<% end %>
+		</li>
+	</ul>
+</div>
+<br />
+<h2>Receivers for <%= @date.to_s(:shipper_date) %></h2>
+<% end %>
+
+<%= render 'shipping/receivers/list' %>
+

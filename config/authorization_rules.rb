@@ -13,7 +13,9 @@ authorization do
     has_permission_on :items, :to => :read
     has_permission_on :user_activities, :to => :read
     has_permission_on :customers, :to => :read
-    has_permission_on :shippers, :to => :read
+    has_permission_on :shipping_shipping_dashboard, :to => :read
+    has_permission_on :shipping_shippers, :to => :read
+    has_permission_on :shipping_receivers, :to => :read
     has_permission_on :sales_backlog_reports, :to => :manage
     has_permission_on :sales_order_releases, :to => :read
     has_permission_on :quote_items, :to => :read

@@ -17,7 +17,7 @@
 			<td colspan="3">Bad shipper</td>
 			<% else %>
 			<td><%= link_to_unless !permitted_to?(:read, :sales_orders), release.sales_order.id, sales_order_url(i.sales_order_release.sales_order.id) %></td>
-			<td><%= link_to i.sales_order_release.part_number, item_url(i.sales_order_release.part_number) %>
+			<td><%= link_to i.sales_order_release.part_number, item_url(i.sales_order_release.part_number) %></td>
 			<td><%= i.sales_order_release.sales_order.customer_po %></td>
 			<% end %>
 			<td class="centered"><%= cm(i.quantity_shipped, :sales_order_quantity, 0) %> / <%= cm i.quantity_ordered, :sales_order_quantity %></td>

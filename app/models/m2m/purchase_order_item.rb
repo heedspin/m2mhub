@@ -102,6 +102,10 @@ class M2m::PurchaseOrderItem < M2m::Base
   def closed?
     self.purchase_order.status.closed?
   end
+  
+  def vendor_part_number
+    self.fvpartno.strip
+  end
 end
 
 # == Schema Information

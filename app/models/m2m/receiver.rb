@@ -5,8 +5,44 @@ class M2m::Receiver < M2m::Base
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :freceiver, :primary_key => :freceiver
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono, :primary_key => :fpono
   
-  alias_attribute :date_received, :fdaterecv  
+  alias_attribute :time_received, :fdaterecv  
   alias_attribute :purchase_order_number, :fpono
+  alias_attribute :received_by, :faccptby
+  
+  def date_received
+    self.time_received.to_date
+  end
+
+  named_scope :with_date_received, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date.to_s(:database), date.advance(:days => 1).to_s(:database) ],
+    }
+  }
+  
+  named_scope :for_next_day, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'rcmast.fdaterecv >= ?', date.advance(:days => 1).to_s(:database) ],
+      :order => :fdaterecv
+    }
+  }
+  
+  named_scope :for_previous_day, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'rcmast.fdaterecv < ?', date.to_s(:database) ],
+      :order => 'rcmast.fdaterecv desc'
+    }
+  }
+  
+  named_scope :by_id_desc, :order => 'rcmast.freceiver desc'
+  
+  def status
+    # fcstatus are 'C' and 'I' but always show up received.
+    self.fcstatus ? 'Received' : 'Not Received'
+  end
+  
 end
 
 # == Schema Information

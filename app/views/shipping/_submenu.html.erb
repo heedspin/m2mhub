@@ -1,0 +1,19 @@
+<div class="submenu">
+	<ul>
+		<% if permitted_to?(:read, :shipping_shipping_dashboard) %>
+		<li class="<%= controller_selected(:shipping_dashboard) %>">
+			<%= link_to 'Shipping Home', shipping_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :shipping_shippers) %>
+		<li class="<%= controller_selected(:shippers) %>">
+			<%= link_to 'Shippers', shippers_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :shipping_receivers) %>
+		<li class="<%= controller_selected(:receivers) %>">
+			<%= link_to 'Receivers', receivers_url %>
+		</li>
+		<% end %>
+	</ul>
+</div>

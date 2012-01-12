@@ -1,3 +1,5 @@
+<%= render 'shipping/submenu' %>
+<br />
 
 <% if @date %>
 <div class="submenu">
@@ -25,5 +27,5 @@
 <h2>Shippers for <%= @date.to_s(:shipper_date) %></h2>
 <% end %>
 
-<%= render 'list' %>
+<%= render 'shipping/shippers/list' %>
 
