@@ -32,6 +32,10 @@ class Production::WorkCenterLoadReport
     def work_center_load_for(day)
       @work_center_loads.detect { |wcl| wcl.date == day }
     end
+    
+    def avg_capacity
+      @work_center_loads.sum(&:capacity).to_f / @work_center_loads.size
+    end
   end
   
   attr_accessor :batch_name
