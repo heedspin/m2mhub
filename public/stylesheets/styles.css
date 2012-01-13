@@ -1012,6 +1012,6 @@ td.guessed_credit_memo {
 	text-decoration:none;
 	color: #ff2222;
 }
-.workcentername {
+.nowrap {
 	white-space:nowrap;
 }

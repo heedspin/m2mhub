@@ -49,10 +49,8 @@ class Production::WorkCenterLoadReport
   
   def run
     M2m::WorkCenterLoad.for_batch(@batch_name).with_load.each do |wcl|
-      if wcl.work_center.capacity_constraint
-        day_report_for(wcl.date).add_work_center_load(wcl)
-        work_center_report_for(wcl.work_center).add_work_center_load(wcl)
-      end
+      day_report_for(wcl.date).add_work_center_load(wcl)
+      work_center_report_for(wcl.work_center).add_work_center_load(wcl)
     end
   end
   
