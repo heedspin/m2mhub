@@ -632,6 +632,7 @@ td.ninjaborders {
 /* DATA TABLES
 -------------------------------------------------------------------- */
 table.data {
+	background-color: #fff;
   border-collapse: collapse;
   border-spacing: 0;
   margin: 15px 0 15px 0;
@@ -1010,4 +1011,7 @@ td.guessed_credit_memo {
 .highworkload, .highworkload a:link, .highworkload a:visited, .highworkload a:hover {
 	text-decoration:none;
 	color: #ff2222;
+}
+.workcentername {
+	white-space:nowrap;
 }
