@@ -666,7 +666,7 @@ table.data td.monitary {
 	text-align: right;
 }
 
-table.data td.centered {
+table.data td.centered, table.data th.centered {
 	text-align: center;
 }
 
@@ -704,6 +704,11 @@ table.data td.otd_details {
 
 table.fullsize {
 	width: 100%;
+}
+
+.hoverinfo a:link, .hoverinfo a:visited, .hoverinfo a:hover {
+	text-decoration:none;
+	color: #666;
 }
 
 /* NEWS

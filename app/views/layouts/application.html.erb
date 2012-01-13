@@ -19,6 +19,7 @@
 				<% links.push link_to(current_user.first_name, user_path(current_user.id)) %>
 				<% links.push link_to('Log Out', logout_path) %>
 				<% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
+				<% links.push link_to_unless_current('History', user_activities_url) if permitted_to?(:read, :user_activities) %>
 				<div class="usermenu"><%= raw links.join(' | ') %></div>
 			<% end %>
 			<div class="banner">
@@ -69,9 +70,9 @@
 						<%= link_to 'backlog', sales_backlog_reports_url %>
 					</li>
 					<% end %>
-					<% if permitted_to?(:read, :user_activities) %>
-					<li class="<%= controller_selected(:user_activities) %>">
-						<%= link_to 'History', user_activities_url %>
+					<% if permitted_to?(:read, :production_production_dashboard) %>
+					<li class="<%= controller_selected(:production_dashboard) %>">
+						<%= link_to 'Production', production_url %>
 					</li>
 					<% end %>
 				</ul>        
