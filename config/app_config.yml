@@ -17,6 +17,8 @@ _default_company_config: &_default_company_config
   job_quantity: "%.0f"
   quality_credit_memo_quantity: "%.0f"
   quality_credit_memo_percentage: "%0.2f"
+  work_center_load_percentage: "%.0f"
+  work_center_load: "%.1f"
   epoch_year: 2000
   
 _shared_company_config: &_shared_company_config
