@@ -34,15 +34,17 @@ class Production::WorkCenterLoadReport
     end
   end
   
+  attr_accessor :batch_name
+  
   def initialize(params)
     params ||= {}
-    batch_name = params[:batch] || 'range'
+    @batch_name = params[:batch_name] || '**default**'
     @day_reports = {}
     @work_center_reports = {}
   end
   
   def run
-    M2m::WorkCenterLoad.for_batch('range').with_load.each do |wcl|
+    M2m::WorkCenterLoad.for_batch(@batch_name).with_load.each do |wcl|
       day_report_for(wcl).add_work_center_load(wcl)
       work_center_report_for(wcl.work_center).add_work_center_load(wcl)
     end
