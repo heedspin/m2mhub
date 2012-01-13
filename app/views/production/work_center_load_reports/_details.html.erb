@@ -24,7 +24,12 @@
 		</tr>
 		<% report.ordered_work_center_reports.each do |wcr| %>
 		<tr>
-			<td class="centered"><%= wcr.work_center.work_center_id %> <%= wcr.work_center.name %></td>
+			<td class="centered">
+				<span class="workcentername hoverinfo">
+					<% wcname = wcr.work_center.work_center_id.strip + ' ' + wcr.work_center.name.strip %>
+					<%= link_to wcname[0..15] + (wcname.size > 16 ? '...' : ''), '#', :title => wcname %>
+				</span>
+			</td>
 			<td class="right">
 				<span class="<%= work_center_load_class(wcr.total_load_percentage) %>">
 				<%= cm wcr.total_load_percentage, :work_center_load_percentage, 0 %>%

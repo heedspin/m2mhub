@@ -3,6 +3,7 @@ class M2m::WorkCenter < M2m::Base
   set_primary_key 'fcpro_id'
   
   alias_attribute :work_center_id, :fcpro_id
+  alias_attribute :capacity_constraint, :flconstrnt
   
   def name
     fcpro_name.titleize.strip

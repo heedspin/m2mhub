@@ -49,8 +49,10 @@ class Production::WorkCenterLoadReport
   
   def run
     M2m::WorkCenterLoad.for_batch(@batch_name).with_load.each do |wcl|
-      day_report_for(wcl).add_work_center_load(wcl)
-      work_center_report_for(wcl.work_center).add_work_center_load(wcl)
+      if wcl.work_center.capacity_constraint
+        day_report_for(wcl.date).add_work_center_load(wcl)
+        work_center_report_for(wcl.work_center).add_work_center_load(wcl)
+      end
     end
   end
   
@@ -61,8 +63,7 @@ class Production::WorkCenterLoadReport
     @ordered_work_center_reports ||= @work_center_reports.values.sort_by { |wcr| wcr.work_center.work_center_id }
   end
   
-  def day_report_for(wcl)
-    date = wcl.date
+  def day_report_for(date)
     @day_reports[date] ||= DayReport.new(date)
   end
   def work_center_report_for(wc)
