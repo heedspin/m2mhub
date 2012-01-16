@@ -16,11 +16,8 @@ Sales Order: <%= link_to @csl.sales_order_number, sales_order_url(@csl.sales_ord
 <%= h simple_format(@csl.inquiry.strip) %>
 
 <% if CompanyConfig.lighthouse_account %>
-<h3>Lighthouse Ticket</h3>
 <% if @csl.lighthouse_ticket %>
-<p>
-<%= link_to @csl.lighthouse_ticket.title, @csl.lighthouse_ticket.url %>
-</p>
+<%= render 'quality/customer_service_logs/lighthouse_ticket', :ticket => @csl.lighthouse_ticket %>
 <% else %>
 <h3>No Lighthouse Ticket</h3>
 <% end %>

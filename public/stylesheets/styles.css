@@ -1015,3 +1015,12 @@ td.guessed_credit_memo {
 .nowrap {
 	white-space:nowrap;
 }
+/* Lighthouse Tickets
+-------------------------------------------------------------------- */
+div.lighthouse_ticket {
+}
+div.lighthouse_comment {
+	margin: 0 0 0 20px;
+	border-top: 1px dotted #c5c5c5;
+	width: 751px;
+}
