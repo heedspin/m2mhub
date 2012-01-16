@@ -40,9 +40,18 @@ authorization do
     has_permission_on :quality_credit_memo_reports, :to => :make
     has_permission_on :quality_customer_service_logs, :to => :read
   end
+  
+  role :production do
+    has_permission_on :production_production_dashboard, :to => :read
+    has_permission_on :production_work_center_load_reports, :to => :make
+  end
+  
+  role :manager do
+    includes :shipping, :sales, :production
+  end
 
   role :admin do
-    includes :shipping, :sales
+    includes :manager
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :content_modules, :to => :manage

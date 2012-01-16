@@ -632,6 +632,7 @@ td.ninjaborders {
 /* DATA TABLES
 -------------------------------------------------------------------- */
 table.data {
+	background-color: #fff;
   border-collapse: collapse;
   border-spacing: 0;
   margin: 15px 0 15px 0;
@@ -666,7 +667,7 @@ table.data td.monitary {
 	text-align: right;
 }
 
-table.data td.centered {
+table.data td.centered, table.data th.centered {
 	text-align: center;
 }
 
@@ -704,6 +705,11 @@ table.data td.otd_details {
 
 table.fullsize {
 	width: 100%;
+}
+
+.hoverinfo a:link, .hoverinfo a:visited, .hoverinfo a:hover {
+	text-decoration:none;
+	color: #666;
 }
 
 /* NEWS
@@ -1000,4 +1006,12 @@ table.details td.fixed_width_text {
 
 td.guessed_credit_memo {
 	background-color: #fa6;
+}
+
+.highworkload, .highworkload a:link, .highworkload a:visited, .highworkload a:hover {
+	text-decoration:none;
+	color: #ff2222;
+}
+.nowrap {
+	white-space:nowrap;
 }

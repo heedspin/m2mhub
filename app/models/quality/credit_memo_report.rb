@@ -123,7 +123,7 @@ class Quality::CreditMemoReport
         end
       end
       month_for(winner.date).add_credit_memo(winner)
-      vendor_for(winner.vendor_number).add_credit_memo(winner)
+      vendor_for(winner.vendor_number).try(:add_credit_memo, winner)
     end
     true
   end

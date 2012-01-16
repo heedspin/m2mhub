@@ -1,0 +1,53 @@
+<h2><%= report.batch_name.titleize %> Batch</h2>
+
+<table class="data fullsize">
+	<thead>
+		<tr>
+			<td colspan="3"></td>
+			<% report.ordered_day_reports.each do |dr| %>
+			<th class="centered"><span class="nowrap"><%= dr.date.strftime('%m-%d') %></span></th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td></td>
+			<td>Load</td>
+			<td>Cpty</td>
+			<% report.ordered_day_reports.each do |dr| %>
+			<td class="right">
+				<span class="<%= work_center_load_class(dr.total_load_percentage) %>">
+				<%= cm dr.total_load_percentage, :work_center_load_percentage, 0 %>%
+				</span>
+			</td>
+			<% end %>
+		</tr>
+		<% report.ordered_work_center_reports.each do |wcr| %>
+		<tr>
+			<td class="centered">
+				<span class="nowrap hoverinfo">
+					<% wcname = wcr.work_center.work_center_id.strip + ' ' + wcr.work_center.name.strip %>
+					<%= link_to wcname[0..15] + (wcname.size > 16 ? '...' : ''), '#', :title => wcname %>
+				</span>
+			</td>
+			<td class="right">
+				<span class="<%= work_center_load_class(wcr.total_load_percentage) %>">
+				<%= cm wcr.total_load_percentage, :work_center_load_percentage, 0 %>%
+				</span>
+			</td>
+			<td class="right">
+				<%= cm wcr.avg_capacity, :work_center_load %>
+			</td>
+			<% report.ordered_day_reports.each do |dr| %>
+			<td class="right">
+				<% if wcl = wcr.work_center_load_for(dr.date) %>
+				<span class="<%= work_center_load_class(wcl.load_percentage, :hoverinfo) %>">
+				<%= link_to cm(wcl.load_percentage, :work_center_load_percentage, 0) + '%', '#', :title => cm(wcl.work_load, :work_center_load, 0) + ' / ' + cm(wcl.capacity, :work_center_load, 0) %>
+				</span>
+				<% end %>
+			</td>
+			<% end %>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
