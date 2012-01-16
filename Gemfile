@@ -22,6 +22,7 @@ gem 'active_hash' #, '0.9.1'
 gem 'userstamp', '2.0.1'
 gem 'composite_primary_keys', '2.3.5.1'
 gem 'spreadsheet', '0.6.5.2'
+gem 'lighthouse-api', '1.1.0'
 
 group :development do
   gem 'ruby-debug'

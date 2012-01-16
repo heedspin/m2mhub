@@ -20,6 +20,8 @@ _default_company_config: &_default_company_config
   work_center_load_percentage: "%.0f"
   work_center_load: "%.1f"
   epoch_year: 2000
+  customer_service_log_field_rma_number: fcinqno
+  customer_service_log_field_credit_memo_reference: user_defined1
   
 _shared_company_config: &_shared_company_config
   lxd:
@@ -32,6 +34,7 @@ _shared_company_config: &_shared_company_config
     long_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
     epoch_year: 2010
+    customer_service_log_field_rma_number: other2
     fob_groups:
       - id: 1
         name: Raleigh
