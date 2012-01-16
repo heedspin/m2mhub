@@ -38,13 +38,11 @@ class M2m::CustomerServiceLog < M2m::Base
   end
   
   def company_rma_number
-    # TODO: Make this configurable.
-    self.other2
+    self.send(CompanyConfig.customer_service_log_field_rma_number)
   end
   
   def credit_memo_reference
-    # TODO: Make this configurable.
-    self.user_defined1
+    self.send(CompanyConfig.customer_service_log_field_credit_memo_reference)
   end
 
   def other2
