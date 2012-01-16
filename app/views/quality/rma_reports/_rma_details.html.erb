@@ -15,7 +15,7 @@
 	<tbody>
 <% rmas.sort_by(&:date).each do |rma| %>
 		<tr>
-			<td><%= rma.company_rma_number %></td>
+			<td><%= link_to rma.company_rma_number, customer_service_log_url(rma) %></td>
 			<td><%= rma.status.name %></td>
 			<td><%= rma.category_name %></td>
 			<td><%= rma.date.to_s(:rma_date) %></td>

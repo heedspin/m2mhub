@@ -28,6 +28,7 @@ class M2m::CustomerServiceLog < M2m::Base
   alias_attribute :inquiry_number, :fcinqno
   alias_attribute :category_code, :fccategory
   alias_attribute :user_defined1, :fcusrchr1
+  alias_attribute :user_defined2, :fcusrchr2
   alias_attribute :customer_name, :fccustomer
   alias_attribute :customer_number, :fccustno
   alias_attribute :sales_order_number, :fcsono
@@ -45,7 +46,7 @@ class M2m::CustomerServiceLog < M2m::Base
     # TODO: Make this configurable.
     self.user_defined1
   end
-  
+
   def other2
     self.fcother2.strip
   end
@@ -73,6 +74,16 @@ class M2m::CustomerServiceLog < M2m::Base
   end
   def invoice_date=(val)
     write_attribute(:invoice_date, val)
+  end
+  
+  def lighthouse_ticket
+    if @lighthouse_ticket.nil?
+      if self.user_defined2.present? and (self.user_defined2 =~ /(lighthouse|lh|ticket)\W*(\d+)/i)
+        ticket_id = $2
+        @lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => CompanyConfig.lighthouse_customer_service_project_id })
+      end
+    end
+    @lighthouse_ticket
   end
   
 end

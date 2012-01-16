@@ -38,6 +38,7 @@ authorization do
     has_permission_on :quality_customer_otd_reports, :to => :make
     has_permission_on :quality_rma_reports, :to => :make
     has_permission_on :quality_credit_memo_reports, :to => :make
+    has_permission_on :quality_customer_service_logs, :to => :read
   end
 
   role :admin do
