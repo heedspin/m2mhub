@@ -34,7 +34,7 @@ _shared_company_config: &_shared_company_config
     long_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
     epoch_year: 2010
-    customer_service_log_field_rma_id: other2
+    customer_service_log_field_rma_number: other2
     fob_groups:
       - id: 1
         name: Raleigh
