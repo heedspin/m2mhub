@@ -23,6 +23,7 @@ gem 'userstamp', '2.0.1'
 gem 'composite_primary_keys', '2.3.5.1'
 gem 'spreadsheet', '0.6.5.2'
 gem 'lighthouse-api', '1.1.0'
+gem 'addressable', '2.2.6'
 
 group :development do
   gem 'ruby-debug'

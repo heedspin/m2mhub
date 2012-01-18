@@ -15,6 +15,7 @@ GEM
     activeresource (2.3.14)
       activesupport (= 2.3.14)
     activesupport (2.3.14)
+    addressable (2.2.6)
     airbrake (3.0.3)
       activesupport
       builder
@@ -78,6 +79,7 @@ PLATFORMS
 DEPENDENCIES
   active_hash
   activerecord-sqlserver-adapter (= 2.3.20)
+  addressable (= 2.2.6)
   airbrake
   annotate
   authlogic (= 2.1.6)
