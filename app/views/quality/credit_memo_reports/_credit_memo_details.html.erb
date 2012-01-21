@@ -18,16 +18,16 @@
 		<tr>
 			<td><%= credit_memo.company_rma_number %></td>
 			<td><%= credit_memo.status.name %></td>
-			<td><%= credit_memo.category_name %></td>
-			<% if credit_memo.invoice_number.present? %>
-			<td class="<%= credit_memo.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= credit_memo.invoice_number %></td>
-			<td><%= credit_memo.invoice_date.to_s(:invoice_date) %></td>
+			<td><%= credit_memo.severity_name %></td>
+			<% if credit_memo.credit_memo_reference.present? %>
+			<td class="<%= credit_memo.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= credit_memo.credit_memo_reference.invoice_number %></td>
+			<td><%= credit_memo.invoice_date.to_s(:invoice_date) if credit_memo.invoice_date %></td>
 			<td class="right">$<%= cm credit_memo.invoice_amount, :quality_credit_memo_total, 0 %></td>
 			<% else %>
 			<td></td><td></td><td></td>
 			<% end %>
 			<td><%= link_to credit_memo.part_number, item_url(credit_memo.part_number) %></td>
-			<td><%= link_to credit_memo.customer_name, customer_url(credit_memo.customer_number) %></td>
+			<td><%= link_to credit_memo.customer.company_name, customer_url(credit_memo.customer_number) %></td>
 			<td><%= cm credit_memo.quantity, :rma_quantity %></td>
 			<td><%= simple_format credit_memo.inquiry %></td>
 		</tr>

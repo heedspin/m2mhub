@@ -90,29 +90,35 @@ class Quality::CreditMemoReport
       end
     end
 
-    results = M2m::CustomerServiceLog.find_by_sql <<-SQL
-    select sycslm.*,
-      armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount,
-      invend.fvendno as vendor_number
+    results = M2m::Rma.find_by_sql <<-SQL
+    select syrmama.*,
+          armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount,
+          aritem.fcrmakey as invoice_item_rma_key,
+          invend.fvendno as vendor_number,
+          syrmaitm.fcpartno as part_number, syrmaitm.fcpartrev as revision, syrmaitm.fnqty as quantity
     from armast
     left join aritem on armast.fcinvoice = aritem.fcinvoice
-    left join sycslm on sycslm.fcpartno = aritem.fpartno
-                    and sycslm.fcpartrev = aritem.frev
-                    and sycslm.fdinqdate <= armast.finvdate
-    left join invend on invend.fpartno = sycslm.fcpartno 
-                    and invend.fpartrev = sycslm.fcpartrev    
+    left join syrmaitm on syrmaitm.fcpartno = aritem.fpartno
+                      and syrmaitm.fcpartrev = aritem.frev
+    left join syrmama on syrmama.fcrmano = syrmaitm.fcrmano
+                     and syrmama.fdenterdate <= armast.finvdate
+    left join invend on invend.fpartno = syrmaitm.fcpartno 
+                    and invend.fpartrev = syrmaitm.fcpartrev    
     where armast.finvtype = 'C'
-      and (sycslm.fccategory = 'Q' or sycslm.fccategory = '')
-      and sycslm.fdinqdate >= '#{@start_date.to_s(:db)}'
-      and sycslm.fdinqdate < '#{@end_date.to_s(:db)}'
-    order by sycslm.fdinqdate desc, sycslm.fcinqno, armast.finvdate
+      and syrmama.fdenterdate >= '#{@start_date.to_s(:db)}'
+      and syrmama.fdenterdate < '#{@end_date.to_s(:db)}'
+    order by syrmama.fdenterdate desc, syrmama.fcrmano, armast.finvdate
     SQL
     rmas = {}
     results.each do |rma|
-      rma.invoice_number = 'CM-' + rma.invoice_number[/\d+/].to_i.to_s
-      (rmas[rma.inquiry_number] ||= []).push(rma)
+      rma.invoice_number = rma.invoice_number[/\d+/].to_i.to_s
+      rma.part_number = rma.part_number.strip
+      rma.revision = rma.revision.strip
+      rma.invoice_date = rma.invoice_date
+      (rmas[rma.rma_number] ||= []).push(rma)
     end
-    rmas.each do |inquiry_number, candidates|
+    rmas.each do |rma_number, candidates|
+      next unless quality_related_rma?(candidates)
       winner = find_credit_memo_reference_match(candidates)
       if winner.nil?
         winner = candidates.first
@@ -128,10 +134,28 @@ class Quality::CreditMemoReport
     true
   end
   
+  def quality_related_rma?(candidates)
+    rma = candidates.first
+    rma.severity.nil? || CompanyConfig.credit_memo_report_severity_names.include?(rma.severity_name)
+  end
+  
   def find_credit_memo_reference_match(candidates)
     candidates.each do |rma|
-      if rma.credit_memo_reference.present? and (rma.credit_memo_reference[/\d+/].to_i == rma.invoice_number[/\d+/].to_i)
-        return rma
+      # First check for a CM-XYZ in the user defined fields.
+      if rma.credit_memo_reference.present?
+        if rma.credit_memo_reference.no_credit_memo?
+          return nil
+        elsif rma.credit_memo_reference.invoice_number.to_s == rma.invoice_number.to_s
+          return rma
+        end
+      end
+      # Second check if there's an RMA Number in the invoice item.
+      if rma.invoice_item_rma_key.present?
+        invoice_rma_number = M2m::InvoiceItem.rma_number(rma.invoice_item_rma_key)
+        # rma_item_no = M2m::InvoiceItem.rma_item_number(rma.invoice_item_rma_key)
+        if rma.rma_number == invoice_rma_number
+          return rma
+        end
       end
     end
     nil
