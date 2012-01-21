@@ -78,6 +78,7 @@ class M2m::Item < M2m::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: inmast
@@ -85,11 +86,10 @@ end
 #  fpartno          :string(25)      not null
 #  frev             :string(3)       not null
 #  fcstscode        :string(1)       not null
-#  fdescript        :string(35)      default(" "), not null
+#  fdescript        :string(35)      not null
 #  flchgpnd         :boolean         not null
 #  fmeasure         :string(3)       not null
 #  fsource          :string(1)       not null
-#  fonhand          :decimal(15, 5)  not null
 #  fleadtime        :decimal(7, 1)   not null
 #  fprice           :decimal(17, 5)  not null
 #  fstdcost         :decimal(17, 5)  not null
@@ -106,12 +106,11 @@ end
 #  f2matlcost       :decimal(17, 5)  not null
 #  f2ovhdcost       :decimal(17, 5)  not null
 #  favgcost         :decimal(17, 5)  not null
-#  fbook            :decimal(15, 5)  not null
 #  fbulkissue       :string(1)       not null
 #  fbuyer           :string(3)       not null
 #  fcalc_lead       :string(1)       not null
 #  fcbackflsh       :string(1)       not null
-#  fcnts            :integer         not null
+#  fcnts            :integer(4)      not null
 #  fcopymemo        :string(1)       not null
 #  fcostcode        :string(1)       not null
 #  fcpurchase       :string(1)       not null
@@ -139,20 +138,13 @@ end
 #  finspect         :string(1)       not null
 #  flabcost         :decimal(17, 5)  not null
 #  flasteoc         :string(25)      not null
-#  flastiss         :datetime        not null
-#  flastrcpt        :datetime        not null
 #  flct             :datetime        not null
 #  fllotreqd        :boolean         not null
 #  fmatlcost        :decimal(17, 5)  not null
 #  fmeasure2        :string(3)       not null
-#  fmtdiss          :decimal(15, 5)  not null
-#  fmtdrcpt         :decimal(15, 5)  not null
 #  fnweight         :decimal(10, 3)  not null
-#  fonorder         :decimal(15, 5)  not null
 #  fovhdcost        :decimal(17, 5)  not null
 #  fprodcl          :string(2)       not null
-#  fproqty          :decimal(15, 5)  not null
-#  fqtyinspec       :decimal(15, 5)  not null
 #  freordqty        :decimal(15, 5)  not null
 #  frevdt           :datetime        not null
 #  frolledup        :string(1)       not null
@@ -160,17 +152,15 @@ end
 #  fschecode        :string(6)       not null
 #  fuprodtime       :decimal(9, 3)   not null
 #  fyield           :decimal(8, 3)   not null
-#  fytdiss          :decimal(15, 5)  not null
-#  fytdrcpt         :decimal(15, 5)  not null
 #  fabccode         :string(1)       not null
 #  ftaxable         :boolean         not null
 #  fcusrchr1        :string(20)      not null
-#  fcusrchr2        :string(40)      default(" "), not null
-#  fcusrchr3        :string(40)      default(" "), not null
+#  fcusrchr2        :string(40)      not null
+#  fcusrchr3        :string(40)      not null
 #  fnusrqty1        :decimal(15, 5)  not null
 #  fnusrcur1        :decimal(17, 5)  not null
 #  fdusrdate1       :datetime        not null
-#  fcdncfile        :string(80)      default(" "), not null
+#  fcdncfile        :string(80)      not null
 #  fccadfile1       :string(250)     not null
 #  fccadfile2       :string(250)     not null
 #  fccadfile3       :string(250)     not null
@@ -190,33 +180,31 @@ end
 #  fcjrdict         :string(10)      not null
 #  flaplpart        :boolean         not null
 #  flfanpart        :boolean         not null
-#  fnfanaglvl       :integer         not null
+#  fnfanaglvl       :integer(4)      not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
+#  fidims           :integer(4)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
-#  fcomment         :text            default(" "), not null
-#  fgimage          :binary          default("0x"), not null
-#  fmusrmemo1       :text            default(" "), not null
-#  fstdmemo         :text            default(" "), not null
+#  fcomment         :text            not null
+#  fmusrmemo1       :text            not null
+#  fstdmemo         :text            not null
 #  fac              :string(20)
 #  sfac             :string(20)
 #  itcfixed         :decimal(17, 5)
 #  itcunit          :decimal(17, 5)
-#  fnPOnHand        :decimal(16, 5)  default(0.0), not null
-#  fnLndToMfg       :decimal(16, 5)  default(0.0), not null
-#  fiPcsOnHd        :integer(4)      default(0), not null
-#  fcudrev          :string(3)       default(" "), not null
-#  fidims           :integer(4)      default(0), not null
-#  fluseudrev       :boolean         default(FALSE), not null
-#  fndbrmod         :integer         default(0), not null
-#  fnonnetqty       :decimal(15, 5)  default(0.0), not null
+#  fnPOnHand        :decimal(16, 5)  not null
+#  fnLndToMfg       :decimal(16, 5)  not null
+#  fcudrev          :string(3)       not null
+#  fluseudrev       :boolean         not null
+#  fndbrmod         :integer(4)      not null
+#  fiPcsOnHd        :integer(4)      not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null
 #  fnlatefact       :decimal(4, 2)   not null
-#  fnsobuf          :integer         not null
-#  fnpurbuf         :integer         not null
+#  fnsobuf          :integer(4)      not null
+#  fnpurbuf         :integer(4)      not null
 #  flcnstrpur       :boolean         not null
 #  fdvenfence       :datetime        not null
 #  flLatefact       :boolean         not null
@@ -225,5 +213,23 @@ end
 #  flHoldStoc       :boolean         not null
 #  fnHoldStoc       :decimal(4, 2)   not null
 #  ManualPlan       :boolean         not null
+#  SchedDate        :datetime        not null
+#  flocbfdef        :string(14)      not null
+#  fbinbfdef        :string(14)      not null
+#  DockTime         :integer(4)      not null
+#  fnifttime        :decimal(7, 1)   not null
+#  flSynchOn        :boolean         not null
+#  fonhand          :decimal(15, 5)
+#  fqtyinspec       :decimal(15, 5)
+#  fnonnetqty       :decimal(15, 5)
+#  fproqty          :decimal(15, 5)
+#  fonorder         :decimal(15, 5)
+#  fbook            :decimal(15, 5)
+#  flastiss         :datetime
+#  flastrcpt        :datetime
+#  fmtdiss          :decimal(15, 5)
+#  fytdiss          :decimal(15, 5)
+#  fmtdrcpt         :decimal(15, 5)
+#  fytdrcpt         :decimal(15, 5)
 #
 

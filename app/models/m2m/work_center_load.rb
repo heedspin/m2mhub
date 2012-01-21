@@ -27,25 +27,26 @@ class M2m::WorkCenterLoad < M2m::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: dbrrlrp
 #
-#  cbatchname       :string(15)      default(" "), not null
-#  noutstacum       :decimal(18, 3)  default(0.0), not null
-#  userid           :string(30)      default(" "), not null
-#  perdname         :string(10)      default(" "), not null
+#  fcpro_id         :string(7)       default(""), not null
+#  perdname         :string(10)      default(""), not null
 #  req_load         :decimal(18, 3)  default(0.0), not null
 #  capacity         :decimal(17, 1)  default(0.0), not null
 #  nloadprcnt       :decimal(8, 1)   default(0.0), not null
-#  identity_column  :integer(4)      not null, primary key
-#  timestamp_column :binary
-#  seqno            :integer         default(0), not null
-#  fcpro_id         :string(7)       default(" "), not null
 #  noutstacap       :decimal(18, 3)  default(0.0), not null
 #  ncumcapprc       :decimal(8, 1)   default(0.0), not null
-#  fcfac            :string(20)      default(" ")
+#  noutstacum       :decimal(18, 3)  default(0.0), not null
+#  cbatchname       :string(15)      default(""), not null
+#  userid           :string(30)      default(""), not null
+#  seqno            :integer(4)      default(0), not null
+#  identity_column  :integer(4)      not null, primary key
+#  timestamp_column :binary
+#  fcfac            :string(20)      default("")
 #  sortdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  SortDateString   :string(23)      not null
+#  SortDateSt       :string(19)      default(""), not null
 #
 

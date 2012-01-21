@@ -16,43 +16,44 @@ class M2m::InventoryTransaction < M2m::Base
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 	
 end
+
 # == Schema Information
 #
 # Table name: intran
 #
-#  fdate            :datetime        not null
-#  fpartno          :string(25)      not null
-#  fcpartrev        :string(3)       not null
-#  ftype            :string(1)       not null
-#  faccno           :string(25)      not null
-#  fcode            :string(4)       not null
-#  fcost            :decimal(17, 5)  not null
-#  ffrombin         :string(14)      not null
-#  ffromexpdt       :datetime        not null
-#  ffromjob         :string(10)      not null
-#  ffromloc         :string(14)      not null
-#  ffromlot         :string(20)      not null
-#  finspect         :string(3)       not null
-#  flabor           :decimal(17, 5)  not null
-#  fmatl            :decimal(17, 5)  not null
-#  fnumber          :integer         not null
-#  fovrhd           :decimal(17, 5)  not null
-#  fqty             :decimal(15, 5)  not null
-#  ftobin           :string(14)      not null
-#  ftoexpdt         :datetime        not null
-#  ftojob           :string(10)      not null
-#  ftoloc           :string(14)      not null
-#  ftolot           :string(20)      not null
-#  ftoso            :string(12)      not null
-#  fctime_ts        :datetime        not null
-#  fnnewonhd        :decimal(17, 5)  not null
+#  fdate            :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fpartno          :string(25)      default(""), not null
+#  fcpartrev        :string(3)       default(""), not null
+#  ftype            :string(1)       default(""), not null
+#  faccno           :string(25)      default(""), not null
+#  fcode            :string(4)       default(""), not null
+#  fcost            :decimal(17, 5)  default(0.0), not null
+#  ffrombin         :string(14)      default(""), not null
+#  ffromexpdt       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  ffromjob         :string(10)      default(""), not null
+#  ffromloc         :string(14)      default(""), not null
+#  ffromlot         :string(20)      default(""), not null
+#  finspect         :string(3)       default(""), not null
+#  flabor           :decimal(17, 5)  default(0.0), not null
+#  fmatl            :decimal(17, 5)  default(0.0), not null
+#  fnumber          :integer(4)      default(0), not null
+#  fovrhd           :decimal(17, 5)  default(0.0), not null
+#  fqty             :decimal(15, 5)  default(0.0), not null
+#  ftobin           :string(14)      default(""), not null
+#  ftoexpdt         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  ftojob           :string(10)      default(""), not null
+#  ftoloc           :string(14)      default(""), not null
+#  ftolot           :string(20)      default(""), not null
+#  ftoso            :string(12)      default(""), not null
+#  fctime_ts        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fnnewonhd        :decimal(17, 5)  default(0.0), not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null, primary key
-#  fcomment         :text            default(" "), not null
-#  fac              :string(20)      not null
-#  ffromfac         :string(20)      not null
-#  ftofac           :string(20)      not null
-#  fcudrev          :string(3)       default(" "), not null
+#  fcomment         :text            default(""), not null
+#  fac              :string(20)      default(""), not null
+#  ffromfac         :string(20)      default(""), not null
+#  ftofac           :string(20)      default(""), not null
+#  fcudrev          :string(3)       default(""), not null
 #  fiorigum         :integer(4)      default(0), not null
 #  fium1            :integer(4)      default(0), not null
 #  fium2            :integer(4)      default(0), not null
@@ -66,5 +67,6 @@ end
 #  fnqty3           :decimal(17, 5)  default(0.0), not null
 #  fnqty4           :decimal(17, 5)  default(0.0), not null
 #  fnqty5           :decimal(17, 5)  default(0.0), not null
+#  fuserinfo        :string(10)      default(""), not null
 #
 

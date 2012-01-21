@@ -32,71 +32,78 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: qtmast
 #
-#  fcompany         :string(35)      default(" "), not null
-#  fquoteno         :string(6)       not null, primary key
-#  fackdate         :datetime        not null
-#  fccurid          :string(3)       not null
-#  fcfactor         :decimal(17, 5)  not null
-#  fcfname          :string(15)      not null
-#  fcfromno         :string(6)       not null
-#  fcfromtype       :string(5)       not null
-#  fcity            :string(20)      not null
-#  fcountry         :string(25)      not null
-#  fdatedue         :datetime        not null
-#  fdaterecvd       :datetime        not null
-#  fdcurdate        :datetime        not null
-#  fdexpired        :datetime        not null
-#  fdistno          :string(6)       not null
-#  fdsalespn        :string(25)      not null
-#  fduplicate       :boolean         not null
-#  festimator       :string(3)       not null
-#  ffax             :string(20)      not null
-#  fjobname         :string(65)      default(" "), not null
-#  fcsoldto         :string(4)       not null
-#  fcustno          :string(6)       not null
-#  fnextenum        :string(3)       not null
-#  fnextinum        :string(3)       not null
-#  fordpotent       :string(1)       not null
-#  fordtime         :string(1)       not null
-#  fphone           :string(20)      not null
-#  fprint_dt        :datetime        not null
-#  fprinted         :boolean         not null
-#  fquotecopy       :string(1)       not null
-#  fquotedate       :datetime        not null
-#  fquoteto         :string(20)      not null
-#  frequestno       :string(15)      not null
-#  frevno           :string(2)       not null
-#  fsalespn         :string(3)       not null
-#  fstate           :string(20)      not null
-#  fstatus          :string(20)      not null
-#  ftype            :string(1)       not null
-#  fzip             :string(10)      not null
-#  fcusrchr1        :string(20)      not null
-#  fcusrchr2        :string(40)      default(" "), not null
-#  fcusrchr3        :string(40)      default(" "), not null
-#  fnusrqty1        :decimal(15, 5)  not null
-#  fnusrcur1        :decimal(17, 5)  not null
-#  fdusrdate1       :datetime        not null
-#  fdisrate         :decimal(15, 5)  not null
-#  fterm            :string(4)       not null
-#  fpaytype         :string(1)       not null
-#  fdeurodate       :datetime        not null
-#  feurofctr        :decimal(17, 5)  not null
-#  fusercode        :string(7)       not null
-#  fcshipto         :string(4)       not null
-#  fltotal          :boolean         not null
+#  fcompany         :string(35)      default(""), not null
+#  fquoteno         :string(6)       default(""), not null, primary key
+#  fackdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fccurid          :string(3)       default(""), not null
+#  fcfactor         :decimal(17, 5)  default(0.0), not null
+#  fcfname          :string(15)      default(""), not null
+#  fcfromno         :string(6)       default(""), not null
+#  fcfromtype       :string(5)       default(""), not null
+#  fcity            :string(20)      default(""), not null
+#  fcountry         :string(25)      default(""), not null
+#  fdatedue         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdaterecvd       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdcurdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdexpired        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdistno          :string(6)       default(""), not null
+#  fdsalespn        :string(25)      default(""), not null
+#  fduplicate       :boolean         default(FALSE), not null
+#  festimator       :string(3)       default(""), not null
+#  ffax             :string(20)      default(""), not null
+#  fjobname         :string(65)      default(""), not null
+#  fcsoldto         :string(4)       default(""), not null
+#  fcustno          :string(6)       default(""), not null
+#  fnextenum        :string(3)       default(""), not null
+#  fnextinum        :string(3)       default(""), not null
+#  fordpotent       :string(1)       default(""), not null
+#  fordtime         :string(1)       default(""), not null
+#  fphone           :string(20)      default(""), not null
+#  fprint_dt        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fprinted         :boolean         default(FALSE), not null
+#  fquotecopy       :string(1)       default(""), not null
+#  fquotedate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fquoteto         :string(20)      default(""), not null
+#  frequestno       :string(15)      default(""), not null
+#  frevno           :string(2)       default(""), not null
+#  fsalespn         :string(3)       default(""), not null
+#  fstate           :string(20)      default(""), not null
+#  fstatus          :string(20)      default(""), not null
+#  ftype            :string(1)       default(""), not null
+#  fzip             :string(10)      default(""), not null
+#  fcusrchr1        :string(20)      default(""), not null
+#  fcusrchr2        :string(40)      default(""), not null
+#  fcusrchr3        :string(40)      default(""), not null
+#  fnusrqty1        :decimal(15, 5)  default(0.0), not null
+#  fnusrcur1        :decimal(17, 5)  default(0.0), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdisrate         :decimal(15, 5)  default(0.0), not null
+#  fterm            :string(4)       default(""), not null
+#  fpaytype         :string(1)       default(""), not null
+#  fdeurodate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  feurofctr        :decimal(17, 5)  default(0.0), not null
+#  fusercode        :string(7)       default(""), not null
+#  fcshipto         :string(4)       default(""), not null
+#  fltotal          :boolean         default(FALSE), not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
-#  fclosmemo        :text            default(" "), not null
-#  fmstreet         :text            default(" "), not null
-#  fmusermemo       :text            default(" "), not null
-#  fsalumemo        :text            default(" "), not null
-#  fndbrmod         :integer(1)      not null
-#  fccontkey        :string(10)      default(" "), not null
+#  fclosmemo        :text            default(""), not null
+#  fmstreet         :text            default(""), not null
+#  fmusermemo       :text            default(""), not null
+#  fsalumemo        :text            default(""), not null
+#  fccontkey        :string(10)      default(""), not null
 #  flcontract       :boolean         default(FALSE), not null
+#  fndbrmod         :integer(4)      default(0), not null
+#  ContractNu       :string(10)      default(""), not null
+#  OpportunNum      :string(6)       default(""), not null
+#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  OppCrType        :string(3)       default(""), not null
+#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fbilladdr        :string(4)       default(""), not null
 #
 
