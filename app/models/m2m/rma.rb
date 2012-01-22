@@ -19,6 +19,12 @@ class M2m::Rma < M2m::Base
       :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
     }
   }
+  
+  named_scope :with_rma_numbers, lambda { |rma_numbers|
+    {
+      :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
+    }
+  }
 
   def rma_number
     self.fcrmano.to_i

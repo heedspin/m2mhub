@@ -1,9 +1,15 @@
 class M2m::RmaItem < M2m::Base
   set_table_name 'syrmaitm'
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]  
+  belongs_to :rma, :class_name => 'M2m::Rma', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
 
   alias_attribute :quantity, :fnqty
   alias_attribute :reason, :freason
+  alias_attribute :item_number, :finumber
+  
+  def rma_number
+    self.fcrmano.to_i
+  end
 
   def part_number
     @part_number ||= self.fcpartno.strip
