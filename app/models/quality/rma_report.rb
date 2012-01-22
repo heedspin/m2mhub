@@ -22,13 +22,17 @@ class Quality::RmaReport
   end
   
   def run
-    rmas = M2m::CustomerServiceLog.between(@start_date, @end_date)
-    items = M2m::Item.with_part_numbers(rmas.map(&:part_number)).all
+    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items)
+    customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
+    items = M2m::Item.with_part_numbers(rmas.map(&:items).flatten.map(&:part_number)).all
     rmas.each do |rma|
       month_for(rma.date).add_rma(rma)
-      if found = items.detect { |c| (c.part_number == rma.part_number) && (c.revision == rma.revision) }
-        rma.item = found
+      rma.items.each do |rma_item|
+        if found = items.detect { |c| (c.part_number == rma_item.part_number) && (c.revision == rma_item.revision) }
+          rma_item.item = found
+        end
       end
+      rma.customer = customers.detect { |c| c.customer_number == rma.customer_number }
     end
     true
   end

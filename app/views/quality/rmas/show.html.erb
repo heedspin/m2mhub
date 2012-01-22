@@ -1,0 +1,24 @@
+<h2>RMA <%= @rma.rma_number %></h2>
+<p>
+M2M ID: <%= @rma.id %><br />
+Company RMA: <%= @rma.company_rma_number %><br />
+Status: <%= @rma.status.name %><br />
+Category: <%= @rma.severity_name %><br />
+Date: <%= @rma.date.to_s(:rma_date) %><br />
+Quantity: <%= cm @rma.quantity, :rma_quantity %><br />
+Customer: <%= link_to @rma.customer_name, customer_url(@rma.customer_number) %><br />
+Part: <%= link_to @rma.part_number, item_url(@rma.item.part_number) if @rma.item.present? %><br />
+<% if @rma.sales_order_number.present? %>
+Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_order_number)  %><br />
+<% end %>
+--------------------------------<br />
+</p>
+<%= h simple_format(@rma.inquiry.strip) %>
+
+<% if CompanyConfig.lighthouse_account %>
+<% if @rma.lighthouse_ticket %>
+<%= render 'quality/customer_service_logs/lighthouse_ticket', :ticket => @rma.lighthouse_ticket %>
+<% else %>
+<h3>No Lighthouse Ticket</h3>
+<% end %>
+<% end %>

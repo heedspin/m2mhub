@@ -1,5 +1,18 @@
 class M2m::RmaItem < M2m::Base
   set_table_name 'syrmaitm'
+  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]  
+
+  alias_attribute :quantity, :fnqty
+  alias_attribute :reason, :freason
+
+  def part_number
+    @part_number ||= self.fcpartno.strip
+  end
+
+  def revision
+    @revision ||= self.fcpartrev.strip
+  end
+  
 end
 
 # == Schema Information

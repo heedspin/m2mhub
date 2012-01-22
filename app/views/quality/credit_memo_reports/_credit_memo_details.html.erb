@@ -14,22 +14,22 @@
 		</tr>
 	</thead>
 	<tbody>
-<% credit_memos.sort_by(&:date).each do |credit_memo| %>
+<% rmas.sort_by(&:date).each do |rma| %>
 		<tr>
-			<td><%= credit_memo.company_rma_number %></td>
-			<td><%= credit_memo.status.name %></td>
-			<td><%= credit_memo.severity_name %></td>
-			<% if credit_memo.credit_memo_reference.present? %>
-			<td class="<%= credit_memo.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= credit_memo.credit_memo_reference.invoice_number %></td>
-			<td><%= credit_memo.invoice_date.to_s(:invoice_date) if credit_memo.invoice_date %></td>
-			<td class="right">$<%= cm credit_memo.invoice_amount, :quality_credit_memo_total, 0 %></td>
+			<td><%= rma.company_rma_number %></td>
+			<td><%= rma.status.name %></td>
+			<td><%= rma.severity_name %></td>
+			<% if rma.credit_memo_reference.present? %>
+			<td class="<%= rma.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= rma.credit_memo_reference.invoice_number %></td>
+			<td><%= rma.invoice_date.to_s(:invoice_date) if rma.invoice_date %></td>
+			<td class="right">$<%= cm rma.invoice_amount, :quality_credit_memo_total, 0 %></td>
 			<% else %>
 			<td></td><td></td><td></td>
 			<% end %>
-			<td><%= link_to credit_memo.part_number, item_url(credit_memo.part_number) %></td>
-			<td><%= link_to credit_memo.customer.company_name, customer_url(credit_memo.customer_number) %></td>
-			<td><%= cm credit_memo.quantity, :rma_quantity %></td>
-			<td><%= simple_format credit_memo.inquiry %></td>
+			<td><%= link_to rma.part_number, item_url(rma.part_number) %></td>
+			<td><%= link_to rma.customer.company_name, customer_url(rma.customer_number) %></td>
+			<td><%= cm rma.quantity, :rma_quantity %></td>
+			<td><%#= simple_format rma.inquiry %></td>
 		</tr>
 <% end %>
 	</tbody>

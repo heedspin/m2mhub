@@ -3,6 +3,7 @@ class M2m::Rma < M2m::Base
   set_primary_key 'fcrmano'
   belongs_to :inquiry, :class_name => 'M2m::Inquiry', :foreign_key => :finqno, :primary_key => :InquiryNo
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
+  has_many :items, :class_name => 'M2m::RmaItem', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
 
   alias_attribute :user_defined1, :fcusrchr1
   alias_attribute :user_defined2, :fcusrchr2
@@ -11,6 +12,13 @@ class M2m::Rma < M2m::Base
   alias_attribute :date, :fdenterdate
   alias_attribute :customer_number, :fccustno
   alias_attribute :severity_code, :fcseverty
+  alias_attribute :sales_order_number, :fcsono
+
+  named_scope :between, lambda { |start_date, end_date|
+    { 
+      :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
+    }
+  }
 
   def rma_number
     self.fcrmano.to_i

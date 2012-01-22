@@ -14,17 +14,19 @@
 	</thead>
 	<tbody>
 <% rmas.sort_by(&:date).each do |rma| %>
+<% rma.items.each do |rma_item| %>
 		<tr>
-			<td><%= link_to rma.company_rma_number, customer_service_log_url(rma) %></td>
+			<td><%= link_to rma.company_rma_number, rma_url(rma.rma_number) %></td>
 			<td><%= rma.status.name %></td>
-			<td><%= rma.category_name %></td>
+			<td><%= rma.severity_name %></td>
 			<td><%= rma.date.to_s(:rma_date) %></td>
-			<td class="right"><%= cm rma.quantity, :rma_quantity %></td>
-			<td><%= link_to rma.customer_name, customer_url(rma.customer_number) %></td>
-			<td><%= link_to rma.part_number, item_url(rma.item.part_number) if rma.item.present? %></td>
-			<td class="fixed_width_text"><%= h simple_format(rma.inquiry.strip) %></td>
+			<td class="right"><%= cm rma_item.quantity, :rma_quantity %></td>
+			<td><%= link_to rma.customer.name, customer_url(rma.customer_number) %></td>
+			<td><%= link_to_if rma_item.item.present?, rma_item.part_number, item_url(rma_item.part_number) %></td>
+			<td class="fixed_width_text"><%= h simple_format(rma_item.reason.strip) %></td>
 			<td><%= link_to rma.sales_order_number, sales_order_url(rma.sales_order_number) if rma.sales_order_number.present? %></td>
 		</tr>
+<% end %>
 <% end %>
 	</tbody>
 </table>
