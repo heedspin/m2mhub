@@ -24,3 +24,4 @@ ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:shipper_date] = 
 ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:backorder_date] = '%m/%d/%Y'
 ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:database] = '%Y-%m-%d'
 ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:month_year] = '%b %Y'
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS[:rma_comment] = '%m-%d-%Y %I:%M %p'

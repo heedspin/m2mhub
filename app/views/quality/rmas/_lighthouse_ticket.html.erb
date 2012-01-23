@@ -1,0 +1,18 @@
+<h2>Lighthouse Ticket: <%= link_to ticket.title, ticket.url %></h2>
+<div class="lighthouse_ticket">
+<p>
+	State: <%= ticket.state %><br />
+	Milestone: <%= ticket.milestone_title %><br />
+	Assigned To: <%= ticket.assigned_user_name %>
+</p>
+<% ticket.versions.each do |comment| %>
+<div class="lighthouse_comment">
+	<p>
+		<strong><%= comment.user_name %> at <%= comment.created_at.to_s(:rma_comment) %>:</strong><br />
+		State: <%= comment.state %><br />
+		Assigned To: <%= comment.assigned_user_name %>
+	</p>
+	<%= comment.body_html %>
+</div>
+<% end %>
+</div>

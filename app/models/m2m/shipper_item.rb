@@ -50,32 +50,34 @@ class M2m::ShipperItem < M2m::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: shitem
 #
-#  fitemno          :string(6)       not null
-#  fitemtype        :string(1)       not null
-#  fpartno          :string(25)      not null
-#  frev             :string(3)       not null
-#  fenumber         :string(6)       not null
-#  finvqty          :decimal(15, 5)  not null
-#  fmeasure         :string(3)       not null
-#  forderqty        :decimal(15, 5)  not null
-#  fcpokey          :string(12)      not null
-#  fshipno          :string(6)       not null
-#  fshipqty         :decimal(15, 5)  not null
-#  fsokey           :string(12)      not null
-#  fcstatus         :string(1)       not null
-#  fcmiscstat       :string(1)       not null
+#  fitemno          :string(6)       default(""), not null
+#  fitemtype        :string(1)       default(""), not null
+#  fpartno          :string(25)      default(""), not null
+#  frev             :string(3)       default(""), not null
+#  fenumber         :string(6)       default(""), not null
+#  finvqty          :decimal(15, 5)  default(0.0), not null
+#  fmeasure         :string(3)       default(""), not null
+#  forderqty        :decimal(15, 5)  default(0.0), not null
+#  fcpokey          :string(12)      default(""), not null
+#  fshipno          :string(6)       default(""), not null
+#  fshipqty         :decimal(15, 5)  default(0.0), not null
+#  fsokey           :string(12)      default(""), not null
+#  fcstatus         :string(1)       default(""), not null
+#  fcmiscstat       :string(1)       default(""), not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null, primary key
-#  fmdescript       :text            default(" "), not null
-#  fac              :string(20)      not null
-#  sfac             :string(20)      not null
-#  fcudrev          :string(3)       default(" "), not null
+#  fmdescript       :text            default(""), not null
+#  fac              :string(20)      default(""), not null
+#  sfac             :string(20)      default(""), not null
+#  fcudrev          :string(3)       default(""), not null
 #  IdoNo            :string(10)      default(""), not null
 #  QtyRecvd         :decimal(15, 5)  default(0.0), not null
-#  fcustpart        :string(25)      not null
+#  fcustpart        :string(25)      default(""), not null
+#  flInvcPoss       :boolean         default(FALSE), not null
 #
 

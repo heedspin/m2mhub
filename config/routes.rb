@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'
   map.resources :receivers, :only => [:index, :show], :controller => 'shipping/receivers'
   
-  map.resources :customer_service_logs, :only => [:show], :controller => 'quality/customer_service_logs'
+  map.resources :rmas, :only => [:show], :controller => 'quality/rmas'
 
   map.production 'production', :controller => 'production/production_dashboard', :action => 'index'
   map.resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'

@@ -1,16 +1,16 @@
 class Quality::CreditMemoReport
   class Month
-    attr_accessor :date, :invoice_total, :credit_memos
+    attr_accessor :date, :invoice_total, :rma_items
     def initialize(date)
       @date = date
       @invoice_total = 0
-      @credit_memos = []
+      @rma_items = []
     end
-    def add_credit_memo(cm)
-      @credit_memos.push cm
+    def add_rma_item(rma_item)
+      @rma_items.push rma_item
     end
     def quality_credit_memo_total
-      @quality_credit_memo_total ||= @credit_memos.sum { |cm| cm.invoice_amount.abs }
+      @quality_credit_memo_total ||= @rma_items.sum { |rma_item| rma_item.invoice_amount.abs }
     end
     def percent_quality_credit_memos
       if self.quality_credit_memo_total == 0
@@ -20,22 +20,22 @@ class Quality::CreditMemoReport
       end
     end
   end
-  
+
   class VendorReport
-    attr_accessor :vendor, :invoice_total, :credit_memos
+    attr_accessor :vendor, :invoice_total, :rma_items
     def initialize(vendor)
       @vendor = vendor
       @invoice_total = 0
-      @credit_memos = []
+      @rma_items = []
+    end
+    def add_rma_item(rma_item)
+      @rma_items.push rma_item
     end
     def name
       self.vendor.name
     end
-    def add_credit_memo(cm)
-      @credit_memos.push cm
-    end
     def quality_credit_memo_total
-      @quality_credit_memo_total ||= @credit_memos.sum { |cm| cm.invoice_amount.abs }
+      @quality_credit_memo_total ||= @rma_items.sum { |rma_item| rma_item.invoice_amount.abs }
     end
     def percent_quality_credit_memos
       if (self.quality_credit_memo_total == 0) or (self.invoice_total == 0)
@@ -45,7 +45,7 @@ class Quality::CreditMemoReport
       end
     end
   end
-  
+
   attr_accessor :vendor_reports
 
   def initialize(args=nil)
@@ -74,67 +74,58 @@ class Quality::CreditMemoReport
 
     results = M2m::Invoice.connection.select_rows <<-SQL
     select invend.fvendno as vendor_number,
-           sum(aritem.ftotprice) as vendor_invoice_total
+      sum(aritem.ftotprice) as vendor_invoice_total
     from aritem
     left join armast on armast.fcinvoice = aritem.fcinvoice
     left join invend on invend.fpartno = aritem.fpartno and invend.fpartrev = aritem.frev
     where armast.finvdate >= '#{@start_date.to_s(:db)}'
-      and armast.finvdate < '#{@end_date.to_s(:db)}'
-      and (armast.finvtype != 'C' and armast.fcsource != 'P')
+    and armast.finvdate < '#{@end_date.to_s(:db)}'
+    and (armast.finvtype != 'C' and armast.fcsource != 'P')
     group by invend.fvendno
     SQL
+    vendor_numbers = results.map(&:first)
+    M2m::Vendor.with_vendor_numbers(vendor_numbers).each do |vendor|
+      @vendor_reports[vendor.vendor_number] ||= VendorReport.new(vendor)
+    end
     results.each do |result_row|
       vendor_number, vendor_invoice_total = result_row
-      if vendor = vendor_for(vendor_number)
-        vendor.invoice_total += vendor_invoice_total
+      if vendor_report = @vendor_reports[vendor_number]
+        vendor_report.invoice_total += vendor_invoice_total
       end
     end
 
-    results = M2m::CustomerServiceLog.find_by_sql <<-SQL
-    select sycslm.*,
-      armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount,
-      invend.fvendno as vendor_number
-    from armast
-    left join aritem on armast.fcinvoice = aritem.fcinvoice
-    left join sycslm on sycslm.fcpartno = aritem.fpartno
-                    and sycslm.fcpartrev = aritem.frev
-                    and sycslm.fdinqdate <= armast.finvdate
-    left join invend on invend.fpartno = sycslm.fcpartno 
-                    and invend.fpartrev = sycslm.fcpartrev    
-    where armast.finvtype = 'C'
-      and (sycslm.fccategory = 'Q' or sycslm.fccategory = '')
-      and sycslm.fdinqdate >= '#{@start_date.to_s(:db)}'
-      and sycslm.fdinqdate < '#{@end_date.to_s(:db)}'
-    order by sycslm.fdinqdate desc, sycslm.fcinqno, armast.finvdate
+    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items).all
+    customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
+    rma_items = rmas.map(&:items).flatten
+    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).all    
+    results = M2m::InventoryVendor.connection.select_rows <<-SQL
+    select syrmaitm.identity_column, invend.fvendno as vendor_number
+    from syrmaitm
+    left join invend on invend.fpartno = syrmaitm.fcpartno and invend.fpartrev = syrmaitm.fcpartrev
+    where syrmaitm.identity_column in (#{rma_items.map(&:identity_column).join(',')})    
     SQL
-    rmas = {}
-    results.each do |rma|
-      rma.invoice_number = 'CM-' + rma.invoice_number[/\d+/].to_i.to_s
-      (rmas[rma.inquiry_number] ||= []).push(rma)
+    @vendor_for_item = {}
+    results.each do |rma_item_identity_column, vendor_number|
+      @vendor_for_item[rma_item_identity_column] = vendor_number
     end
-    rmas.each do |inquiry_number, candidates|
-      winner = find_credit_memo_reference_match(candidates)
-      if winner.nil?
-        winner = candidates.first
-        if winner.open? or winner.credit_memo_reference.present?
-          # leave blank
-          winner.invoice_number = winner.invoice_date = nil
-          winner.invoice_amount = 0
+    rmas.each do |rma|
+      next unless rma.severity.nil? || CompanyConfig.credit_memo_report_severity_names.include?(rma.severity_name)
+      rma.items = rma_items.select { |ri| ri.rma_number == rma.rma_number }
+      rma.items.each do |rma_item|
+        rma_item.rma = rma
+        # Rails.logger.debug "Looking for #{M2m::InvoiceItem.rma_key(rma_item)} in " + invoice_items.map(&:rma_key).sort.join(', ')
+        for_rma_item, remaining = invoice_items.partition { |ii| ii.for_rma_item?(rma_item) }
+        rma_item.invoice_items = for_rma_item
+        # Rails.logger.debug "rma item #{rma_item.rma_number} got invoice_items: #{for_rma_item.map(&:identity_column)} out of #{invoice_items.size}"
+        invoice_items = remaining
+        month_for(rma.date).add_rma_item(rma_item)
+        if vendor_number = @vendor_for_item[rma_item.identity_column]
+          @vendor_reports[vendor_number].try(:add_rma_item, rma_item)
         end
       end
-      month_for(winner.date).add_credit_memo(winner)
-      vendor_for(winner.vendor_number).try(:add_credit_memo, winner)
-    end
+      rma.customer = customers.detect { |c| c.customer_number == rma.customer_number }
+    end    
     true
-  end
-  
-  def find_credit_memo_reference_match(candidates)
-    candidates.each do |rma|
-      if rma.credit_memo_reference.present? and (rma.credit_memo_reference[/\d+/].to_i == rma.invoice_number[/\d+/].to_i)
-        return rma
-      end
-    end
-    nil
   end
 
   def ordered_months
@@ -145,12 +136,7 @@ class Quality::CreditMemoReport
     month_date = Date.new(date.year, date.month, 1)
     @months[month_date] ||= Month.new(month_date)
   end
-  
-  def vendor_for(vendor_number)
-    return nil unless vendor_number.present?
-    @vendor_reports[vendor_number] ||= VendorReport.new(M2m::Vendor.find(vendor_number))
-  end
-  
+
   def ordered_vendor_reports
     @vendor_reports.values.select { |vr| vr.quality_credit_memo_total > 0 }.sort_by(&:percent_quality_credit_memos).reverse
   end
@@ -170,9 +156,9 @@ class Quality::CreditMemoReport
       (self.quality_credit_memo_total.to_f / self.invoice_total) * 100
     end
   end
-  
+
   def all_credit_memos
     @months.values.map(&:credit_memos).flatten
   end
-  
+
 end

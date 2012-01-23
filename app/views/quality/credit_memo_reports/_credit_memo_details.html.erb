@@ -14,22 +14,18 @@
 		</tr>
 	</thead>
 	<tbody>
-<% credit_memos.sort_by(&:date).each do |credit_memo| %>
+<% rma_items.sort_by { |ri| [ri.rma.date, ri.item_number ] }.each do |rma_item| %>
 		<tr>
-			<td><%= credit_memo.company_rma_number %></td>
-			<td><%= credit_memo.status.name %></td>
-			<td><%= credit_memo.category_name %></td>
-			<% if credit_memo.invoice_number.present? %>
-			<td class="<%= credit_memo.credit_memo_reference.present? ? '' : 'guessed_credit_memo' %>"><%= credit_memo.invoice_number %></td>
-			<td><%= credit_memo.invoice_date.to_s(:invoice_date) %></td>
-			<td class="right">$<%= cm credit_memo.invoice_amount, :quality_credit_memo_total, 0 %></td>
-			<% else %>
-			<td></td><td></td><td></td>
-			<% end %>
-			<td><%= link_to credit_memo.part_number, item_url(credit_memo.part_number) %></td>
-			<td><%= link_to credit_memo.customer_name, customer_url(credit_memo.customer_number) %></td>
-			<td><%= cm credit_memo.quantity, :rma_quantity %></td>
-			<td><%= simple_format credit_memo.inquiry %></td>
+			<td><%= rma_item.rma.company_rma_number %><%= rma_item.rma.items.size > 1 ? "-#{rma_item.item_number}" : '' %></td>
+			<td><%= rma_item.rma.status.name %></td>
+			<td><%= rma_item.rma.severity_name %></td>
+			<td><%= rma_item.invoice_items.map { |ii| ii.clean_invoice_number + '.' + ii.clean_item_number }.join(', ') %></td>
+			<td><%= rma_item.invoice_items.map { |ii| ii.invoice.date.to_s(:invoice_date) }.join(', ') %></td>
+			<td class="right">$<%= cm rma_item.invoice_amount, :quality_credit_memo_total, 0 %></td>
+			<td><%= link_to rma_item.part_number, item_url(rma_item.part_number) %></td>
+			<td><%= link_to rma_item.rma.customer.company_name, customer_url(rma_item.rma.customer_number) %></td>
+			<td><%= cm rma_item.quantity, :rma_quantity %></td>
+			<td><%= simple_format rma_item.reason %></td>
 		</tr>
 <% end %>
 	</tbody>

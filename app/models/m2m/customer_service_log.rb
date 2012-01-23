@@ -37,14 +37,6 @@ class M2m::CustomerServiceLog < M2m::Base
     self.fcrmano.strip
   end
   
-  def company_rma_number
-    self.send(CompanyConfig.customer_service_log_field_rma_number)
-  end
-  
-  def credit_memo_reference
-    self.send(CompanyConfig.customer_service_log_field_credit_memo_reference)
-  end
-
   def other2
     self.fcother2.strip
   end
@@ -85,65 +77,66 @@ class M2m::CustomerServiceLog < M2m::Base
   end
   
 end
+
 # == Schema Information
 #
 # Table name: sycslm
 #
-#  fcinqno          :string(6)       not null, primary key
-#  fcsono           :string(6)       not null
-#  fcpartno         :string(25)      not null
-#  fcpartrev        :string(3)       not null
-#  fdinqdate        :datetime        not null
-#  fctype           :string(1)       not null
-#  fcstatus         :string(20)      not null
-#  fcenterby        :string(3)       not null
-#  fcauthby         :string(3)       not null
-#  fccustomer       :string(35)      default(" "), not null
-#  fcvendor         :string(35)      default(" "), not null
-#  fcphone          :string(20)      not null
-#  fcrmano          :string(25)      not null
-#  fcassignto       :string(3)       not null
-#  fdestdate        :datetime        not null
-#  fcreslvby        :string(3)       not null
-#  fdreslvdat       :datetime        not null
-#  fcrevwby         :string(3)       not null
-#  fdrevwdate       :datetime        not null
-#  fcusrchr1        :string(40)      default(" "), not null
-#  fcusrchr2        :string(40)      default(" "), not null
-#  fcusrchr3        :string(40)      default(" "), not null
-#  fcusrchr4        :string(40)      default(" "), not null
-#  fnusrqty1        :decimal(17, 5)  not null
-#  fnusrcur1        :decimal(, )     not null
-#  fdusrdate1       :datetime        not null
-#  fccustno         :string(6)       not null
-#  fcvendno         :string(6)       not null
-#  fcseverity       :string(1)       not null
-#  fccategory       :string(1)       not null
-#  fcclass          :string(1)       not null
-#  fcrinscode       :string(4)       not null
-#  fcpono           :string(6)       not null
-#  fcfax            :string(20)      not null
-#  fcemail          :string(60)      default(" "), not null
-#  fnqty            :decimal(17, 5)  not null
-#  fcfname          :string(15)      not null
-#  fclname          :string(20)      not null
-#  fccustpo         :string(20)      not null
-#  fcsalecode       :string(7)       not null
-#  fccuststat       :string(1)       not null
-#  fcnextact        :string(1)       not null
-#  fcother          :string(1)       not null
-#  fcmeasure        :string(3)       not null
-#  fcother2         :string(20)      not null
-#  fclot            :string(20)      not null
-#  fdincidate       :datetime        not null
-#  fcwlitem         :string(6)       not null
-#  finumber         :string(3)       not null
-#  frelsno          :string(3)       not null
+#  fcinqno          :string(6)       default(""), not null, primary key
+#  fcsono           :string(6)       default(""), not null
+#  fcpartno         :string(25)      default(""), not null
+#  fcpartrev        :string(3)       default(""), not null
+#  fdinqdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fctype           :string(1)       default(""), not null
+#  fcstatus         :string(20)      default(""), not null
+#  fcenterby        :string(3)       default(""), not null
+#  fcauthby         :string(3)       default(""), not null
+#  fccustomer       :string(35)      default(""), not null
+#  fcvendor         :string(35)      default(""), not null
+#  fcphone          :string(20)      default(""), not null
+#  fcrmano          :string(25)      default(""), not null
+#  fcassignto       :string(3)       default(""), not null
+#  fdestdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcreslvby        :string(3)       default(""), not null
+#  fdreslvdat       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcrevwby         :string(3)       default(""), not null
+#  fdrevwdate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcusrchr1        :string(40)      default(""), not null
+#  fcusrchr2        :string(40)      default(""), not null
+#  fcusrchr3        :string(40)      default(""), not null
+#  fcusrchr4        :string(40)      default(""), not null
+#  fnusrqty1        :decimal(17, 5)  default(0.0), not null
+#  fnusrcur1        :decimal(17, 5)  default(0.0), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fccustno         :string(6)       default(""), not null
+#  fcvendno         :string(6)       default(""), not null
+#  fcseverity       :string(1)       default(""), not null
+#  fccategory       :string(1)       default(""), not null
+#  fcclass          :string(1)       default(""), not null
+#  fcrinscode       :string(4)       default(""), not null
+#  fcpono           :string(6)       default(""), not null
+#  fcfax            :string(20)      default(""), not null
+#  fcemail          :string(60)      default(""), not null
+#  fnqty            :decimal(17, 5)  default(0.0), not null
+#  fcfname          :string(15)      default(""), not null
+#  fclname          :string(20)      default(""), not null
+#  fccustpo         :string(20)      default(""), not null
+#  fcsalecode       :string(7)       default(""), not null
+#  fccuststat       :string(1)       default(""), not null
+#  fcnextact        :string(1)       default(""), not null
+#  fcother          :string(1)       default(""), not null
+#  fcmeasure        :string(3)       default(""), not null
+#  fcother2         :string(20)      default(""), not null
+#  fclot            :string(20)      default(""), not null
+#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcwlitem         :string(6)       default(""), not null
+#  finumber         :string(3)       default(""), not null
+#  frelsno          :string(3)       default(""), not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
-#  fminquiry        :text            default(" "), not null
-#  fmusrmemo1       :text            default(" "), not null
-#  fac              :string(20)      not null
-#  fcudrev          :string(3)       default(" "), not null
+#  fminquiry        :text            default(""), not null
+#  fmusrmemo1       :text            default(""), not null
+#  fac              :string(20)      default(""), not null
+#  fcudrev          :string(3)       default(""), not null
 #
 
