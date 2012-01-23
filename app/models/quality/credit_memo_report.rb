@@ -94,61 +94,38 @@ class Quality::CreditMemoReport
       end
     end
 
-    rma_items = M2m::RmaItem.find_by_sql <<-SQL
-    select syrmaitm.*,
-      armast.fcinvoice as invoice_number, armast.finvdate as invoice_date, armast.fnamount as invoice_amount,
-      invend.fvendno as vendor_number
-    from armast
-    left join aritem on armast.fcinvoice = aritem.fcinvoice
-    left join syrmaitm on syrmaitm.fcpartno = aritem.fpartno
-    and syrmaitm.fcpartrev = aritem.frev
-    and syrmaitm.fcrmano = SUBSTRING(aritem.fcrmakey, 1, 15)
-    and syrmaitm.finumber = SUBSTRING(aritem.fcrmakey, 16, 13)
-    left join syrmama on syrmama.fcrmano = syrmaitm.fcrmano
-    left join invend on invend.fpartno = syrmaitm.fcpartno
-    and invend.fpartrev = syrmaitm.fcpartrev
-    where armast.finvtype = 'C'
-    and syrmama.fdenterdate >= '#{@start_date.to_s(:db)}'
-    and syrmama.fdenterdate < '#{@end_date.to_s(:db)}'
-    and aritem.fcrmakey != '' and aritem.fcrmakey is not NULL
+    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items).all
+    customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
+    rma_items = rmas.map(&:items).flatten
+    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).all    
+    results = M2m::InventoryVendor.connection.select_rows <<-SQL
+    select syrmaitm.identity_column, invend.fvendno as vendor_number
+    from syrmaitm
+    left join invend on invend.fpartno = syrmaitm.fcpartno and invend.fpartrev = syrmaitm.fcpartrev
+    where syrmaitm.identity_column in (#{rma_items.map(&:identity_column).join(',')})    
     SQL
-    rmas = M2m::Rma.with_rma_numbers(rma_items.map(&:rma_number))
-    rma_items.each do |rma_item|
-      rma_item.rma = rmas.detect { |r| r.rma_number == rma_item.rma_number }
-      rma_item.invoice_number = rma_item.invoice_number[/\d+/].to_i.to_s
-      rma_item.invoice_date = rma_item.invoice_date
+    @vendor_for_item = {}
+    results.each do |rma_item_identity_column, vendor_number|
+      @vendor_for_item[rma_item_identity_column] = vendor_number
     end
-    customers = M2m::Customer.with_customer_numbers(rma_items.map(&:rma).map(&:customer_number)).all
-    rma_items.each do |rma_item|
-      rma = rma_item.rma
+    rmas.each do |rma|
       next unless rma.severity.nil? || CompanyConfig.credit_memo_report_severity_names.include?(rma.severity_name)
+      rma.items = rma_items.select { |ri| ri.rma_number == rma.rma_number }
+      rma.items.each do |rma_item|
+        rma_item.rma = rma
+        # Rails.logger.debug "Looking for #{M2m::InvoiceItem.rma_key(rma_item)} in " + invoice_items.map(&:rma_key).sort.join(', ')
+        for_rma_item, remaining = invoice_items.partition { |ii| ii.for_rma_item?(rma_item) }
+        rma_item.invoice_items = for_rma_item
+        # Rails.logger.debug "rma item #{rma_item.rma_number} got invoice_items: #{for_rma_item.map(&:identity_column)} out of #{invoice_items.size}"
+        invoice_items = remaining
+        month_for(rma.date).add_rma_item(rma_item)
+        if vendor_number = @vendor_for_item[rma_item.identity_column]
+          @vendor_reports[vendor_number].try(:add_rma_item, rma_item)
+        end
+      end
       rma.customer = customers.detect { |c| c.customer_number == rma.customer_number }
-      month_for(rma.date).add_rma_item(rma_item)
-      @vendor_reports[rma_item.vendor_number].try(:add_rma_item, rma_item)
-    end
+    end    
     true
-  end
-
-  def find_credit_memo_reference_match(candidates)
-    candidates.each do |rma|
-      # First check for a CM-XYZ in the user defined fields.
-      if rma.credit_memo_reference.present?
-        if rma.credit_memo_reference.no_credit_memo?
-          return nil
-        elsif rma.credit_memo_reference.invoice_number.to_s == rma.invoice_number.to_s
-          return rma
-        end
-      end
-      # Second check if there's an RMA Number in the invoice item.
-      if rma.invoice_item_rma_key.present?
-        invoice_rma_number = M2m::InvoiceItem.rma_number(rma.invoice_item_rma_key)
-        # rma_item_no = M2m::InvoiceItem.rma_item_number(rma.invoice_item_rma_key)
-        if rma.rma_number == invoice_rma_number
-          return rma
-        end
-      end
-    end
-    nil
   end
 
   def ordered_months

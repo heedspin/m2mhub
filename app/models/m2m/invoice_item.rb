@@ -1,8 +1,43 @@
 class M2m::InvoiceItem < M2m::Base
   set_table_name 'aritem'
   
+  belongs_to :invoice, :class_name => 'M2m::Invoice', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
+  
   alias_attribute :rma_key, :fcrmakey
-
+  alias_attribute :amount, :ftotprice
+  
+  named_scope :for_rma_item, lambda { |rma_item|
+    {
+      :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
+    }
+  }
+  
+  named_scope :for_rma_items, lambda { |rma_items|
+    {
+      :conditions => [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
+    }
+  }
+  
+  def invoice_number
+    self.fcinvoice.strip
+  end
+  
+  def clean_invoice_number
+    if self.fcinvoice =~ /^\W*(\w\w)-(\d+)\W*$/
+      $1 + '-' + $2.to_i.to_s
+    else
+      self.fcinvoice.strip
+    end
+  end
+  
+  def item_number
+    self.fitem.strip
+  end
+  
+  def clean_item_number
+    self.item_number.to_i.to_s
+  end
+  
   def part_number
     @part_number ||= self.fpartno.strip
   end
@@ -24,6 +59,15 @@ class M2m::InvoiceItem < M2m::Base
   def self.rma_item_number(rma_key)
     return nil unless rma_key.present?
     rma_key[15..-1].to_i
+  end
+  def self.rma_key(rma_item)
+    ("%015d" % rma_item.rma_number) + ("% 3d" % rma_item.item_number.to_i)
+  end
+  def rma_item=(rma_item)
+    self.rma_key = M2m::InvoiceItem.rma_key(rma_item)
+  end
+  def for_rma_item?(rma_item)
+    self.rma_key.strip == M2m::InvoiceItem.rma_key(rma_item)
   end
 end
 

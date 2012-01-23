@@ -2,13 +2,17 @@ class M2m::RmaItem < M2m::Base
   set_table_name 'syrmaitm'
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]  
   belongs_to :rma, :class_name => 'M2m::Rma', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
+  has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
 
   alias_attribute :quantity, :fnqty
   alias_attribute :reason, :freason
-  alias_attribute :item_number, :finumber
   
   def rma_number
     self.fcrmano.to_i
+  end
+  
+  def item_number
+    self.finumber.strip
   end
 
   def part_number
@@ -17,6 +21,17 @@ class M2m::RmaItem < M2m::Base
 
   def revision
     @revision ||= self.fcpartrev.strip
+  end
+  
+  def invoice_items
+    @invoice_items ||= M2m::InvoiceItem.for_rma_item(self).all
+  end
+  def invoice_items=(invoice_items)
+    @invoice_items = invoice_items
+  end
+  
+  def invoice_amount
+    self.invoice_items.sum(&:amount)
   end
   
 end

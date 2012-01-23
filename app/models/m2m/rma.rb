@@ -84,6 +84,40 @@ class M2m::Rma < M2m::Base
   #   puts "Done"
   # end
   
+  def self.import_credit_memo_references
+    self.all.each do |rma|
+      if rma.credit_memo_reference.present?
+        if rma.credit_memo_reference.no_credit_memo?
+          puts "Rma #{rma.rma_number} has disabled credit memo reference"
+        else
+          if rma.items.all.size != 1
+            puts "**** Too many rma items #{rma.items.all.size}"
+          else
+            rma_item = rma.items.first
+            puts "Updating rma #{rma.rma_number} for #{rma_item.part_number} with credit memo reference: #{rma.credit_memo_reference}"
+            invoice = M2m::Invoice.find(rma.credit_memo_reference.db_invoice_number)
+            invoice_items = invoice.items.all.select { |ii| ii.part_number == rma_item.part_number }
+            invoice_items.each do |invoice_item|
+              if invoice_item.rma_key.present?
+                puts "**** Invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} has an existing rma_key #{invoice_item.rma_key}"
+              else
+                invoice_item.rma_item = rma_item
+                if invoice_item.changes.size != 1
+                  puts "**** Too many changes.  Not setting invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} rma_key to #{invoice_item.rma_key}"              
+                  puts "**** Too many changes.  Not saving."
+                else
+                  puts "     Setting invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} rma_key to #{invoice_item.rma_key}"              
+                  # invoice_item.save
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    puts "Done"
+  end
+  
   # **********************************************************************
 
   class CreditMemoReference
@@ -107,6 +141,12 @@ class M2m::Rma < M2m::Base
     end
     def no_credit_memo?
       self.invoice_number == 'None'
+    end
+    def to_s
+      self.encode
+    end
+    def db_invoice_number
+      M2m::Invoice.invoice_number(M2m::InvoiceType.credit_memo, self.invoice_number[/\d+/])
     end
   end
   

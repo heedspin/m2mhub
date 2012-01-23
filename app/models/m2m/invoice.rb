@@ -2,29 +2,35 @@ class M2m::Invoice < M2m::Base
   set_table_name 'armast'
   set_primary_key 'fcinvoice'
   
+  alias_attribute :invoice_source_code, :fcsource
+  alias_attribute :invoice_type_code, :finvtype
+  alias_attribute :amount, :fnamount
+  alias_attribute :date, :finvdate
+  alias_attribute :invoice_number, :fcinvoice
+  
   has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
 
-  # C - Credit Memo            
-  # M - Miscellaneous Invoice  
-  # N - Normal Invoice         
-  # P - Pre-Payment Memo       
-  # T - Time & Material Billing
-  # V - Vendor Invoice         
-  def invoice_type             
-    M2m::CsPopup.for_key('ARMAST.FINVTYPE').with_code(self.invoice_type_code).first
+  def invoice_type
+    M2m::InvoiceType.find_by_key(self.invoice_type_code)
   end
   def invoice_type_name
-    self.invoice_type.try(:text)
+    self.invoice_type.try(:name)
   end
   
   def invoice_source
     M2m::InvoiceSource.find_by_key(self.invoice_source_code)
   end
+
+  def self.invoice_number(invoice_type, invoice_number)
+    if invoice_type.credit_memo?
+      'CM-' + "%07d" % invoice_number
+    elsif invoice_type.pre_payment_memo?
+      'PM-' + "%07d" % invoice_number
+    else
+      "%010d" % invoice_number
+    end
+  end
   
-  alias_attribute :invoice_source_code, :fcsource
-  alias_attribute :invoice_type_code, :finvtype
-  alias_attribute :amount, :fnamount
-  alias_attribute :date, :finvdate
 end
 
 

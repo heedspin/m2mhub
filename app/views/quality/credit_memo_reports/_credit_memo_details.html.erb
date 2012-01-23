@@ -16,11 +16,11 @@
 	<tbody>
 <% rma_items.sort_by { |ri| [ri.rma.date, ri.item_number ] }.each do |rma_item| %>
 		<tr>
-			<td><%= rma_item.rma.company_rma_number %></td>
+			<td><%= rma_item.rma.company_rma_number %><%= rma_item.rma.items.size > 1 ? "-#{rma_item.item_number}" : '' %></td>
 			<td><%= rma_item.rma.status.name %></td>
 			<td><%= rma_item.rma.severity_name %></td>
-			<td><%= rma_item.invoice_number %></td>
-			<td><%= rma_item.invoice_date.to_s(:invoice_date) if rma_item.invoice_date %></td>
+			<td><%= rma_item.invoice_items.map { |ii| ii.clean_invoice_number + '.' + ii.clean_item_number }.join(', ') %></td>
+			<td><%= rma_item.invoice_items.map { |ii| ii.invoice.date.to_s(:invoice_date) }.join(', ') %></td>
 			<td class="right">$<%= cm rma_item.invoice_amount, :quality_credit_memo_total, 0 %></td>
 			<td><%= link_to rma_item.part_number, item_url(rma_item.part_number) %></td>
 			<td><%= link_to rma_item.rma.customer.company_name, customer_url(rma_item.rma.customer_number) %></td>
