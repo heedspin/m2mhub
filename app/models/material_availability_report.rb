@@ -24,7 +24,7 @@ class MaterialAvailabilityReport
       self.actual_date || self.target_date
     end
     def <=>(rhs)
-      [self.date.to_s, self.type_weighting, (self.number || 0).to_s] <=> [rhs.date.to_s, rhs.type_weighting, (rhs.number || 0).to_s]
+      [self.date.to_s(:db), self.type_weighting, (self.number || 0).to_s] <=> [rhs.date.to_s(:db), rhs.type_weighting, (rhs.number || 0).to_s]
     end
     def count_supply_and_demand?
       @count_supply_and_demand
