@@ -3,7 +3,6 @@ class Items::QuoteItemsController < ApplicationController
 
   def index
     @item = parent_object
-    @current_item = M2m::CurrentItem.for_part_number(@item.fpartno).first
     @quote_items = @item.quote_items.reverse_order.paginate(:all, :page => params[:page], :per_page => 10)
   end
 

@@ -9,14 +9,11 @@ class ItemsController < ApplicationController
       @items = M2m::Item.part_number_like(@search_item.fpartno).paginate(:all, :page => params[:page],
                                                                          :per_page => 20,
                                                                          :order => 'inmast.fpartno, inmast.frev desc')
-      @current_item = M2m::CurrentItem.for_part_number(@search_item.fpartno).first
     end
   end
 
   def show
     @item = current_object
-    @current_item = M2m::CurrentItem.for_part_number(@item.fpartno).first
-
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).open.by_due_date_desc.all#(:include => [:sales_order, :item])
     M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count

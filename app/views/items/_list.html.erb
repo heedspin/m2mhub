@@ -18,7 +18,7 @@
 		<tr>
 			<td><%= link_to_unless @search_item.nil?, search_excerpt(i.part_number, @search_item.try(:fpartno)), item_url(i.part_number) %></td>
 			<td><%= i.revision %></td>
-			<td><%= @current_item.try(:is_item?, i) ? 'X' : '' %></td>
+			<td><%= i.is_current? ? 'X' : '' %></td>
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search_item.try(:fpartno)) }.join(', ') %></td>
 			<td><%= h i.fdescript %></td>
 			<td><%= render 'items/locations', :item => i %></td>

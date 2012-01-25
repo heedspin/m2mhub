@@ -4,7 +4,6 @@ class Items::JobsController < ApplicationController
   def index
     @popup_layout = params[:layout] == 'popup'
     @item = parent_object
-    @current_item = M2m::CurrentItem.for_part_number(@item.fpartno).first
     @jobs = M2m::Job.for_item(@item).by_date_desc
     @jobs = @jobs.paginate(:all, :page => params[:page], :per_page => 5)
     if @popup_layout
