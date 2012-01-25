@@ -3,6 +3,7 @@ class Items::HistoryController < ApplicationController
 
   def show
     @item = parent_object
+    @current_item = M2m::CurrentItem.for_part_number(@item.fpartno).first
     @sales_order_items = @item.sales_order_items.all(:include => :sales_order)
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.all#(:include => [:sales_order, :item])
     @sales_order_releases.each do |r|

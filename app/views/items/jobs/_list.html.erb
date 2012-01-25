@@ -4,7 +4,8 @@
 			<thead>
 				<tr>
 					<th colspan="4">
-						<%= j.job_number %>
+						Rev: <%= j.revision %>&nbsp;
+						Job: <%= j.job_number %>
 						<span class="jobstatus"><%= j.status %>: <%= j.status_date.try(:to_s, :job_date) %></span>
 					</th>
 			</thead>

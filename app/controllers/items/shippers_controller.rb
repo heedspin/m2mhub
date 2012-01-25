@@ -3,6 +3,7 @@ class Items::ShippersController < ApplicationController
 
   def index
     @item = parent_object
+    @current_item = M2m::CurrentItem.for_part_number(@item.fpartno).first
     @shippers = M2m::Shipper.for_item(@item.part_number).by_shipper_number_desc
     @total_shippers = @shippers.count
     if limit = params[:limit]

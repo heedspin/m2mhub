@@ -11,6 +11,7 @@ class M2m::Item < M2m::Base
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
   has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
+  has_one :current_flag, :class_name => 'M2m::InventoryCurrentFlag', :foreign_key => [:fcpartno, :fcpartrev]
   
   def locations
     @locations ||= M2m::InventoryLocation.for_item(self)
@@ -75,7 +76,12 @@ class M2m::Item < M2m::Base
     self.with_part_number(part_number).by_rev_desc.first
   end
   
+  def is_current?
+    M2m::CurrentItem.for_part_number(self.part_number).first.is_item?(self)
+  end
+  
 end
+
 
 
 
@@ -183,7 +189,6 @@ end
 #  fnfanaglvl       :integer(4)      not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
-#  fidims           :integer(4)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
 #  fcomment         :text            not null
@@ -195,10 +200,11 @@ end
 #  itcunit          :decimal(17, 5)
 #  fnPOnHand        :decimal(16, 5)  not null
 #  fnLndToMfg       :decimal(16, 5)  not null
+#  fiPcsOnHd        :integer(4)      not null
 #  fcudrev          :string(3)       not null
+#  fidims           :integer(4)      not null
 #  fluseudrev       :boolean         not null
 #  fndbrmod         :integer(4)      not null
-#  fiPcsOnHd        :integer(4)      not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null
