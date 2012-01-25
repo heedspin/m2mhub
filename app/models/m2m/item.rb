@@ -77,7 +77,11 @@ class M2m::Item < M2m::Base
   end
   
   def is_current?
-    M2m::CurrentItem.for_part_number(self.part_number).first.is_item?(self)
+    if ci = M2m::CurrentItem.for_part_number(self.part_number).first
+      ci.is_item?(self)
+    else
+      false
+    end
   end
   
 end
