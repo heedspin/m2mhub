@@ -16,7 +16,7 @@
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
 		<tr class="<%= !line_item.count_supply_and_demand? ? 'not_counted' : '' %>">
-			<% if line_item.today? %>
+			<% if line_item.today? %>		
 			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
 			<td class="current_on_hand<%= descrepency ? '_error' : '' %>" colspan="7">
 				Today's On Hand:
@@ -36,9 +36,12 @@
 				<% elsif line_item.purchase_order? %>
 				PO <%= line_item.purchase_order_item.purchase_order_number.to_i %>
 				<% elsif line_item.receiver? %>
-				PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>, 
-				Recv <%= line_item.receiver_item.receiver_number.to_i %>
+				Receiver <%= line_item.receiver_item.receiver_number.to_i %>
+				on PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>
+				<% elsif line_item.shipper? %>
+				Shipper <%= line_item.shipper_item.shipper_number %> for SO <%= line_item.shipper_item.sales_order_number.to_i %>
 				<% else %>
+				<%= line_item.inventory_transaction.transaction_type.key %>
 				<%= line_item.inventory_transaction.transaction_type.name %>
 				<% if line_item.inventory_transaction.comment.present? %>
 				<br /><%= h line_item.inventory_transaction.comment %>
