@@ -17,14 +17,18 @@ class MaterialAvailabilityReport
     def receiver?
       self.is_a?(ReceiverLineItem)
     end
+    def shipper?
+      self.is_a?(ShipperLineItem)
+    end
     def closed?
       true
     end
     def date
-      self.actual_date || self.target_date
+      d = (self.actual_date || self.target_date)
+      Date.new(d.year, d.month, d.day)
     end
     def <=>(rhs)
-      [self.date.to_s(:db), self.type_weighting, (self.number || 0).to_s] <=> [rhs.date.to_s(:db), rhs.type_weighting, (rhs.number || 0).to_s]
+      [self.date, self.type_weighting, (self.number || 0).to_s] <=> [rhs.date, rhs.type_weighting, (rhs.number || 0).to_s]
     end
     def count_supply_and_demand?
       @count_supply_and_demand
@@ -34,7 +38,7 @@ class MaterialAvailabilityReport
   class TodayLineItem < LineItem
     def initialize
       self.actual_date = Date.current
-      self.type_weighting = 4
+      self.type_weighting = 5
     end
   end
 
@@ -106,7 +110,7 @@ class MaterialAvailabilityReport
       self.type_weighting = 1
       self.supply = @inventory_transaction.quantity
       self.actual_date = @inventory_transaction.date
-      self.count_supply_and_demand = !(@inventory_transaction.transaction_type.receipts? or @inventory_transaction.transaction_type.issues? or @inventory_transaction.transaction_type.transfers?)
+      self.count_supply_and_demand = !(@inventory_transaction.transaction_type.receipts? or  @inventory_transaction.transaction_type.issues? or @inventory_transaction.transaction_type.transfers?)
     end
   end
 
@@ -119,6 +123,18 @@ class MaterialAvailabilityReport
       self.actual_date = @receiver_item.receiver.date_received
       self.count_supply_and_demand = true
       self.number = "#{@receiver_item.purchase_order_item_number}-#{@receiver_item.release_number}"
+    end
+  end
+
+  class ShipperLineItem < LineItem
+    attr :shipper_item
+    def initialize(shipper_item)
+      @shipper_item = shipper_item
+      self.type_weighting = 0
+      self.demand = @shipper_item.quantity
+      self.actual_date = @shipper_item.shipper.ship_date
+      self.count_supply_and_demand = true
+      # self.number = "#{@shipper_item.purchase_order_item_number}-#{@receiver_item.release_number}"
     end
   end
 
@@ -136,8 +152,9 @@ class MaterialAvailabilityReport
 
   def run
     @sales_order_releases.each do |r|
-      i = SalesLineItem.new(r)
-      @line_items.push i unless i.closed?
+      unless r.master? || r.closed? || (r.backorder_quantity <= 0)
+        @line_items.push SalesLineItem.new(r)
+      end
     end
     @purchase_order_items.each do |p|
       i = PurchaseLineItem.new(p)
@@ -147,11 +164,14 @@ class MaterialAvailabilityReport
       @item.inventory_transactions.each do |t|
         next if t.ftype.blank?
         raise "Unhandled transaction type: #{t.ftype}" if t.transaction_type.nil?
-        next if t.transaction_type.receipts?
+        next if (t.transaction_type.receipts? or t.transaction_type.issues?)
         @line_items.push i = InventoryLineItem.new(t)
       end
       @item.receiver_items.all(:include => :receiver).each do |r|
         @line_items.push ReceiverLineItem.new(r)
+      end
+      @item.shipper_items.all(:include => :shipper).each do |s|
+        @line_items.push ShipperLineItem.new(s)
       end
       @line_items.push TodayLineItem.new
     end
