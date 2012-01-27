@@ -22,10 +22,20 @@
 			<td><%= search_excerpt(i.sales_order.customer_po, @search_item.try(:order_number)) %></td>
 			<td><%= i.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to i.sales_order.customer_name, customer_url(i.sales_order.fcustno) %></td>
-			<td><%= link_to search_excerpt(i.item.part_number, @search_item.try(:part_number)), item_url(i.item.part_number) %></td>
+			<td>
+				<% if i.item %>
+				<%= link_to search_excerpt(i.item.part_number, @search_item.try(:part_number)), item_url(i.item.part_number) %>
+				<% else %>
+				<%= i.part_number %>
+				<% end %>
+			</td>
 			<td><%= search_excerpt(i.customer_part_number, @search_item.try(:part_number)) %></td>
-			<td><%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
-			<td><%= h i.item.fdescript %></td>
+			<td>
+				<% if i.item %>
+					<%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %>
+				<% end %>
+			</td>
+			<td><%= h i.item.try(:fdescript) %></td>
 		</tr>
 	<% end %>
 	</tbody>
