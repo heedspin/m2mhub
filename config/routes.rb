@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_orders, :only => [:index, :show]
   map.resources :sales_order_items, :only => [:index, :show]
   map.resources :sales_order_releases, :only => [:index]
-  map.resources :quote_items, :only => [:index]
+  map.resources :quotes
   map.resources :user_activities, :as => 'history', :only => [:index]
   map.resources :items, :only => [:index] do |item|
     item.resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
@@ -22,7 +22,6 @@ ActionController::Routing::Routes.draw do |map|
     item.resources :jobs, :only => [:index], :controller => 'items/jobs'
   end
   map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/
-  map.resources :quotes, :only => [:index, :show]
   map.resources :customers, :only => [:index, :show] do |customer|
     customer.resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
     customer.resources :quotes, :only => [:index], :controller => 'customers/quotes'
@@ -37,7 +36,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'
   map.resources :receivers, :only => [:index, :show], :controller => 'shipping/receivers'
   
-  map.resources :rmas, :only => [:show], :controller => 'quality/rmas'
+  map.resources :rmas, :only => [:show], :controller => 'quality/rmas' do |rma|
+    rma.resource :lighthouse_ticket, :only => :create, :controller => 'quality/lighthouse_tickets'
+  end
 
   map.production 'production', :controller => 'production/production_dashboard', :action => 'index'
   map.resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'

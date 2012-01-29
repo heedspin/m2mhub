@@ -26,7 +26,7 @@ authorization do
 
   role :sales do
     includes :shipping
-    has_permission_on :quotes, :to => :read
+    has_permission_on :quotes, :to => :manage
     has_permission_on :sales_orders, :to => :read
     has_permission_on :sales_order_items, :to => :read
     has_permission_on :customers_sales_orders, :to => :read
@@ -39,6 +39,7 @@ authorization do
     has_permission_on :quality_rma_reports, :to => :make
     has_permission_on :quality_credit_memo_reports, :to => :make
     has_permission_on :quality_rmas, :to => :read
+    has_permission_on :quality_rma_lighthouse_tickets, :to => :create
   end
   
   role :production do

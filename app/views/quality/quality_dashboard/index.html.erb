@@ -2,8 +2,8 @@
 <br />
 
 <h3>Recent Late Shipments</h2>
-<%= render 'quality/customer_otd_reports/otd_details', :releases => @otd_report.all_late_releases %>
+<%= render 'quality/customer_otd_reports/otd_details', :releases => @otd_report.all_late_releases.sort_by(&:due_date).reverse %>
 
 <br />
 <h3>Recent RMAs</h3>
-<%= render 'quality/rma_reports/rma_details', :rmas => @rma_report.all_rmas %>
+<%= render 'quality/rma_reports/rma_details', :rmas => @rma_report.all_rmas.sort_by(&:date).reverse %>

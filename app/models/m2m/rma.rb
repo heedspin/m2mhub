@@ -11,6 +11,7 @@ class M2m::Rma < M2m::Base
   alias_attribute :enter_date, :fdenterdate
   alias_attribute :date, :fdenterdate
   alias_attribute :customer_number, :fccustno
+  alias_attribute :customer_name, :fcompany
   alias_attribute :severity_code, :fcseverty
   alias_attribute :sales_order_number, :fcsono
 
@@ -25,6 +26,24 @@ class M2m::Rma < M2m::Base
       :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
     }
   }
+  
+  # This works:
+  # select * from syrmama where fcrmano = 85
+  #
+  # This does not:
+  # select * from syrmama where fcrmano = N'85'  
+  def self.find(*args)
+    if (args.size == 1) and (id = args.first) and (id.is_a?(Fixnum) or id.is_a?(String))
+      self.find(:first, :conditions => { :fcrmano => id.to_i })
+    else
+      super
+    end
+  end
+  
+  # def self.zero_pad(id)
+  #   # 000000000000005    
+  #   "%010d" % id
+  # end
 
   def rma_number
     self.fcrmano.to_i
@@ -171,13 +190,30 @@ class M2m::Rma < M2m::Base
       "ticket-#{self.ticket_id}"
     end
     def ticket
-      @ticket ||= Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => CompanyConfig.lighthouse_rma_project_id })
+      if @ticket.nil?
+        begin
+          @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => CompanyConfig.lighthouse_rma_project_id })
+        rescue ActiveResource::ResourceNotFound
+          # Bad link...
+        end
+      end
+      @ticket
     end
   end
 
   def lighthouse_ticket_reference
     @lighthouse_ticket_reference ||= LighthouseTicketReference.from(self.company_codes)
-  end  
+  end
+  
+  def lighthouse_ticket
+    self.lighthouse_ticket_reference.try(:ticket)
+  end
+  
+  # Console hint:
+  # rma = M2m::Rma.find(119) ; rma.set_lighthouse_ticket_id(78) ; rma.save
+  def set_lighthouse_ticket_id(ticket_id)
+    @lighthouse_ticket_reference = LighthouseTicketReference.new(ticket_id)
+  end
   
   # **********************************************************************
 

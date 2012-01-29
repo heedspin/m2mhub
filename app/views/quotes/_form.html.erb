@@ -1,0 +1,23 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$( ".autopart > input" ).autocomplete({
+		source: "<%= items_url %>",
+		minLength: 2
+	});
+})
+</script>
+<% end %>
+
+<% f.inputs do %>
+  <%= f.input :company_name %> 
+<% end %>
+
+<% f.semantic_fields_for :items, @quote_item do |qif| %>
+  <%= qif.input :fpartno, :wrapper_html => { :class => 'autopart' } %>
+<% end %>
+
+<% f.buttons do %>
+  <%= f.commit_button %>
+  <%= f.cancel_link %>
+<% end %>
