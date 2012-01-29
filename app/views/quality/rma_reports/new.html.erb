@@ -23,7 +23,7 @@
 			<% if month.total_rmas > 0 %>
 			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">Show Details</span></a>
 			<div class="closed_details" id="xclosed_details_<%= count %>">
-			<%= render 'rma_details', :rmas => month.rmas %>
+			<%= render 'rma_details', :rmas => month.rmas.sort_by(&:date) %>
 			</div>
 			<% end %>
 		</td>

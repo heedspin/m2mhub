@@ -23,7 +23,7 @@
 			<% if month.num_late_releases > 0 %>
 			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">Show Details</span></a>
 			<div class="closed_details" id="xclosed_details_<%= count %>">
-			<%= render 'otd_details', :releases => month.late_releases %>
+			<%= render 'otd_details', :releases => month.late_releases.sort_by(&:due_date) %>
 			</div>
 			<% end %>
 		</td>

@@ -13,10 +13,15 @@
 		</tr>
 	</thead>
 	<tbody>
-<% rmas.sort_by(&:date).each do |rma| %>
+<% rmas.each do |rma| %>
 <% rma.items.each do |rma_item| %>
 		<tr>
-			<td><%= link_to rma.company_rma_number, rma_url(rma.rma_number) %></td>
+			<td>
+				<%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
+				<% if rma.lighthouse_ticket_reference %>
+				<%= link_to image_tag('lighthouse.png', :width => 16), rma_url(rma.rma_number) %>
+				<% end %>
+			</td>
 			<td><%= rma.status.try(:name) %></td>
 			<td><%= rma.severity_name %></td>
 			<td><%= rma.date.to_s(:rma_date) %></td>
