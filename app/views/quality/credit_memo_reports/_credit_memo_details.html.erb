@@ -16,7 +16,13 @@
 	<tbody>
 <% rma_items.sort_by { |ri| [ri.rma.date, ri.item_number ] }.each do |rma_item| %>
 		<tr>
-			<td><%= rma_item.rma.company_rma_number %><%= rma_item.rma.items.size > 1 ? "-#{rma_item.item_number}" : '' %></td>
+			<td>
+				<%= link_to rma_item.rma_number, rma_url(rma_item.rma_number) %>
+				<% if rma_item.rma.lighthouse_ticket_reference %>
+				<%= link_to image_tag('lighthouse.png', :width => 16), rma_url(rma_item.rma_number) %>
+				<% end %>
+				<%#= rma_item.rma.company_rma_number %><%= rma_item.rma.items.size > 1 ? "-#{rma_item.item_number}" : '' %>
+			</td>
 			<td><%= rma_item.rma.status.name %></td>
 			<td><%= rma_item.rma.severity_name %></td>
 			<td><%= rma_item.invoice_items.map { |ii| ii.clean_invoice_number + '.' + ii.clean_item_number }.join(', ') %></td>
