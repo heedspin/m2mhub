@@ -12,32 +12,34 @@
 	<tbody>
 		<% @material_availability_report.line_items.each do |line_item| %>
 		<tr class="<%= !line_item.count_supply_and_demand? ? 'not_counted' : '' %>">
-			<% if line_item.today? %>
-			<% descrepency = (line_item.net_availability != @material_availability_report.item.quantity_on_hand) %>
+			<% if line_item.today? %>		
+			<% descrepency = (line_item.quantity_on_hand != @material_availability_report.item.quantity_on_hand) %>
 			<td class="current_on_hand<%= descrepency ? '_error' : '' %>" colspan="7">
 				Today's On Hand:
 				<% if descrepency %>
 				<strong>
-					Discrepency! History shows <%= cm line_item.net_availability, :sales_order_quantity, 0 %>, 
+					Discrepency! History shows <%= cm line_item.quantity_on_hand, :sales_order_quantity, 0 %>, 
 					but M2M reports <%= cm @material_availability_report.item.quantity_on_hand, :sales_order_quantity, 0 %>
 				</strong>
 				<% else %>
-				<%= cm line_item.net_availability, :sales_order_quantity, 0 %>
+				<%= cm line_item.quantity_on_hand, :sales_order_quantity, 0 %>
 				<% end %>
 			</td>
 			<% else %>
 			<td>
 				<% if line_item.sales_order? %>
 				<%= link_to "SO #{line_item.sales_order.sales_order_number.to_i}", sales_order_url(line_item.sales_order.sales_order_number) %>
+				for <%= cm line_item.sales_order.quantity, :sales_order_quantity, 0 %>
 				<% elsif line_item.purchase_order? %>
-				PO <%= line_item.purchase_order_item.purchase_order_number.to_i %>
-				<% if line_item.purchase_order_item.master_release? %>
-				<br />Master Release
-				<% end %>
+				PO <%= line_item.purchase_order_item.purchase_order_number.to_i %> 
+				for <%= cm line_item.purchase_order_item.quantity, :sales_order_quantity, 0 %>
 				<% elsif line_item.receiver? %>
-				PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>, 
-				Recv <%= line_item.receiver_item.receiver_number.to_i %>
+				Receiver <%= line_item.receiver_item.receiver_number.to_i %>
+				on PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>
+				<% elsif line_item.shipper? %>
+				Shipper <%= line_item.shipper_item.shipper_number %> for SO <%= line_item.shipper_item.sales_order_number.to_i %>
 				<% else %>
+				<%= line_item.inventory_transaction.transaction_type.key %>
 				<%= line_item.inventory_transaction.transaction_type.name %>
 				<% if line_item.inventory_transaction.comment.present? %>
 				<br /><%= h line_item.inventory_transaction.comment %>
@@ -67,11 +69,15 @@
 			<th colspan="2">Totals</th>
 			<th><%= cm @material_availability_report.total_future_supply, :sales_order_quantity, 0 %></th>
 			<th><%= cm @material_availability_report.total_future_demand, :sales_order_quantity, 0 %></th>
+			<td colspan="3"></td>
 		</tr>
+		<% if link_to_full %>
 		<tr>
 			<td class="ninjaborders" colspan="8">
 				<%= link_to "See Full History", item_history_url(@item.part_number) %>
 			</td>
 		</tr>
+		<% end %>
 	</tbody>
 </table>
+

@@ -20,6 +20,9 @@ class MaterialAvailabilityReport
     def shipper?
       self.is_a?(ShipperLineItem)
     end
+    def quantity_on_hand
+      self.net_availability < 0.0 ? 0.0 : self.net_availability
+    end
     def closed?
       true
     end
@@ -48,23 +51,14 @@ class MaterialAvailabilityReport
       @sales_order = sales_order
       self.type_weighting = 3
       self.number = @sales_order.sales_order_release_id
-      self.demand = if @sales_order.closed?
-        @sales_order.quantity_shipped
-      elsif @sales_order.quantity_shipped > 0
-        @sales_order.quantity_shipped
-      else
-        @sales_order.quantity
-      end
+      self.demand = @sales_order.backorder_quantity
       self.status = @sales_order.status
       self.target_date = @sales_order.due_date
       self.actual_date = @sales_order.last_ship_date
       self.count_supply_and_demand = !self.status.on_hold?
     end
     def closed?
-      # TODO: Perhaps make this policy a configuration option.
-      # We're considering sales orders closed when the last ship date passes.
-      # I don't understand this policy, but M2M's ma report appears to run this way.
-      !@status.open? || ((@sales_order.last_ship_date || @sales_order.due_date) < Date.current)
+      @status.closed?
     end
   end
 
@@ -74,31 +68,29 @@ class MaterialAvailabilityReport
       @purchase_order_item = purchase_order_item
       self.type_weighting = 2
       self.number = @purchase_order_item.release
-      self.supply = get_supply
+      self.supply = self.backorder_quantity
       self.status = @purchase_order_item.status
-      self.target_date = @purchase_order_item.last_promise_date
-      self.actual_date = @purchase_order_item.date_received
+      if !self.closed? and (self.backorder_quantity > 0) and (@purchase_order_item.last_promise_date < Date.current)
+        # Assume it will show up tomorrow
+        self.target_date = Date.current.advance(:days => 1)
+      else
+        self.target_date = @purchase_order_item.last_promise_date
+        self.actual_date = @purchase_order_item.date_received
+      end
       d = self.actual_date || self.target_date
-      self.count_supply_and_demand = d.present? && (d >= Date.current)
+      self.count_supply_and_demand = !self.closed?
     end
     def closed?
-      # TODO: Perhaps make this policy a configuration option.
-      # We're considering purchase orders closed when the last promise date passes.
-      # I don't understand this policy, but M2M's ma report appears to run this way.
-      !@status.open? || (@purchase_order_item.last_promise_date < Date.current)
+      @status.closed?
     end
 
     protected
 
-      def get_supply
-        if @purchase_order_item.closed?
-          @purchase_order_item.quantity_received
-        elsif @purchase_order_item.master_release?
+      def backorder_quantity
+        if @purchase_order_item.master_release?
           @purchase_order_item.master_remainder_quantity
-        elsif @purchase_order_item.quantity_received > 0
-          @purchase_order_item.quantity_received
         else
-          @purchase_order_item.quantity
+          @purchase_order_item.backorder_quantity
         end
       end
   end
@@ -181,15 +173,15 @@ class MaterialAvailabilityReport
     # Calculate net availability
     net_availability = @show_history ? 0.0 : item.quantity_on_hand || 0.0
     @total_future_supply = item.quantity_on_hand
-    @total_future_demand = 0
+    @total_future_demand = 0.0
     @line_items.each do |line_item|
       if line_item.count_supply_and_demand?
         supply = (line_item.supply || 0.0)
         demand = (line_item.demand || 0.0)
         net_availability = line_item.net_availability = net_availability + supply - demand
         unless line_item.closed?
-          @total_future_supply += supply
-          @total_future_demand += demand
+          @total_future_supply += (supply || 0).to_f
+          @total_future_demand += (demand || 0).to_f
         end
       else
         line_item.net_availability = net_availability
