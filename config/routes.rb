@@ -13,15 +13,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_order_releases, :only => [:index]
   map.resources :quotes
   map.resources :user_activities, :as => 'history', :only => [:index]
-  map.resources :items, :only => [:index] do |item|
-    item.resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
-    item.resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'
-    item.resources :quote_items, :only => [:index], :controller => 'items/quote_items'
-    item.resource :history, :controller => 'items/history'
-    item.resources :shippers, :only => [:index], :controller => 'items/shippers'
-    item.resources :jobs, :only => [:index], :controller => 'items/jobs'
+  map.resources :items, :requirements => { :id => /[^\/]+/ } do |item|
+    item.resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases', :requirements => { :item_id => /[^\/]+/ }
+    item.resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items', :requirements => { :item_id => /[^\/]+/ }
+    item.resources :quote_items, :only => [:index], :controller => 'items/quote_items', :requirements => { :item_id => /[^\/]+/ }
+    item.resource :history, :controller => 'items/history', :requirements => { :item_id => /[^\/]+/ }
+    item.resources :shippers, :only => [:index], :controller => 'items/shippers', :requirements => { :item_id => /[^\/]+/ }
+    item.resources :jobs, :only => [:index], :controller => 'items/jobs', :requirements => { :item_id => /[^\/]+/ }
   end
-  map.item 'items/:id', :controller => 'items', :action => 'show', :id => /.+/
   map.resources :customers, :only => [:index, :show] do |customer|
     customer.resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
     customer.resources :quotes, :only => [:index], :controller => 'customers/quotes'
