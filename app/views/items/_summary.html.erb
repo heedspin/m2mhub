@@ -14,8 +14,16 @@
 			<%= link_to 'Shippers', item_shippers_url(@item.part_number) %>
 		</li>
 
+		<li class="<%= controller_selected('sales_order_releases') %>">
+			<%= link_to 'Sales Orders', item_sales_order_releases_url(@item.part_number) %>
+		</li>
+
 		<li class="<%= controller_selected('quote_items') %>">
 			<%= link_to 'Quotes', item_quote_items_url(@item.part_number) %>
+		</li>
+
+		<li class="<%= controller_selected('purchase_order_items') %>">
+			<%= link_to 'Purchase Orders', item_purchase_order_items_url(@item.part_number) %>
 		</li>
 	</ul>
 </div>
