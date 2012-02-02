@@ -2,7 +2,7 @@
 <% browse_all_link = link_to("Browse all #{@total_sales_order_releases} Sales Orders", item_sales_order_releases_url(@item.part_number)) %>
 <% end %>
 <% if @sales_order_releases.size == 0 %>
-	<p>No <%= @total_sales_order_releases > 0 ? 'open' : '' %> sales orders</p>
+	<p>No <%= (@total_sales_order_releases || 0) > 0 ? 'open' : '' %> sales orders</p>
 	<% if browse_all_link %>
 		<p><%= browse_all_link %></p>
 	<% end %>
