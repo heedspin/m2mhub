@@ -58,8 +58,9 @@ class M2m::Item < M2m::Base
     } 
   }
   named_scope :by_rev_desc, :order => 'inmast.frev desc'
+  named_scope :by_part_number, :order => 'inmast.fpartno'
   
-  named_scope :part_number_like, lambda { |text|
+  named_scope :company_or_vendor_part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {
       :joins => <<-SQL
@@ -69,6 +70,12 @@ class M2m::Item < M2m::Base
         WHERE (inmast.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
       on inmast.identity_column = tmp1.identity_column
       SQL
+    }
+  }
+  
+  named_scope :part_number_like, lambda { |text|
+    {
+      :conditions => [ 'inmast.fpartno like ?', '%' + (text.strip || '') + '%' ]
     }
   }
   
@@ -85,6 +92,7 @@ class M2m::Item < M2m::Base
   end
   
 end
+
 
 
 
@@ -193,6 +201,7 @@ end
 #  fnfanaglvl       :integer(4)      not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
+#  fidims           :integer(4)      not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null
 #  fcomment         :text            not null
@@ -204,11 +213,10 @@ end
 #  itcunit          :decimal(17, 5)
 #  fnPOnHand        :decimal(16, 5)  not null
 #  fnLndToMfg       :decimal(16, 5)  not null
-#  fiPcsOnHd        :integer(4)      not null
 #  fcudrev          :string(3)       not null
-#  fidims           :integer(4)      not null
 #  fluseudrev       :boolean         not null
 #  fndbrmod         :integer(4)      not null
+#  fiPcsOnHd        :integer(4)      not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null

@@ -10,6 +10,11 @@ class QuotesController < ApplicationController
     @previous_quote = M2m::Quote.find(:first, :conditions => ['fquoteno < ?', current_object.fquoteno], :order => 'fquoteno desc')
     @next_quote = M2m::Quote.find(:first, :conditions => ['fquoteno > ?', current_object.fquoteno], :order => 'fquoteno')
   end
+  
+  def new
+    @quote = M2m::Quote.new
+    @quote_item = @quote.items.new
+  end
 
   protected
 

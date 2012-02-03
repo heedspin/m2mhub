@@ -28,6 +28,17 @@ class M2m::Quote < M2m::Base
   alias_attribute :discount_rate, :fdisrate
   alias_attribute :quote_number, :fquoteno
   alias_attribute :date, :fdcurdate
+  alias_attribute :company_name, :fcompany
+  alias_attribute :customer_number, :fcustno
+  alias_attribute :contact_first_name, :fquoteto
+  alias_attribute :contact_last_name, :fcfname
+  
+  accepts_nested_attributes_for :items
+  
+  attr_accessor :contact_name
+  def contact_name
+    [(self.contact_first_name || '').titleize, (self.contact_last_name || '').capitalize].join(' ')
+  end
 end
 
 
