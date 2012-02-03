@@ -1,8 +1,20 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
+	new_company_matcher = /^Create New: (.+)$/;
 	$("input#search_fcompany").autocomplete({
-  	source: <%= @customer_names.to_json %>
+		source: "<%= customers_url(:new_prompt => 1) %>",
+		select: function(event, ui) { 
+			$("#inprogress").show();
+			var matches = ui.item.value.match(new_company_matcher);
+			if (matches && (matches.length > 1)) {
+				window.location.href = "<%= new_customer_url %>?m2m_customer[fcompany]=" + matches[1];
+			}	else {
+				$(this).val( ui.item.value ); 
+				$("form.search").submit(); 				
+			}
+			return false; 
+		}
 	});
 })
 </script>
@@ -17,10 +29,13 @@ $(function() {
 				  <%= f.input :fcompany, :label => 'Name' %>
 				<% end %>
 			</td>
-			<td>				
-			  <% f.buttons do %>
-				  <%= f.commit_button 'Search' %>
-				<% end %>
+			<td>
+				<div id="inprogress" class="hide">
+				<%= image_tag 'inprogress.gif' %>
+				</span>
+			  <%# f.buttons do %>
+				  <%#= f.commit_button 'Search' %>
+				<%# end %>
 			</td>
 		</tr>
 	</tbody>

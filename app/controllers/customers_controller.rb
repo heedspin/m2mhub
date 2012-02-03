@@ -2,6 +2,38 @@ class CustomersController < ApplicationController
   filter_access_to_defaults
 
   def index
+    if (@search_term = params[:term]).present?
+      autocomplete_index
+    else
+      search_index
+    end
+  end
+  
+  def new
+    @customer = M2m::Customer.new(params[:m2m_customer])
+    @customer.contacts.build
+  end
+  
+  def create
+    @customer = M2m::Customer.new(params[:m2m_customer])
+    if @customer.save
+      redirect_to customer_url(@customer.id)
+    else
+      render :action => 'new'
+    end
+  end
+  
+  def autocomplete_index
+    # Autocomplete path.
+    @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 10)
+    names = @customers.map(&:name)
+    # if params[:new_prompt] == '1'
+    #   names.push "Create New: #{@search_term}"
+    # end
+    render :json => names
+  end
+  
+  def search_index
     @search = M2m::Customer.new(params[:search])
     # For who knows what reason, a new customer comes out with a name = " ".
     if @search.fcompany

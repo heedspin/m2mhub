@@ -711,6 +711,9 @@ table.fullsize {
 	text-decoration:none;
 	color: #666;
 }
+table.data tr.primary-contact {
+	background-color: #efe;
+}
 
 /* NEWS
 -------------------------------------------------------------------- */

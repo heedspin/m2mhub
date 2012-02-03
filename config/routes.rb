@@ -21,9 +21,10 @@ ActionController::Routing::Routes.draw do |map|
     item.resources :shippers, :only => [:index], :controller => 'items/shippers', :requirements => { :item_id => /[^\/]+/ }
     item.resources :jobs, :only => [:index], :controller => 'items/jobs', :requirements => { :item_id => /[^\/]+/ }
   end
-  map.resources :customers, :only => [:index, :show] do |customer|
+  map.resources :customers do |customer|
     customer.resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
     customer.resources :quotes, :only => [:index], :controller => 'customers/quotes'
+    customer.resources :contacts, :controller => 'customers/contacts'
   end
   map.resources :sales_backlog_reports, :only => [:index, :show]  
   map.resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
