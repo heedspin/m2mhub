@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '2.3.14'
 gem 'mysql', '2.8.1'
-gem 'tiny_tds'
-gem 'activerecord-sqlserver-adapter', '2.3.20'
+gem 'tiny_tds', '0.5.1'
+gem 'activerecord-sqlserver-adapter', '2.3.24'
 
 gem 'authlogic', '2.1.6'
 
