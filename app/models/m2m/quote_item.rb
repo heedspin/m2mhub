@@ -5,18 +5,18 @@ class M2m::QuoteItem < M2m::Base
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono, :primary_key => :fsono
   
-  named_scope :open,      :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.open.name }}
-  named_scope :closed,    :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.closed.name }}
-  named_scope :cancelled, :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.cancelled.name }}
+  scope :status_open,      :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.open.name }}
+  scope :status_closed,    :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.closed.name }}
+  scope :status_cancelled, :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.cancelled.name }}
   
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
       :conditions => { :fpartno => fpartno } 
     }
   }
 
-  named_scope :with_status, lambda { |status|
+  scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :joins => :quote, 
@@ -24,7 +24,7 @@ class M2m::QuoteItem < M2m::Base
     }
   }
   
-  named_scope :reverse_order, :order => 'fsono desc, fenumber'
+  scope :reverse_order, :order => 'fsono desc, fenumber'
 
 
   alias_attribute :quantity, :festqty

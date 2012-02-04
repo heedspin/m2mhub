@@ -4,13 +4,13 @@ class M2m::Quote < M2m::Base
   
   has_many :items, :class_name => 'M2m::QuoteItem', :foreign_key => :fquoteno, :primary_key => :fquoteno
   
-  named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
-  named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
 
-  named_scope :by_quote_number_desc, :order => 'fquoteno desc'  
+  scope :by_quote_number_desc, :order => 'fquoteno desc'  
 
-  named_scope :since, lambda { |day|
+  scope :since, lambda { |day|
     {
       :conditions => ['qtmast.fquotedate >= ?', day],
       :order => 'fquotedate desc, fquoteno desc'

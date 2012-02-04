@@ -7,7 +7,7 @@ class M2m::SalesOrderRelease < M2m::Base
 
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
 
-  named_scope :for_shipper_items, lambda { |shipper_items|
+  scope :for_shipper_items, lambda { |shipper_items|
     if shipper_items.is_a?(M2m::ShipperItem)
       shipper_items = [shipper_items]
     end
@@ -17,32 +17,32 @@ class M2m::SalesOrderRelease < M2m::Base
     }
   }
 
-  named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
-  named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
-  named_scope :cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
+  scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
+  scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
+  scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
 
-  named_scope :by_due_date, :order => :fduedate
-  named_scope :by_due_date_desc, :order => 'sorels.fduedate desc'
+  scope :by_due_date, :order => :fduedate
+  scope :by_due_date_desc, :order => 'sorels.fduedate desc'
 
-  named_scope :due_by, lambda { |date|
+  scope :due_by, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
     }
   }
 
-  named_scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
+  scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
 
-  named_scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
+  scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
 
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
       :conditions => { :fpartno => fpartno.strip } 
     }
   }
   
-  named_scope :with_status, lambda { |status|
+  scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :somast => { :fstatus => status_name.upcase } }
@@ -50,7 +50,7 @@ class M2m::SalesOrderRelease < M2m::Base
   }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
-  # named_scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
+  # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
 
   def quantity
     self.forderqty > 0 ? self.forderqty : self.item.quantity
@@ -69,9 +69,9 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :order_quantity, :forderqty
   
-  # named_scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
-  named_scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]
-  named_scope :due, lambda { |start_date, end_date|
+  # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
+  scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]
+  scope :due, lambda { |start_date, end_date|
     {
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
     }

@@ -44,7 +44,7 @@ class M2m::ShipperItem < M2m::Base
     (self.sales_order_number == release.sales_order_number) && (self.sales_order_release_id == release.sales_order_release_id) && (self.sales_order_release_number == release.sales_order_release_number)
   end
   
-  named_scope :for_sales_order, lambda { |sales_order|
+  scope :for_sales_order, lambda { |sales_order|
     {
       :joins => 'inner join sorels on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)',
       :conditions => [ 'sorels.fsono = ?', sales_order.id ]

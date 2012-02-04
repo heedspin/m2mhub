@@ -4,9 +4,9 @@ class M2m::PurchaseOrder < M2m::Base
   
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
 
-  named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
-  named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
 
   def status
     M2m::Status.find_by_name(self.fstatus)

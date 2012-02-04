@@ -1,7 +1,6 @@
 class M2m::Item < M2m::Base
   set_table_name 'inmast'
-  # set_primary_key 'fpartno'
-  set_primary_keys 'fpartno', 'frev'
+  # set_primary_keys 'fpartno', 'frev'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -47,20 +46,20 @@ class M2m::Item < M2m::Base
     @revision ||= self.frev.strip
   end
   
-  named_scope :with_part_number, lambda { |pn| 
+  scope :with_part_number, lambda { |pn| 
     {
       :conditions => { :fpartno => pn }
     } 
   }
-  named_scope :with_part_numbers, lambda { |part_numbers| 
+  scope :with_part_numbers, lambda { |part_numbers| 
     {
       :conditions => [ 'inmast.fpartno in (?)', part_numbers]
     } 
   }
-  named_scope :by_rev_desc, :order => 'inmast.frev desc'
-  named_scope :by_part_number, :order => 'inmast.fpartno'
+  scope :by_rev_desc, :order => 'inmast.frev desc'
+  scope :by_part_number, :order => 'inmast.fpartno'
   
-  named_scope :company_or_vendor_part_number_like, lambda { |text|
+  scope :company_or_vendor_part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {
       :joins => <<-SQL
@@ -73,7 +72,7 @@ class M2m::Item < M2m::Base
     }
   }
   
-  named_scope :part_number_like, lambda { |text|
+  scope :part_number_like, lambda { |text|
     {
       :conditions => [ 'inmast.fpartno like ?', '%' + (text.strip || '') + '%' ]
     }

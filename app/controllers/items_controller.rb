@@ -26,11 +26,11 @@ class ItemsController < ApplicationController
       # end
       record_not_found
     else
-      @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).open.by_due_date_desc.all#(:include => [:sales_order, :item])
+      @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).status_open.by_due_date_desc.all#(:include => [:sales_order, :item])
       M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
       @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-      @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).open.all(:include => :purchase_order)
+      @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => :purchase_order)
       @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
 
       @material_availability_report = MaterialAvailabilityReport.new( :item => @item,

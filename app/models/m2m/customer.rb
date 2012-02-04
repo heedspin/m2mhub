@@ -12,15 +12,15 @@ class M2m::Customer < M2m::Base
   alias_attribute :company_name, :fcompany
   alias_attribute :customer_number, :fcustno
   
-  named_scope :name_like, lambda { |text|
+  scope :name_like, lambda { |text|
     {
       :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
     }
   }
   
-  named_scope :by_name, :order => 'fcompany'
+  scope :by_name, :order => 'fcompany'
   
-  named_scope :with_customer_numbers, lambda { |customer_numbers|
+  scope :with_customer_numbers, lambda { |customer_numbers|
     {
       :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
     }

@@ -21,14 +21,14 @@ class M2m::Shipper < M2m::Base
     self.fconfirm ? 'Shipped' : 'Not Shipped'
   end
   
-  named_scope :with_ship_date, lambda { |date|
+  scope :with_ship_date, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate = ?', date.to_s(:database) ],
     }
   }
   
-  named_scope :for_next_day, lambda { |date|
+  scope :for_next_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate > ?', date.to_s(:database) ],
@@ -36,7 +36,7 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :for_previous_day, lambda { |date|
+  scope :for_previous_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate < ?', date.to_s(:database) ],
@@ -44,9 +44,9 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
+  scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
 
-  named_scope :next_shipper, lambda { |shipper| 
+  scope :next_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno > ?', shipper.fsono], 
       :order => 'fshipno',
@@ -54,7 +54,7 @@ class M2m::Shipper < M2m::Base
     }
   }
 
-  named_scope :previous_shipper, lambda { |shipper| 
+  scope :previous_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno < ?', shipper.fsono], 
       :order => 'fshipno desc',
@@ -62,7 +62,7 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     part_number = item.is_a?(M2m::Item) ? item.part_number : item.to_s.strip
     {
       :joins => :items,

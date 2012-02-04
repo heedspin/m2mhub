@@ -15,13 +15,13 @@ class M2m::Rma < M2m::Base
   alias_attribute :severity_code, :fcseverty
   alias_attribute :sales_order_number, :fcsono
 
-  named_scope :between, lambda { |start_date, end_date|
+  scope :between, lambda { |start_date, end_date|
     { 
       :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
     }
   }
   
-  named_scope :with_rma_numbers, lambda { |rma_numbers|
+  scope :with_rma_numbers, lambda { |rma_numbers|
     {
       :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
     }

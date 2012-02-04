@@ -13,13 +13,13 @@ class M2m::InventoryLocation < M2m::Base
     @revision ||= self.fpartrev.strip
   end
 
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision } 
     }
   }
 
-  named_scope :with_part_numbers, lambda { |part_numbers|
+  scope :with_part_numbers, lambda { |part_numbers|
     {
       :conditions => [ 'inonhd.fpartno in (?)', part_numbers]
     }

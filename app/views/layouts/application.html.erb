@@ -19,7 +19,7 @@
 				<% links.push link_to(current_user.first_name, user_path(current_user.id)) %>
 				<% links.push link_to('Log Out', logout_path) %>
 				<% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
-				<% links.push link_to_unless_current('History', user_activities_url) if permitted_to?(:read, :user_activities) %>
+				<% links.push link_to_unless_current('History', history_index_url) if permitted_to?(:read, :user_activities) %>
 				<div class="usermenu"><%= raw links.join(' | ') %></div>
 			<% end %>
 			<div class="banner">

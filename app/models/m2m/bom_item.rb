@@ -1,11 +1,10 @@
 class M2m::BomItem < M2m::Base
   set_table_name 'inboms'
-  # set_primary_key 'fpartno'
-  set_primary_keys 'fcomponent', 'fcomprev'
+  # set_primary_keys 'fcomponent', 'fcomprev'
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcomponent, :fcomprev]
   belongs_to :parent_item, :class_name => 'M2m::Item', :foreign_key => [:fparent, :fparentrev]
   
-  named_scope :for_parent_item, lambda { |part_number, revision|
+  scope :for_parent_item, lambda { |part_number, revision|
     {
       :joins => :parent_item,
       :conditions => { :inmast => { :fpartno => part_number, :frev => revision } }      

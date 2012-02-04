@@ -7,7 +7,7 @@ class SalesBacklogReportsController < ApplicationController
     @search.due_date ||= Date.current.next_week
 
     if @search_performed
-      @releases = M2m::SalesOrderRelease.filtered.open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fsono, sorels.fpartno')
+      @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fsono, sorels.fpartno')
       sales_order_items = M2m::SalesOrderItem.for_releases(@releases).all
       M2m::SalesOrderItem.attach_to_releases_for_backlog(@releases, sales_order_items)
       items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number)).all

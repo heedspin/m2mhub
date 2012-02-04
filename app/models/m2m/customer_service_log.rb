@@ -6,10 +6,10 @@ class M2m::CustomerServiceLog < M2m::Base
   belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
 
-  named_scope :open,      :conditions => { :fcstatus => M2m::Status.open.name }
-  named_scope :closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
-  named_scope :cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
-  named_scope :between, lambda { |start_date, end_date|
+  scope :status_open,      :conditions => { :fcstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
+  scope :between, lambda { |start_date, end_date|
     { 
       :conditions => [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
     }

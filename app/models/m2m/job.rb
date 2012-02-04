@@ -3,15 +3,15 @@ class M2m::Job < M2m::Base
   
   has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
 
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
 
-  named_scope :released, :conditions => { :fstatus => M2m::Status.released.name }
+  scope :released, :conditions => { :fstatus => M2m::Status.released.name }
   
-  named_scope :by_date_desc, :order => 'jomast.fhold_dt desc'
+  scope :by_date_desc, :order => 'jomast.fhold_dt desc'
   
   def revision
     self.fpartrev.strip

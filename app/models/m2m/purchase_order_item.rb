@@ -17,32 +17,32 @@ class M2m::PurchaseOrderItem < M2m::Base
     self.fpartno.strip
   end
   
-  named_scope :open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
-  named_scope :closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
-  named_scope :cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
+  scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
+  scope :status_closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
+  scope :status_cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
   
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number }
     }
   }
   
-  named_scope :for_itemno, lambda { |itemno|
+  scope :for_itemno, lambda { |itemno|
     {
       :conditions => { :fitemno => itemno }
     }
   }
     
-  named_scope :with_status, lambda { |status|
+  scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :pomast => { :fstatus => status_name.upcase } }
     }
   }
   
-  named_scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
+  scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
 
-  named_scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
+  scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
 
   def master_release?
     (self.fmultirls.strip == 'Y') && (self.frelsno.to_i == 0)

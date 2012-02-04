@@ -1,11 +1,11 @@
 class User < ApplicationModel
-  model_stamper
+  # model_stamper
   acts_as_authentic do |c|
     c.validate_password_field = true
     c.maintain_sessions = false
   end
-  belongs_to :user_role
-  belongs_to :user_status
+  belongs_to_active_hash :user_role
+  belongs_to_active_hash :user_status
   attr_protected :password, :password_confirmation, :user_role, :user_status
   validates_presence_of :first_name, :last_name, :email, :user_status, :user_role
 
@@ -20,12 +20,7 @@ class User < ApplicationModel
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]
   def role_symbols
-    [self.user_role.downcase.to_sym]
-  end
-  
-  # For Declarative Auth.
-  def role_symbols
-    @role_symbols ||= (!user_role.nil?) ? [user_role.name.downcase.to_sym] : []
+    [(self.user_role || UserRole.default).name.downcase.to_sym]
   end
 
   def full_name

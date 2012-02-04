@@ -10,13 +10,13 @@ class M2m::SalesOrder < M2m::Base
     self.releases(*args).select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
   end
   
-  named_scope :open,      :conditions => { :fstatus => M2m::Status.open.name }
-  named_scope :closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  named_scope :cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
   
-  named_scope :by_order_number_desc, :order => 'fsono desc'  
+  scope :by_order_number_desc, :order => 'fsono desc'  
   
-  named_scope :since, lambda { |day|
+  scope :since, lambda { |day|
     {
       :conditions => ['somast.forderdate >= ?', day],
       :include => [:releases, :items], 
@@ -24,7 +24,7 @@ class M2m::SalesOrder < M2m::Base
     }
   }
 
-  named_scope :ordered_after, lambda { |day|
+  scope :ordered_after, lambda { |day|
     {
       :conditions => ['somast.forderdate >= ?', day],
     }

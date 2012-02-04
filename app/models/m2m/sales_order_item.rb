@@ -20,18 +20,18 @@ class M2m::SalesOrderItem < M2m::Base
     @revision ||= self.fpartrev.strip
   end
 
-  named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
-  named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
-  named_scope :cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
+  scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
+  scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
+  scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
   
-  named_scope :part_number_like, lambda { |text| 
+  scope :part_number_like, lambda { |text| 
     text = '%' + (text || '') + '%'
     {
       :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
     }
   }
   
-  named_scope :order_number_like, lambda { |text|
+  scope :order_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
       :joins => :sales_order,
@@ -39,13 +39,13 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
   
-  named_scope :for_releases, lambda { |sales_order_releases|
+  scope :for_releases, lambda { |sales_order_releases|
     {
       :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
     }

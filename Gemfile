@@ -1,28 +1,30 @@
 source 'http://rubygems.org'
 
-gem 'rails', '2.3.14'
+gem 'rails', '3.2.1'
+gem 'json'
+gem 'jquery-rails'
 gem 'mysql', '2.8.1'
 gem 'tiny_tds', '0.5.1'
-gem 'activerecord-sqlserver-adapter', '2.3.24'
+gem 'activerecord-sqlserver-adapter', '3.2.0'
 
-gem 'authlogic', '2.1.6'
+gem 'authlogic', '3.1.0'
 
 # gem 'daemons', '1.1.0'
 # gem 'crack', '0.1.8'
 
-gem 'formtastic', '0.9.10', :require => nil
-gem 'declarative_authorization', '0.4'
+gem 'formtastic', '1.2.3'
+gem 'declarative_authorization', '0.5.5'
 gem 'paperclip', '2.4.1'
-gem 'will_paginate', '2.3.12'
-gem 'delayed_job', '2.0.3'
-gem "airbrake"
+# gem 'will_paginate', '3.0.3'
+gem 'delayed_job', '3.0.1'
+gem "airbrake", '3.0.9'
 #gem 'thinking-sphinx', '1.3.20', :require => 'thinking_sphinx'
 #gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
 gem 'active_hash' #, '0.9.1'
-gem 'userstamp', '2.0.1'
-gem 'composite_primary_keys', '2.3.5.1'
-gem 'spreadsheet', '0.6.5.2'
-gem 'lighthouse-api', '1.1.0'
+# No rails 3 love: gem 'userstamp', '2.0.1'
+# gem 'composite_primary_keys', '4.1.2'
+gem 'spreadsheet', '0.6.8'
+gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 
 group :development do

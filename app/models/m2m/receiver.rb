@@ -13,14 +13,14 @@ class M2m::Receiver < M2m::Base
     self.time_received.to_date
   end
 
-  named_scope :with_date_received, lambda { |date|
+  scope :with_date_received, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date.to_s(:database), date.advance(:days => 1).to_s(:database) ],
     }
   }
   
-  named_scope :for_next_day, lambda { |date|
+  scope :for_next_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'rcmast.fdaterecv >= ?', date.advance(:days => 1).to_s(:database) ],
@@ -28,7 +28,7 @@ class M2m::Receiver < M2m::Base
     }
   }
   
-  named_scope :for_previous_day, lambda { |date|
+  scope :for_previous_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'rcmast.fdaterecv < ?', date.to_s(:database) ],
@@ -36,7 +36,7 @@ class M2m::Receiver < M2m::Base
     }
   }
   
-  named_scope :by_id_desc, :order => 'rcmast.freceiver desc'
+  scope :by_id_desc, :order => 'rcmast.freceiver desc'
   
   def status
     # fcstatus are 'C' and 'I' but always show up received.
