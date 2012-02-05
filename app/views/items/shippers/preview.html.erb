@@ -1,5 +1,5 @@
 <%= render 'list' %>
 
 <% if @total_shippers > @shippers.size %>
-<p><%= link_to "Browse all #{@total_shippers} Shippers", item_shippers_url(@item.part_number) %></p>
+<p><%= link_to "Browse all #{@total_shippers} Shippers", item_shippers_url(@item) %></p>
 <% end %>

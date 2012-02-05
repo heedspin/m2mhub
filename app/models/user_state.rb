@@ -1,5 +1,5 @@
 require 'active_hash_methods'
-class UserStatus < ActiveHash::Base
+class UserState < ActiveHash::Base
   self.data = [
     {:id => 1, :name => 'Unconfirmed'},
     {:id => 2, :name => 'Active'},

@@ -21,14 +21,14 @@ class M2m::Shipper < M2m::Base
     self.fconfirm ? 'Shipped' : 'Not Shipped'
   end
   
-  named_scope :with_ship_date, lambda { |date|
+  scope :with_ship_date, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate = ?', date.to_s(:database) ],
     }
   }
   
-  named_scope :for_next_day, lambda { |date|
+  scope :for_next_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate > ?', date.to_s(:database) ],
@@ -36,7 +36,7 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :for_previous_day, lambda { |date|
+  scope :for_previous_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'shmast.fshipdate < ?', date.to_s(:database) ],
@@ -44,9 +44,9 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
+  scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
 
-  named_scope :next_shipper, lambda { |shipper| 
+  scope :next_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno > ?', shipper.fsono], 
       :order => 'fshipno',
@@ -54,7 +54,7 @@ class M2m::Shipper < M2m::Base
     }
   }
 
-  named_scope :previous_shipper, lambda { |shipper| 
+  scope :previous_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno < ?', shipper.fsono], 
       :order => 'fshipno desc',
@@ -62,11 +62,10 @@ class M2m::Shipper < M2m::Base
     }
   }
   
-  named_scope :for_item, lambda { |item|
-    part_number = item.is_a?(M2m::Item) ? item.part_number : item.to_s.strip
+  scope :for_item, lambda { |item|
     {
       :joins => :items,
-      :conditions => [ 'shitem.fpartno = ?', part_number ]
+      :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
     }
   }
   
@@ -93,13 +92,13 @@ end
 #  ffrtinvcd        :boolean         default(FALSE), not null
 #  flisinv          :boolean         default(FALSE), not null
 #  fno_boxes        :integer(4)      default(0), not null
-#  fshipdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fshipdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fshipno          :string(6)       default(""), not null, primary key
 #  fshipvia         :string(20)      default(""), not null
 #  fshipwght        :decimal(12, 4)  default(0.0), not null
 #  fshptoaddr       :string(4)       default(""), not null
 #  ftype            :string(2)       default(""), not null
-#  start            :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  start            :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  flpickprin       :boolean         default(FALSE), not null
 #  flshipprin       :boolean         default(FALSE), not null
 #  fcfname          :string(15)      default(""), not null
@@ -123,7 +122,7 @@ end
 #  fmstreet         :text            default(""), not null
 #  fmtrckno         :text            default(""), not null
 #  fshipmemo        :text            default(""), not null
-#  upsdate          :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  upsdate          :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  upsaddr2         :text            default(""), not null
 #  upsaddr3         :text            default(""), not null
 #

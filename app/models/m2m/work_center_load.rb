@@ -6,13 +6,13 @@ class M2m::WorkCenterLoad < M2m::Base
   alias_attribute :work_center_id, :fcpro_id
   alias_attribute :work_load, :req_load
   
-  named_scope :for_batch, lambda { |batch_name|
+  scope :for_batch, lambda { |batch_name|
     {
       :conditions => { :cbatchname => batch_name },
       :include => 'work_center'
     }
   }
-  named_scope :with_load, :conditions => 'dbrrlrp.req_load > 0'
+  scope :with_load, :conditions => 'dbrrlrp.req_load > 0'
   
   def date
     @date ||= Date.new(self.sortdate.year, self.sortdate.month, self.sortdate.day)
@@ -46,7 +46,7 @@ end
 #  identity_column  :integer(4)      not null, primary key
 #  timestamp_column :binary
 #  fcfac            :string(20)      default("")
-#  sortdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  sortdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  SortDateSt       :string(19)      default(""), not null
 #
 

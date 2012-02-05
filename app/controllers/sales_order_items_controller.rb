@@ -7,22 +7,20 @@ class SalesOrderItemsController < ApplicationController
   end
 
   def index
-    @search_item = SearchItem.new(params[:search])
-    @sales_order_items = if @search_item.order_number.present?
-      M2m::SalesOrderItem.order_number_like(@search_item.order_number)
+    @search = SearchItem.new(params[:search])
+    @sales_order_items = if @search.order_number.present?
+      M2m::SalesOrderItem.order_number_like(@search.order_number)
     end
-    if @search_item.part_number.present?
+    if @search.part_number.present?
       @sales_order_items = if @sales_order_items.present?
-        @sales_order_items.part_number_like(@search_item.part_number)
+        @sales_order_items.part_number_like(@search.part_number)
       else
-        M2m::SalesOrderItem.part_number_like(@search_item.part_number)
+        M2m::SalesOrderItem.part_number_like(@search.part_number)
       end
     end
     if @sales_order_items.present?
-      @sales_order_items = @sales_order_items.paginate(:all, :page => params[:page],
-                                                       :per_page => 20,
-                                                       :order => 'soitem.fsono desc',
-                                                       :include => :sales_order)
+      @sales_order_items = @sales_order_items.paginate(:page => params[:page],
+                                                       :per_page => 20).order('soitem.fsono desc').includes(:sales_order)
     end
   end
 

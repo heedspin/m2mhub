@@ -3,13 +3,13 @@ class M2m::CustomerServiceLog < M2m::Base
   set_primary_key 'fcinqno'
 
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fcsono
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fcpartno, :fcpartrev]
+  belongs_to_item :fcpartno, :fcpartrev
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
 
-  named_scope :open,      :conditions => { :fcstatus => M2m::Status.open.name }
-  named_scope :closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
-  named_scope :cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
-  named_scope :between, lambda { |start_date, end_date|
+  scope :status_open,      :conditions => { :fcstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
+  scope :between, lambda { |start_date, end_date|
     { 
       :conditions => [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
     }
@@ -48,14 +48,6 @@ class M2m::CustomerServiceLog < M2m::Base
     self.category.try(:text)
   end
   
-  def part_number
-    @part_number ||= self.fcpartno.strip
-  end
-
-  def revision
-    @revision ||= self.fcpartrev.strip
-  end
-  
   def invoice_number=(val)
     write_attribute(:invoice_number, val)
   end
@@ -86,7 +78,7 @@ end
 #  fcsono           :string(6)       default(""), not null
 #  fcpartno         :string(25)      default(""), not null
 #  fcpartrev        :string(3)       default(""), not null
-#  fdinqdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdinqdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fctype           :string(1)       default(""), not null
 #  fcstatus         :string(20)      default(""), not null
 #  fcenterby        :string(3)       default(""), not null
@@ -96,18 +88,18 @@ end
 #  fcphone          :string(20)      default(""), not null
 #  fcrmano          :string(25)      default(""), not null
 #  fcassignto       :string(3)       default(""), not null
-#  fdestdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdestdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcreslvby        :string(3)       default(""), not null
-#  fdreslvdat       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdreslvdat       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcrevwby         :string(3)       default(""), not null
-#  fdrevwdate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdrevwdate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcusrchr1        :string(40)      default(""), not null
 #  fcusrchr2        :string(40)      default(""), not null
 #  fcusrchr3        :string(40)      default(""), not null
 #  fcusrchr4        :string(40)      default(""), not null
 #  fnusrqty1        :decimal(17, 5)  default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)  default(0.0), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fccustno         :string(6)       default(""), not null
 #  fcvendno         :string(6)       default(""), not null
 #  fcseverity       :string(1)       default(""), not null
@@ -128,7 +120,7 @@ end
 #  fcmeasure        :string(3)       default(""), not null
 #  fcother2         :string(20)      default(""), not null
 #  fclot            :string(20)      default(""), not null
-#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcwlitem         :string(6)       default(""), not null
 #  finumber         :string(3)       default(""), not null
 #  frelsno          :string(3)       default(""), not null

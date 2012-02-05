@@ -3,7 +3,7 @@ class Items::QuoteItemsController < ApplicationController
 
   def index
     @item = parent_object
-    @quote_items = @item.quote_items.reverse_order.paginate(:all, :page => params[:page], :per_page => 10)
+    @quote_items = @item.quote_items.reverse_order.paginate(:page => params[:page], :per_page => 10)
   end
 
   protected
@@ -13,11 +13,7 @@ class Items::QuoteItemsController < ApplicationController
     end
     
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
     
 end

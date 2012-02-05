@@ -6,13 +6,13 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :rma_key, :fcrmakey
   alias_attribute :amount, :ftotprice
   
-  named_scope :for_rma_item, lambda { |rma_item|
+  scope :for_rma_item, lambda { |rma_item|
     {
       :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
     }
   }
   
-  named_scope :for_rma_items, lambda { |rma_items|
+  scope :for_rma_items, lambda { |rma_items|
     {
       :conditions => [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
     }

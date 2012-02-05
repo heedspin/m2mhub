@@ -6,7 +6,8 @@ class Shipping::ReceiversController < ApplicationController
       @date = Date.parse(date)
     end
     @date ||= Date.current
-    @receivers = M2m::Receiver.with_date_received(@date).by_id_desc.all(:include => :receiver_items)
+    @receivers = M2m::Receiver.with_date_received(@date).by_id_desc.includes(:items)
+    M2m::Item.attach_items(@receivers.map(&:items).flatten)
     # M2m::ReceiverItem.attach_sales_orders(@shippers)
     if next_receiver = M2m::Receiver.for_next_day(@date).first
       @next_date = next_receiver.date_received

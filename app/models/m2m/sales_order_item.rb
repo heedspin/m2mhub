@@ -2,8 +2,8 @@ class M2m::SalesOrderItem < M2m::Base
   default_scope :order => 'soitem.fenumber'
   set_table_name 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
+  belongs_to_item :fpartno, :fpartrev
 
   alias_attribute :quantity, :fquantity
   alias_attribute :unit_price, :fprice
@@ -12,26 +12,18 @@ class M2m::SalesOrderItem < M2m::Base
   
   alias_attribute :multiple_releases, :fmultiple
   
-  def part_number
-    @part_number ||= self.fpartno.strip
-  end
+  scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
+  scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
+  scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
   
-  def revision
-    @revision ||= self.fpartrev.strip
-  end
-
-  named_scope :open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
-  named_scope :closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
-  named_scope :cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
-  
-  named_scope :part_number_like, lambda { |text| 
+  scope :part_number_like, lambda { |text| 
     text = '%' + (text || '') + '%'
     {
       :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
     }
   }
   
-  named_scope :order_number_like, lambda { |text|
+  scope :order_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
       :joins => :sales_order,
@@ -39,26 +31,32 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
   
-  named_scope :for_releases, lambda { |sales_order_releases|
+  scope :for_releases, lambda { |sales_order_releases|
     {
       :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
     }
   }
   
+  scope :for_release, lambda { |release|
+    {
+      :conditions => { :fsono => release.fsono, :fenumber => release.fenumber }
+    }
+  }
+  
   def self.attach_to_releases(sales_order_releases)
     if sales_order_releases.size > 0
-      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
+      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases)
       items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number))
       sales_order_releases.each do |r|
         if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
           r.item = i
-          r.sales_order = i.sales_order
+          i.sales_order = r.sales_order
           i.item = items.detect { |c| (c.part_number == i.part_number) && (c.revision == i.revision) }
         end
       end
@@ -86,16 +84,6 @@ class M2m::SalesOrderItem < M2m::Base
     end
   end
   
-  def self.attach_items(sales_order_items, items)
-    if (items.size > 0) and (sales_order_items.size > 0)
-      sales_order_items.each do |soi|
-        if soi.part_number.present? and soi.revision.present? and (found = items.detect { |item| (soi.part_number == item.part_number) && (soi.revision == item.revision) })
-          soi.item = found
-        end
-      end
-    end
-  end
-
 end
 
 
@@ -118,7 +106,7 @@ end
 #  fcustptrev       :string(3)       default(""), not null
 #  fdet_bom         :boolean         default(FALSE), not null
 #  fdet_rtg         :boolean         default(FALSE), not null
-#  fduedate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fduedate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fenumber         :string(3)       default(""), not null
 #  ffixact          :decimal(17, 5)  default(0.0), not null
 #  fgroup           :string(6)       default(""), not null

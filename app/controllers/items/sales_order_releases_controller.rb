@@ -3,8 +3,8 @@ class Items::SalesOrderReleasesController < ApplicationController
 
   def index
     @item = parent_object
-    @sales_order_items = @item.sales_order_items.all(:include => :sales_order)
-    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.paginate(:all, :page => params[:page], :per_page => 10)
+    @sales_order_items = @item.sales_order_items.includes(:sales_order)
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.paginate(:page => params[:page], :per_page => 10)
     @sales_order_releases.each do |r|
       if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
         r.item = i
@@ -20,11 +20,7 @@ class Items::SalesOrderReleasesController < ApplicationController
     end
 
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
     
 end

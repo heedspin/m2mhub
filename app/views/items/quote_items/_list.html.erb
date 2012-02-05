@@ -16,7 +16,7 @@
 <% @quote_items.each do |item| %>
 		<tr>
 			<td><%= link_to item.quote.quote_number, quote_url(item.quote) %></td>
-			<td><%= link_to_if item.item.present?, item.part_number, item_url(item.part_number) %></td>
+			<td><%= link_to_item item.item, item.part_number %></td>
 			<td><%= simple_format item.fdesc.strip %></td>
 			<td><%= cm item.quantity, :sales_order_quantity %></td>
 			<td><%= item.fcustpart %></td>
@@ -29,7 +29,7 @@
 <% if (@total_quote_items || 0) > @quote_items.size %>
 <tr>
 	<td class="ninjaborders" colspan="8">
-		<%= link_to "Browse all #{@total_quote_items} Quote Items", item_quote_items_url(@item.part_number) %>
+		<%= link_to "Browse all #{@total_quote_items} Quote Items", item_quote_items_url(@item) %>
 	</td>
 </tr>
 <% end %>

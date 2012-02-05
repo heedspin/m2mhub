@@ -1,10 +1,10 @@
-<% f.inputs do %>
+<%= f.inputs do %>
   <%= f.input :first_name %> 
   <%= f.input :last_name %> 
   <%= f.input :email %>
   <% if permitted_to?(:set_role, @user) %>
-  <%= f.input :user_role %>
-  <%= f.input :user_status %>
+  <%= f.input :user_role_id, :as => :select, :collection => UserRole.all, :include_blank => false %>
+  <%= f.input :user_state_id, :as => :select, :collection => UserState.all, :include_blank => false  %>
   <% end %>
 	<% if @user.new_record? %>
   <%= f.input :password %>
@@ -12,7 +12,7 @@
 	<% end %>
 <% end %>
 
-<% f.buttons do %>
+<%= f.buttons do %>
   <%= f.commit_button %>
   <%= f.cancel_link %>
 	<% if !@user.new_record? and permitted_to?(:delete) %>

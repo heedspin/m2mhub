@@ -15,13 +15,13 @@ class M2m::Rma < M2m::Base
   alias_attribute :severity_code, :fcseverty
   alias_attribute :sales_order_number, :fcsono
 
-  named_scope :between, lambda { |start_date, end_date|
+  scope :between, lambda { |start_date, end_date|
     { 
       :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
     }
   }
   
-  named_scope :with_rma_numbers, lambda { |rma_numbers|
+  scope :with_rma_numbers, lambda { |rma_numbers|
     {
       :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
     }
@@ -192,7 +192,13 @@ class M2m::Rma < M2m::Base
     def ticket
       if @ticket.nil?
         begin
-          @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => CompanyConfig.lighthouse_rma_project_id })
+          if @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => CompanyConfig.lighthouse_rma_project_id })
+            # Convert to time objects.
+            @ticket.created_at = Time.parse(@ticket.created_at)
+            @ticket.versions.each do |v|
+              v.created_at = Time.parse(v.created_at)
+            end
+          end
         rescue ActiveResource::ResourceNotFound
           # Bad link...
         end
@@ -230,7 +236,7 @@ end
 #
 # Table name: syrmama
 #
-#  fcrmano          :string(25)      default(""), not null
+#  fcrmano          :string(25)      default(""), not null, primary key
 #  fcsono           :string(6)       default(""), not null
 #  fccustno         :string(6)       default(""), not null
 #  fcstatus         :string(20)      default(""), not null
@@ -239,11 +245,11 @@ end
 #  fcseverty        :string(1)       default(""), not null
 #  fccustpo         :string(20)      default(""), not null
 #  fcsalecode       :string(7)       default(""), not null
-#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  fdenterdate      :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdenterdate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  finqno           :string(6)       default(""), not null
 #  fcompany         :string(35)      default(""), not null
-#  identity_column  :integer(4)      not null, primary key
+#  identity_column  :integer(4)      not null
 #  timestamp_column :binary
 #  fnextenum        :string(3)       default(""), not null
 #  fnextinum        :string(3)       default(""), not null
@@ -253,7 +259,7 @@ end
 #  fcusrchr3        :string(40)      default(""), not null
 #  fnusrqty1        :decimal(15, 5)  default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)  default(0.0), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fmusrmemo1       :text            default(""), not null
 #  fnotes           :string(500)     default(""), not null
 #  flfsflag         :boolean         default(FALSE), not null
@@ -261,3 +267,4 @@ end
 #  fdisrate         :decimal(8, 3)   default(0.0), not null
 #  fcusrchr4        :string(40)      default(""), not null
 #
+

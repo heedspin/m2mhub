@@ -1,11 +1,11 @@
 class M2m::CsPopup < M2m::Base
   set_table_name 'cspopup'
-  named_scope :for_key, lambda { |key|
+  scope :for_key, lambda { |key|
     {
       :conditions => { :fcpopkey => key }
     }
   }
-  named_scope :with_code, lambda { |code|
+  scope :with_code, lambda { |code|
     {
       :conditions => { :fcpopval => code }
     }

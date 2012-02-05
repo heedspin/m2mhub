@@ -1,21 +1,13 @@
 class M2m::ReceiverItem < M2m::Base
   set_table_name 'rcitem'
   belongs_to :receiver, :class_name => 'M2m::Receiver', :foreign_key => :freceiver, :primary_key => :freceiver
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
+  belongs_to_item :fpartno, :fpartrev
   
   alias_attribute :quantity, :fqtyrecv
   alias_attribute :receiver_number, :freceiver
   alias_attribute :purchase_order_item_number, :fpoitemno
   alias_attribute :release_number, :frelsno
   alias_attribute :purchase_order_item_number, :fpoitemno
-
-  def part_number
-    @part_number ||= self.fpartno.strip
-  end
-  
-  def revision
-    @revision ||= self.fpartrev.strip
-  end
 
   def purchase_order_item
     if self.receiver.purchase_order
@@ -53,7 +45,7 @@ end
 #  frelsno          :string(3)       default(""), not null
 #  fvendno          :string(6)       default(""), not null
 #  fbinno           :string(14)      default(""), not null
-#  fexpdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fexpdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  finspect         :string(1)       default(""), not null
 #  finvqty          :decimal(15, 5)  default(0.0), not null
 #  flocation        :string(14)      default(""), not null

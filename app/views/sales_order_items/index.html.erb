@@ -1,11 +1,11 @@
 <%= render 'sales_orders/submenu' %>
 
-<% semantic_form_for :search, @search_item, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
-	<% f.inputs do %>
+<%= semantic_form_for :search, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
+	<%= f.inputs do %>
   	<%= f.input :order_number, :as => :string %>
 	  <%= f.input :part_number, :as => :string %>
 	<% end %>
-  <% f.buttons do %>
+  <%= f.buttons do %>
 	  <%= f.commit_button 'Search' %>
 	<% end %>
 <% end %>

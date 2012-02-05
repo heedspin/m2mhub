@@ -14,7 +14,7 @@
 	</thead>
 	<tbody>
 	<% @sales_orders.each do |so| %>
-		<% releases = so.releases.all.sort_by(&:due_date) %>
+		<% releases = so.releases.to_a.sort_by(&:due_date) %>
 		<% so_style = cycle('odd', 'even') %>
 		<tr class="<%= so_style %>">
 			<td rowspan="<%= releases.size %>">
@@ -27,7 +27,7 @@
 		<tr class="<%= so_style %>">
 			<% end %>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
-			<td><%= link_to r.part_number, item_url(r.part_number) %></td>
+			<td><%= link_to_item(r.item.item, r.part_number) %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
 			<td class="monitary"><span class="currency_symbol">$</span><%= cm(r.item.item.total_cost, :dollars) if r.item.item %></td>

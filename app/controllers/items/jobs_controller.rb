@@ -5,7 +5,7 @@ class Items::JobsController < ApplicationController
     @popup_layout = params[:layout] == 'popup'
     @item = parent_object
     @jobs = M2m::Job.for_item(@item).by_date_desc
-    @jobs = @jobs.paginate(:all, :page => params[:page], :per_page => 5)
+    @jobs = @jobs.paginate(:page => params[:page], :per_page => 5)
     if @popup_layout
       render :action => 'popup', :layout => 'popup'
     end
@@ -18,11 +18,7 @@ class Items::JobsController < ApplicationController
     end
 
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
     
 end

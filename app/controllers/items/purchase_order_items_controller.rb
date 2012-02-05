@@ -3,7 +3,7 @@ class Items::PurchaseOrderItemsController < ApplicationController
 
   def index
     @item = parent_object
-    @purchase_order_items = @item.purchase_order_items.reverse_order.paginate(:all, :include => :purchase_order, :page => params[:page], :per_page => 10)
+    @purchase_order_items = @item.purchase_order_items.reverse_order.includes(:purchase_order).paginate(:page => params[:page], :per_page => 10)
   end
   
   protected
@@ -13,11 +13,7 @@ class Items::PurchaseOrderItemsController < ApplicationController
     end
 
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
     
 end

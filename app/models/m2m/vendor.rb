@@ -5,7 +5,7 @@ class M2m::Vendor < M2m::Base
   alias_attribute :name, :fcompany
   has_many :inventory_vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fvendno, :primary_key => :fvendno
   
-  named_scope :with_vendor_numbers, lambda { |vendor_numbers|
+  scope :with_vendor_numbers, lambda { |vendor_numbers|
     {
       :conditions => [ 'apvend.fvendno in (?)', vendor_numbers ]
     }

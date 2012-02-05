@@ -21,19 +21,19 @@ end
 #  fCustNo          :string(6)       default(""), not null
 #  ContactNumber    :string(20)      default(""), not null
 #  InqSubject       :text            default(""), not null
-#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  identity_column  :integer(4)      not null, primary key
+#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  identity_column  :integer(4)      not null
 #  timestamp_column :binary
 #  fInqType         :string(1)       default(""), not null
 #  fcassignto       :string(3)       default(""), not null
-#  fdestdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdestdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcreslvby        :string(3)       default(""), not null
-#  fdreslvdat       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdreslvdat       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcrevwby         :string(3)       default(""), not null
-#  fdrevwdate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdrevwdate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcactby          :string(3)       default(""), not null
-#  fdactdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdactdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fmaction         :text            default(""), not null
 #  fcsono           :string(6)       default(""), not null
 #  fccustpo         :string(20)      default(""), not null

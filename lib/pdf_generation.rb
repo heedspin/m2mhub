@@ -8,7 +8,7 @@ module PdfGeneration
       xml = render_to_string(options, &block)
       if Rails.env.development?
         # Log xml for debug purposes.
-        File.open(RAILS_ROOT + '/log/last_pdf.xml', 'w+') do |f|
+        File.open(File.join(Rails.root, 'log/last_pdf.xml'), 'w+') do |f|
           f.write(xml)
         end
       end
