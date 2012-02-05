@@ -1,4 +1,4 @@
-<h1><%= M2m::Item.model_name.human %>: <%= @item.part_number %></h1>
+<h1><%= M2m::Item.model_name.human %>: <%= @item.part_number %> <%= "Rev #{@item.revision}" if @item.revision.present? %></h1>
 
 <div class="submenu">
 	<ul>
@@ -32,4 +32,4 @@
 	</ul>
 </div>
 
-<%= render 'items/list', :items => @item.revisions %>
+<%= render 'items/list', :items => @item.revisions.sort_by { |i| [i.is_current? ? 1 : 0, i.revision]}.reverse %>
