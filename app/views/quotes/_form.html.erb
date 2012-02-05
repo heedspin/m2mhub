@@ -15,18 +15,18 @@ $(function() {
 </script>
 <% end %>
 
-<% f.inputs do %>
+<%= f.inputs do %>
   <%= f.input :company_name, :wrapper_html => { :class => 'autocompany' } %> 
 	<%= f.input :contact_name, :wrapper_html => { :class => 'autocontact' } %>
 <% end %>
 
 <% f.semantic_fields_for :items, @quote_item do |qif| %>
-	<% f.inputs do %>
+	<%= f.inputs do %>
   <%= qif.input :fpartno, :wrapper_html => { :class => 'autopart' } %>
 	<% end %>
 <% end %>
 
-<% f.buttons do %>
+<%= f.buttons do %>
   <%= f.commit_button %>
   <%= f.cancel_link %>
 <% end %>

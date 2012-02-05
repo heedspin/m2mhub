@@ -8,9 +8,9 @@
 		</tr>
 	</thead>
 	<tbody>
-<% receiver.receiver_items.each do |i| %>
+<% receiver.items.each do |i| %>
 		<tr>
-			<td><%= link_to i.part_number, item_url(i.part_number) %></td>
+			<td><%= link_to_item i.item, i.part_number %></td>
 			<td><%= i.po_vendor_part_number %></td>
 			<td><%= cm i.quantity, :sales_order_quantity %></td>
 			<td><%= i.flocation %></td>

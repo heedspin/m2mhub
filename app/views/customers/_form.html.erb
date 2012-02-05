@@ -1,9 +1,9 @@
-<% f.inputs do %>
+<%= f.inputs do %>
   <%= f.input :company_name %> 
 <% end %>
 
 <% f.semantic_fields_for :contacts, @customer.contacts.first do |contact| %>
-	<% f.inputs do %>
+	<%= f.inputs do %>
   <%= contact.input :fcfname %>
   <%= contact.input :fcontact %>
 	<%= contact.input :fcemail %>
@@ -11,7 +11,7 @@
 	<% end %>
 <% end %>
 
-<% f.buttons do %>
+<%= f.buttons do %>
   <%= f.commit_button %>
   <%= f.cancel_link %>
 <% end %>

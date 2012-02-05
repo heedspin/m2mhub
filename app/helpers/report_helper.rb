@@ -1,6 +1,6 @@
 module ReportHelper
   def include_closed_details_javascript
-    content_for :javascripts, <<-HTML
+    html = <<-HTML
     <script type="text/javascript">
     $(function() {
     	$(".show_closed_details").toggle(function() { 
@@ -13,5 +13,6 @@ module ReportHelper
     });
     </script>
     HTML
+    content_for :javascripts, html.html_safe
   end
 end

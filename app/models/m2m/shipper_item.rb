@@ -3,8 +3,7 @@ class M2m::ShipperItem < M2m::Base
   set_table_name 'shitem'
 
   belongs_to :shipper, :class_name => 'M2m::Shipper', :foreign_key => :fshipno
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno  
-  # belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
+  belongs_to_item :fpartno, :fpartrev
   
   alias_attribute :quantity, :fshipqty
   alias_attribute :quantity_shipped, :fshipqty

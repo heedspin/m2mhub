@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/ctran/annotate_models.git
+  revision: a43c08f0eb4d69a48c6830630ebb60e35ccb2d2d
+  specs:
+    annotate (2.4.1.beta1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -37,7 +43,6 @@ GEM
     airbrake (3.0.9)
       activesupport
       builder
-    annotate (2.4.0)
     arel (2.2.1)
     authlogic (3.1.0)
       activerecord (>= 3.0.7)
@@ -50,10 +55,8 @@ GEM
       activesupport (~> 3.0)
     erubis (2.7.0)
     factory_girl (1.2.3)
-    formtastic (1.2.3)
-      actionpack (>= 2.3.7)
-      activesupport (>= 2.3.7)
-      i18n (~> 0.4)
+    formtastic (2.0.2)
+      rails (~> 3.0)
     hike (1.2.1)
     i18n (0.6.0)
     jquery-rails (1.0.19)
@@ -128,6 +131,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.31)
+    will_paginate (3.0.3)
 
 PLATFORMS
   ruby
@@ -137,12 +141,12 @@ DEPENDENCIES
   activerecord-sqlserver-adapter (= 3.1.5)
   addressable (= 2.2.6)
   airbrake (= 3.0.9)
-  annotate
+  annotate!
   authlogic (= 3.1.0)
   declarative_authorization (= 0.5.5)
   delayed_job (= 3.0.1)
   factory_girl (= 1.2.3)
-  formtastic (= 1.2.3)
+  formtastic (= 2.0.2)
   jquery-rails
   json
   lighthouse-api (= 2.0)
@@ -154,3 +158,4 @@ DEPENDENCIES
   spreadsheet (= 0.6.8)
   tiny_tds (= 0.5.1)
   transactional-factories (= 0.5.0)
+  will_paginate (= 3.0.3)

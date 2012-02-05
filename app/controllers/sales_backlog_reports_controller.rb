@@ -7,12 +7,13 @@ class SalesBacklogReportsController < ApplicationController
     @search.due_date ||= Date.current.next_week
 
     if @search_performed
-      @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.due_by(@search.due_date).all(:include => {:sales_order => :customer}, :order => 'somast.fcompany, sorels.fsono, sorels.fpartno')
-      sales_order_items = M2m::SalesOrderItem.for_releases(@releases).all
+      @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.due_by(@search.due_date).includes(:sales_order => :customer).order('somast.fcompany, sorels.fsono, sorels.fpartno').to_a
+      sales_order_items = M2m::SalesOrderItem.for_releases(@releases).to_a
       M2m::SalesOrderItem.attach_to_releases_for_backlog(@releases, sales_order_items)
-      items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number)).all
-      M2m::SalesOrderItem.attach_items(sales_order_items, items)
-      locations = M2m::InventoryLocation.with_part_numbers(items)
+      items = M2m::Item.attach_items(sales_order_items)
+
+      # This will get too many locations, but will be filtered with revision by InventoryLocation.attach_to_items.
+      locations = M2m::InventoryLocation.with_part_numbers(items.map(&:part_number)).to_a
       M2m::InventoryLocation.attach_to_items(locations, items)
 
       # Filter out by fob and status

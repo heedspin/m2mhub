@@ -94,10 +94,11 @@ class Quality::CreditMemoReport
       end
     end
 
-    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items).all
-    customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
+    rmas = M2m::Rma.between(@start_date, @end_date).includes(:items).to_a
+    customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).to_a
     rma_items = rmas.map(&:items).flatten
-    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).all    
+    M2m::Item.attach_items(rma_items)
+    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).to_a
     results = M2m::InventoryVendor.connection.select_rows <<-SQL
     select syrmaitm.identity_column, invend.fvendno as vendor_number
     from syrmaitm
@@ -110,7 +111,6 @@ class Quality::CreditMemoReport
     end
     rmas.each do |rma|
       next unless rma.severity.nil? || CompanyConfig.credit_memo_report_severity_names.include?(rma.severity_name)
-      rma.items = rma_items.select { |ri| ri.rma_number == rma.rma_number }
       rma.items.each do |rma_item|
         rma_item.rma = rma
         # Rails.logger.debug "Looking for #{M2m::InvoiceItem.rma_key(rma_item)} in " + invoice_items.map(&:rma_key).sort.join(', ')
@@ -124,7 +124,7 @@ class Quality::CreditMemoReport
         end
       end
       rma.customer = customers.detect { |c| c.customer_number == rma.customer_number }
-    end    
+    end 
     true
   end
 

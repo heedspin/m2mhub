@@ -1,31 +1,31 @@
-<h1><%= M2m::Item.human_name %>: <%= @item.part_number %></h1>
+<h1><%= M2m::Item.model_name.human %>: <%= @item.part_number %></h1>
 
 <div class="submenu">
 	<ul>
 		<li class="<%= controller_selected(:items, :show) %>">
-			<%= link_to 'Summary', item_url(@item.part_number) %>
+			<%= link_to 'Summary', item_url(@item) %>
 		</li>
 
 		<li class="<%= controller_selected('jobs') %>">
-			<%= link_to 'Jobs', item_jobs_url(@item.part_number) %>
+			<%= link_to 'Jobs', item_jobs_url(@item) %>
 		</li>
 
 		<li class="<%= controller_selected('shippers') %>">
-			<%= link_to 'Shippers', item_shippers_url(@item.part_number) %>
+			<%= link_to 'Shippers', item_shippers_url(@item) %>
 		</li>
 
 		<li class="<%= controller_selected('sales_order_releases') %>">
-			<%= link_to 'Sales Orders', item_sales_order_releases_url(@item.part_number) %>
+			<%= link_to 'Sales Orders', item_sales_order_releases_url(@item) %>
 		</li>
 
 		<li class="<%= controller_selected('quote_items') %>">
-			<%= link_to 'Quotes', item_quote_items_url(@item.part_number) %>
+			<%= link_to 'Quotes', item_quote_items_url(@item) %>
 		</li>
 
 		<li class="<%= controller_selected('purchase_order_items') %>">
-			<%= link_to 'Purchase Orders', item_purchase_order_items_url(@item.part_number) %>
+			<%= link_to 'Purchase Orders', item_purchase_order_items_url(@item) %>
 		</li>
 	</ul>
 </div>
 
-<%= render 'items/list' %>
+<%= render 'items/list', :items => @item.revisions %>

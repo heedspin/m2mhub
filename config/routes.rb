@@ -21,13 +21,13 @@ M2mhub::Application.routes.draw do
   resources :sales_order_releases, :only => [:index]
   resources :quotes
   resources :user_activities, :as => 'history', :only => [:index]
-  resources :items, :requirements => { :id => /[^\/]+/ } do
-    resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases', :requirements => { :item_id => /[^\/]+/ }
-    resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items', :requirements => { :item_id => /[^\/]+/ }
-    resources :quote_items, :only => [:index], :controller => 'items/quote_items', :requirements => { :item_id => /[^\/]+/ }
-    resource :history, :controller => 'items/history', :requirements => { :item_id => /[^\/]+/ }
-    resources :shippers, :only => [:index], :controller => 'items/shippers', :requirements => { :item_id => /[^\/]+/ }
-    resources :jobs, :only => [:index], :controller => 'items/jobs', :requirements => { :item_id => /[^\/]+/ }
+  resources :items do
+    resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
+    resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'
+    resources :quote_items, :only => [:index], :controller => 'items/quote_items'
+    resource :history, :controller => 'items/history'
+    resources :shippers, :only => [:index], :controller => 'items/shippers'
+    resources :jobs, :only => [:index], :controller => 'items/jobs'
   end
   resources :customers do
     resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'

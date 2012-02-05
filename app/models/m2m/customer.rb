@@ -56,8 +56,8 @@ class M2m::Customer < M2m::Base
   def update_timestamps
     now = Time.now
     if self.new_record?
-      self.write_attribute(:fcreated, now)
-      self.write_attribute(:fsince, now) unless self.fsince.present?
+      write_attribute(:fcreated, now)
+      write_attribute(:fsince, now) unless self.fsince.present?
     end
   end
   
@@ -80,7 +80,7 @@ end
 #  fcfname          :string(15)      default(""), not null
 #  fcontact         :string(20)      default(""), not null
 #  fcountry         :string(25)      default(""), not null
-#  fcreated         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcreated         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcrlimit         :integer(4)      default(0), not null
 #  fcshipto         :string(4)       default(""), not null
 #  fcsoldto         :string(4)       default(""), not null
@@ -88,11 +88,11 @@ end
 #  fcusrchr1        :string(20)      default(""), not null
 #  fcusrchr2        :string(40)      default(""), not null
 #  fcusrchr3        :string(40)      default(""), not null
-#  fdbdate          :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdbdate          :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fdbrate          :string(4)       default(""), not null
 #  fdisrate         :decimal(8, 3)   default(0.0), not null
 #  fdistno          :string(6)       default(""), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fllongdist       :boolean         default(FALSE), not null
 #  ffax             :string(20)      default(""), not null
 #  ffincharge       :boolean         default(FALSE), not null
@@ -111,7 +111,7 @@ end
 #  fsicno1          :string(4)       default(""), not null
 #  fsicno2          :string(4)       default(""), not null
 #  fshipvia         :string(20)      default(""), not null
-#  fsince           :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fsince           :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fstate           :string(20)      default(""), not null
 #  ftaxcode         :string(10)      default(""), not null
 #  ftaxexempt       :string(15)      default(""), not null

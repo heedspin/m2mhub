@@ -1,8 +1,8 @@
 
 <div class="paging">
-	<%= link_to("&laquo; #{@next_sales_order.customer_name} &lt;#{@next_sales_order.order_number}&gt;", sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
+	<%= link_to("&laquo; #{@next_sales_order.customer_name} &lt;#{@next_sales_order.order_number}&gt;".html_safe, sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
 	<%= link_to 'Browse All', sales_orders_url %>
-	<%= link_to("#{@previous_sales_order.customer_name} &lt;#{@previous_sales_order.order_number}&gt; &raquo;", 
+	<%= link_to("#{@previous_sales_order.customer_name} &lt;#{@previous_sales_order.order_number}&gt; &raquo;".html_safe, 
 	sales_order_url(@previous_sales_order.order_number)) if @previous_sales_order %>
 </div>
 
@@ -39,7 +39,10 @@
 		<tr>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= h r.fdelivery.strip %></td>
-			<td><%= link_to_if r.item.item.present?, r.part_number, item_url(r.part_number) %></td>
+			<% if r.item.nil? %>
+			<td colspan="8"></td>
+			<% else %>
+			<td><%= link_to_if r.item.try(:item), r.part_number, item_url(r.part_number) %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
 			<td class="monitary">$<%= cm r.item.try(:item).try(:total_cost), :dollars %></td>
@@ -51,6 +54,7 @@
 			<% else %>
 			<td></td>
 			<td></td>
+			<% end %>
 			<% end %>
 			<td class="monitary">$<%= cm(r.release_price, :dollars) %></td>
 		</tr>

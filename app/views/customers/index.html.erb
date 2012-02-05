@@ -20,12 +20,12 @@ $(function() {
 </script>
 <% end %>
 
-<% semantic_form_for :search, @search, :url => customers_path, :html => {:method => :get} do |f| %>
+<%= semantic_form_for :search, :url => customers_path, :html => {:method => :get} do |f| %>
 <table class="flatform">
 	<tbody>
 		<tr>
 			<td>
-				<% f.inputs do %>
+				<%= f.inputs do %>
 				  <%= f.input :fcompany, :label => 'Name' %>
 				<% end %>
 			</td>

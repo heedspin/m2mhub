@@ -5,9 +5,9 @@ class User < ApplicationModel
     c.maintain_sessions = false
   end
   belongs_to_active_hash :user_role
-  belongs_to_active_hash :user_status
-  attr_protected :password, :password_confirmation, :user_role, :user_status
-  validates_presence_of :first_name, :last_name, :email, :user_status, :user_role
+  belongs_to_active_hash :user_state
+  attr_protected :password, :password_confirmation, :user_role, :user_state
+  validates_presence_of :first_name, :last_name, :email, :user_state, :user_role
 
   has_many :user_messages, :dependent => :delete_all
   has_many :messages, :through => :user_messages
@@ -15,7 +15,7 @@ class User < ApplicationModel
   belongs_to :notification_preference
 
   attr_accessor :current_password
-  scope :active, :conditions => { :user_status_id => UserStatus.active.id }
+  scope :active, :conditions => { :user_state_id => UserState.active.id }
   
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]
@@ -48,7 +48,7 @@ class User < ApplicationModel
   end
 
   def destroy
-    self.update_attributes(:user_status_id => UserStatus.deleted.id)
+    self.update_attributes(:user_state_id => UserState.deleted.id)
   end
 
   def deliver_verification_instructions!
@@ -62,7 +62,7 @@ class User < ApplicationModel
   end
 
   def verify!
-    self.update_attributes(:user_status_id => UserStatus.active.id)
+    self.update_attributes(:user_state_id => UserState.active.id)
   end
 
   def self.robo_mailer
@@ -74,13 +74,13 @@ class User < ApplicationModel
     user.save(:validate => false)
     user
   end
-
+  
   protected
 
     before_validation :set_default_status_and_role, :on => :create
     def set_default_status_and_role
       self.user_role_id ||= UserRole.default.id
-      self.user_status_id ||= UserStatus.unconfirmed.id
+      self.user_state_id ||= UserState.unconfirmed.id
     end
 end
 
@@ -95,7 +95,7 @@ end
 #  photo_file_name         :string(255)
 #  photo_content_type      :string(255)
 #  photo_file_size         :integer(4)
-#  user_status_id          :integer(4)
+#  user_state_id           :integer(4)
 #  user_role_id            :integer(4)
 #  email                   :string(255)
 #  crypted_password        :string(255)

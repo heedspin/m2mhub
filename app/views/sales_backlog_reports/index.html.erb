@@ -1,22 +1,22 @@
-<% semantic_form_for :search, @search, :url => sales_backlog_reports_path, :html => {:method => :get} do |f| %>
+<%= semantic_form_for :search, :url => sales_backlog_reports_path, :html => {:method => :get} do |f| %>
 <table class="flatform">
 	<tbody>
 		<tr>
 			<td>
-				<% f.inputs do %>
-				  <%= f.input :due_date, :as => :calendar, :value => @search.due_date.to_s(:backorder_date), :label => 'Due' %>
+				<%= f.inputs do %>
+				  <%= f.input :due_date, :as => :calendar, :label => 'Due' %>
 				<% end %>
 			</td>
 			<td>
-				<% f.buttons do %>
+				<%= f.buttons do %>
 				  <%= f.commit_button 'View' %>
 					<%= f.commit_button 'Print' %>
 				<% end %>
 			</td>
 			<td>
-				<% f.inputs do %>
-					<%= f.input :customer_status %>
-					<%= f.input :fob_group %>
+				<%= f.inputs do %>
+					<%= f.input :customer_status, :as => :select, :collection => M2m::CustomerStatus.all %>
+					<%= f.input :fob_group, :as => :select, :collection => FobGroup.all %>
 				<% end %>
 			</td>
 		</tr>

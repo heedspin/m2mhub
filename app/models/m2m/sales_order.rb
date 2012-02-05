@@ -6,10 +6,6 @@ class M2m::SalesOrder < M2m::Base
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
   
-  def filtered_releases(*args)
-    self.releases(*args).select { |r| (r.frelease != '000') || !r.item.multiple_releases? }
-  end
-  
   scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
@@ -41,7 +37,7 @@ class M2m::SalesOrder < M2m::Base
   end
   
   def total_price
-    self.filtered_releases.sum(&:total_price)
+    self.releases.to_a.sum { |r| r.master? ? 0.0 : r.total_price }
   end
   
   def status
@@ -69,25 +65,25 @@ end
 #  fcompany         :string(35)      default(""), not null
 #  fcity            :string(20)      default(""), not null
 #  fcustpono        :string(20)      default(""), not null
-#  fackdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  fcanc_dt         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fackdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcanc_dt         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fccurid          :string(3)       default(""), not null
 #  fcfactor         :decimal(17, 5)  default(0.0), not null
 #  fcfname          :string(15)      default(""), not null
 #  fcfromno         :string(25)      default("")
 #  fcfromtype       :string(5)       default(""), not null
 #  fcontact         :string(30)      default(""), not null
-#  fclos_dt         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fclos_dt         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fcountry         :string(25)      default(""), not null
 #  fcusrchr1        :string(20)      default(""), not null
 #  fcusrchr2        :string(40)      default(""), not null
 #  fcusrchr3        :string(40)      default(""), not null
-#  fdcurdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdcurdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fdisrate         :decimal(8, 3)   default(0.0), not null
 #  fdistno          :string(6)       default(""), not null
-#  fduedate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fduedate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fduplicate       :boolean         default(FALSE), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  festimator       :string(3)       default(""), not null
 #  ffax             :string(20)      default(""), not null
 #  ffob             :string(20)      default(""), not null
@@ -95,12 +91,12 @@ end
 #  fnextinum        :string(3)       default(""), not null
 #  fnusrqty1        :decimal(15, 5)  default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)  default(0.0), not null
-#  forderdate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  forderdate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fordername       :string(35)      default(""), not null
-#  fordrevdt        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fordrevdt        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fpaytype         :string(1)       default(""), not null
 #  fphone           :string(20)      default(""), not null
-#  fprint_dt        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fprint_dt        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fprinted         :boolean         default(FALSE), not null
 #  fsalcompct       :decimal(8, 3)   default(0.0), not null
 #  fsalecom         :boolean         default(FALSE), not null
@@ -121,7 +117,7 @@ end
 #  flprofrqd        :boolean         default(FALSE), not null
 #  fndpstrcvd       :decimal(17, 5)  default(0.0), not null
 #  fndpstrqd        :decimal(17, 5)  default(0.0), not null
-#  fdeurodate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdeurodate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  feurofctr        :decimal(17, 5)  default(0.0), not null
 #  fsalescode       :string(7)       default(""), not null
 #  fusercode        :string(7)       default(""), not null
@@ -141,8 +137,8 @@ end
 #  ContractNu       :string(10)      default(""), not null
 #  fbilladdr        :string(4)       default(""), not null
 #  OpportunNum      :string(6)       default(""), not null
-#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  OppCrType        :string(3)       default(""), not null
 #  QuoteNumber      :string(6)       default(""), not null
 #

@@ -3,8 +3,8 @@ class M2m::SalesOrderRelease < M2m::Base
   default_scope :order => 'sorels.fenumber'
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
-  belongs_to :item, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'soitem.fenumber = \'#{fenumber}\''
-
+  belongs_to_item :fpartno, :fpartrev
+  
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
 
   scope :for_shipper_items, lambda { |shipper_items|
@@ -103,17 +103,17 @@ class M2m::SalesOrderRelease < M2m::Base
     quantity - quantity_shipped
   end
 
-  def part_number
-    self.fpartno.strip
-  end
-
-  def part_rev
-    self.fpartrev.strip
-  end
-
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)
     self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+  end
+
+  def self.attach_to_sales_orders(sales_orders)
+    sales_orders.each do |so|
+      so.releases.each do |r|
+        r.sales_order = so
+      end
+    end
   end
 
   def status
@@ -153,6 +153,11 @@ class M2m::SalesOrderRelease < M2m::Base
   def master?
     self.fmasterrel
   end
+  
+  # def master_release?
+  #   (self.frelease == '000') && self.item.try(:multiple_releases?)
+  # end
+  
 end
 
 
@@ -172,14 +177,14 @@ end
 #  fbook            :decimal(15, 5)  default(0.0), not null
 #  fbqty            :decimal(15, 5)  default(0.0), not null
 #  fdiscount        :decimal(17, 5)  default(0.0), not null
-#  fduedate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fduedate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  finvamount       :decimal(17, 5)  default(0.0), not null
 #  finvqty          :decimal(15, 5)  default(0.0), not null
 #  fjob             :boolean         default(FALSE), not null
 #  fjoqty           :decimal(15, 5)  default(0.0), not null
 #  flabcost         :decimal(17, 5)  default(0.0), not null
 #  flngth           :decimal(15, 5)  default(0.0), not null
-#  flshipdate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  flshipdate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fmasterrel       :boolean         default(FALSE), not null
 #  fmatlcost        :decimal(17, 5)  default(0.0), not null
 #  fmaxqty          :decimal(15, 5)  default(0.0), not null
@@ -228,7 +233,7 @@ end
 #  fcudrev          :string(3)       default(""), not null
 #  fndbrmod         :integer(4)      default(0), not null
 #  fpriority        :integer(4)      default(4), not null
-#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  flInvcPoss       :boolean         default(FALSE), not null
 #  fmatlpadj        :decimal(16, 5)  default(0.0), not null
 #  ftoolpadj        :decimal(16, 5)  default(0.0), not null

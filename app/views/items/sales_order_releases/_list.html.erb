@@ -40,7 +40,7 @@
 			<td class="centered"><%= r.status %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
 			<td><%= link_to r.sales_order.customer_name, customer_url(r.sales_order.fcustno) %></td>
-			<td><%= link_to r.item.item.part_number, item_url(r.item.item.part_number) %></td>
+			<td><%= link_to r.item.item.part_number, item_url(r.item.item) %></td>
 			<td><%= r.revision %></td>
 			<td><%= r.item.customer_part_number %></td>
 			<td><%= r.item.item.vendors.map { |v| v.vendor_part_number.strip }.join(', ') %></td>

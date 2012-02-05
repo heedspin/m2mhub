@@ -3,13 +3,14 @@ class Items::ShippersController < ApplicationController
 
   def index
     @item = parent_object
-    @shippers = M2m::Shipper.for_item(@item.part_number).by_shipper_number_desc
+    @shippers = M2m::Shipper.for_item(@item).by_shipper_number_desc
     @total_shippers = @shippers.count
     if limit = params[:limit]
       @shippers = @shippers.all(:limit => limit.to_i)
       render :action => 'preview', :layout => false
     else
-      @shippers = @shippers.paginate(:all, :page => params[:page], :per_page => 10)
+      @shippers = @shippers.includes(:items).paginate(:page => params[:page], :per_page => 10)
+      M2m::Item.attach_items(@shippers.map(&:items).flatten)
     end
     M2m::ShipperItem.attach_sales_orders(@shippers)
   end
@@ -21,11 +22,7 @@ class Items::ShippersController < ApplicationController
     end
 
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
     
 end

@@ -7,13 +7,13 @@ class ItemsController < ApplicationController
       @items = M2m::Item.part_number_like(@search_term).by_part_number.all(:select => 'inmast.fpartno', :limit => 20)
       render :json => @items.map(&:part_number)
     else
-      @search_item = M2m::Item.new
+      @search = M2m::Item.new
       search_params = params[:search] || {}
-      @search_item.fpartno = search_params['fpartno']
-      if @search_item.fpartno.present?
-        @items = M2m::Item.company_or_vendor_part_number_like(@search_item.fpartno).paginate(:all, :page => params[:page],
-                                                                                             :per_page => 20,
-                                                                                             :order => 'inmast.fpartno, inmast.frev desc')
+      @search.fpartno = search_params['fpartno']
+      if @search.fpartno.present?
+        @items =
+          M2m::Item.company_or_vendor_part_number_like(@search.fpartno).paginate(:page => params[:page],
+                                                                                 :per_page => 20).order('inmast.fpartno, inmast.frev desc')
       end
     end
   end
@@ -21,8 +21,8 @@ class ItemsController < ApplicationController
   def show
     unless @item = current_object
       # if @item_id.include?('/') and (part_no = @item_id.split('/').first) and (M2m::Item.with_part_number(part_no).count > 0)
-      #   redirect_to 
-      #   
+      #   redirect_to
+      #
       # end
       record_not_found
     else
@@ -53,12 +53,7 @@ class ItemsController < ApplicationController
     end
 
     def current_object
-      if @current_object.nil?
-        @item_id = CGI::unescape(params[:id])
-        @items = M2m::Item.with_part_number(@item_id).by_rev_desc
-        @current_object = @items.first
-      end
-      @current_object
+      @current_object ||= M2m::Item.includes(:revisions).find(params[:id])
     end
 
 end

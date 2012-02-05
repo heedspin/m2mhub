@@ -46,7 +46,7 @@ end
 #  identity_column  :integer(4)      not null, primary key
 #  timestamp_column :binary
 #  fcfac            :string(20)      default("")
-#  sortdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  sortdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  SortDateSt       :string(19)      default(""), not null
 #
 

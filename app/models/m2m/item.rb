@@ -11,6 +11,7 @@ class M2m::Item < M2m::Base
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
   has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
   has_one :current_flag, :class_name => 'M2m::InventoryCurrentFlag', :foreign_key => [:fcpartno, :fcpartrev]
+  has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
   
   def locations
     @locations ||= M2m::InventoryLocation.for_item(self)
@@ -46,6 +47,8 @@ class M2m::Item < M2m::Base
     @revision ||= self.frev.strip
   end
   
+  scope :part_number, lambda { |pn| where(:fpartno => pn) }
+  scope :revision, lambda { |r| where(:frev => r) }
   scope :with_part_number, lambda { |pn| 
     {
       :conditions => { :fpartno => pn }
@@ -88,6 +91,18 @@ class M2m::Item < M2m::Base
     else
       false
     end
+  end
+
+  def self.attach_items(objects, items=nil)
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number))
+    if (items.size > 0) and (objects.size > 0)
+      objects.each do |o|
+        if o.part_number.present? and o.revision.present? and (found = items.detect { |item| (o.part_number == item.part_number) && (o.revision == item.revision) })
+          o.item = found
+        end
+      end
+    end
+    items
   end
   
 end
@@ -202,7 +217,7 @@ end
 #  fcclass          :string(12)      not null
 #  fidims           :integer(4)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null
+#  identity_column  :integer(4)      not null, primary key
 #  fcomment         :text            not null
 #  fmusrmemo1       :text            not null
 #  fstdmemo         :text            not null

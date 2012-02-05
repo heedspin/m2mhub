@@ -15,7 +15,7 @@ namespace :default_data do
       u.last_name = user[1]
       u.email = user[2]
       u.user_role_id = UserRole.admin.id
-      u.user_status_id = UserStatus.active.id
+      u.user_state_id = UserState.active.id
       if (password = user[3]) and u.crypted_password.nil?
         u.password = u.password_confirmation = password
       end

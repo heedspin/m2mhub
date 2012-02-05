@@ -2,8 +2,8 @@ class M2m::QuoteItem < M2m::Base
   default_scope :order => 'qtitem.fenumber'
   set_table_name 'qtitem'
   belongs_to :quote, :class_name => 'M2m::Quote', :foreign_key => :fquoteno, :primary_key => :fquoteno
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono, :primary_key => :fsono
+  belongs_to_item :fpartno, :fpartrev
   
   scope :status_open,      :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.open.name }}
   scope :status_closed,    :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.closed.name }}
@@ -31,9 +31,6 @@ class M2m::QuoteItem < M2m::Base
   alias_attribute :unit_price, :funetprice
   alias_attribute :sales_order_number, :fsono
   alias_attribute :item_number, :fenumber
-  def part_number
-    self.fpartno.strip
-  end
 end
 
 
@@ -100,8 +97,8 @@ end
 #  ITCCOST          :decimal(17, 5)  default(0.0), not null
 #  fcudrev          :string(3)       default(""), not null
 #  fndbrmod         :integer(4)      default(0), not null
-#  fctpdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  fctptrans        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fctpdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctptrans        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  ContractNu       :string(10)      default(""), not null
 #  Flrfqreqd        :boolean         default(FALSE), not null
 #  Fcostfrom        :string(9)       default(""), not null

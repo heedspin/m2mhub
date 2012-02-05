@@ -40,7 +40,7 @@ class CustomersController < ApplicationController
       @search.fcompany = @search.fcompany.strip
     end
     if @search.fcompany.present?
-      @customers = M2m::Customer.name_like(@search.fcompany.strip).paginate(:all, :page => params[:page], :per_page => 50, :order => 'fcompany')
+      @customers = M2m::Customer.name_like(@search.fcompany.strip).paginate(:page => params[:page], :per_page => 50).order('fcompany')
     end
     if @customers and (@customers.size == 1)
       redirect_to customer_url(@customers.first.fcustno)
@@ -52,7 +52,9 @@ class CustomersController < ApplicationController
   def show
     @customer = current_object
     @total_sales_orders = @customer.sales_orders.count
-    @sales_orders = @customer.sales_orders.by_order_number_desc.all(:include => :releases, :limit => 5)
+    @sales_orders = @customer.sales_orders.by_order_number_desc.includes(:releases).limit(5)
+    M2m::SalesOrderRelease.attach_to_sales_orders(@sales_orders)
+    M2m::SalesOrderItem.attach_to_releases(@sales_orders.map(&:releases).flatten)
     @total_quotes = @customer.quotes.count
     @quotes = @customer.quotes.by_quote_number_desc.all(:include => :items, :limit => 1)
     # @previous_customer = M2m::Customer.find(:first, :conditions => ['fcompany < ?', current_object.fcompany], :order => 'fcompany desc')

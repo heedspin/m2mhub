@@ -25,28 +25,28 @@ end
 #
 #  fcompany         :string(35)      default(""), not null
 #  fcshipto         :string(8)       default(""), not null
-#  forddate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  forddate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fpono            :string(6)       default(""), not null, primary key
 #  fstatus          :string(20)      default(""), not null
 #  fvendno          :string(6)       default(""), not null
 #  fbuyer           :string(3)       default(""), not null
 #  fchangeby        :string(25)      default(""), not null
-#  fcngdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcngdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fconfirm         :string(19)      default(""), not null
 #  fcontact         :string(20)      default(""), not null
 #  fcfname          :string(15)      default(""), not null
-#  fcreate          :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fcreate          :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  ffob             :string(20)      default(""), not null
 #  fmethod          :string(1)       default(""), not null
 #  foldstatus       :string(20)      default(""), not null
-#  fordrevdt        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fordrevdt        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fordtot          :decimal(15, 5)  default(0.0), not null
 #  fpayterm         :string(4)       default(""), not null
 #  fpaytype         :string(1)       default(""), not null
 #  fporev           :string(2)       default(""), not null
 #  fprint           :string(1)       default(""), not null
-#  freqdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  freqsdt          :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  freqdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  freqsdt          :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  freqsno          :string(6)       default(""), not null
 #  frevtot          :decimal(15, 5)  default(0.0), not null
 #  fsalestax        :decimal(7, 3)   default(0.0), not null
@@ -75,11 +75,11 @@ end
 #  fcusrchr3        :string(40)      default(""), not null
 #  fnusrqty1        :decimal(17, 5)  default(0.0), not null
 #  fnusrcur1        :decimal(, )     default(0.0), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fccurid          :string(3)       default(""), not null
 #  fcfactor         :decimal(17, 5)  default(0.0), not null
-#  fdcurdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  fdeurodate       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdcurdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdeurodate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  feurofctr        :decimal(17, 5)  default(0.0), not null
 #  fctype           :string(1)       default(""), not null
 #  timestamp_column :binary
@@ -91,6 +91,6 @@ end
 #  fpoclosing       :text            default(""), not null
 #  freasoncng       :text            default(""), not null
 #  fndbrmod         :integer(4)      default(0), not null
-#  flpdate          :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  flpdate          :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #
 

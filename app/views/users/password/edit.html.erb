@@ -1,5 +1,5 @@
 <% title "Change Password for #{@user.full_name}"  %>
-<% semantic_form_for @user, :url => user_password_path(@user) do |f| %>
+<%= semantic_form_for @user, :url => user_password_path(@user) do |f| %>
   <%= f.inputs do %>
 		<% unless permitted_to?(:update_without_current_password, :users_password) %>
     <%= f.input :current_password %>

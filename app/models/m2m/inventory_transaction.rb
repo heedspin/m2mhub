@@ -1,8 +1,7 @@
 class M2m::InventoryTransaction < M2m::Base
   set_table_name 'intran'
   
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno  
-  # belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
+  belongs_to_item :fpartno, :fcpartrev
   
   def transaction_type
     M2m::InventoryTransactionType.find_by_key(self.ftype)
@@ -10,7 +9,6 @@ class M2m::InventoryTransaction < M2m::Base
   
   alias_attribute :quantity, :fqty
   alias_attribute :date, :fdate
-  alias_attribute :revision, :fcpartrev
   alias_attribute :comment, :fcomment
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
@@ -21,7 +19,7 @@ end
 #
 # Table name: intran
 #
-#  fdate            :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdate            :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fpartno          :string(25)      default(""), not null
 #  fcpartrev        :string(3)       default(""), not null
 #  ftype            :string(1)       default(""), not null
@@ -29,7 +27,7 @@ end
 #  fcode            :string(4)       default(""), not null
 #  fcost            :decimal(17, 5)  default(0.0), not null
 #  ffrombin         :string(14)      default(""), not null
-#  ffromexpdt       :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  ffromexpdt       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  ffromjob         :string(10)      default(""), not null
 #  ffromloc         :string(14)      default(""), not null
 #  ffromlot         :string(20)      default(""), not null
@@ -40,12 +38,12 @@ end
 #  fovrhd           :decimal(17, 5)  default(0.0), not null
 #  fqty             :decimal(15, 5)  default(0.0), not null
 #  ftobin           :string(14)      default(""), not null
-#  ftoexpdt         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  ftoexpdt         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  ftojob           :string(10)      default(""), not null
 #  ftoloc           :string(14)      default(""), not null
 #  ftolot           :string(20)      default(""), not null
 #  ftoso            :string(12)      default(""), not null
-#  fctime_ts        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fctime_ts        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fnnewonhd        :decimal(17, 5)  default(0.0), not null
 #  timestamp_column :binary
 #  identity_column  :integer(4)      not null, primary key

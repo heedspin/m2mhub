@@ -1,21 +1,21 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.1'
+gem 'rails', '3.1.3' #'3.2.1'
 gem 'json'
 gem 'jquery-rails'
 gem 'mysql', '2.8.1'
 gem 'tiny_tds', '0.5.1'
-gem 'activerecord-sqlserver-adapter', '3.2.0'
+gem 'activerecord-sqlserver-adapter', '3.1.5' # '3.2.0'
 
 gem 'authlogic', '3.1.0'
 
 # gem 'daemons', '1.1.0'
 # gem 'crack', '0.1.8'
 
-gem 'formtastic', '1.2.3'
+gem 'formtastic', '2.0.2'
 gem 'declarative_authorization', '0.5.5'
 gem 'paperclip', '2.4.1'
-# gem 'will_paginate', '3.0.3'
+gem 'will_paginate', '3.0.3'
 gem 'delayed_job', '3.0.1'
 gem "airbrake", '3.0.9'
 #gem 'thinking-sphinx', '1.3.20', :require => 'thinking_sphinx'
@@ -30,7 +30,7 @@ gem 'addressable', '2.2.6'
 group :development do
   gem 'ruby-debug'
   gem 'ruby-debug-base'
-  gem 'annotate'
+  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
 end
 
 group :test do
