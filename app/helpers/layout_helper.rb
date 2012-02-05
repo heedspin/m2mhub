@@ -34,13 +34,4 @@ module LayoutHelper
     end
     strip_tags(txt).html_safe
   end
-  def navigation_li(key, link_text)
-		url = send("#{key}_url", nocache)
-    result = <<-HTML
-		<li class="#{controller_selected(key.to_s.pluralize)}">
-			<a href="#{url}">#{link_text}</a>
-		</li>
-		HTML
-		result.html_safe
-	end
 end

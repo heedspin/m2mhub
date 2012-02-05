@@ -19,6 +19,9 @@ class M2m::Contact < M2m::Base
   end
 
   alias_attribute :primary, :IsPrimary
+  alias_attribute :work_phone, :PhoneWork
+  
+  scope :primary, :conditions => { :IsPrimary => true }
 
   def phone_number_array
     result = []
