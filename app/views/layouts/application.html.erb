@@ -36,7 +36,7 @@
 						<%= link_to 'Home', root_url %>
 					</li>
 					<% if permitted_to?(:read, :quality_quality_dashboard) %>
-					<li class="<%= menu_selected :controllers => [:quality_dashboard, :rma_reports, :customer_otd_reports, :credit_memo_reports] %>">
+					<li class="<%= menu_selected :controllers => [:rmas, :quality_dashboard, :rma_reports, :customer_otd_reports, :credit_memo_reports] %>">
 						<%= link_to 'Quality', quality_url %>
 					</li>
 					<% end %>
