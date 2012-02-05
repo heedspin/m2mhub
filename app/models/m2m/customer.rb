@@ -50,7 +50,7 @@ class M2m::Customer < M2m::Base
     self.ffob.strip
   end
   
-  validates_presence_of :fcompany
+  validates_uniqueness_of :fcompany
   
   before_save :update_timestamps
   def update_timestamps
@@ -60,6 +60,19 @@ class M2m::Customer < M2m::Base
       write_attribute(:fsince, now) unless self.fsince.present?
     end
   end
+  
+  def fcustno=(val)
+    if val.is_a?(Fixnum)
+      val = '%06d' % val
+    end
+    write_attribute(:fcustno, val)
+  end
+  
+  after_create :set_custno
+  def set_custno
+    self.fcustno = self.id
+    self.save
+  end  
   
 end
 

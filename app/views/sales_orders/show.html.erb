@@ -1,14 +1,15 @@
+<%= render 'sales_orders/submenu' %>
+<br />
 
 <div class="paging">
-	<%= link_to("&laquo; #{@next_sales_order.customer_name} &lt;#{@next_sales_order.order_number}&gt;".html_safe, sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
-	<%= link_to 'Browse All', sales_orders_url %>
-	<%= link_to("#{@previous_sales_order.customer_name} &lt;#{@previous_sales_order.order_number}&gt; &raquo;".html_safe, 
+	<%= link_to("&laquo; Previous".html_safe, sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
+	<%= link_to("Next &raquo;".html_safe, 
 	sales_order_url(@previous_sales_order.order_number)) if @previous_sales_order %>
 </div>
 
+<h2>Sales Order <%= @sales_order.fsono %></h2>
 <p>
 	Date: <%= @sales_order.order_date.to_s(:sales_date) %><br />
-	Sales Order: <%= @sales_order.fsono %><br />
 	Status: <%= @sales_order.status %><br />
 	Customer: <strong><%= link_to @sales_order.customer_name, customer_url(@sales_order.fcustno) %></strong><br />
 	Customer PO#: <%= @sales_order.customer_po %><br />

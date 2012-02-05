@@ -2,31 +2,31 @@
 
 <div class="submenu">
 	<ul>
-		<li class="<%= controller_selected(:items, :show) %>">
+		<li class="<%= menu_selected(:controller => :items, :action => :show) %>">
 			<%= link_to 'Summary', item_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('history') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :history) %>">
 			<%= link_to 'History', item_history_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('jobs') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :jobs) %>">
 			<%= link_to 'Jobs', item_jobs_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('shippers') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :shippers) %>">
 			<%= link_to 'Shippers', item_shippers_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('sales_order_releases') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :sales_order_releases) %>">
 			<%= link_to 'Sales Orders', item_sales_order_releases_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('quote_items') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :quote_items) %>">
 			<%= link_to 'Quotes', item_quote_items_url(@item) %>
 		</li>
 
-		<li class="<%= controller_selected('purchase_order_items') %>">
+		<li class="<%= menu_selected(:parent => :items, :controller => :purchase_order_items) %>">
 			<%= link_to 'Purchase Orders', item_purchase_order_items_url(@item) %>
 		</li>
 	</ul>
