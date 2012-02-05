@@ -6,6 +6,10 @@
 			<%= link_to 'Summary', item_url(@item) %>
 		</li>
 
+		<li class="<%= controller_selected('history') %>">
+			<%= link_to 'History', item_history_url(@item) %>
+		</li>
+
 		<li class="<%= controller_selected('jobs') %>">
 			<%= link_to 'Jobs', item_jobs_url(@item) %>
 		</li>

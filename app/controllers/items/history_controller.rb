@@ -3,8 +3,8 @@ class Items::HistoryController < ApplicationController
 
   def show
     @item = parent_object
-    @sales_order_items = @item.sales_order_items.all(:include => :sales_order)
-    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.all#(:include => [:sales_order, :item])
+    @sales_order_items = @item.sales_order_items.includes(:sales_order).to_a
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.to_a
     @sales_order_releases.each do |r|
       if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
         r.item = i
@@ -12,7 +12,7 @@ class Items::HistoryController < ApplicationController
         i.item = @item
       end
     end
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => :purchase_order)
+    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.includes(:purchase_order).to_a
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
                                                                     :sales_order_releases => @sales_order_releases,
                                                                     :purchase_order_items => @purchase_order_items,
@@ -26,11 +26,7 @@ class Items::HistoryController < ApplicationController
     end
 
     def parent_object
-      if @parent_object.nil?
-        @items = M2m::Item.with_part_number(params[:item_id]).by_rev_desc
-        @parent_object = @items.first
-      end
-      @parent_object
+      @parent_object ||= M2m::Item.find(params[:item_id])
     end
 
 end

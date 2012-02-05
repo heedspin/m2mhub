@@ -8,9 +8,6 @@ class M2m::Item < M2m::Base
   has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
-  has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
-  has_one :current_flag, :class_name => 'M2m::InventoryCurrentFlag', :foreign_key => [:fcpartno, :fcpartrev]
   has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
   
   def locations
@@ -56,7 +53,7 @@ class M2m::Item < M2m::Base
   }
   scope :with_part_numbers, lambda { |part_numbers| 
     {
-      :conditions => [ 'inmast.fpartno in (?)', part_numbers]
+      :conditions => [ 'inmast.fpartno in (?)', part_numbers.uniq]
     } 
   }
   scope :by_rev_desc, :order => 'inmast.frev desc'

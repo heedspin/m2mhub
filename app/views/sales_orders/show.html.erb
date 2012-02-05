@@ -42,7 +42,7 @@
 			<% if r.item.nil? %>
 			<td colspan="8"></td>
 			<% else %>
-			<td><%= link_to_if r.item.try(:item), r.part_number, item_url(r.part_number) %></td>
+			<td><%= link_to_item r.item.try(:item), r.part_number %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
 			<td class="monitary">$<%= cm r.item.try(:item).try(:total_cost), :dollars %></td>
