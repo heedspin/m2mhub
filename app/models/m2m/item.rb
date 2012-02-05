@@ -83,11 +83,14 @@ class M2m::Item < M2m::Base
   end
   
   def is_current?
-    if ci = M2m::CurrentItem.for_part_number(self.part_number).first
-      ci.is_item?(self)
-    else
-      false
+    if @is_current.nil?
+      @is_current = if ci = M2m::CurrentItem.for_part_number(self.part_number).first
+        ci.is_item?(self)
+      else
+        false
+      end
     end
+    @is_current
   end
 
   def self.attach_items(objects, items=nil)
