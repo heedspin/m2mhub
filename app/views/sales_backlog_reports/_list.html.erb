@@ -25,8 +25,8 @@
 			</td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>">
-				<%= link_to r.part_number, item_url(r.part_number) %>
-				<%= r.part_rev unless r.part_rev == '000' %>
+				<%= link_to_item r.item.item, r.part_number %>
+				<%= r.revision unless r.revision == '000' %>
 			</td>
 			<td class="<%= sbl_shippable(r, 'top') %>"><%= r.item.customer_part_number %></td>
 			<td class="right <%= sbl_shippable(r, 'top') %>"><%= cm r.quantity, :sales_order_quantity, 0 %></td>
@@ -36,7 +36,7 @@
 				<%= cm r.item.item.try(:quantity_on_hand), :sales_order_quantity, 0 %>
 				<% unless r.can_be_fully_shipped? %>
 				<span class="sbl_jobs_link">
-				<%= link_to image_tag('search.png'), item_jobs_url(r.part_number, :layout => 'popup'), :class => 'jobspopup' %>
+				<%= link_to image_tag('search.png'), item_jobs_url(r.item.item, :layout => 'popup'), :class => 'jobspopup' %>
 				</span>
 				<% end %>
 			</td>

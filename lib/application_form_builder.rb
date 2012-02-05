@@ -1,4 +1,4 @@
-class ApplicationFormBuilder < Formtastic::SemanticFormBuilder
+class ApplicationFormBuilder < Formtastic::FormBuilder
   def cancel_link(options = {})
     location = options[:url] || template.request.params[:_cancel_url] || template.request.referer || '/'
     template.hidden_field_tag(:_cancel_url, location)
@@ -12,12 +12,6 @@ class ApplicationFormBuilder < Formtastic::SemanticFormBuilder
     template.content_tag(:li, template.link_to('Cancel', location), :class => "cancel" )
   end
 
-  def calendar_input(method, options)
-    # don't want to use #{method}_before_type_cast; want to get the value after it has been formatted
-    options[:value] ||= @object.send(method).try(:to_s, :mdy)
-    label(method, options.delete(:label), options.slice(:required)) + text_field(method, options.except(:required))
-  end
-  
   # Implements image preview and delete option.
   def attachment_input(method, options = {})
     delete_attachment_link  = "delete_#{method}_link"

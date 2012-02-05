@@ -1,5 +1,5 @@
 <% if (@total_sales_order_releases || 0) > @sales_order_releases.size %>
-<% browse_all_link = link_to("Browse all #{@total_sales_order_releases} Sales Orders", item_sales_order_releases_url(@item.part_number)) %>
+<% browse_all_link = link_to("Browse all #{@total_sales_order_releases} Sales Orders", item_sales_order_releases_url(@item)) %>
 <% end %>
 <% if @sales_order_releases.size == 0 %>
 	<p>No <%= (@total_sales_order_releases || 0) > 0 ? 'open' : '' %> sales orders</p>
@@ -40,7 +40,7 @@
 			<td class="centered"><%= r.status %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
 			<td><%= link_to r.sales_order.customer_name, customer_url(r.sales_order.fcustno) %></td>
-			<td><%= link_to r.item.item.part_number, item_url(r.item.item.part_number) %></td>
+			<td><%= link_to_item r.item.item, r.item.part_number %></td>
 			<td><%= r.revision %></td>
 			<td><%= r.item.customer_part_number %></td>
 			<td><%= r.item.item.vendors.map { |v| v.vendor_part_number.strip }.join(', ') %></td>

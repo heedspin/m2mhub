@@ -1,23 +1,23 @@
 class UserActivity < ActiveRecord::Base
   belongs_to :user
-  named_scope :year_in, lambda { |year|
+  scope :year_in, lambda { |year|
     {
       :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', year.start_date, year.start_date.advance(:years => 1) ]
     }
   }
-  named_scope :month_in, lambda { |month|
+  scope :month_in, lambda { |month|
     {
       :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', month, month.advance(:months => 1) ]
     }
   }
-  named_scope :for_user, lambda { |user|
+  scope :for_user, lambda { |user|
     {
       :conditions => { :user_id => user.id }
     }
   }
-  named_scope :by_date_desc, :order => 'user_activities.created_at desc'
+  scope :by_date_desc, :order => 'user_activities.created_at desc'
   
-  named_scope :with_name, lambda { |report_name|
+  scope :with_name, lambda { |report_name|
     {:conditions => {:report_name => report_name}}
   }
   

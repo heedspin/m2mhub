@@ -1,5 +1,5 @@
 require File.expand_path('../../config/boot',  __FILE__)
-require RAILS_ROOT + '/config/environment'
+require Rails.root + '/config/environment'
 require 'csv'
 
 M2m::Item.new

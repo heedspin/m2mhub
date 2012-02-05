@@ -1,7 +1,6 @@
 class M2m::Item < M2m::Base
   set_table_name 'inmast'
-  # set_primary_key 'fpartno'
-  set_primary_keys 'fpartno', 'frev'
+  # set_primary_keys 'fpartno', 'frev'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -9,9 +8,7 @@ class M2m::Item < M2m::Base
   has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => [:fpartno, :fpartrev]
-  has_many :bom_items, :class_name => 'M2m::BomItem', :foreign_key => [:fcomponent, :fcomprev]
-  has_one :current_flag, :class_name => 'M2m::InventoryCurrentFlag', :foreign_key => [:fcpartno, :fcpartrev]
+  has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
   
   def locations
     @locations ||= M2m::InventoryLocation.for_item(self)
@@ -47,19 +44,22 @@ class M2m::Item < M2m::Base
     @revision ||= self.frev.strip
   end
   
-  named_scope :with_part_number, lambda { |pn| 
+  scope :part_number, lambda { |pn| where(:fpartno => pn) }
+  scope :revision, lambda { |r| where(:frev => r) }
+  scope :with_part_number, lambda { |pn| 
     {
       :conditions => { :fpartno => pn }
     } 
   }
-  named_scope :with_part_numbers, lambda { |part_numbers| 
+  scope :with_part_numbers, lambda { |part_numbers| 
     {
-      :conditions => [ 'inmast.fpartno in (?)', part_numbers]
+      :conditions => [ 'inmast.fpartno in (?)', part_numbers.uniq]
     } 
   }
-  named_scope :by_rev_desc, :order => 'inmast.frev desc'
+  scope :by_rev_desc, :order => 'inmast.frev desc'
+  scope :by_part_number, :order => 'inmast.fpartno'
   
-  named_scope :part_number_like, lambda { |text|
+  scope :company_or_vendor_part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {
       :joins => <<-SQL
@@ -69,6 +69,12 @@ class M2m::Item < M2m::Base
         WHERE (inmast.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
       on inmast.identity_column = tmp1.identity_column
       SQL
+    }
+  }
+  
+  scope :part_number_like, lambda { |text|
+    {
+      :conditions => [ 'inmast.fpartno like ?', '%' + (text.strip || '') + '%' ]
     }
   }
   
@@ -83,8 +89,21 @@ class M2m::Item < M2m::Base
       false
     end
   end
+
+  def self.attach_items(objects, items=nil)
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number))
+    if (items.size > 0) and (objects.size > 0)
+      objects.each do |o|
+        if o.part_number.present? and o.revision.present? and (found = items.detect { |item| (o.part_number == item.part_number) && (o.revision == item.revision) })
+          o.item = found
+        end
+      end
+    end
+    items
+  end
   
 end
+
 
 
 
@@ -193,8 +212,9 @@ end
 #  fnfanaglvl       :integer(4)      not null
 #  fcplnclass       :string(1)       not null
 #  fcclass          :string(12)      not null
+#  fidims           :integer(4)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null
+#  identity_column  :integer(4)      not null, primary key
 #  fcomment         :text            not null
 #  fmusrmemo1       :text            not null
 #  fstdmemo         :text            not null
@@ -204,11 +224,10 @@ end
 #  itcunit          :decimal(17, 5)
 #  fnPOnHand        :decimal(16, 5)  not null
 #  fnLndToMfg       :decimal(16, 5)  not null
-#  fiPcsOnHd        :integer(4)      not null
 #  fcudrev          :string(3)       not null
-#  fidims           :integer(4)      not null
 #  fluseudrev       :boolean         not null
 #  fndbrmod         :integer(4)      not null
+#  fiPcsOnHd        :integer(4)      not null
 #  flSendSLX        :boolean         not null
 #  fcSLXProd        :string(12)      not null
 #  flFSRtn          :boolean         not null

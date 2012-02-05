@@ -3,7 +3,7 @@
 
 // Calendar date-picker widget
 $(document).ready(function(){
-  $("li.calendar input").datepicker({
+  $("input.calendar").datepicker({
     yearRange: '-10:+4',
     dateFormat: 'mm/dd/yy',
     showOn: 'button',

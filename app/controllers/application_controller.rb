@@ -1,9 +1,11 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+require 'navigation_system'
+require 'pdf_generation'
 
 class ApplicationController < ActionController::Base
   include NavigationSystem
-  include Userstamp
+  # include Userstamp
   include PdfGeneration
 
   protected
@@ -36,12 +38,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_stamper
-      User.stamper ||= current_user
-    end
+    # def set_stamper
+    #   User.stamper ||= current_user
+    # end
     helper :all # include all helpers, all the time
     protect_from_forgery # See ActionController::RequestForgeryProtection for details
-    filter_parameter_logging :password, :password_confirmation
 
     helper_method :current_user_session, :current_user
     before_filter :set_current_user

@@ -92,12 +92,12 @@ class UsersController < ApplicationController
       if @current_object.nil?
         user_params = params[:user] || {}
         user_role_id = user_params.delete(:user_role_id)
-        user_status_id = user_params.delete(:user_status_id)
+        user_state_id = user_params.delete(:user_state_id)
         user_password = user_params.delete(:password)
         user_password_confirmation = user_params.delete(:password_confirmation)
         @current_object = method == :new ? User.new(user_params) : User.find(params[:id])
         if permitted_to? :manage, @current_object
-          @current_object.user_status_id = user_status_id if user_status_id.present?
+          @current_object.user_state_id = user_state_id if user_state_id.present?
           @current_object.user_role_id = user_role_id if user_role_id.present?
         end
         if user_password

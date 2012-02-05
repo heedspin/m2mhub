@@ -1,5 +1,20 @@
-<h2><%= link_to_unless_current @customer.name, customer_url(@customer) %></h2>
-<p>
-	Customer Number: <%= @customer.fcustno %><br />
-</p>
+<h2><%= @customer.name %></h2>
+
+<div class="submenu">
+	<ul>
+		<li class="<%= controller_selected(:customers, :show) %>">
+			<%= link_to 'Summary', customer_url(@customer) %>
+		</li>
+		<li class="<%= controller_selected(:quotes, :index) %>">
+			<%= link_to 'Quotes', customer_quotes_url(@customer) %>
+		</li>
+		<li class="<%= controller_selected(:sales_orders, :index) %>">
+			<%= link_to 'Sales Orders', customer_sales_orders_url(@customer) %>
+		</li>
+		<li class="<%= controller_selected(:contacts, :index) %>">
+			<%= link_to 'Contacts', customer_contacts_url(@customer) %>
+		</li>
+	</ul>
+</div>
+
 

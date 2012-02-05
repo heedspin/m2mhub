@@ -2,8 +2,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   set_table_name 'poitem'
 
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono
-  belongs_to :item, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
-  # belongs_to :item, :class_name => 'M2m::Item', :foreign_key => [:fpartno, :fpartrev]
+  belongs_to_item :fpartno, :frev
   
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :ship_date, :fdateship
@@ -13,36 +12,32 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :requisition_date, :freqdate
   alias_attribute :release, :frelsno
   
-  def part_number
-    self.fpartno.strip
-  end
+  scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
+  scope :status_closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
+  scope :status_cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
   
-  named_scope :open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
-  named_scope :closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
-  named_scope :cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
-  
-  named_scope :for_item, lambda { |item|
+  scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number }
     }
   }
   
-  named_scope :for_itemno, lambda { |itemno|
+  scope :for_itemno, lambda { |itemno|
     {
       :conditions => { :fitemno => itemno }
     }
   }
     
-  named_scope :with_status, lambda { |status|
+  scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :pomast => { :fstatus => status_name.upcase } }
     }
   }
   
-  named_scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
+  scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
 
-  named_scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
+  scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
 
   def master_release?
     (self.fmultirls.strip == 'Y') && (self.frelsno.to_i == 0)
@@ -129,19 +124,19 @@ end
 #  flstcost         :decimal(17, 5)  default(0.0), not null
 #  fstdcost         :decimal(17, 5)  default(0.0), not null
 #  fleadtime        :decimal(5, 1)   default(0.0), not null
-#  forgpdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  flstpdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  forgpdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flstpdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fmultirls        :string(1)       default(""), not null
 #  fnextrels        :integer(4)      default(0), not null
 #  fnqtydm          :decimal(15, 5)  default(0.0), not null
-#  freqdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  freqdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fretqty          :decimal(15, 5)  default(0.0), not null
 #  fordqty          :decimal(15, 5)  default(0.0), not null
 #  fqtyutol         :decimal(6, 2)   default(0.0), not null
 #  fqtyltol         :decimal(6, 2)   default(0.0), not null
 #  fbkordqty        :decimal(15, 5)  default(0.0), not null
-#  flstsdate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  frcpdate         :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  flstsdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frcpdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  frcpqty          :decimal(15, 5)  default(0.0), not null
 #  fshpqty          :decimal(15, 5)  default(0.0), not null
 #  finvqty          :decimal(15, 5)  default(0.0), not null
@@ -163,7 +158,7 @@ end
 #  fvconvfact       :decimal(13, 9)  default(0.0), not null
 #  fvucost          :decimal(17, 5)  default(0.0), not null
 #  fqtyshipr        :decimal(15, 5)  default(0.0), not null
-#  fdateship        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  fdateship        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  fparentpo        :string(6)       default(""), not null
 #  frmano           :string(25)      default(""), not null
 #  fdebitmemo       :string(1)       default(""), not null
@@ -194,11 +189,11 @@ end
 #  fcudrev          :string(3)       default(""), not null
 #  fndbrmod         :integer(4)      default(0), not null
 #  blanketPO        :boolean         default(FALSE), not null
-#  PlaceDate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  PlaceDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  DockTime         :integer(4)      default(0), not null
 #  PurchBuf         :integer(4)      default(0), not null
 #  Final            :boolean         default(FALSE), not null
-#  AvailDate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
-#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 -0500 1900), not null
+#  AvailDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #
 

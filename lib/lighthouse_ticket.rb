@@ -37,8 +37,4 @@ class Lighthouse::Ticket
   def new_record?
     false
   end
-
-  def self.human_name
-    'Lighthouse Ticket'
-  end
 end

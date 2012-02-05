@@ -1,8 +1,8 @@
-<% semantic_form_for :search, @search_item, :url => items_path, :html => {:method => :get} do |f| %>
-	<% f.inputs do %>
-	  <%= f.input :fpartno %>
+<%= semantic_form_for :search, :url => items_path, :html => {:method => :get} do |f| %>
+	<%= f.inputs do %>
+	  <%= f.input :fpartno, :label => M2m::Item.human_attribute_name(:fpartno) %>
 	<% end %>
-  <% f.buttons do %>
+  <%= f.buttons do %>
 	  <%= f.commit_button 'Search' %>
 	<% end %>
 <% end %>
@@ -10,7 +10,7 @@
 <% if @items %>
 <% if @items.size > 0 %>
 <%= will_paginate @items %>
-<%= render 'list' %>
+<%= render 'list', :items => @items %>
 <% else %>
 <h3>No matches</h3>
 <% end %>
