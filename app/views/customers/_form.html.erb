@@ -1,8 +1,8 @@
 <%= f.inputs do %>
-  <%= f.input :company_name %> 
+  <%= f.input :fcompany %> 
 <% end %>
 
-<% f.semantic_fields_for :contacts, @customer.contacts.first do |contact| %>
+<%= f.semantic_fields_for :contacts, @customer.contacts.first do |contact| %>
 	<%= f.inputs do %>
   <%= contact.input :fcfname %>
   <%= contact.input :fcontact %>

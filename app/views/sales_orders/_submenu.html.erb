@@ -1,13 +1,13 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:read, :sales_order_items) %>
-		<li class="<%= controller_selected(:sales_order_items) %>">
+		<li class="<%= menu_selected(:controller => :sales_order_items) %>">
 			<%= link_to 'Search', sales_order_items_url %>
 		</li>
 		<% end %>
 
 		<% if permitted_to?(:read, :sales_orders) %>
-		<li class="<%= controller_selected(:sales_orders) %>">
+		<li class="<%= menu_selected(:controller => :sales_orders, :action => :index) %>">
 			<%= link_to 'Browse All', sales_orders_url %>
 		</li>
 		<% end %>

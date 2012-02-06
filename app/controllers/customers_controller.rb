@@ -8,31 +8,40 @@ class CustomersController < ApplicationController
       search_index
     end
   end
-  
+
   def new
     @customer = M2m::Customer.new(params[:m2m_customer])
-    @customer.contacts.build
+    @customer.contacts.build.primary = true
   end
-  
+
   def create
     @customer = M2m::Customer.new(params[:m2m_customer])
-    if @customer.save
-      redirect_to customer_url(@customer.id)
-    else
-      render :action => 'new'
+    contact = @customer.contacts.to_a.first
+    @customer.transaction do
+      if @customer.save
+        # Tie the contact to the customer.
+        if contact
+          contact.primary = true
+          contact.fcsourceid = @customer.id
+          contact.save
+        end
+        redirect_to customer_contacts_url(@customer)
+      else
+        render :action => 'new'
+      end
     end
   end
-  
+
   def autocomplete_index
     # Autocomplete path.
     @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 10)
     names = @customers.map(&:name)
-    # if params[:new_prompt] == '1'
-    #   names.push "Create New: #{@search_term}"
-    # end
+    if params[:new_prompt] == '1'
+      names.push "Create New: #{@search_term}"
+    end
     render :json => names
   end
-  
+
   def search_index
     @search = M2m::Customer.new(params[:search])
     # For who knows what reason, a new customer comes out with a name = " ".

@@ -18,6 +18,8 @@ en:
       sales_backlog_report:
         fob_group: FOB Group
         customer_status: Customer Status
+      m2m/customer:
+        fcompany: Company Name
       m2m/contact:
         fcfname: First Name
         fcontact: Last Name

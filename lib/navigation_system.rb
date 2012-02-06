@@ -2,22 +2,27 @@ module NavigationSystem
 
   def self.included(base)
     base.class_eval <<-EOS
-    helper_method :controller_active?
-    helper_method :controller_selected
+    helper_method :menu_selected
     EOS
   end
   
   SELECTED_CSS_CLASS='current'
   
-  def controller_active?(controller, action=nil)
-    (self.controller_name == controller.to_s) && (action.nil? or self.action_name == action.to_s)
-  end
-  
-  def controller_selected(controller, action=nil)
-    result = if controller.is_a?(Array)
-      controller.any? { |c| controller_active?(c, action) }
+  def menu_selected(args={})
+    result = if path_regex = args[:path]
+      path_regex.match(request.path).present?
+    elsif path_starts_with = args[:path_starts_with]
+      request.path.starts_with?(path_starts_with)
     else
-      controller_active?(controller, action)
+      parent_key = args[:parent]
+      controller_names = args[:controllers] || args[:controller] || self.controller_name
+      controller_names = if controller_names.is_a?(Enumerable)
+        controller_names.map(&:to_s)
+      else
+        [ controller_names.to_s ]
+      end
+      action = (args[:action] || self.action_name).to_s
+      (parent_key.nil? || params[parent_key.to_s.singularize + '_id'].present?) && (controller_names.include?(self.controller_name)) && (action == self.action_name)  
     end
     result ? SELECTED_CSS_CLASS : ''
   end

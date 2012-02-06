@@ -1,17 +1,17 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:read, :shipping_shipping_dashboard) %>
-		<li class="<%= controller_selected(:shipping_dashboard) %>">
+		<li class="<%= menu_selected(:controller => :shipping_dashboard) %>">
 			<%= link_to 'Shipping Home', shipping_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :shipping_shippers) %>
-		<li class="<%= controller_selected(:shippers) %>">
+		<li class="<%= menu_selected(:controller => :shippers) %>">
 			<%= link_to 'Shippers', shippers_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :shipping_receivers) %>
-		<li class="<%= controller_selected(:receivers) %>">
+		<li class="<%= menu_selected(:controller => :receivers) %>">
 			<%= link_to 'Receivers', receivers_url %>
 		</li>
 		<% end %>
