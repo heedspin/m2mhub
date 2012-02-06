@@ -1,6 +1,6 @@
 class M2m::Customer < M2m::Base
   set_table_name 'slcdpmx'
-  # set_primary_key 'fcustno'
+  set_primary_key 'fcustno'
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
   has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'slcdpm' }
