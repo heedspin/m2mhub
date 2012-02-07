@@ -1,14 +1,14 @@
 module ReportHelper
-  def include_closed_details_javascript
+  def include_closed_details_javascript(show_text='Show Details', hide_text='Hide Details')
     html = <<-HTML
     <script type="text/javascript">
     $(function() {
     	$(".show_closed_details").toggle(function() { 
     	  $("#x" + $(this).attr("id")).show();
-    	  $(this).html("Hide Details");
+    	  $(this).html("#{hide_text}");
     	}, function() {
     	  $("#x" + $(this).attr("id")).hide();
-    	  $(this).html("Show Details");
+    	  $(this).html("#{show_text}");
     	});
     });
     </script>

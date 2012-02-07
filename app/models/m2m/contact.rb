@@ -1,6 +1,13 @@
 class M2m::Contact < M2m::Base
   set_table_name 'syphon'
   include ActionView::Helpers::NumberHelper
+  
+  after_initialize :set_defaults
+  def set_defaults
+    unless self.country_name.present?
+      self.country_name = CompanyConfig.default_country_name
+    end
+  end
 
   def first_name
     self.fcfname.titleize.strip
@@ -20,6 +27,9 @@ class M2m::Contact < M2m::Base
 
   alias_attribute :primary, :IsPrimary
   alias_attribute :work_phone, :PhoneWork
+  alias_attribute :work_fax, :fcfax
+  alias_attribute :mobile_phone, :PhoneMobile
+  alias_attribute :country_name, :fccountry
   
   scope :primary, :conditions => { :IsPrimary => true }
 

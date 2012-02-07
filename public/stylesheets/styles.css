@@ -1027,3 +1027,23 @@ div.lighthouse_comment {
 	border-top: 1px dotted #c5c5c5;
 	width: 751px;
 }
+
+/* Forms
+----------------------------- */
+form.formtastic fieldset.closed_details {
+	display: none;
+}
+
+div.more_form {
+	font-size: 1.4em;
+}
+
+div.similar_customers {
+	border:10px solid #e92;
+	padding: 10px 10px 0 10px;
+	margin: 0 0 30px;
+}
+
+div.similar_customers ul {
+	margin: 10px 0 10px;
+}

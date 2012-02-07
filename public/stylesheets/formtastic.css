@@ -93,11 +93,14 @@ form.formtastic fieldset > ol > li.string input { max-width:74%; }
 form.formtastic fieldset > ol > li.password input { max-width: 13em; }
 form.formtastic fieldset > ol > li.numeric input { max-width:74%; }
 
+form.formtastic fieldset > ol > li.half input { width:20%; }
 
 /* TEXTAREA OVERRIDES
 --------------------------------------------------------------------------------------------------*/
 form.formtastic fieldset > ol > li.text textarea { width:74%; }
 
+form.formtastic fieldset > ol > li.address textarea { width:40%; height:2.5em; }
+form.formtastic fieldset > ol > li.notes textarea { width:40%; height:3.5em; }
 
 /* HIDDEN OVERRIDES
 The dual declarations are required because of our clearfix display hack on the LIs, which is more

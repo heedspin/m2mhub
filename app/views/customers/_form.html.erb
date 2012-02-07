@@ -1,3 +1,4 @@
+<% include_closed_details_javascript('More', 'Less') %>
 <%= f.inputs do %>
   <%= f.input :fcompany %> 
 <% end %>
@@ -8,6 +9,18 @@
   <%= contact.input :fcontact %>
 	<%= contact.input :fcemail, :as => :string %>
 	<%= contact.input :PhoneWork %>
+	<%= contact.input :fmnotes, :wrapper_html => { :class => 'notes' } %>
+	<li>
+		<a href="#"><span class="show_closed_details" id="closed_details">More</span></a>
+	</li>
+	<% end %>
+	<%= f.inputs :class => 'closed_details', :id => 'xclosed_details' do %>
+	<%= contact.input :fcfax, :as => :string %>
+	<%= contact.input :Address, :wrapper_html => { :class => 'address' } %>
+	<%= contact.input :City, :wrapper_html => { :class => 'half' } %>
+	<%= contact.input :State, :wrapper_html => { :class => 'half' } %>
+	<%= contact.input :PostalCode, :wrapper_html => { :class => 'half' } %>
+	<%= contact.input :fccountry, :as => :select, :collection => M2m::Currency.order('fccountry'), :member_label => 'country_name', :member_value => 'country_name' %>
 	<% end %>
 <% end %>
 

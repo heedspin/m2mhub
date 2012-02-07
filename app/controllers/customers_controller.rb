@@ -1,6 +1,7 @@
+require 'amatcher'
 class CustomersController < ApplicationController
   filter_access_to_defaults
-  
+
   def index
     if (@search_term = params[:term]).present?
       autocomplete_index
@@ -12,8 +13,14 @@ class CustomersController < ApplicationController
   def new
     @customer = M2m::Customer.new(params[:m2m_customer])
     @customer.contacts.build.primary = true
+    similar_customers = Amatcher.find_similar( :match => @customer.company_name, :method => :company_name,
+                                                :objects => M2m::Customer.scoped(:select => 'slcdpmx.identity_column, slcdpmx.fcompany'),
+                                                :limit => 10, :threshold => 0.7 )
+    if similar_customers.size > 0
+      @similar_customers = similar_customers.map(&:object)
+    end
   end
-  
+
   def edit
     @customer = current_object
     @customer.strip_strings
@@ -37,7 +44,7 @@ class CustomersController < ApplicationController
       end
     end
   end
-  
+
   def update
     @customer = current_object
     if @customer.update_attributes(params[:m2m_customer])
@@ -90,7 +97,7 @@ class CustomersController < ApplicationController
     def model_class
       M2m::Customer
     end
-    
+
     def current_object
       @current_object ||= if params[:custno] == 'true'
         M2m::Customer.where(:fcustno => M2m::Customer.fcustno_for(params[:id])).first
