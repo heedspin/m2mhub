@@ -1,6 +1,6 @@
 class M2m::SalesOrderRelease < M2m::Base
   
-  default_scope :order => 'sorels.fenumber'
+  # default_scope :order => 'sorels.fenumber'
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to_item :fpartno, :fpartrev
