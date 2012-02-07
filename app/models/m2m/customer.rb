@@ -75,6 +75,32 @@ class M2m::Customer < M2m::Base
     self.save
   end
   
+  def self.data_to_params(data, params)
+    contact = {}
+    hash = JSON.parse ActiveSupport::Base64.decode64(CGI.unescape(data))
+    hash.each do |key, value|
+      if key == 'company'
+        params[:fcompany] = value
+        Rails.logger.debug("Decoded company: #{value}")
+      elsif key == 'name'
+        if value.present?
+          fn, ln = value.split(' ', 2)
+          contact[:fcfname] = fn
+          contact[:fcontact] = ln
+          Rails.logger.debug("Decoded firstname: #{fn}")
+          Rails.logger.debug("Decoded lastname: #{ln}")
+        end
+      elsif key == 'email'
+        contact[:fcemail] = value
+        Rails.logger.debug("Decoded email: #{value}")
+      elsif key == 'phone'
+        contact[:PhoneWork] = value
+        Rails.logger.debug("Decoded phone: #{value}")
+      end
+    end
+    params['contacts_attributes'] = [ contact ]
+  end
+  
 end
 
 
