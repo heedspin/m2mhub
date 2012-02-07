@@ -26,7 +26,7 @@
 			<td><%= rma.severity_name %></td>
 			<td><%= rma.date.to_s(:rma_date) %></td>
 			<td class="right"><%= cm rma_item.quantity, :rma_quantity %></td>
-			<td><%= link_to rma.customer.name, customer_url(rma.customer_number) %></td>
+			<td><%= link_to rma.customer.name, customer_number_url(rma.customer_number) %></td>
 			<td><%= link_to_item rma_item.item, rma_item.part_number %></td>
 			<td class="fixed_width_text"><%= h simple_format(rma_item.reason.strip) %></td>
 			<td><%= link_to rma.sales_order_number, sales_order_url(rma.sales_order_number) if rma.sales_order_number.present? %></td>

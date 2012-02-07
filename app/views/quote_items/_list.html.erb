@@ -25,7 +25,7 @@
 		<tr>
 			<% if show_quotes %>
 			<td><%= link_to item.quote.quote_number, quote_url(item.quote) %></td>
-			<td><%= link_to item.quote.customer_name, customer_url(item.quote.fcustno) %></td>
+			<td><%= link_to item.quote.customer_name, customer_number_url(item.quote.fcustno) %></td>
 			<% else %>
 			<td><%= item.fenumber %></td>
 			<% end %>

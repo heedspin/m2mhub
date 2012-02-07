@@ -21,6 +21,15 @@ class M2m::Base < ApplicationModel
     RUBY
   end  
 
+  # Useful after loading object and before rendering edit.
+  def strip_strings
+    self.class.columns.each do |column|
+      if column.type == :string
+        self.send("#{column.name}=", self.send(column.name).try(:strip))
+      end
+    end
+  end
+
   m2m_key = "#{Rails.env}_m2m"
   msg = if config = M2m::Base.configurations[m2m_key]
     begin

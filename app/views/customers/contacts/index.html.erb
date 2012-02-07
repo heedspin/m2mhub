@@ -23,3 +23,10 @@
 		<% end %>
 	</tbody>
 </table>
+
+<%# if permitted_to? :edit, contact %>
+<p>
+	<%= link_to 'edit', edit_customer_path(@customer) %>
+</p>
+<%# end %>
+

@@ -1,6 +1,6 @@
 class M2m::Customer < M2m::Base
   set_table_name 'slcdpmx'
-  set_primary_key 'fcustno'
+
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
   has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'slcdpm' }
@@ -61,18 +61,19 @@ class M2m::Customer < M2m::Base
     end
   end
   
+  def self.fcustno_for(val)
+    '%06d' % val.to_i
+  end
+
   def fcustno=(val)
-    if val.is_a?(Fixnum)
-      val = '%06d' % val
-    end
-    write_attribute(:fcustno, val)
+    write_attribute(:fcustno, M2m::Customer.fcustno_for(val))
   end
   
   after_create :set_custno
   def set_custno
     self.fcustno = self.id
     self.save
-  end  
+  end
   
 end
 
