@@ -11,6 +11,10 @@ class CustomersController < ApplicationController
   end
 
   def new
+    if data = params[:d]
+      params[:m2m_customer] ||= {}
+      M2m::Customer.data_to_params(data, params[:m2m_customer])
+    end
     @customer = M2m::Customer.new(params[:m2m_customer])
     @customer.contacts.build.primary = true
     similar_customers = Amatcher.find_similar( :match => @customer.company_name, :method => :company_name,
