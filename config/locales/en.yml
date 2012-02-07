@@ -26,3 +26,6 @@ en:
         fcemail: Email
         fcfax: Fax
         PhoneWork: Work Phone
+        fccountry: Country
+        fmnotes: Notes
+        PostalCode: Postal Code

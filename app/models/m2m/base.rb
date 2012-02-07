@@ -24,7 +24,7 @@ class M2m::Base < ApplicationModel
   # Useful after loading object and before rendering edit.
   def strip_strings
     self.class.columns.each do |column|
-      if column.type == :string
+      if [:string, :text].include?(column.type)
         self.send("#{column.name}=", self.send(column.name).try(:strip))
       end
     end

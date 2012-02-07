@@ -26,6 +26,7 @@ gem 'active_hash' #, '0.9.1'
 gem 'spreadsheet', '0.6.8'
 gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
+gem 'amatch'
 
 group :development do
   gem 'ruby-debug'
@@ -34,6 +35,6 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl', '=1.2.3'
+  gem 'factory_girl', '2.5.1'
   gem 'transactional-factories', '0.5.0'
 end
