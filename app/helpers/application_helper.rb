@@ -7,4 +7,8 @@ module ApplicationHelper
       part_number
     end
   end
+  
+  def customer_number_url(custno)
+    customer_url(:id => custno, :custno => true)
+  end
 end

@@ -11,7 +11,7 @@
 <p>
 	Date: <%= @sales_order.order_date.to_s(:sales_date) %><br />
 	Status: <%= @sales_order.status %><br />
-	Customer: <strong><%= link_to @sales_order.customer_name, customer_url(@sales_order.fcustno) %></strong><br />
+	Customer: <strong><%= link_to @sales_order.customer_name, customer_number_url(@sales_order.fcustno) %></strong><br />
 	Customer PO#: <%= @sales_order.customer_po %><br />
 	Total: $<%= cm @sales_order.total_price, :dollars %><br />
 	Sales Rep: <%= @sales_order.fsoldby %><br />

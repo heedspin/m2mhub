@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   filter_access_to_defaults
-
+  
   def index
     if (@search_term = params[:term]).present?
       autocomplete_index
@@ -12,6 +12,12 @@ class CustomersController < ApplicationController
   def new
     @customer = M2m::Customer.new(params[:m2m_customer])
     @customer.contacts.build.primary = true
+  end
+  
+  def edit
+    @customer = current_object
+    @customer.strip_strings
+    @customer.contacts.map(&:strip_strings)
   end
 
   def create
@@ -29,6 +35,15 @@ class CustomersController < ApplicationController
       else
         render :action => 'new'
       end
+    end
+  end
+  
+  def update
+    @customer = current_object
+    if @customer.update_attributes(params[:m2m_customer])
+      redirect_to customer_contacts_url(@customer)
+    else
+      render_action :action => 'edit'
     end
   end
 
@@ -52,7 +67,7 @@ class CustomersController < ApplicationController
       @customers = M2m::Customer.name_like(@search.fcompany.strip).paginate(:page => params[:page], :per_page => 50).order('fcompany')
     end
     if @customers and (@customers.size == 1)
-      redirect_to customer_url(@customers.first.fcustno)
+      redirect_to customer_url(@customers.first)
     else
       @customer_names = M2m::Customer.all_names
     end
@@ -74,5 +89,13 @@ class CustomersController < ApplicationController
 
     def model_class
       M2m::Customer
+    end
+    
+    def current_object
+      @current_object ||= if params[:custno] == 'true'
+        M2m::Customer.where(:fcustno => M2m::Customer.fcustno_for(params[:id])).first
+      else
+        M2m::Customer.find(params[:id])
+      end
     end
 end

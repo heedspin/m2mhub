@@ -8,7 +8,7 @@ Company RMA: <%= @rma.company_rma_number %><br />
 Status: <%= @rma.status.try(:name) %><br />
 Category: <%= @rma.severity_name %><br />
 Date: <%= @rma.date.to_s(:rma_date) %><br />
-Customer: <%= link_to @rma.customer_name, customer_url(@rma.customer_number) %><br />
+Customer: <%= link_to @rma.customer_name, customer_number_url(@rma.customer_number) %><br />
 <% if @rma.sales_order_number.present? %>
 Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_order_number)  %><br />
 <% end %>

@@ -30,7 +30,7 @@ authorization do
     has_permission_on :sales_orders, :to => :read
     has_permission_on :sales_order_items, :to => :read
     has_permission_on :customers_sales_orders, :to => :read
-    has_permission_on :customers, :to => :make
+    has_permission_on :customers, :to => :manage
     has_permission_on :customers_quotes, :to => :read
     has_permission_on :customers_contacts, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read

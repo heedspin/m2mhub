@@ -7,7 +7,7 @@
 
 <p>
 	Quote: <%= @quote.fquoteno %><br />
-	Company: <strong><%= link_to @quote.customer_name, customer_url(@quote.fcustno) %></strong><br />
+	Company: <strong><%= link_to @quote.customer_name, customer_number_url(@quote.fcustno) %></strong><br />
 	Date: <%= @quote.fquotedate.to_s(:sales_date) %><br />
 	Terms: <%= @quote.terms.try(:name) %><br />
 	Estimator: <%= @quote.festimator %><br />

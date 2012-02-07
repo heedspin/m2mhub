@@ -29,7 +29,7 @@
 			<td><%= rma_item.invoice_items.map { |ii| ii.invoice.date.to_s(:invoice_date) }.join(', ') %></td>
 			<td class="right">$<%= cm rma_item.invoice_amount, :quality_credit_memo_total, 0 %></td>
 			<td><%= link_to_item rma_item.item, rma_item.part_number %></td>
-			<td><%= link_to rma_item.rma.customer.company_name, customer_url(rma_item.rma.customer_number) %></td>
+			<td><%= link_to rma_item.rma.customer.company_name, customer_number_url(rma_item.rma.customer_number) %></td>
 			<td><%= cm rma_item.quantity, :rma_quantity %></td>
 			<td><%= simple_format rma_item.reason %></td>
 		</tr>
