@@ -7,6 +7,6 @@ class UserActivitiesController < ApplicationController
     else
       UserActivity.for_user(current_user).by_date_desc
     end
-    @user_activities = @user_activities.paginate(:all, :page => params[:page], :per_page => 50)
+    @user_activities = @user_activities.paginate(:page => params[:page], :per_page => 50)
   end
 end
