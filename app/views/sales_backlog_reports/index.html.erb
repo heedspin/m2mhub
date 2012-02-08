@@ -15,8 +15,8 @@
 			</td>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :customer_status, :as => :select, :collection => M2m::CustomerStatus.all %>
-					<%= f.input :fob_group, :as => :select, :collection => FobGroup.all %>
+					<%= f.input :customer_status_id, :as => :select, :collection => M2m::CustomerStatus.all %>
+					<%= f.input :fob_group_id, :as => :select, :collection => FobGroup.all %>
 				<% end %>
 			</td>
 		</tr>
