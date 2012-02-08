@@ -8,14 +8,13 @@ class CalendarInput < Formtastic::Inputs::StringInput
       :maxlength => options[:input_html].try(:[], :maxlength) || limit,
       :size => builder.default_text_field_size,
       :placeholder => placeholder_text,
-      :value => value,
+      :value => (value || Date.current).to_s(:calendar_date),
       :class => 'calendar'
     }.merge(super)
   end
 
   def value
-    v = object.send(method) if object && object.respond_to?(method)
-    (v || Date.current).to_s(:calendar_date)
+    object.send(method) if object && object.respond_to?(method)
   end
   
   # def calendar_input(method, options)
