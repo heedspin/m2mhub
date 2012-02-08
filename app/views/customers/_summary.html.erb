@@ -10,7 +10,7 @@
 <div class="submenu">
 	<ul>
 		<li class="<%= menu_selected(:controller => :customers, :action => :show) %>">
-			<%= link_to 'Summary', customer_number_url(@customer) %>
+			<%= link_to 'Summary', customer_url(@customer) %>
 		</li>
 		<li class="<%= menu_selected(:parent => :customers, :controller => :quotes) %>">
 			<%= link_to 'Quotes', customer_quotes_url(@customer) %>
