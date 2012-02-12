@@ -20,7 +20,7 @@ $(function() {
 </script>
 <% end %>
 
-<%= semantic_form_for :search, :url => customers_path, :html => {:method => :get} do |f| %>
+<%= semantic_form_for @search, :as => :search, :url => customers_path, :html => {:method => :get} do |f| %>
 <table class="flatform">
 	<tbody>
 		<tr>

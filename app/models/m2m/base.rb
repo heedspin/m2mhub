@@ -1,7 +1,7 @@
 class M2m::Base < ApplicationModel
   self.abstract_class = true
   set_primary_key 'identity_column'
-  
+
   def self.belongs_to_item(part_number_field, revision_field, item_method_base=:item)
     item_method_base = item_method_base.to_s
     part_number_method = item_method_base == 'item' ? 'part_number' : "#{item_method_base}_part_number"
@@ -19,7 +19,23 @@ class M2m::Base < ApplicationModel
       @#{item_method} ||= M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first
     end
     RUBY
-  end  
+  end
+
+  def self.m2m_id_setter(column, num_digits, name=nil)
+    name ||= column
+    alias_code = if name != column
+      "alias_attribute '#{name}', '#{column}'"
+    end
+    self.class_eval <<-RUBY
+    #{alias_code}
+    def self.#{name}_for(val)
+      '%0#{num_digits}d' % val.to_i
+    end
+    def #{name}=(val)
+      write_attribute('#{column}', self.class.send('#{name}_for', val))
+    end
+    RUBY
+  end
 
   # Useful after loading object and before rendering edit.
   def strip_strings

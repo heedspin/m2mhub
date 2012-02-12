@@ -3,29 +3,59 @@ class M2m::Customer < M2m::Base
 
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno
-  has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'slcdpm' }
-  accepts_nested_attributes_for :contacts
-  
+  has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM' }
+  has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
+  has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
+
   alias_attribute :notes, :fmnotes
   alias_attribute :last_name, :fcontact
   alias_attribute :first_name, :fcfname
   alias_attribute :company_name, :fcompany
   alias_attribute :customer_number, :fcustno
-  
+  alias_attribute :work_email, :fcemail
+  alias_attribute :work_phone, :fphone
+  alias_attribute :work_notes, :fmnotes
+  alias_attribute :work_fax, :ffax
+  alias_attribute :work_address, :fmstreet
+  alias_attribute :work_city, :fcity
+  alias_attribute :work_state, :fstate
+  alias_attribute :work_postal_code, :fzip
+  alias_attribute :work_country_name, :fcountry
+
+  after_initialize :set_defaults
+  def set_defaults
+    begin
+      self.work_country_name = CompanyConfig.default_country_name if self.work_country_name.blank?
+      # TODO: do something meaningful with ftype.
+      self.ftype = 'C' if self.ftype.blank?
+      # fcshipto => '0001', :fcsoldto => '0001'
+      # SubType = 'NONE'
+      # ContactNum = '000123'
+    rescue ActiveModel::MissingAttributeError
+      # Ignore this exception.  Probably because we used a :select.
+    end
+  end
+
   scope :name_like, lambda { |text|
     {
       :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
     }
   }
-  
+
   scope :by_name, :order => 'fcompany'
-  
+
   scope :with_customer_numbers, lambda { |customer_numbers|
     {
       :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
     }
   }
-  
+
+  scope :with_custno, lambda { |custno|
+    {
+      :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
+    }
+  }
+
   def status
     M2m::CustomerStatus.find_by_key(self.fcstatus)
   end
@@ -37,21 +67,21 @@ class M2m::Customer < M2m::Base
       txt.split(' ').map { |p| p.downcase.capitalize }.join(' ')
     end
   end
-  
+
   def name
     @name ||= M2m::Customer.customer_name(self.fcompany)
   end
-  
+
   def self.all_names
     self.all(:select => 'slcdpmx.fcompany', :order => 'slcdpmx.fcompany').map(&:name)
-  end  
-  
+  end
+
   def fob
     self.ffob.strip
   end
-  
+
   validates_uniqueness_of :fcompany
-  
+
   before_save :update_timestamps
   def update_timestamps
     now = Time.now
@@ -60,47 +90,83 @@ class M2m::Customer < M2m::Base
       write_attribute(:fsince, now) unless self.fsince.present?
     end
   end
-  
-  def self.fcustno_for(val)
-    '%06d' % val.to_i
+
+  m2m_id_setter :fcustno, 6
+  m2m_id_setter :fcshipto, 4
+  m2m_id_setter :fcsoldto, 4
+  m2m_id_setter :ContactNum, 6, :contact_number
+
+  after_save :after_save_madness
+  def after_save_madness
+    unless @running_after_save_madness
+      begin
+        @running_after_save_madness = true
+        need_to_save_self = false
+        if self.fcustno.blank?
+          self.fcustno = self.id 
+          need_to_save_self = true
+        end
+        contact = self.primary_contact || self.contacts.primary.new
+        address = self.addresses.sold_to.first
+        if address.nil?
+          address = self.addresses.sold_to.new #M2m::Address.sold_to.new
+          address.set_fcaddrkey
+        end
+        # self.addresses << address
+        %w(first_name last_name work_email work_phone notes work_fax work_address work_city work_state work_postal_code work_country_name).each do |a|
+          contact.send("#{a}=", self.send(a))
+          address.send("#{a}=", self.send(a))
+        end
+        unless self.fcsoldto.present?
+          self.fcsoldto = address.fcaddrkey
+          need_to_save_self = true
+        end
+        unless self.fcshipto.present?
+          self.fcshipto = address.fcaddrkey
+          need_to_save_self = true
+        end
+        unless self.contact_number.present?
+          self.contact_number = contact.contact_number
+          need_to_save_self = true
+        end
+        contact.save! if contact.changed?
+        address.save! if address.changed?
+        self.save! if need_to_save_self
+      rescue
+        raise $!
+      ensure
+        @running_after_save_madness = false
+      end
+    end
+    true
   end
 
-  def fcustno=(val)
-    write_attribute(:fcustno, M2m::Customer.fcustno_for(val))
-  end
-  
-  after_create :set_custno
-  def set_custno
-    self.fcustno = self.id
-    self.save
-  end
-  
   def self.data_to_params(data, params)
     contact = {}
     hash = JSON.parse ActiveSupport::Base64.decode64(CGI.unescape(data))
     hash.each do |key, value|
       if key == 'company'
         params[:fcompany] = value
-        Rails.logger.debug("Decoded company: #{value}")
+        # Rails.logger.debug("Decoded company: #{value}")
       elsif key == 'name'
         if value.present?
           fn, ln = value.split(' ', 2)
           contact[:fcfname] = fn
           contact[:fcontact] = ln
-          Rails.logger.debug("Decoded firstname: #{fn}")
-          Rails.logger.debug("Decoded lastname: #{ln}")
+          # Rails.logger.debug("Decoded firstname: #{fn}")
+          # Rails.logger.debug("Decoded lastname: #{ln}")
         end
       elsif key == 'email'
         contact[:fcemail] = value
-        Rails.logger.debug("Decoded email: #{value}")
+        # Rails.logger.debug("Decoded email: #{value}")
       elsif key == 'phone'
         contact[:PhoneWork] = value
-        Rails.logger.debug("Decoded phone: #{value}")
+        # Rails.logger.debug("Decoded phone: #{value}")
       end
     end
     params['contacts_attributes'] = [ contact ]
   end
-  
+
 end
 
 
@@ -185,4 +251,3 @@ end
 #  MobilePhone      :string(20)      default(""), not null
 #  NAICsCode        :string(6)       default(""), not null
 #
-
