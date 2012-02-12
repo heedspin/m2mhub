@@ -62,7 +62,7 @@ class M2m::Contact < M2m::Base
   end
   
   m2m_id_setter :fcsourceid, 6  
-  validates_presence_of :fcfname, :fcontact
+  validates_presence_of :first_name, :last_name
   
 end
 
