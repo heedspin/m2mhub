@@ -46,7 +46,7 @@ class M2m::Address < M2m::Base
   alias_attribute :work_email, :fcemail
   alias_attribute :work_phone, :fcphone
   alias_attribute :notes, :fmnotes
-  alias_attribute :work_fax, :fcfname
+  alias_attribute :work_fax, :fcfax
   alias_attribute :work_address, :fmstreet
   alias_attribute :work_city, :fccity
   alias_attribute :work_state, :fcstate
