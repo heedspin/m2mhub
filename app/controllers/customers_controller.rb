@@ -44,7 +44,7 @@ class CustomersController < ApplicationController
     if @customer.update_attributes(params[:m2m_customer])
       redirect_to customer_contacts_url(@customer)
     else
-      render_action :action => 'edit'
+      render :action => 'edit'
     end
   end
 
