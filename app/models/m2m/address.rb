@@ -38,7 +38,8 @@ class M2m::Address < M2m::Base
   set_table_name 'syaddr'
   
   # Magic number.  But I don't know the logic the M2M uses to choose this.
-  scope :sold_to, :conditions => { :fcaddrtype => 'S' }
+  scope :sold_to, :conditions => { :fcaddrtype => 'O' }
+  scope :ship_to, :conditions => { :fcaddrtype => 'S' }
   
   alias_attribute :first_name, :fcfname
   alias_attribute :last_name, :fclname
@@ -51,6 +52,7 @@ class M2m::Address < M2m::Base
   alias_attribute :work_state, :fcstate
   alias_attribute :work_postal_code, :fczip
   alias_attribute :work_country_name, :fccountry
+  alias_attribute :company_name, :fccompany
   
   def address_type
     M2m::CsPopup.cached_lookup('SYADDR.FCADDRTYPE', self.fcaddrtype).try(:text)
@@ -61,7 +63,7 @@ class M2m::Address < M2m::Base
   before_create :set_fcaddrkey
   def set_fcaddrkey
     unless self.fcaddrkey.present?
-      self.fcaddrkey = M2m::Address.where(:fcaliaskey => self.fcaliaskey, :fcalias => self.fcalias).count + 1
+      self.fcaddrkey = M2m::Address.where(:fcaliaskey => self.fcaliaskey, :fcalias => self.fcalias, :fcaddrtype => self.fcaddrtype).count + 1
     end
     true
   end
