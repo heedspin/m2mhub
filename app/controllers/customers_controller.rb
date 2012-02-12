@@ -16,10 +16,9 @@ class CustomersController < ApplicationController
       M2m::Customer.data_to_params(data, params[:m2m_customer])
     end
     @customer = M2m::Customer.new(params[:m2m_customer])
-    @customer.contacts.build.primary = true
     similar_customers = Amatcher.find_similar( :match => @customer.company_name, :method => :company_name,
-                                                :objects => M2m::Customer.scoped(:select => 'slcdpmx.identity_column, slcdpmx.fcompany'),
-                                                :limit => 10, :threshold => 0.7 )
+                                               :objects => M2m::Customer.scoped(:select => 'slcdpmx.identity_column, slcdpmx.fcompany'),
+                                               :limit => 10, :threshold => 0.7 )
     if similar_customers.size > 0
       @similar_customers = similar_customers.map(&:object)
     end
@@ -28,24 +27,15 @@ class CustomersController < ApplicationController
   def edit
     @customer = current_object
     @customer.strip_strings
-    @customer.contacts.map(&:strip_strings)
   end
 
   def create
     @customer = M2m::Customer.new(params[:m2m_customer])
-    contact = @customer.contacts.to_a.first
-    @customer.transaction do
-      if @customer.save
-        # Tie the contact to the customer.
-        if contact
-          contact.primary = true
-          contact.fcsourceid = @customer.id
-          contact.save
-        end
-        redirect_to customer_contacts_url(@customer)
-      else
-        render :action => 'new'
-      end
+    if @customer.save
+      # @customer.after_save_madness!
+      redirect_to customer_contacts_url(@customer)
+    else
+      render :action => 'new'
     end
   end
 
@@ -104,7 +94,7 @@ class CustomersController < ApplicationController
 
     def current_object
       @current_object ||= if params[:custno] == 'true'
-        M2m::Customer.where(:fcustno => M2m::Customer.fcustno_for(params[:id])).first || (raise ActiveRecord::RecordNotFound)
+        M2m::Customer.with_custno(params[:id]).first || (raise ActiveRecord::RecordNotFound)
       else
         M2m::Customer.find(params[:id])
       end

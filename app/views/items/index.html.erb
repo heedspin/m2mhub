@@ -1,4 +1,4 @@
-<%= semantic_form_for :search, :url => items_path, :html => {:method => :get} do |f| %>
+<%= semantic_form_for @search, :as => 'search', :url => items_path, :html => {:method => :get} do |f| %>
 	<%= f.inputs do %>
 	  <%= f.input :fpartno, :label => M2m::Item.human_attribute_name(:fpartno) %>
 	<% end %>

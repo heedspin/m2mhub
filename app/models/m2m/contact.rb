@@ -2,13 +2,21 @@ class M2m::Contact < M2m::Base
   set_table_name 'syphon'
   include ActionView::Helpers::NumberHelper
   
-  after_initialize :set_defaults
-  def set_defaults
-    unless self.country_name.present?
-      self.country_name = CompanyConfig.default_country_name
-    end
-  end
-
+  alias_attribute :primary, :IsPrimary
+  alias_attribute :work_phone, :PhoneWork
+  alias_attribute :work_fax, :fcfax
+  alias_attribute :mobile_phone, :PhoneMobile
+  alias_attribute :work_country_name, :fccountry
+  alias_attribute :contact_number, :Number
+  alias_attribute :work_email, :fcemail
+  alias_attribute :first_name, :fcfname
+  alias_attribute :last_name, :fcontact
+  alias_attribute :notes, :fmnotes
+  alias_attribute :work_address, :Address
+  alias_attribute :work_city, :City
+  alias_attribute :work_state, :State
+  alias_attribute :work_postal_code, :PostalCode
+  
   def first_name
     self.fcfname.titleize.strip
   end
@@ -25,11 +33,13 @@ class M2m::Contact < M2m::Base
     self.fcfax.strip
   end
 
-  alias_attribute :primary, :IsPrimary
-  alias_attribute :work_phone, :PhoneWork
-  alias_attribute :work_fax, :fcfax
-  alias_attribute :mobile_phone, :PhoneMobile
-  alias_attribute :country_name, :fccountry
+  m2m_id_setter :Number, 6, :contact_number
+  
+  after_create :set_contact_number
+  def set_contact_number
+    self.contact_number = self.id
+    self.save
+  end
   
   scope :primary, :conditions => { :IsPrimary => true }
 
@@ -51,14 +61,9 @@ class M2m::Contact < M2m::Base
     self.fcextensio.strip
   end
   
-  def fcsourceid=(val)
-    if val.is_a?(Fixnum)
-      val = '%06d' % val
-    end
-    write_attribute(:fcsourceid, val)
-  end  
-  
+  m2m_id_setter :fcsourceid, 6  
   validates_presence_of :fcfname, :fcontact
+  
 end
 
 # == Schema Information
