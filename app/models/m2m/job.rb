@@ -29,19 +29,19 @@ class M2m::Job < M2m::Base
     elsif (self.status.cancelled? or self.status.on_hold? or self.status.closed?)
       self.hold_date
     elsif self.status.completed?
-      self.finish_date
+      self.finish_date || self.last_labor_date
     else
       nil
     end
   end
   
   alias_attribute :job_number, :fjobno
-  alias_attribute :release_date, :fact_rel
-  alias_attribute :finish_date, :fdfnshdate
-  alias_attribute :hold_date, :fhold_dt
-  alias_attribute :last_labor_date, :flastlab
-  alias_attribute :open_date, :fopen_dt
-  alias_attribute :created_at, :fdstart
+  alias_date_attribute :release_date, :fact_rel
+  alias_date_attribute :finish_date, :fdfnshdate
+  alias_date_attribute :hold_date, :fhold_dt
+  alias_date_attribute :last_labor_date, :flastlab
+  alias_date_attribute :open_date, :fopen_dt
+  alias_date_attribute :created_at, :fdstart
 end
 
 # == Schema Information

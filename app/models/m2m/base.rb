@@ -36,6 +36,15 @@ class M2m::Base < ApplicationModel
     end
     RUBY
   end
+  
+  def self.alias_date_attribute(new_name, old_name)
+    self.class_eval <<-RUBY
+    alias_attribute '#{new_name}', '#{old_name}'
+    def #{new_name}
+      M2m::Constants.sanitize_date(self.send('#{old_name}'))
+    end
+    RUBY
+  end
 
   # Useful after loading object and before rendering edit.
   def strip_strings
