@@ -28,13 +28,13 @@ class ApplicationController < ActionController::Base
       begin
         options = yield
         options[:user_id] ||= current_user.try(:id)
-        options[:remote_ip] ||= request.remote_ip
-        options[:params] ||= params.to_json
-        options[:report_name] ||= controller_name + ' / ' + action_name
+        options[:remote_ip] ||= request.try(:remote_ip)
+        options[:params] ||= params.try(:to_json)
+        options[:report_name] ||= (controller_name || 'no controller') + ' / ' + (action_name || 'no action')
         options[:format] ||= params[:format]# || 'html'
         @last_user_activity = UserActivity.create(options)
       rescue
-        RAILS_DEFAULT_LOGGER.error "Ignoring UserActivity exception: #{$!}"
+        logger.error "Ignoring UserActivity exception: #{$!}"
       end
     end
 
