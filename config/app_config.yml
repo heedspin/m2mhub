@@ -24,6 +24,7 @@ _default_company_config: &_default_company_config
   rma_custom_codes_field: fcusrchr3
   credit_memo_report_severity_names: Quality
   default_country_name: United States
+  use_item_revisions: true
   
 _shared_company_config: &_shared_company_config
   lxd:
@@ -56,6 +57,7 @@ _shared_company_config: &_shared_company_config
           - CIF:HK
           - CIF:KOREA
           - BEIJING
+    use_item_revisions: false
     
   smt:
     google_analytics_key:

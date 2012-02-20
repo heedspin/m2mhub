@@ -19,7 +19,7 @@
 			<td><%= link_to @search.present? ? search_excerpt(i.part_number, @search.try(:fpartno)) : i.part_number, item_url(i) %></td>
 			<td><%= i.revision %></td>
 			<td><%= i.is_current? ? 'X' : '' %></td>
-			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search.try(:fpartno)) }.join(', ') %></td>
+			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search.try(:fpartno)) }.join(', ').html_safe %></td>
 			<td><%= h i.fdescript %></td>
 			<td><%= render 'items/locations', :item => i %></td>
 			<td class="right"><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
