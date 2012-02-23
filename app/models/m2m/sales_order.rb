@@ -25,6 +25,11 @@ class M2m::SalesOrder < M2m::Base
       :conditions => ['somast.forderdate >= ?', day],
     }
   }
+  scope :with_order_number, lambda { |order_number|
+    {
+      :conditions => { :fsono => order_number }
+    }
+  }
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate

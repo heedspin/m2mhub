@@ -11,7 +11,8 @@ class M2m::Status < ActiveHash::Base
     {:id => 8,  :name => 'Receiving'},
     {:id => 9,  :name => 'Partial'},
     {:id => 10, :name => 'Released'},
-    {:id => 11, :name => 'Completed'}
+    {:id => 11, :name => 'Completed'},
+    {:id => 12, :name => 'Void'}
   ]
   include ActiveHashMethods
   

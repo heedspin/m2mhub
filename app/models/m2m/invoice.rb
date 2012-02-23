@@ -2,13 +2,28 @@ class M2m::Invoice < M2m::Base
   set_table_name 'armast'
   set_primary_key 'fcinvoice'
   
+  belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => 'fsono', :primary_key => 'fsono'  
+  has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
+  
   alias_attribute :invoice_source_code, :fcsource
   alias_attribute :invoice_type_code, :finvtype
   alias_attribute :amount, :fnamount
   alias_attribute :date, :finvdate
-  alias_attribute :invoice_number, :fcinvoice
+  alias_attribute :invoice_number, :fcinvoice  
   
-  has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
+  scope :customer, lambda { |customer|
+    custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
+    {
+      :conditions => { :fcustno => custno }
+    }
+  }
+  scope :invoice_dates, lambda { |start_date, end_date|
+    {
+      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', Date.parse(start_date), Date.parse(end_date) ]
+    }
+  }
+  # TODO: Replace 'V' with something intelligent?
+  scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
 
   def invoice_type
     M2m::InvoiceType.find_by_key(self.invoice_type_code)
@@ -28,6 +43,14 @@ class M2m::Invoice < M2m::Base
       'PM-' + "%07d" % invoice_number
     else
       "%010d" % invoice_number
+    end
+  end
+  
+  def status_name
+    if popup = M2m::CsPopup.cached_lookup('ARMAST.FCSTATUS', self.fcstatus)
+      popup.text.strip
+    else
+      nil
     end
   end
   
