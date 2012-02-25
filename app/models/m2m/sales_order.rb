@@ -30,6 +30,11 @@ class M2m::SalesOrder < M2m::Base
       :conditions => { :fsono => order_number }
     }
   }
+  scope :with_order_numbers, lambda { |order_numbers|
+    {
+      :conditions => [ 'somast.fsono in (?)', order_numbers ]
+    }
+  }
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
@@ -56,6 +61,21 @@ class M2m::SalesOrder < M2m::Base
   # Default to customer sales master
   def fob
     self.ffob.present? ? self.ffob.strip : self.customer.ffob
+  end
+
+  def self.attach_sales_orders(objects)
+    sales_orders = M2m::SalesOrder.with_order_numbers(objects.map(&:sales_order_number).uniq).scoped(:include => :items)
+    sales_order_hash = {}
+    sales_orders.each { |so| sales_order_hash[so.order_number] = so }
+    objects.each do |o|
+      if o.sales_order_number.present? and (found = sales_order_hash[o.sales_order_number])
+        o.sales_order = found
+      else
+        # Explicitly set to prevent lazy load
+        o.sales_order = nil
+      end
+    end
+    sales_orders
   end
   
 end

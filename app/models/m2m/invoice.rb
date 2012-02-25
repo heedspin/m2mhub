@@ -9,7 +9,8 @@ class M2m::Invoice < M2m::Base
   alias_attribute :invoice_type_code, :finvtype
   alias_attribute :amount, :fnamount
   alias_attribute :date, :finvdate
-  alias_attribute :invoice_number, :fcinvoice  
+  alias_attribute :invoice_number, :fcinvoice
+  alias_attribute :customer_number, :fcustno
   
   scope :customer, lambda { |customer|
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
@@ -52,6 +53,10 @@ class M2m::Invoice < M2m::Base
     else
       nil
     end
+  end
+  
+  def customer_name
+    M2m::Customer.customer_name(self.fbcompany)
   end
   
 end

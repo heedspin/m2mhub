@@ -9,6 +9,7 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :ship_quantity, :fshipqty
   alias_attribute :unit_price, :fprice
+  alias_attribute :description, :fmdescript
 
   scope :for_rma_item, lambda { |rma_item|
     {
@@ -57,9 +58,19 @@ class M2m::InvoiceItem < M2m::Base
   def clean_item_number
     self.item_number.to_i.to_s
   end
-  
+
   def sales_order
-    M2m::SalesOrder.with_order_number(self.sales_order_number).first
+    unless @_loaded_sales_order
+      if self.sales_order_number.present?
+        @sales_order = M2m::SalesOrder.with_order_number(self.sales_order_number).first
+        @_loaded_sales_order = true
+      end
+    end
+    @sales_order
+  end
+  def sales_order=(val)
+    @_loaded_sales_order = true
+    @sales_order = val
   end
 
   def sales_order_number

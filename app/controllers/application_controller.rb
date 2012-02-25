@@ -117,7 +117,7 @@ class ApplicationController < ActionController::Base
     end
 
     def build_object
-      model_class.new(params[model_name])
+      @build_object ||= model_class.new(params[model_name])
     end
 
     def current_object

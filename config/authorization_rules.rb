@@ -43,6 +43,7 @@ authorization do
     has_permission_on :quality_credit_memo_reports, :to => :make
     has_permission_on :quality_rmas, :to => :read
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
+    has_permission_on :invoiced_sales_reports, :to => :manage
   end
   
   role :production do
