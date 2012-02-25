@@ -16,7 +16,15 @@ class M2m::Base < ApplicationModel
     end
     attr_accessor :#{item_method}
     def #{item_method}
-      @#{item_method} ||= M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first
+      unless @_loaded_item
+        @#{item_method} = M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first
+        @_loaded_item = true
+      end
+      @#{item_method}
+    end
+    def #{item_method}=(val)
+      @_loaded_item = true
+      @#{item_method} = val
     end
     RUBY
   end

@@ -21,6 +21,9 @@
 		<li class="<%= menu_selected(:parent => :customers, :controller => :contacts) %>">
 			<%= link_to 'Contacts', customer_contacts_url(@customer) %>
 		</li>
+		<li class="<%= menu_selected(:parent => :customers, :controller => :invoiced_sales_reports) %>">
+			<%= link_to 'Invoiced Sales', new_customer_invoiced_sales_report_url(@customer) %>
+		</li>
 	</ul>
 </div>
 

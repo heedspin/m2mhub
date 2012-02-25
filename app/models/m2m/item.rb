@@ -94,12 +94,16 @@ class M2m::Item < M2m::Base
   end
 
   def self.attach_items(objects, items=nil)
-    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number))
-    if (items.size > 0) and (objects.size > 0)
-      objects.each do |o|
-        if o.part_number.present? and o.revision.present? and (found = items.detect { |item| (o.part_number == item.part_number) && (o.revision == item.revision) })
-          o.item = found
-        end
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
+    items_hash = {}
+    items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
+    objects.each do |o|
+      okey = (o.part_number || '') + '-' + (o.revision || '')
+      if okey.present? and (found = items_hash[okey])
+        o.item = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.item = nil
       end
     end
     items

@@ -1,27 +1,48 @@
 class M2m::InvoiceItem < M2m::Base
   set_table_name 'aritem'
-  
+
   belongs_to :invoice, :class_name => 'M2m::Invoice', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
-  
+  belongs_to_item :fpartno, :frev
+
   alias_attribute :rma_key, :fcrmakey
   alias_attribute :amount, :ftotprice
-  
+  alias_attribute :invoice_number, :fcinvoice
+  alias_attribute :ship_quantity, :fshipqty
+  alias_attribute :unit_price, :fprice
+  alias_attribute :description, :fmdescript
+
   scope :for_rma_item, lambda { |rma_item|
     {
       :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
     }
   }
-  
   scope :for_rma_items, lambda { |rma_items|
     {
       :conditions => [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
     }
   }
-  
+  scope :customer, lambda { |customer|
+    custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
+    {
+      :joins => :invoice,
+      :conditions => { :armast => {:fcustno => custno} }
+    }
+  }
+  scope :invoice_dates, lambda { |start_date, end_date|
+    start_date = Date.parse(start_date) unless start_date.is_a?(Date)
+    end_date = Date.parse(end_date) unless end_date.is_a?(Date)
+    {
+      :joins => :invoice,
+      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
+    }
+  }
+  # TODO: Replace 'V' with something intelligent?
+  scope :not_void, :joins => :invoice, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
+
   def invoice_number
     self.fcinvoice.strip
   end
-  
+
   def clean_invoice_number
     if self.fcinvoice =~ /^\W*(\w\w)-(\d+)\W*$/
       $1 + '-' + $2.to_i.to_s
@@ -29,23 +50,49 @@ class M2m::InvoiceItem < M2m::Base
       self.fcinvoice.strip
     end
   end
-  
+
   def item_number
     self.fitem.strip
   end
-  
+
   def clean_item_number
     self.item_number.to_i.to_s
   end
-  
-  def part_number
-    @part_number ||= self.fpartno.strip
+
+  def sales_order
+    unless @_loaded_sales_order
+      if self.sales_order_number.present?
+        @sales_order = M2m::SalesOrder.with_order_number(self.sales_order_number).first
+        @_loaded_sales_order = true
+      end
+    end
+    @sales_order
   end
-  
-  def revision
-    @revision ||= self.frev.strip
+  def sales_order=(val)
+    @_loaded_sales_order = true
+    @sales_order = val
   end
-  
+
+  def sales_order_number
+    @sales_order_number ||= self.fsokey[0..5]
+  end
+
+  def sales_order_release_id
+    @sales_order_release_id ||= self.fsokey[6..8]
+  end
+
+  def sales_order_release_number
+    @sales_order_release_number ||= self.fsokey[9..11]
+  end
+
+  def customer_part_number
+    if (so = self.sales_order) and (sales_order_item = so.items.detect { |soi| soi.part_number == self.part_number })
+      sales_order_item.customer_part_number
+    else
+      nil
+    end
+  end
+
   def rma_number
     M2m::InvoiceItem.rma_number(self.rma_key)
   end
@@ -121,4 +168,3 @@ end
 #  fnMiscamt        :decimal(, )     default(0.0), not null
 #  fcrmakey         :string(28)      default(""), not null
 #
-

@@ -68,6 +68,7 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :revision, :fpartrev
   alias_attribute :due_date, :fduedate
   alias_attribute :order_quantity, :forderqty
+  alias_attribute :internal_number, :finumber
   
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
   scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]

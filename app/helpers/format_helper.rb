@@ -46,4 +46,15 @@ module FormatHelper
   def percent1(num)
     num && sprintf("%.1f",num * 100)
   end
+  
+  def set_focus(input_id)
+    html = <<-HTML
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('#{input_id}').focus();
+    });    
+    </script>
+    HTML
+    content_for :javascripts, html.html_safe
+  end
 end

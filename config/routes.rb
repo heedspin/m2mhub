@@ -33,11 +33,13 @@ M2mhub::Application.routes.draw do
     resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
     resources :quotes, :only => [:index], :controller => 'customers/quotes'
     resources :contacts, :controller => 'customers/contacts'
+    resources :invoiced_sales_reports, :controller => 'customers/invoiced_sales_reports'
   end
   resources :sales_backlog_reports, :only => [:index, :show]  
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
+  resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   match 'quality' => 'quality/quality_dashboard#index'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
