@@ -42,6 +42,8 @@ $(function() {
 </table>			
 <% end %>
 
+<%= set_focus('#search_fcompany') %>
+
 <% if @customers %>
 <% if @customers.size > 0 %>
 <%= will_paginate @customers %>
