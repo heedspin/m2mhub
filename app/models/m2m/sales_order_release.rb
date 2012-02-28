@@ -1,10 +1,10 @@
 class M2m::SalesOrderRelease < M2m::Base
-  
+
   # default_scope :order => 'sorels.fenumber'
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to_item :fpartno, :fpartrev
-  
+
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
 
   scope :for_shipper_items, lambda { |shipper_items|
@@ -38,10 +38,10 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :for_item, lambda { |item|
     fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
-      :conditions => { :fpartno => fpartno.strip } 
+      :conditions => { :fpartno => fpartno.strip }
     }
   }
-  
+
   scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
@@ -69,21 +69,23 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :order_quantity, :forderqty
   alias_attribute :internal_number, :finumber
-  
+
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
-  scope :shipped_late, :conditions => ['(sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_grace_period_days]
+  scope( :shipped_late,
+         :joins => :sales_order,
+         :conditions => ['(DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?) AND (sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_lead_time, CompanyConfig.otd_grace_period_days] )
   scope :due, lambda { |start_date, end_date|
     {
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
     }
   }
-  
+
   def days_late
     return 0 unless self.due_date.present?
     date = self.last_ship_date || Time.current
     (date - self.due_date).to_i / 86400
   end
-  
+
   def last_ship_date
     self.flshipdate == M2m::Constants.null_time ? nil : self.flshipdate
   end
@@ -91,11 +93,11 @@ class M2m::SalesOrderRelease < M2m::Base
   def due_date
     self.fduedate == M2m::Constants.null_time ? nil : self.fduedate
   end
-  
+
   # def due_date_month
   #   @due_date_month ||= Date.new(self.due_date.year, self.due_date.month, 1)
   # end
-  # 
+  #
   def quantity_shipped
     (self.fshipbook || 0) + (self.fshipbuy || 0) + (self.fshipmake || 0)
   end
@@ -150,15 +152,15 @@ class M2m::SalesOrderRelease < M2m::Base
   def can_be_partially_shipped?
     (backorder_quantity > 0) && item.item && (item.item.quantity_on_hand > 0) && (item.item.quantity_on_hand < backorder_quantity)
   end
-  
+
   def master?
     self.fmasterrel
   end
-  
+
   # def master_release?
   #   (self.frelease == '000') && self.item.try(:multiple_releases?)
   # end
-  
+
 end
 
 
@@ -245,4 +247,3 @@ end
 #  fsetuppadj       :decimal(16, 5)  default(0.0), not null
 #  fnISOQty         :decimal(15, 5)  default(0.0), not null
 #
-
