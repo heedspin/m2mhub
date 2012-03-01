@@ -1,4 +1,4 @@
-<% if (@total_purchase_order_items || 0) > @purchase_order_items.size %>
+<% if @total_purchase_order_items > @purchase_order_items.size %>
 <% browse_all_link = link_to("Browse all #{@total_purchase_order_items} Purchase Order Items", item_purchase_order_items_url(@item)) %>
 <% end %>
 <% if @purchase_order_items.size == 0 %>
