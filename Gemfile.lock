@@ -4,6 +4,13 @@ GIT
   specs:
     annotate (2.4.1.beta1)
 
+PATH
+  remote: ../doogle
+  specs:
+    doogle (0.0.1)
+      acts_as_list
+      rails (~> 3.1.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -39,6 +46,7 @@ GEM
       activesupport (= 3.1.3)
     activesupport (3.1.3)
       multi_json (~> 1.0)
+    acts_as_list (0.1.5)
     addressable (2.2.6)
     airbrake (3.0.9)
       activesupport
@@ -150,6 +158,7 @@ DEPENDENCIES
   authlogic (= 3.1.0)
   declarative_authorization (= 0.5.5)
   delayed_job (= 3.0.1)
+  doogle!
   factory_girl (= 2.5.1)
   formtastic (= 2.0.2)
   jquery-rails
