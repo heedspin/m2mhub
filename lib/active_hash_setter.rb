@@ -2,10 +2,10 @@ module ActiveHashSetter
   def self.included(base)
     class << base
       def active_hash_setter(klass)
-        attr_key = klass.name.tableize.split('/').last.singularize
+        attr_key = klass.name.demodulize.underscore
         attr_id = ":#{attr_key}_id"
-        attr_sym = ":#{attr_sym}"
         self.class_eval <<-TEXT
+          belongs_to_active_hash :#{attr_key}, :class_name => '#{klass.name}'
           def #{attr_key}=(thing)
             if thing.is_a?(#{klass.name})
               write_attribute(#{attr_id}, thing.id)
