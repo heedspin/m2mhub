@@ -8,3 +8,4 @@ config/local_company_config.yml
 data
 db/schema.rb
 db/migrate/*doogle*
+db/backups
