@@ -4,16 +4,15 @@ class ItemsController < ApplicationController
   def index
     if (@search_term = params[:term]).present?
       # Autocomplete path.
-      @items = M2m::Item.part_number_like(@search_term).by_part_number.all(:select => 'inmast.fpartno', :limit => 20)
+      @items = M2m::Item.part_number_like(@search_term).by_part_number.all(:select => 'inmastx.fpartno', :limit => 20)
       render :json => @items.map(&:part_number)
     else
       @search = M2m::Item.new
       search_params = params[:search] || {}
       @search.fpartno = search_params['fpartno']
       if @search.fpartno.present?
-        @items =
-          M2m::Item.company_or_vendor_part_number_like(@search.fpartno).paginate(:page => params[:page],
-                                                                                 :per_page => 20).order('inmast.fpartno, inmast.frev desc')
+        @items = M2m::Item.company_or_vendor_part_number_like(@search.fpartno).
+          by_part_rev_desc.paginate(:page => params[:page], :per_page => 20)
       end
     end
   end

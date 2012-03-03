@@ -259,3 +259,4 @@ end
 #  MobilePhone      :string(20)      default(""), not null
 #  NAICsCode        :string(6)       default(""), not null
 #
+

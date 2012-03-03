@@ -168,3 +168,4 @@ end
 #  fnMiscamt        :decimal(, )     default(0.0), not null
 #  fcrmakey         :string(28)      default(""), not null
 #
+
