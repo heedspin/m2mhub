@@ -58,7 +58,7 @@ module M2mhub
 
     config.colorize_logging = false
     
-    config.action_view.javascript_expansions[:defaults] = %w(jquery-1.6.4.min jquery-ui-1.8.6.custom.min application jrails)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery-1.6.4.min jquery-ui-1.8.6.custom.min application jrails jquery.form)
   end
 end
 

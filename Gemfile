@@ -14,7 +14,8 @@ gem 'authlogic', '3.1.0'
 
 gem 'formtastic', '2.0.2'
 gem 'declarative_authorization', '0.5.5'
-gem 'paperclip', '2.4.1'
+gem 'aws-sdk', '1.3.4'
+gem 'paperclip', '2.7.0'
 gem 'will_paginate', '3.0.3'
 gem 'delayed_job', '3.0.1'
 gem "airbrake", '3.0.9'
@@ -27,6 +28,14 @@ gem 'spreadsheet', '0.6.8'
 gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 gem 'amatch'
+
+# Sadly this is the best approach until we turn M2MHub into an engine:
+# puts Dir.get_cwd
+if File.exists?('../doogle')
+  gem 'doogle', :path => '../doogle'
+elsif Dir.getwd.includes?('lxd')
+  gem 'doogle', :git => 'git@github.com:heedspin/doogle.git'
+end
 
 group :development do
   gem 'ruby-debug'

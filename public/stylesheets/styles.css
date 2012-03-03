@@ -1047,3 +1047,7 @@ div.similar_customers {
 div.similar_customers ul {
 	margin: 10px 0 10px;
 }
+
+div.display_search { 
+	font-size: 2em;
+}
