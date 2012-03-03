@@ -22,6 +22,11 @@ module ActiveHashSetter
               raise ActiveRecord::AssociationTypeMismatch.new('Expected #{klass.name}, got ' + thing.class.name + ' ' + thing.to_s)
             end
           end
+          scope :#{attr_key}, lambda { |val|
+            {
+              :conditions => { #{attr_id} => val.id }
+            }
+          }          
         TEXT
       end
     end
