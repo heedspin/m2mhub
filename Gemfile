@@ -28,7 +28,14 @@ gem 'spreadsheet', '0.6.8'
 gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 gem 'amatch'
-gem 'doogle', :path => '../doogle'
+
+# Sadly this is the best approach until we turn M2MHub into an engine:
+# puts Dir.get_cwd
+if File.exists?('../doogle')
+  gem 'doogle', :path => '../doogle'
+elsif Dir.getwd.includes?('lxd')
+  gem 'doogle', :git => 'git@github.com:heedspin/doogle.git'
+end
 
 group :development do
   gem 'ruby-debug'
