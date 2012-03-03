@@ -20,7 +20,6 @@ class M2m::Item < M2m::Base
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
   alias_attribute :quantity_committed, :fbook
-  alias_attribute :quantity_on_hand, :fonhand
   alias_attribute :quantity_on_order, :fonorder
   alias_attribute :quantity_non_nettable, :fnonnetqty
   alias_attribute :quantity_in_process, :fproqty
@@ -34,6 +33,10 @@ class M2m::Item < M2m::Base
   # Uses same calculation that m2m uses.
   def quantity_available
     self.quantity_on_hand + self.quantity_on_order + self.quantity_in_inspection + self.quantity_in_process - self.quantity_committed - self.quantity_non_nettable
+  end
+  
+  def quantity_on_hand
+    self.locations.to_a.sum(&:quantity_on_hand)
   end
 
   def part_number
