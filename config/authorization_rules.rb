@@ -44,6 +44,8 @@ authorization do
     has_permission_on :quality_rmas, :to => :read
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
     has_permission_on :invoiced_sales_reports, :to => :manage
+    # TODO: factor this out or make configurable.
+    has_permission_on :displays, :to => :manage
   end
   
   role :production do
