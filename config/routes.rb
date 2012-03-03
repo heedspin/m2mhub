@@ -54,5 +54,5 @@ M2mhub::Application.routes.draw do
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
 
   # Specify thing regular expression because the routes use '.' as separator.
-  match 'switch/:thing' => 'switch#switch', :thing => /.+/
+  match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end
