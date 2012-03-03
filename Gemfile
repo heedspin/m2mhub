@@ -33,7 +33,7 @@ gem 'amatch'
 # puts Dir.get_cwd
 if File.exists?('../doogle')
   gem 'doogle', :path => '../doogle'
-elsif Dir.getwd.includes?('lxd')
+elsif Dir.getwd.include?('lxd')
   gem 'doogle', :git => 'git@github.com:heedspin/doogle.git'
 end
 
