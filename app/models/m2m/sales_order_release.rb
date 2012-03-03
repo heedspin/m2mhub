@@ -247,3 +247,4 @@ end
 #  fsetuppadj       :decimal(16, 5)  default(0.0), not null
 #  fnISOQty         :decimal(15, 5)  default(0.0), not null
 #
+

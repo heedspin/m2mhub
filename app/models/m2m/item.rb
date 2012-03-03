@@ -1,120 +1,3 @@
-class M2m::Item < M2m::Base
-  set_table_name 'inmast'
-  # set_primary_keys 'fpartno', 'frev'
-  has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :quote_items, :class_name => 'M2m::QuoteItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
-  
-  def locations
-    @locations ||= M2m::InventoryLocation.for_item(self)
-  end
-  def locations=(v)
-    @locations = v
-  end
-
-  alias_attribute :total_cost, :fdisptcost
-  alias_attribute :description, :fdescript
-  alias_attribute :quantity_committed, :fbook
-  alias_attribute :quantity_on_hand, :fonhand
-  alias_attribute :quantity_on_order, :fonorder
-  alias_attribute :quantity_non_nettable, :fnonnetqty
-  alias_attribute :quantity_in_process, :fproqty
-  alias_attribute :quantity_in_inspection, :fqtyinspec
-  alias_attribute :average_cost, :favgcost
-  alias_attribute :rolled_material_cost, :f2matlcost
-  alias_attribute :rolled_labor_cost, :f2labcost
-  alias_attribute :facility, :fac
-  alias_attribute :source_facility, :sfac
-  
-  # Uses same calculation that m2m uses.
-  def quantity_available
-    self.quantity_on_hand + self.quantity_on_order + self.quantity_in_inspection + self.quantity_in_process - self.quantity_committed - self.quantity_non_nettable
-  end
-
-  def part_number
-    @part_number ||= self.fpartno.strip
-  end
-  
-  def revision
-    @revision ||= self.frev.strip
-  end
-  
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :revision, lambda { |r| where(:frev => r) }
-  scope :with_part_number, lambda { |pn| 
-    {
-      :conditions => { :fpartno => pn }
-    } 
-  }
-  scope :with_part_numbers, lambda { |part_numbers| 
-    {
-      :conditions => [ 'inmast.fpartno in (?)', part_numbers.uniq]
-    } 
-  }
-  scope :by_rev_desc, :order => 'inmast.frev desc'
-  scope :by_part_number, :order => 'inmast.fpartno'
-  
-  scope :company_or_vendor_part_number_like, lambda { |text|
-    text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
-    {
-      :joins => <<-SQL
-      INNER JOIN
-      ( SELECT distinct [inmast].identity_column FROM [inmast] 
-        LEFT JOIN [invend] ON invend.fpartno = inmast.fpartno 
-        WHERE (inmast.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
-      on inmast.identity_column = tmp1.identity_column
-      SQL
-    }
-  }
-  
-  scope :part_number_like, lambda { |text|
-    {
-      :conditions => [ 'inmast.fpartno like ?', '%' + (text.strip || '') + '%' ]
-    }
-  }
-  
-  def self.latest(part_number)
-    self.with_part_number(part_number).by_rev_desc.first
-  end
-  
-  def is_current?
-    if @is_current.nil?
-      @is_current = if ci = M2m::CurrentItem.for_part_number(self.part_number).first
-        ci.is_item?(self)
-      else
-        false
-      end
-    end
-    @is_current
-  end
-
-  def self.attach_items(objects, items=nil)
-    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
-    items_hash = {}
-    items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
-    objects.each do |o|
-      okey = (o.part_number || '') + '-' + (o.revision || '')
-      if okey.present? and (found = items_hash[okey])
-        o.item = found
-      else
-        # Explicitly set this to keep it from trying to lazy load.
-        o.item = nil
-      end
-    end
-    items
-  end
-  
-end
-
-
-
-
-
 # == Schema Information
 #
 # Table name: inmast
@@ -268,4 +151,142 @@ end
 #  fmtdrcpt         :decimal(15, 5)
 #  fytdrcpt         :decimal(15, 5)
 #
+
+class M2m::Item < M2m::Base
+  set_table_name 'inmastx'
+  has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :quote_items, :class_name => 'M2m::QuoteItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
+  
+  def locations
+    @locations ||= M2m::InventoryLocation.for_item(self)
+  end
+  def locations=(v)
+    @locations = v
+  end
+
+  alias_attribute :total_cost, :fdisptcost
+  alias_attribute :description, :fdescript
+  alias_attribute :average_cost, :favgcost
+  alias_attribute :rolled_material_cost, :f2matlcost
+  alias_attribute :rolled_labor_cost, :f2labcost
+  alias_attribute :facility, :fac
+  alias_attribute :source_facility, :sfac
+  
+  # Uses same calculation that m2m uses.
+  def quantity_available
+    self.quantity_on_hand + self.quantity_on_order + self.quantity_in_inspection + self.quantity_in_process - self.quantity_committed - self.quantity_non_nettable
+  end  
+  def quantity_on_hand
+    self.locations.to_a.sum(&:quantity_on_hand)
+  end
+  def call_item_quantity_proc(bit)
+    result = self.class.connection.select_values("select dbo.GetItem#{bit}Quantity('#{self.fac}', '#{self.fpartno}', '#{self.frev}')")
+    result.first
+  end
+  def quantity_committed
+    call_item_quantity_proc('Committed')
+  end
+  def quantity_in_process
+    call_item_quantity_proc('InProcess')
+  end
+  def quantity_in_inspection
+    call_item_quantity_proc('Inspection')
+  end
+  def quantity_on_order
+    call_item_quantity_proc('OnOrder')
+  end
+  def quantity_non_nettable
+    call_item_quantity_proc('NonNet')
+  end  
+  # def self.check
+  #   problems = []
+  #   self.find_each do |i|
+  #     if i.quantity_non_nettable != i.fnonnetqty
+  #       problems.push "#{i.part_number} #{i.quantity_committed} != #{i.fbook}"
+  #     end
+  #   end
+  #   puts "#{problems.size} errors found: " + problems.join("\n")
+  # end
+
+  def part_number
+    @part_number ||= self.fpartno.strip
+  end
+  
+  def revision
+    @revision ||= self.frev.strip
+  end
+  
+  scope :part_number, lambda { |pn| where(:fpartno => pn) }
+  scope :revision, lambda { |r| where(:frev => r) }
+  scope :with_part_number, lambda { |pn| 
+    {
+      :conditions => { :fpartno => pn }
+    } 
+  }
+  scope :with_part_numbers, lambda { |part_numbers| 
+    {
+      :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq]
+    } 
+  }
+  scope :by_rev_desc, :order => 'inmastx.frev desc'
+  scope :by_part_number, :order => 'inmastx.fpartno'
+  scope :by_part_rev_desc, :order => 'inmastx.fpartno, inmastx.frev desc'
+  
+  scope :company_or_vendor_part_number_like, lambda { |text|
+    text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
+    {
+      :joins => <<-SQL
+      INNER JOIN
+      ( SELECT distinct [inmastx].identity_column FROM [inmastx] 
+        LEFT JOIN [invend] ON invend.fpartno = inmastx.fpartno 
+        WHERE (inmastx.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
+      on inmastx.identity_column = tmp1.identity_column
+      SQL
+    }
+  }
+  
+  scope :part_number_like, lambda { |text|
+    {
+      :conditions => [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
+    }
+  }
+  
+  def self.latest(part_number)
+    self.with_part_number(part_number).by_rev_desc.first
+  end
+  
+  def is_current?
+    if @is_current.nil?
+      @is_current = if ci = M2m::CurrentItem.for_part_number(self.part_number).first
+        ci.is_item?(self)
+      else
+        false
+      end
+    end
+    @is_current
+  end
+
+  def self.attach_items(objects, items=nil)
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
+    items_hash = {}
+    items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
+    objects.each do |o|
+      okey = (o.part_number || '') + '-' + (o.revision || '')
+      if okey.present? and (found = items_hash[okey])
+        o.item = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.item = nil
+      end
+    end
+    items
+  end
+  
+end
 

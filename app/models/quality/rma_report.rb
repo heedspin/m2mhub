@@ -22,7 +22,7 @@ class Quality::RmaReport
   end
   
   def run
-    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items)
+    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items).all
     customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
     items = M2m::Item.with_part_numbers(rmas.map(&:items).flatten.map(&:part_number)).all
     rmas.each do |rma|
