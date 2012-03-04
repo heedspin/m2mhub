@@ -26,6 +26,7 @@ _default_company_config: &_default_company_config
   credit_memo_report_severity_names: Quality
   default_country_name: United States
   use_item_revisions: true
+  enable_inventory_report: true
   
 _shared_company_config: &_shared_company_config
   lxd:
@@ -69,6 +70,7 @@ _shared_company_config: &_shared_company_config
     short_name: SMT
     long_name: SMT, Inc.
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
+    enable_inventory_report: false
     fob_groups:
       - id: 1
         default: true
