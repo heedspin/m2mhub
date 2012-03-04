@@ -39,9 +39,9 @@ class ItemsController < ApplicationController
 
       @sales_order_releases = @sales_order_releases.select { |s| s.status.open? }
       @purchase_order_items = @purchase_order_items.sort_by { |i| i.last_promise_date }
-      @total_quote_items = @item.quote_items.count
       @shippers_count = M2m::Shipper.for_item(@item).count
-      @quote_items = @item.quote_items.reverse_order.all(:limit => 3)
+      @total_quote_items = M2m::QuoteItem.for_item(@item).count
+      @quote_items = M2m::QuoteItem.for_item(@item).reverse_order.all(:limit => 3)
     end
   end
 

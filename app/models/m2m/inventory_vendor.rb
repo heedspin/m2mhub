@@ -2,6 +2,12 @@ class M2m::InventoryVendor < M2m::Base
   set_table_name 'invend'
   alias_attribute :vendor_part_number, :fvpartno
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
+  
+  scope :for_item, lambda { |item|
+    {
+      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
+    }
+  }
 end
 
 

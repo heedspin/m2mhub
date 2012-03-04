@@ -154,10 +154,10 @@
 
 class M2m::Item < M2m::Base
   set_table_name 'inmastx'
-  has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
-  has_many :quote_items, :class_name => 'M2m::QuoteItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  # has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
+  # has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  # has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
+  # has_many :quote_items, :class_name => 'M2m::QuoteItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -169,10 +169,15 @@ class M2m::Item < M2m::Base
   def locations=(v)
     @locations = v
   end
+  
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self)
+  end
 
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
   alias_attribute :average_cost, :favgcost
+  alias_attribute :standard_cost, :fstdcost
   alias_attribute :rolled_material_cost, :f2matlcost
   alias_attribute :rolled_labor_cost, :f2labcost
   alias_attribute :facility, :fac
@@ -181,38 +186,53 @@ class M2m::Item < M2m::Base
   # Uses same calculation that m2m uses.
   def quantity_available
     self.quantity_on_hand + self.quantity_on_order + self.quantity_in_inspection + self.quantity_in_process - self.quantity_committed - self.quantity_non_nettable
-  end  
-  def quantity_on_hand
-    self.locations.to_a.sum(&:quantity_on_hand)
   end
+  attr_accessor :item_quantities
   def call_item_quantity_proc(bit)
-    result = self.class.connection.select_values("select dbo.GetItem#{bit}Quantity('#{self.fac}', '#{self.fpartno}', '#{self.frev}')")
-    result.first
+    if @item_quantities.nil?
+      @item_quantities = { :OnHand => nil, :Committed => nil, :InProcess => nil, :Inspection => nil, :OnOrder => nil, :NonNet => nil }
+      selects = []
+      @item_quantities.keys.each do |key|
+        selects.push "dbo.GetItem#{key}Quantity('#{self.fac.strip}', '#{self.part_number}', '#{self.revision}') as #{key}"
+      end
+      result = self.class.connection.select_one('select ' + selects.join(','))
+      # Rails.logger.debug("***************** " + result.inspect)
+      @item_quantities.keys.each do |key|
+        @item_quantities[key] = result[key.to_s]
+      end
+    end
+    @item_quantities[bit]
+  end
+  def quantity_on_hand
+    # self.locations.to_a.sum(&:quantity_on_hand)
+    call_item_quantity_proc(:OnHand)
   end
   def quantity_committed
-    call_item_quantity_proc('Committed')
+    call_item_quantity_proc(:Committed)
   end
   def quantity_in_process
-    call_item_quantity_proc('InProcess')
+    call_item_quantity_proc(:InProcess)
   end
   def quantity_in_inspection
-    call_item_quantity_proc('Inspection')
+    call_item_quantity_proc(:Inspection)
   end
   def quantity_on_order
-    call_item_quantity_proc('OnOrder')
+    call_item_quantity_proc(:OnOrder)
   end
   def quantity_non_nettable
-    call_item_quantity_proc('NonNet')
-  end  
+    call_item_quantity_proc(:NonNet)
+  end
+  
   # def self.check
-  #   problems = []
+  #   errors = []
   #   self.find_each do |i|
-  #     if i.quantity_non_nettable != i.fnonnetqty
-  #       problems.push "#{i.part_number} #{i.quantity_committed} != #{i.fbook}"
+  #     location_sum = i.locations.to_a.sum(&:quantity_on_hand)
+  #     if (i.quantity_on_hand + i.quantity_in_inspection) != location_sum
+  #       errors.push "#{i.part_number} #{i.quantity_on_hand} != #{location_sum} #{i.item_quantities.inspect}"
   #     end
   #   end
-  #   puts "#{problems.size} errors found: " + problems.join("\n")
-  # end
+  #   puts "Found #{errors.size} errors: " + errors.join("\n")
+  # end    
 
   def part_number
     @part_number ||= self.fpartno.strip
@@ -286,6 +306,10 @@ class M2m::Item < M2m::Base
       end
     end
     items
+  end
+  
+  def customers
+    M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).map { |i| i.sales_order.customer }.uniq
   end
   
 end

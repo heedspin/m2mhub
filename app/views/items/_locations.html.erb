@@ -1,5 +1,5 @@
 <% item.locations.each do |il| %>
-<%= il.bin %>
+<%= il.location_description %>
 <% if item.locations.size > 1 %>
 	(<%= cm il.quantity_on_hand, :item_quantity %>)<br />
 <% end %>

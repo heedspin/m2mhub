@@ -75,6 +75,9 @@ class M2m::SalesOrderItem < M2m::Base
           i.item = item
         end
       end
+      sales_order_items
+    else
+      nil
     end
   end
 

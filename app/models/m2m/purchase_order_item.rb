@@ -18,7 +18,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   
   scope :for_item, lambda { |item|
     {
-      :conditions => { :fpartno => item.part_number }
+      :conditions => { :fpartno => item.part_number, :frev => item.revision }
     }
   }
   
