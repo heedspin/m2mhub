@@ -34,6 +34,7 @@ authorization do
     has_permission_on :customers_quotes, :to => :read
     has_permission_on :customers_contacts, :to => :manage
     has_permission_on :customers_invoiced_sales_reports, :to => :manage
+    has_permission_on :customers_sales_backlog_reports, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read

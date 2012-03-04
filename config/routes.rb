@@ -34,6 +34,7 @@ M2mhub::Application.routes.draw do
     resources :quotes, :only => [:index], :controller => 'customers/quotes'
     resources :contacts, :controller => 'customers/contacts'
     resources :invoiced_sales_reports, :controller => 'customers/invoiced_sales_reports'
+    resources :sales_backlog_reports, :controller => 'customers/sales_backlog_reports'
   end
   resources :sales_backlog_reports, :only => [:index, :show]  
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
