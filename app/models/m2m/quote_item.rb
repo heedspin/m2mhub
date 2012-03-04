@@ -10,9 +10,8 @@ class M2m::QuoteItem < M2m::Base
   scope :status_cancelled, :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.cancelled.name }}
   
   scope :for_item, lambda { |item|
-    fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
     {
-      :conditions => { :fpartno => fpartno } 
+      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision } 
     }
   }
 

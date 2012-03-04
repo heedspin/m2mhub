@@ -55,6 +55,7 @@ authorization do
   
   role :manager do
     includes :shipping, :sales, :production
+    has_permission_on :production_inventory_reports, :to => :manage
   end
 
   role :admin do

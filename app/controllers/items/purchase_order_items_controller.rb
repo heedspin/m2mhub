@@ -4,7 +4,7 @@ class Items::PurchaseOrderItemsController < ApplicationController
   def index
     @item = parent_object
     @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
-    @purchase_order_items = @item.purchase_order_items.reverse_order.includes(:purchase_order).paginate(:page => params[:page], :per_page => 10)
+    @purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).reverse_order.includes(:purchase_order).paginate(:page => params[:page], :per_page => 10)
   end
   
   protected

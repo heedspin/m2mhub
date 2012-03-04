@@ -3,8 +3,9 @@ class Items::HistoryController < ApplicationController
 
   def show
     @item = parent_object
-    @sales_order_items = @item.sales_order_items.includes(:sales_order).to_a
+    # @sales_order_items = @item.sales_order_items.includes(:sales_order).to_a
     @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.to_a
+    @sales_order_items = M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @sales_order_releases.each do |r|
       if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
         r.item = i
