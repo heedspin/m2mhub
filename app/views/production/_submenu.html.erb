@@ -10,5 +10,10 @@
 			<%= link_to 'Work Center Load', new_work_center_load_report_url %>
 		</li>
 		<% end %>
+		<% if permitted_to?(:make, :production_inventory_reports) %>
+		<li class="<%= menu_selected(:controller => :inventory_reports) %>">
+			<%= link_to 'Inventory Report', new_inventory_report_url %>
+		</li>
+		<% end %>
 	</ul>
 </div>

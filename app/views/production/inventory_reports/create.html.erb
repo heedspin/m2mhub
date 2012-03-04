@@ -1,0 +1,38 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<th>Part</th>
+			<th>Quantity On Hand</th>
+			<th>Unit Cost</th>
+			<th>Total Cost</th>
+		</tr>
+		<tr>
+			<th colspan="4" class="right">Total</th>
+			<th class="right">$<%= cm @report.total_cost, :rounded_dollars %></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @report.ordered_customer_reports.each do |customer_report| %>
+		<% customer_report.sorted_inventories.each do |inventory| %>
+		<tr>
+			<% if inventory == customer_report.sorted_inventories.first %>
+			<td rowspan="<%=customer_report.inventories.size %>"><%= customer_report.customer.try(:name) %></td>
+			<% end %>
+			<td><%= inventory.item.part_number %></td>
+			<td><%= render 'items/locations', :item => inventory.item %></td>
+			<td class="right">$<%= cm inventory.item.standard_cost, :dollars %></td>
+			<td class="right">$<%= cm inventory.cost, :rounded_dollars %></td>
+		</tr>
+		<% end %>
+		<tr>
+			<td colspan="4" class="right">Subtotal</td>
+			<th class="right">$<%= cm customer_report.total_cost, :rounded_dollars %></th>
+		</tr>
+		<% end %>
+		<tr>
+			<th colspan="4" class="right">Total</th>
+			<th class="right">$<%= cm @report.total_cost, :rounded_dollars %></th>
+		</tr>
+	</tbody>
+</table>

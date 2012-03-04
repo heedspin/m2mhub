@@ -6,11 +6,7 @@ class Production::InventoryReport
       @allocated_to_customer = allocated_to_customer
     end
     def cost
-      if @item.standard_cost
-        @item.standard_cost * (@item.quantity_on_hand + @item.quantity_in_inspection)
-      else
-        0
-      end
+      @cost ||= @item.standard_cost ? @item.standard_cost * (@item.quantity_on_hand + @item.quantity_in_inspection) : 0
     end
   end
   class CustomerReport
@@ -22,13 +18,14 @@ class Production::InventoryReport
     def add_inventory(inventory)
       @inventories.push inventory
     end
+    def sorted_inventories
+      @sorted_inventories ||= self.inventories.sort_by(&:cost)
+    end
     def total_cost
-      @inventories.sum do |i|
-        i.allocated_to_customer == self.customer ? i.cost : 0
-      end
+      @total_cost ||= @inventories.sum { |i| i.allocated_to_customer == self.customer ? i.cost : 0 }
     end
   end
-
+  
   def initialize(args=nil)
     args ||= {}
     @customer_reports = {}
@@ -39,16 +36,16 @@ class Production::InventoryReport
     items = M2m::Item.attach_items(locations)
     no_customer = CustomerReport.new(nil)
     items.each do |item|
-      allocated_to_customer = item.customers.first || no_customer
+      allocated_to_customer = item.customers.first
       inventory = Inventory.new(item, allocated_to_customer)
-      customer_report = @customer_reports[allocated_to_customer.id] ||= CustomerReport.new(allocated_to_customer)
+      customer_report = @customer_reports[allocated_to_customer.try(:id)] ||= CustomerReport.new(allocated_to_customer)
       customer_report.add_inventory(inventory)
     end
     true
   end
 
   def ordered_customer_reports
-    @customer_reports.values.sort_by(&:total_cost)
+    @customer_reports.values.sort_by(&:total_cost).reverse
   end
   
   def total_cost
