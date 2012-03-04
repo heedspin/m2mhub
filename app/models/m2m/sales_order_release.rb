@@ -21,7 +21,7 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
 
-  scope :by_due_date, :order => :fduedate
+  scope :by_due_date, :order => 'sorels.fduedate'
   scope :by_due_date_desc, :order => 'sorels.fduedate desc'
 
   scope :due_by, lambda { |date|
@@ -41,11 +41,16 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :fpartno => fpartno.strip }
     }
   }
-
   scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :somast => { :fstatus => status_name.upcase } }
+    }
+  }
+  scope :customer, lambda { |customer|
+    {
+      :joins => :sales_order,
+      :conditions => { :somast => { :fcustno => customer.customer_number } }
     }
   }
 
