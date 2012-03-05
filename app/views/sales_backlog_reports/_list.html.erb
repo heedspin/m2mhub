@@ -42,7 +42,7 @@
 				<% end %>
 				<% end %>
 			</td>
-			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= render('items/locations', :item => r.item.item) if r.item.item %></td>
+			<td class="centered <%= sbl_shippable(r, 'cr') %>"><%= render( :template => 'items/_locations.html.erb', :locals => {:item => r.item.item}) if r.item.item %></td>
 		</tr>
 		<tr>
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
