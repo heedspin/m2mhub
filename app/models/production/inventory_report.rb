@@ -19,7 +19,7 @@ class Production::InventoryReport
       @inventories.push inventory
     end
     def sorted_inventories
-      @sorted_inventories ||= self.inventories.sort_by(&:cost)
+      @sorted_inventories ||= self.inventories.sort_by(&:cost).reverse
     end
     def total_cost
       @total_cost ||= @inventories.sum { |i| i.allocated_to_customer == self.customer ? i.cost : 0 }
