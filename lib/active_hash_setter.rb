@@ -1,8 +1,8 @@
 module ActiveHashSetter
   def self.included(base)
     class << base
-      def active_hash_setter(klass)
-        attr_key = klass.name.demodulize.underscore
+      def active_hash_setter(klass, attr_key=nil)
+        attr_key ||= klass.name.demodulize.underscore
         attr_id = ":#{attr_key}_id"
         self.class_eval <<-TEXT
           belongs_to_active_hash :#{attr_key}, :class_name => '#{klass.name}'
