@@ -46,7 +46,7 @@
 					</li>
 					<% end %>
 					<% if permitted_to?(:read, :sales_order_items) %>
-					<li class="<%= menu_selected(:controller => [:sales_order_items, :sales_orders]) %>">
+					<li class="<%= menu_selected(:controller => [:sales_order_items, :sales_orders, :invoiced_sales_reports, :pro_forma_sales_reports]) %>">
 						<%= link_to 'Sales Orders', sales_order_items_url %>
 					</li>
 					<% end %>
