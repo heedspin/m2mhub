@@ -5,16 +5,19 @@ module ActiveHashMethods
     base.data.each do |config|
       if (cname = config[:name]) and (cid = config[:id])
         cmethod = config[:method] || cname.gsub(/[ -\/]/, '_').downcase
-        static_methods.push << <<-RUBY
-        def #{cmethod}
-          @#{cmethod} ||= find(#{cid})
+        firstchar = cmethod[0..0]
+        unless (firstchar >= '0') and (firstchar <= '9')
+          static_methods.push << <<-RUBY
+          def #{cmethod}
+            @#{cmethod} ||= find(#{cid})
+          end
+          RUBY
+          instance_methods.push <<-RUBY
+          def #{cmethod}?
+            self.id == #{cid}
+          end
+          RUBY
         end
-        RUBY
-        instance_methods.push <<-RUBY
-        def #{cmethod}?
-          self.id == #{cid}
-        end
-        RUBY
       end
     end
     ruby = <<-RUBY

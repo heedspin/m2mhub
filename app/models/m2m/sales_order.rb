@@ -5,12 +5,14 @@ class M2m::SalesOrder < M2m::Base
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
+  has_many :invoices, :class_name => 'M2m::Invoice', :foreign_key => :fsono, :primary_key => :fsono
   
   scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
   
-  scope :by_order_number_desc, :order => 'fsono desc'  
+  scope :by_order_number_desc, :order => 'somast.fsono desc'  
+  scope :by_due_date, :order => 'somast.fduedate'
   
   scope :since, lambda { |day|
     {
@@ -35,12 +37,14 @@ class M2m::SalesOrder < M2m::Base
       :conditions => [ 'somast.fsono in (?)', order_numbers ]
     }
   }
+  scope :prepayment_required, :conditions => { :flprofrqd => true }
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
   alias_attribute :customer_po, :fcustpono
   alias_attribute :due_date, :fduedate
   alias_attribute :ship_via, :fshipvia
+  alias_attribute :prepayment_required, :flprofrqd
   
   def customer_name
     M2m::Customer.customer_name(self.fcompany)

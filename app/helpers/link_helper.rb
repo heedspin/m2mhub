@@ -8,7 +8,7 @@ module LinkHelper
       end
     end
     if path
-      "<input type=\"hidden\" name=\"return_to\" value=\"#{path}\" />"
+      "<input type=\"hidden\" name=\"return_to\" value=\"#{path}\" />".html_safe
     else
       nil
     end

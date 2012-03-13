@@ -13,8 +13,14 @@
 		<% end %>
 
 		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
-		<li class="<%= menu_selected(:controller => :invoiced_sales_reports_controller) %>">
+		<li class="<%= menu_selected(:controller => :invoiced_sales_reports) %>">
 			<%= link_to 'Invoiced Sales', new_invoiced_sales_report_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:manage, :pro_forma_sales_reports) %>
+		<li class="<%= menu_selected(:controller => :pro_forma_sales_reports) %>">
+			<%= link_to 'Pro Forma Sales', new_pro_forma_sales_report_url %>
 		</li>
 		<% end %>
 	</ul>
