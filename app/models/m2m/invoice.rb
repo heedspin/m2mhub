@@ -10,7 +10,7 @@ class M2m::Invoice < M2m::Base
   alias_attribute :amount, :fnamount
   alias_date_attribute :date, :finvdate
   alias_date_attribute :due_date, :fduedate
-  alias_date_attribute :date_paid, :fdfactdate
+  alias_date_attribute :gl_date, :fdgldate
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :customer_number, :fcustno
   
