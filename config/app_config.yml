@@ -20,6 +20,7 @@ _default_company_config: &_default_company_config
   quality_credit_memo_percentage: "%0.2f"
   work_center_load_percentage: "%.0f"
   work_center_load: "%.1f"
+  trim_decimals: trim_decimals
   epoch_year: 2000
   rma_company_rma_number_field: fcrmano
   rma_custom_codes_field: fcusrchr3
