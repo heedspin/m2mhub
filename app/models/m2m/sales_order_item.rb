@@ -6,7 +6,6 @@ class M2m::SalesOrderItem < M2m::Base
   belongs_to_item :fpartno, :fpartrev
 
   alias_attribute :quantity, :fquantity
-  alias_attribute :unit_price, :fprice
   alias_attribute :customer_part_number, :fcustpart
   alias_attribute :due_date, :fduedate
   alias_attribute :internal_number, :finumber

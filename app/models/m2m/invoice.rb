@@ -13,6 +13,7 @@ class M2m::Invoice < M2m::Base
   alias_date_attribute :gl_date, :fdgldate
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :customer_number, :fcustno
+  alias_attribute :printed?, :flisprint
   
   scope :customer, lambda { |customer|
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
