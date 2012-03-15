@@ -23,6 +23,12 @@ module ActiveHashMethods
     ruby = <<-RUBY
     class << self
       #{static_methods.join("\n")}
+      def columns
+        pk = ActiveRecord::ConnectionAdapters::Column.new(self.primary_key, nil, 'int(11)', false)
+        pk.primary = true
+        [pk,
+         ActiveRecord::ConnectionAdapters::Column.new('name', nil, :string, true)]
+      end
     end
     #{instance_methods.join("\n")}
     def to_s
