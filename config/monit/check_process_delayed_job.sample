@@ -1,7 +1,7 @@
 ############################################################
 # Staging
 
-check process lxd_m2mhub_staging with pidfile /home/tim/Dropbox/p/lxd_m2mhub/tmp/pids/dww_delayed_job.pid
+check process lxd_m2mhub_staging with pidfile /home/tim/Dropbox/p/lxd_m2mhub/tmp/pids/delayed_job.pid
   start program = "/bin/bash /home/tim/Dropbox/p/lxd_m2mhub/script/monit_delayed_job.sh start"
     as uid www-data and gid www-data
   stop program = "/bin/bash  /home/tim/Dropbox/p/lxd_m2mhub/script/monit_delayed_job.sh stop"
@@ -15,7 +15,7 @@ check process lxd_m2mhub_staging with pidfile /home/tim/Dropbox/p/lxd_m2mhub/tmp
 ############################################################
 # Production
 
-check process lxd_m2mhub with pidfile /var/www/lxd_m2mhub/current/tmp/pids/dww_delayed_job.pid
+check process lxd_m2mhub with pidfile /var/www/lxd_m2mhub/current/tmp/pids/delayed_job.pid
   start program = "/bin/bash /var/www/lxd_m2mhub/current/script/monit_delayed_job.sh start"
     as uid www-data and gid www-data
   stop program = "/bin/bash  /var/www/lxd_m2mhub/current/script/monit_delayed_job.sh stop"
