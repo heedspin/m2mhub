@@ -9,7 +9,7 @@ gem 'activerecord-sqlserver-adapter', '3.1.5' # '3.2.0'
 
 gem 'authlogic', '3.1.0'
 
-# gem 'daemons', '1.1.0'
+gem 'daemons', '1.1.8'
 # gem 'crack', '0.1.8'
 
 gem 'formtastic', '2.0.2'
@@ -17,7 +17,7 @@ gem 'declarative_authorization', '0.5.5'
 gem 'aws-sdk', '1.3.4'
 gem 'paperclip', '2.7.0'
 gem 'will_paginate', '3.0.3'
-gem 'delayed_job', '3.0.1'
+gem 'delayed_job', '2.1.4'
 gem "airbrake", '3.0.9'
 #gem 'thinking-sphinx', '1.3.20', :require => 'thinking_sphinx'
 #gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
