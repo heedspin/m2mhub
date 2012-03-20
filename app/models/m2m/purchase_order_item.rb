@@ -11,7 +11,15 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_attribute :item_number, :fitemno
   alias_attribute :requisition_date, :freqdate
   alias_attribute :release, :frelsno
+  alias_date_attribute :date_received, :frcpdate
+  alias_date_attribute :last_promise_date, :flstpdate
+  alias_date_attribute :original_promise_date, :forgpdate
+  # alias_date_attribute :request_date, :freqdate
   
+  def safe_promise_date
+    self.last_promise_date || self.original_promise_date || Date.current.advance(:years => 1)
+  end
+    
   scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
@@ -60,15 +68,6 @@ class M2m::PurchaseOrderItem < M2m::Base
     end
   end
 
-  alias_date_attribute :date_received, :frcpdate
-  alias_date_attribute :last_promise_date, :flstpdate
-  alias_date_attribute :original_promise_date, :forgpdate
-  # alias_date_attribute :request_date, :freqdate
-  
-  def safe_promise_date
-    self.last_promise_date || self.original_promise_date || Date.current.advance(:years => 1)
-  end
-  
   def backorder_quantity
     quantity - quantity_received
   end

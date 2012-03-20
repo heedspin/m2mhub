@@ -26,7 +26,7 @@ class Production::InventoryReport < ActiveRecord::Base
   has_many :item_reports, :class_name => '::Production::InventoryReportItem', :dependent => :destroy
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => '::Production::InventoryReportCostMethod'
-  
+
   scope :by_date_desc, :order => 'inventory_reports.created_at desc'
 
   def run
@@ -35,10 +35,13 @@ class Production::InventoryReport < ActiveRecord::Base
 
     no_customer = self.customer_reports.build
     @inventory_customers = { nil => no_customer }
-    
+
     locations = M2m::InventoryLocation.with_quantity_on_hand
     items = M2m::Item.attach_items(locations)
 
+    releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.to_a
+    purchase_order_items = M2m::PurchaseOrderItem.filtered.status_open.to_a
+    
     # Remove non inventory items.
     groups_to_filter = CompanyConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
     part_numbers_to_filter = CompanyConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
@@ -55,7 +58,9 @@ class Production::InventoryReport < ActiveRecord::Base
       end
       inventory_item = inventory_customer.item_reports.build(:inventory_report_cost_method => self.inventory_report_cost_method,
                                                              :inventory_report_id => self.id)
-      inventory_item.set_item item
+      inventory_item.set_item(item,
+                              releases.select { |r| r.is_for_item?(item) },
+                              purchase_order_items.select { |p| p.is_for_item?(item) })
       inventory_customer.add_to_totals inventory_item
     end
     @inventory_customers.values.each do |inventory_customer|

@@ -16,6 +16,8 @@
 #  cost                            :float
 #  last_receipt_date               :datetime
 #  last_ship_date                  :datetime
+#  next_ship_date                  :datetime
+#  next_receipt_date               :datetime
 #
 
 require 'm2m/belongs_to_item'
@@ -31,7 +33,7 @@ class Production::InventoryReportItem < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => 'Production::InventoryReportCostMethod'
   
-  def set_item(item)
+  def set_item(item, sales_order_releases, purchase_order_items)
     self.part_number = item.part_number
     self.revision = item.revision
     self.m2m_identity_column = item.identity_column
@@ -42,6 +44,8 @@ class Production::InventoryReportItem < ActiveRecord::Base
     self.cost = item.send(self.inventory_report_cost_method.item_key)
     self.last_ship_date = item.shipper_items.by_ship_date_desc.scoped(:include => :shipper).first.try(:shipper).try(:ship_date)
     self.last_receipt_date = item.receiver_items.by_time_received_desc.scoped(:include => :receiver).first.try(:receiver).try(:time_received)
+    self.next_ship_date = sales_order_releases.sort_by(&:due_date).first.try(:due_date)
+    self.next_receipt_date = purchase_order_items.sort_by(&:safe_promise_date).first.try(:safe_promise_date)
   end
   
   # Try default first.  Then just keep looking for something that has a value.
