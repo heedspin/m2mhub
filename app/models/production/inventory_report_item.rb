@@ -14,6 +14,8 @@
 #  quantity_on_order               :float
 #  inventory_report_cost_method_id :integer(4)
 #  cost                            :float
+#  last_receipt_date               :datetime
+#  last_ship_date                  :datetime
 #
 
 require 'm2m/belongs_to_item'
@@ -38,6 +40,8 @@ class Production::InventoryReportItem < ActiveRecord::Base
     end
     self.choose_cost_method
     self.cost = item.send(self.inventory_report_cost_method.item_key)
+    self.last_ship_date = item.shipper_items.by_ship_date_desc.scoped(:include => :shipper).first.try(:shipper).try(:ship_date)
+    self.last_receipt_date = item.receiver_items.by_time_received_desc.scoped(:include => :receiver).first.try(:receiver).try(:time_received)
   end
   
   # Try default first.  Then just keep looking for something that has a value.

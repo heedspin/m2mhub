@@ -20,7 +20,8 @@ class M2m::ReceiverItem < M2m::Base
   def po_vendor_part_number
     self.purchase_order_item.try(:vendor_part_number)
   end
-  
+
+  scope :by_time_received_desc, { :joins => :receiver, :order => 'rcmast.fdaterecv desc, rcitem.fitemno' }  
 end
 
 
