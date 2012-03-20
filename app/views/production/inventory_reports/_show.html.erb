@@ -8,12 +8,14 @@
 			<th>Part</th>
 			<th>Last Receipt</th>
 			<th>Last Ship</th>
+			<th>Next Receipt</th>
+			<th>Next Ship</th>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th><%= quantity.name %></th>
 			<% end %>
 		</tr>
 		<tr>
-			<th colspan="4" class="right">Total</th>
+			<th colspan="6" class="right">Total</th>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th class="right"><%= cm @report.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>
@@ -34,6 +36,8 @@
 			</td>
 			<td><%= item_report.last_receipt_date.try(:to_s, :report_date) %></td>
 			<td><%= item_report.last_ship_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_receipt_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_ship_date.try(:to_s, :report_date) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right">
 				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
@@ -45,7 +49,7 @@
 		</tr>
 		<% end %>
 		<tr>
-			<td colspan="4" class="right">Subtotal</td>
+			<td colspan="6" class="right">Subtotal</td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>

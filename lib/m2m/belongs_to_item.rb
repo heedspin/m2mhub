@@ -34,6 +34,9 @@ module BelongsToItem
         @_loaded_item = true
         @#{item_method} = val
       end
+      def is_for_item?(item)
+        (self.part_number == item.part_number) && (self.revision == item.revision)
+      end
       RUBY
     end
   end
