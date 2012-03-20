@@ -15,7 +15,7 @@
 		<tr>
 			<th colspan="4" class="right">Total</th>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th class="right">$<%= cm @report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<th class="right"><%= cm @report.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>
 		</tr>
 	</thead>
@@ -36,7 +36,7 @@
 			<td><%= item_report.last_ship_date.try(:to_s, :report_date) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right">
-				$<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
+				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
 					<br /><%= cm item_report.send(quantity.quantity_key), :item_quantity %></td>
 				</div>
@@ -47,7 +47,7 @@
 		<tr>
 			<td colspan="4" class="right">Subtotal</td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th class="right">$<%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>
 		</tr>
 		<% end %>

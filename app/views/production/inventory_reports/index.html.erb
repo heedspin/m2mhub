@@ -26,7 +26,7 @@
 		<tr>
 			<td><%= link_to report.created_at.to_s(:report_date), inventory_report_url(report) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<td class="right">$<%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
+			<td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
 			<% end %>
 			<% if permitted_to?(:destroy, :production_inventory_reports) %>
 			<td><%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %></td>
