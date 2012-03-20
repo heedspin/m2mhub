@@ -962,7 +962,7 @@ span.currency_symbol {
 }
 
 /* On Time Delivery Reports */
-div.closed_details {
+.closed_details {
 	display: none;
 }
 
@@ -1058,4 +1058,13 @@ div.display_search {
 form.formtastic li.doogle_dimensions input {
 	width:10%;
 	margin: 0 10px 0 5px;
+}
+
+/* Pagination
+---------------------------------------------------- */
+.pagination {
+	margin: 5px 0 5px 0;
+}
+.pagination a {
+	font-size: 1.1em;
 }

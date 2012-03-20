@@ -1,31 +1,6 @@
 <%= render 'production/submenu' %>
 <br />
 
-<% content_for :javascripts do %>
-<script type="text/javascript">
-var options = {
-	target: '#report_results',
-	beforeSubmit: function(arr, $form, options) { 
-		$("#report_results").html("");
-		$("#inprogress").show();
-		return true;
-	},
-	success: function() {
-		$("#inprogress").hide();
-		return true;
-	},
-	error: function() {
-		$("#inprogress").hide();
-		$("#report_results").html("<h2>Sorry, the report failed to run.</h2>")
-		return true;
-	}
-};
-$(function() {
-  $("form.inventory_report").ajaxForm(options);
-});
-</script>
-<% end %>
-
 <% title 'Inventory Report' %>
 
 <h2>Inventory Report</h2>
@@ -35,10 +10,3 @@ $(function() {
 	<%= f.commit_button 'Create' %>
 <% end %>
 <% end %>
-
-<div id="inprogress" class="hide display_search">
-	Generating... (can take over 30 seconds) <%= image_tag 'inprogress.gif' %>
-</div>
-
-<div id="report_results">
-</div>

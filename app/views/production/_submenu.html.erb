@@ -10,9 +10,9 @@
 			<%= link_to 'Work Center Load', new_work_center_load_report_url %>
 		</li>
 		<% end %>
-		<% if CompanyConfig.enable_inventory_report? and permitted_to?(:make, :production_inventory_reports) %>
+		<% if CompanyConfig.enable_inventory_report? and permitted_to?(:read, :production_inventory_reports) %>
 		<li class="<%= menu_selected(:controller => :inventory_reports) %>">
-			<%= link_to 'Inventory Report', new_inventory_report_url %>
+			<%= link_to 'Inventory Reports', inventory_reports_url %>
 		</li>
 		<% end %>
 	</ul>

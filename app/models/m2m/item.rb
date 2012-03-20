@@ -164,12 +164,20 @@ class M2m::Item < M2m::Base
 
   alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
-  alias_attribute :average_cost, :favgcost
   alias_attribute :standard_cost, :fstdcost
+  alias_attribute :rolled_standard_cost, :f2totcost
+  alias_attribute :standard_material_cost, :fmatlcost
   alias_attribute :rolled_material_cost, :f2matlcost
+  alias_attribute :standard_labor_cost, :flabcost
   alias_attribute :rolled_labor_cost, :f2labcost
+  alias_attribute :standard_overhead_cost, :fovhdcost
+  alias_attribute :rolled_overhead_cost, :f2ovhdcost
+  alias_attribute :last_cost, :flastcost
+  alias_attribute :average_cost, :favgcost
   alias_attribute :facility, :fac
   alias_attribute :source_facility, :sfac
+  alias_attribute :product_class_key, :fprodcl
+  alias_attribute :group_code_key, :fgroup
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -228,6 +236,13 @@ class M2m::Item < M2m::Base
   
   def revision
     @revision ||= self.frev.strip
+  end
+  
+  def group
+    M2m::ItemGroupCode.cached_lookup(self.group_code_key)
+  end
+  def group_name
+    self.group.try(:text)
   end
   
   scope :part_number, lambda { |pn| where(:fpartno => pn) }
