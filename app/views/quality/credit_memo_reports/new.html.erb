@@ -26,7 +26,7 @@
 			<td class="rma_details">
 				<% if month.rma_items.size > 0 %>
 				<a href="#"><span class="show_closed_details" id="closed_details_<%= @id_count %>">Show Details</span></a>
-				<div class="closed_details" id="xclosed_details_<%= @id_count %>">
+				<div class="closed_details xclosed_details_<%= @id_count %>">
 				<%= render 'credit_memo_details', :rma_items => month.rma_items %>
 				</div>
 				<% end %>

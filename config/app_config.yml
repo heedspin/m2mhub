@@ -28,6 +28,8 @@ _default_company_config: &_default_company_config
   default_country_name: United States
   use_item_revisions: true
   enable_inventory_report: true
+  inventory_report_filter_groups: noninv, tool
+  inventory_report_filter_part_numbers: samples
   
 _shared_company_config: &_shared_company_config
   lxd:

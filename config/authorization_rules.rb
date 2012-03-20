@@ -53,11 +53,11 @@ authorization do
   role :production do
     has_permission_on :production_production_dashboard, :to => :read
     has_permission_on :production_work_center_load_reports, :to => :make
+    has_permission_on :production_inventory_reports, :to => :read
   end
   
   role :manager do
     includes :shipping, :sales, :production
-    has_permission_on :production_inventory_reports, :to => :manage
   end
 
   role :admin do
@@ -66,6 +66,7 @@ authorization do
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :content_modules, :to => :manage
     has_permission_on :user_activities, :to => :manage
+    has_permission_on :production_inventory_reports, :to => :manage
   end
 end
  

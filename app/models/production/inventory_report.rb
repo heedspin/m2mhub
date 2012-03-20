@@ -1,55 +1,68 @@
-class Production::InventoryReport
-  class Inventory
-    attr_accessor :item, :allocated_to_customer
-    def initialize(item, allocated_to_customer)
-      @item = item
-      @allocated_to_customer = allocated_to_customer
-    end
-    def cost
-      @cost ||= @item.standard_cost ? @item.standard_cost * (@item.quantity_on_hand + @item.quantity_in_inspection) : 0
-    end
-  end
-  class CustomerReport
-    attr_accessor :customer, :inventories
-    def initialize(customer)
-      @customer = customer
-      @inventories = []
-    end
-    def add_inventory(inventory)
-      @inventories.push inventory
-    end
-    def sorted_inventories
-      @sorted_inventories ||= self.inventories.sort_by(&:cost).reverse
-    end
-    def total_cost
-      @total_cost ||= @inventories.sum { |i| i.allocated_to_customer == self.customer ? i.cost : 0 }
-    end
-  end
+# == Schema Information
+#
+# Table name: inventory_reports
+#
+#  id                              :integer(4)      not null, primary key
+#  delayed_job_id                  :integer(4)
+#  delayed_job_status_id           :integer(4)
+#  delayed_job_log                 :text
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  inventory_report_cost_method_id :integer(4)
+#  total_on_hand_cost              :float
+#  total_on_order_cost             :float
+#  total_available_cost            :float
+#  total_committed_cost            :float
+#
+
+require 'delayed_report'
+require 'active_hash_methods'
+
+class Production::InventoryReport < ActiveRecord::Base
+  set_table_name 'inventory_reports'
+  include DelayedReport
+  include Production::InventoryReportQuantity::Helper
+  has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy
+  has_many :item_reports, :class_name => '::Production::InventoryReportItem', :dependent => :destroy
+  extend ActiveHash::Associations::ActiveRecordExtensions
+  belongs_to_active_hash :inventory_report_cost_method, :class_name => '::Production::InventoryReportCostMethod'
   
-  def initialize(args=nil)
-    args ||= {}
-    @customer_reports = {}
-  end
-  
+  scope :by_date_desc, :order => 'inventory_reports.created_at desc'
+
   def run
+    self.inventory_report_cost_method ||= Production::InventoryReportCostMethod.standard_cost
+    self.save if self.new_record?
+
+    no_customer = self.customer_reports.build
+    @inventory_customers = { nil => no_customer }
+    
     locations = M2m::InventoryLocation.with_quantity_on_hand
     items = M2m::Item.attach_items(locations)
-    no_customer = CustomerReport.new(nil)
+
+    # Remove non inventory items.
+    groups_to_filter = CompanyConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
+    part_numbers_to_filter = CompanyConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
+    items.delete_if { |i| groups_to_filter.include?(i.group_code_key.strip.downcase) || part_numbers_to_filter.include?(i.part_number.downcase) }
+
     items.each do |item|
       allocated_to_customer = item.customers.first
-      inventory = Inventory.new(item, allocated_to_customer)
-      customer_report = @customer_reports[allocated_to_customer.try(:id)] ||= CustomerReport.new(allocated_to_customer)
-      customer_report.add_inventory(inventory)
+      inventory_customer = @inventory_customers[allocated_to_customer.try(:customer_number)]
+      if inventory_customer.nil?
+        inventory_customer = self.customer_reports.build(:customer_number => allocated_to_customer.customer_number,
+                                                         :customer_name => allocated_to_customer.name,
+                                                         :m2m_identity_column => allocated_to_customer.identity_column)
+        @inventory_customers[allocated_to_customer.customer_number] = inventory_customer
+      end
+      inventory_item = inventory_customer.item_reports.build(:inventory_report_cost_method => self.inventory_report_cost_method,
+                                                             :inventory_report_id => self.id)
+      inventory_item.set_item item
+      inventory_customer.add_to_totals inventory_item
     end
-    true
+    @inventory_customers.values.each do |inventory_customer|
+      self.add_to_totals(inventory_customer)
+      inventory_customer.save
+    end
+    self.save
   end
 
-  def ordered_customer_reports
-    @customer_reports.values.sort_by(&:total_cost).reverse
-  end
-  
-  def total_cost
-    @customer_reports.values.sum(&:total_cost)
-  end
-  
 end
