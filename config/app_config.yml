@@ -9,8 +9,8 @@ _local_company_config: &_local_company_config
 _default_company_config: &_default_company_config
   otd_grace_period_days: 5
   otd_lead_time: 28
-  rounded_dollars: "%.0f"
-  dollars: "%.2f"
+  rounded_dollars: "$%.0f"
+  dollars: "$%.2f"
   sales_order_quantity: "%.0f"
   purchase_order_quantity: "%.0f"
   item_quantity: "%.0f"

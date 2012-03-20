@@ -13,7 +13,7 @@
 	Status: <%= @sales_order.status %><br />
 	Customer: <strong><%= link_to @sales_order.customer_name, customer_number_url(@sales_order.fcustno) %></strong><br />
 	Customer PO#: <%= @sales_order.customer_po %><br />
-	Total: $<%= cm @sales_order.total_price, :dollars %><br />
+	Total: <%= cm @sales_order.total_price, :dollars %><br />
 	Sales Rep: <%= @sales_order.fsoldby %><br />
 	Coord: <%= @sales_order.fsocoord %><br />
 </p>
@@ -46,8 +46,8 @@
 			<td><%= link_to_item r.item.try(:item), r.part_number %></td>
 			<td><%= simple_format r.item.fdesc.strip %></td>
 			<td><%= r.item.fcustpart %></td>
-			<td class="monitary">$<%= cm r.item.try(:item).try(:total_cost), :dollars %></td>
-			<td class="monitary">$<%= cm r.unit_price, :dollars %></td>
+			<td class="monitary"><%= cm r.item.try(:item).try(:total_cost), :dollars %></td>
+			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 			<td class="right"><%= cm(r.quantity, :sales_order_quantity) %></td>
 			<% if r.item.try(:item) %>
 			<td class="right"><%= cm(r.item.item.quantity_on_hand, :sales_order_quantity, 0) %></td>
@@ -57,7 +57,7 @@
 			<td></td>
 			<% end %>
 			<% end %>
-			<td class="monitary">$<%= cm(r.release_price, :dollars) %></td>
+			<td class="monitary"><%= cm(r.release_price, :dollars) %></td>
 		</tr>
 <% end %>
 	</tbody>

@@ -20,8 +20,8 @@
 		<% @id_count += 1 %>
 		<tr>
 			<td><%= month.date.to_s(:month_year) %></td>
-			<td class="right">$<%= cm month.invoice_total, :quality_credit_memo_quantity, 0 %></td>
-			<td class="right">$<%= cm month.quality_credit_memo_total, :quality_credit_memo_quantity, 0 %></td>
+			<td class="right"><%= cm month.invoice_total, :quality_credit_memo_quantity, 0 %></td>
+			<td class="right"><%= cm month.quality_credit_memo_total, :quality_credit_memo_quantity, 0 %></td>
 			<td class="right"><%= cm month.percent_quality_credit_memos, :quality_credit_memo_percentage, 0 %>%</td>
 			<td class="rma_details">
 				<% if month.rma_items.size > 0 %>
@@ -35,8 +35,8 @@
 	<% end %>
 		<tr>
 			<th>Totals</th>
-			<th class="right">$<%= cm @report.invoice_total, :quality_credit_memo_quantity %></th>
-			<th class="right">$<%= cm @report.quality_credit_memo_total, :quality_credit_memo_quantity %></th>
+			<th class="right"><%= cm @report.invoice_total, :quality_credit_memo_quantity %></th>
+			<th class="right"><%= cm @report.quality_credit_memo_total, :quality_credit_memo_quantity %></th>
 			<th class="right"><%= cm @report.percent_quality_credit_memos, :quality_credit_memo_percentage, 0 %>%</th>
 		</tr>
 	</tbody>
