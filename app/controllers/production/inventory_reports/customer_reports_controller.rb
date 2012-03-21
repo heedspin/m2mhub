@@ -20,7 +20,7 @@ class Production::InventoryReports::CustomerReportsController < ApplicationContr
     end
 
     def parent_object
-      @parent_object ||= InventoryReport.find(params[:inventory_report_id])
+      @parent_object ||= Production::InventoryReport.find(params[:inventory_report_id])
     end
 
 end
