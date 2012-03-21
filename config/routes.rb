@@ -56,7 +56,7 @@ M2mhub::Application.routes.draw do
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
   resources :inventory_reports, :controller => 'production/inventory_reports' do
     resources :customer_reports, :only => [:index, :show], :controller => 'production/inventory_reports/customer_reports'
-    # resources :item_reports, :only => [:index], :controller => 'production/inventory_reports/item_reports'
+    resources :obsolete_reports, :only => [:index], :controller => 'production/inventory_reports/obsolete_reports'
   end
 
   # Specify thing regular expression because the routes use '.' as separator.
