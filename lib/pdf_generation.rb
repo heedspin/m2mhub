@@ -53,10 +53,10 @@ class PdfGenerator
       self.command_output = input.read
     end
     if self.success
-      logger.info "Prince success: #{self.command_output}"
+      log "Prince success: #{self.command_output}"
       @file = File.new(destination)
     else
-      logger.error "Prince error: #{status}: #{self.command_output}"
+      log "Prince error: #{status}: #{self.command_output}"
     end
     FileUtils.rm source
   end
