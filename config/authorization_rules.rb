@@ -54,6 +54,8 @@ authorization do
     has_permission_on :production_production_dashboard, :to => :read
     has_permission_on :production_work_center_load_reports, :to => :make
     has_permission_on :production_inventory_reports, :to => :read
+    has_permission_on :production_inventory_reports_customer_reports, :to => :read
+    # has_permission_on :production_inventory_reports_item_reports, :to => :read
   end
   
   role :manager do

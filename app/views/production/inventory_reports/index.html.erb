@@ -1,5 +1,4 @@
 <%= render 'production/submenu' %>
-<br />
 
 <% if permitted_to?(:make, :production_inventory_reports) %>
 	<%= semantic_form_for :inventory_report, :url => inventory_reports_path do |f| %>
@@ -24,12 +23,15 @@
 	<tbody>
 	<% @reports.each do |report| %>
 		<tr>
-			<td><%= link_to report.created_at.to_s(:report_date), inventory_report_url(report) %></td>
+			<td><%= link_to report.created_at.to_s(:report_date), inventory_report_customer_reports_url(report) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
 			<% end %>
 			<% if permitted_to?(:destroy, :production_inventory_reports) %>
 			<td><%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %></td>
+			<% if report.delayed_job_status.in_progress? %>
+			<td><%= link_to 'progress', inventory_report_url(report) %></td>
+			<% end %>
 			<% end %>
 		</tr>
 	<% end %>

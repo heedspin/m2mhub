@@ -1,0 +1,31 @@
+<%= render 'production/submenu' %>
+<br />
+
+<%= will_paginate @customer_reports %>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<th><%= quantity.name %></th>
+			<% end %>
+		</tr>
+		<tr>
+			<th class="right"><%= CompanyConfig.short_name %> Total</th>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<th class="right"><%= cm @inventory_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% @customer_reports.each do |customer_report| %>
+		<tr>
+			<td><%= link_to customer_report.customer_name, inventory_report_customer_report_url(@inventory_report, customer_report) %></td>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

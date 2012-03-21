@@ -54,7 +54,10 @@ M2mhub::Application.routes.draw do
 
   match 'production' => 'production/production_dashboard#index'
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
-  resources :inventory_reports, :controller => 'production/inventory_reports'
+  resources :inventory_reports, :controller => 'production/inventory_reports' do
+    resources :customer_reports, :only => [:index, :show], :controller => 'production/inventory_reports/customer_reports'
+    # resources :item_reports, :only => [:index], :controller => 'production/inventory_reports/item_reports'
+  end
 
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'

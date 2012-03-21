@@ -17,7 +17,7 @@ class Production::InventoryReportsController < ApplicationController
 
   def show
     @report = current_object
-    @customer_reports = @report.customer_reports.by_on_hand_desc.paginate(:page => params[:page], :per_page => 10)
+    @customer_reports = @report.customer_reports.by_on_hand_desc.paginate(:page => params[:page], :per_page => 1)
     respond_to do |format|
       format.html
       format.json {

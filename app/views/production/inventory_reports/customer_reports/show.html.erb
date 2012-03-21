@@ -1,10 +1,21 @@
 <% include_closed_details_javascript(image_tag('arrow_collapse.gif'),image_tag('arrow_expand.gif')) %>
-<%= will_paginate @customer_reports %>
+
+<%= render 'production/submenu' %>
+<br />
+
+<div class="paging">
+	<%= link_to("&laquo; Previous".html_safe, inventory_report_customer_report_url(@inventory_report, @prev_customer_report)) if @prev_customer_report  %>
+	<%= link_to('Top', inventory_report_customer_reports_url(@inventory_report)) %>
+	<%= link_to("Next &raquo;".html_safe, 
+	inventory_report_customer_report_url(@inventory_report, @next_customer_report)) if @next_customer_report %>
+</div>
+
+
+<h2><%= @customer_report.customer_name %></h2>
 
 <table class="data">
 	<thead>
 		<tr>
-			<th>Customer</th>
 			<th>Part</th>
 			<th>Last Receipt</th>
 			<th>Last Ship</th>
@@ -14,22 +25,10 @@
 			<th><%= quantity.name %></th>
 			<% end %>
 		</tr>
-		<tr>
-			<th colspan="6" class="right">Total</th>
-			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th class="right"><%= cm @report.send(quantity.total_cost_key), :rounded_dollars %></th>
-			<% end %>
-		</tr>
 	</thead>
 	<tbody>
-		<% @customer_reports.each do |customer_report| %>
-		<% item_reports = customer_report.item_reports.by_on_hand_cost_desc.to_a %>
-		<% first_item_report = item_reports.first %>
-		<% item_reports.each do |item_report| %>
+		<% @customer_report.item_reports.by_on_hand_cost_desc.each do |item_report| %>
 		<tr>
-			<% if item_report == first_item_report %>
-			<td rowspan="<%= customer_report.item_reports.size %>"><%= customer_report.customer_name %></td>
-			<% end %>
 			<td>
 				<a href="#"><span class="show_closed_details" id="closed_details_<%= item_report.m2m_identity_column %>">
 				<%= image_tag('arrow_collapse.gif') %>
@@ -51,11 +50,10 @@
 		</tr>
 		<% end %>
 		<tr>
-			<td colspan="6" class="right">Subtotal</td>
+			<td class="right" colspan="5" class="right">Total</td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<th class="right"><%= cm @customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>
 		</tr>
-		<% end %>
 	</tbody>
 </table>
