@@ -38,7 +38,7 @@ class Production::InventoryReport < ActiveRecord::Base
     self.inventory_report_cost_method ||= Production::InventoryReportCostMethod.standard_cost
     self.save if self.new_record?
 
-    no_customer = self.customer_reports.build
+    no_customer = self.customer_reports.build(:customer_name => 'No Customer')
     @inventory_customers = { nil => no_customer }
     groups_to_filter = CompanyConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
     part_numbers_to_filter = CompanyConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
