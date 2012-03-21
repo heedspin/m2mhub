@@ -33,6 +33,8 @@ class Production::InventoryReportItem < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => 'Production::InventoryReportCostMethod'
   
+  scope :by_on_hand_cost_desc, :order => '(inventory_report_items.cost * inventory_report_items.quantity_on_hand) desc'
+  
   def set_item(item, sales_order_releases, purchase_order_items)
     self.part_number = item.part_number
     self.revision = item.revision

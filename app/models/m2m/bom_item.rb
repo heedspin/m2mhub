@@ -3,15 +3,22 @@ class M2m::BomItem < M2m::Base
   # set_primary_keys 'fcomponent', 'fcomprev'
   belongs_to_item :fcomponent, :fcomprev
   belongs_to_item :fparent, :fparentrev, :parent
+
+  alias_attribute :quantity, :fqty
   
   scope :for_parent_item, lambda { |part_number, revision|
     {
       :joins => :parent_item,
-      :conditions => { :inmast => { :fpartno => part_number, :frev => revision } }      
+      :conditions => { :inmastx => { :fpartno => part_number, :frev => revision } }      
+    }
+  }
+  scope :with_child_item, lambda { |item|
+    {
+      :conditions => { :fcomponent => item.part_number, :fcomprev => item.revision }
     }
   }
   
-  alias_attribute :quantity, :fqty
+  scope :just_item_columns, :select => [:fcomponent, :fcomprev, :fparent, :fparentrev]
 end
 
 # == Schema Information

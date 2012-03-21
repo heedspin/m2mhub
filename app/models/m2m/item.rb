@@ -299,20 +299,25 @@ class M2m::Item < M2m::Base
     items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
     items_hash = {}
     items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
+    result = []
     objects.each do |o|
       okey = (o.part_number || '') + '-' + (o.revision || '')
       if okey.present? and (found = items_hash[okey])
-        o.item = found
+        result.push o.item = found
       else
         # Explicitly set this to keep it from trying to lazy load.
         o.item = nil
       end
     end
-    items
+    result
   end
   
   def customers
     M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).map { |i| i.sales_order.customer }.uniq
+  end
+
+  def last_customer
+    M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).by_sales_order_date_desc.first.try(:sales_order).try(:customer)
   end
   
 end
