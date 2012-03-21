@@ -28,10 +28,13 @@
 			<td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
 			<% end %>
 			<% if permitted_to?(:destroy, :production_inventory_reports) %>
-			<td><%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %></td>
-			<% if report.delayed_job_status.try(:in_progress?) %>
-			<td><%= link_to 'progress', inventory_report_url(report) %></td>
-			<% end %>
+			<td>
+				<% if report.delayed_job_status.try(:in_progress?) %>
+				<%= link_to 'in progress', inventory_report_url(report) %>
+				<% else %>
+				<%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %>				
+				<% end %>
+			</td>
 			<% end %>
 		</tr>
 	<% end %>
