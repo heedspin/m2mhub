@@ -45,7 +45,7 @@ class PdfGenerator
     FileUtils.mv tempfile.path, source
     destination = tempfile.path + '.pdf'
     command = "/usr/bin/prince -v -s #{Rails.root}/public/stylesheets/prince.css --log #{logfile} #{source} -o #{destination}"
-    logger.info "Prince command: #{command}"
+    log "Prince command: #{command}"
     `#{command}`
     status = $?
     self.success = (status.to_i == 0)
