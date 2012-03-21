@@ -29,11 +29,13 @@ class Production::InventoryReportItem < ActiveRecord::Base
   include ::BelongsToItem
   belongs_to_item
   belongs_to :inventory_report, :class_name => 'Production::InventoryReport'
-  belongs_to :customer_report, :class_name => 'Production::InventoryReportCustomer'
+  belongs_to :customer_report, :class_name => 'Production::InventoryReportCustomer', :foreign_key => 'inventory_report_customer_id'
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => 'Production::InventoryReportCostMethod'
   
   scope :by_on_hand_cost_desc, :order => '(inventory_report_items.cost * inventory_report_items.quantity_on_hand) desc'
+  scope :by_latest_activity, :select => "inventory_report_items.*, 
+  greatest(coalesce(last_ship_date, '1900-01-01'), coalesce(last_receipt_date, '1900-01-01'), coalesce(next_ship_date, '1900-01-01'), coalesce(next_receipt_date, '1900-01-01')) as latest_activity_date", :order => 'latest_activity_date'
   
   def set_item(item, sales_order_releases, purchase_order_items)
     self.part_number = item.part_number
