@@ -1,0 +1,14 @@
+<%= render 'production/submenu' %>
+<br />
+<div class="submenu">
+	<ul>
+		<li class="<%= menu_selected(:controller => :customer_reports) %>">
+			<%= link_to 'Customer Reports', inventory_report_customer_reports_url(@inventory_report) %>
+		</li>
+		<li class="<%= menu_selected(:controller => :obsolete_reports) %>">
+			<%= link_to 'Obsolete Reports', inventory_report_obsolete_reports_url(@inventory_report) %>
+		</li>
+	</ul>
+</div>
+
+<br />

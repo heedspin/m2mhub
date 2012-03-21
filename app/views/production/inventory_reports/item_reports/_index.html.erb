@@ -1,0 +1,59 @@
+<% include_closed_details_javascript(image_tag('arrow_collapse.gif'),image_tag('arrow_expand.gif')) %>
+
+<% total_object = nil unless defined?(total_object) %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Part</th>
+			<% unless total_object %>
+			<th>Last Customer</th>
+			<% end %>
+			<th>Last Receipt</th>
+			<th>Last Ship</th>
+			<th>Next Receipt</th>
+			<th>Next Ship</th>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<th><%= quantity.name %></th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% item_reports.each do |item_report| %>
+		<tr>
+			<td>
+				<a href="#<%= item_report.id %>"><span class="show_closed_details" id="closed_details_<%= item_report.m2m_identity_column %>">
+				<%= image_tag('arrow_collapse.gif') %>
+				</span></a>
+				<%= link_to item_report.part_number, item_url(item_report.m2m_identity_column) %>
+			</td>
+			<% unless total_object %>
+			<td>
+				<% if item_report.customer_report.try(:m2m_identity_column) %>
+				<%= link_to item_report.customer_report.customer_name, customer_url(item_report.customer_report.m2m_identity_column) %>
+				<% end %>
+			</td>
+			<% end %>
+			<td><%= item_report.last_receipt_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.last_ship_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_receipt_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_ship_date.try(:to_s, :report_date) %></td>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<td class="right">
+				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
+				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
+					<br /><%= cm item_report.send(quantity.quantity_key), :item_quantity %></td>
+				</div>
+			</td>
+			<% end %>
+		</tr>
+		<% end %>
+		<% if total_object %>
+		<tr>
+			<td class="right" colspan="5" class="right">Total</td>
+			<% Production::InventoryReportQuantity.all.each do |quantity| %>
+			<th class="right"><%= cm total_object.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
