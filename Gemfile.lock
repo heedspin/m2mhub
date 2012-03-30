@@ -81,6 +81,7 @@ GEM
     formtastic (2.0.2)
       rails (~> 3.0)
     hike (1.2.1)
+    hominid (3.0.4)
     httparty (0.8.1)
       multi_json
       multi_xml
@@ -182,6 +183,7 @@ DEPENDENCIES
   doogle!
   factory_girl (= 2.5.1)
   formtastic (= 2.0.2)
+  hominid
   jquery-rails
   json
   lighthouse-api (= 2.0)

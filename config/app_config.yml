@@ -42,6 +42,7 @@ _shared_company_config: &_shared_company_config
     short_name: LXD
     long_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
+    production_hostname: m2mhub.lxdinc.com
     epoch_year: 2010
     # rma_company_rma_number_field: fcusrchr1
     fob_groups:
@@ -64,7 +65,7 @@ _shared_company_config: &_shared_company_config
           - CIF:KOREA
           - BEIJING
     use_item_revisions: false
-    
+      
   smt:
     google_analytics_key:
     email_name: SMT WebBot
