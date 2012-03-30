@@ -28,6 +28,8 @@ gem 'spreadsheet', '0.6.8'
 gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 gem 'amatch'
+gem 'hominid' # mailchimp
+
 
 # Sadly this is the best approach until we turn M2MHub into an engine:
 # puts Dir.get_cwd
