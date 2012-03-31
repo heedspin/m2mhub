@@ -1,0 +1,21 @@
+<%= render 'items/summary' %>
+
+<% if @bom_parents.size > 0 %>
+<h2>Parents (parts that include <%= @item.part_number %>)</h2>
+<%= render 'items/list', :items => @bom_parents.map(&:parent_item) %>
+<% if @total_bom_parents > @bom_parents.size %>
+<p><%= link_to "Browse all #{cm @total_bom_parents} parents", item_bom_parents_url(@item) %></p>
+<% end %>
+<% else %>
+<h3>No parents (parts include <%= @item.part_number %>)</h3>
+<% end %>
+
+<% if @bom_children.size > 0 %>
+<h2>Children (parts included in <%= @item.part_number %>)</h2>
+<%= render 'items/list', :items => @bom_children.map(&:item) %>
+<% if @total_bom_children > @bom_children.size %>
+<p><%= link_to "Browse all #{cm @total_bom_children} children", item_bom_children_url(@item) %></p>
+<% end %>
+<% else %>
+<h3>No Children (parts included in <%= @item.part_number %>)</h3>
+<% end %>

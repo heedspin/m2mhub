@@ -6,10 +6,17 @@ class M2m::InventoryTransactionType < ActiveHash::Base
     {:id => 3, :key => 'S', :name => 'Scrap'},
     {:id => 4, :key => 'R', :name => 'Receipts'},
     {:id => 5, :key => 'I', :name => 'Issues'},
-    {:id => 6, :key => 'M', :name => 'Move To Finished Goods (Also A Receipt)'},
+    {:id => 6, :key => 'M', :name => 'Move To Finished Goods (Also A Receipt)', :method => 'moves'},
     {:id => 7, :key => 'O', :name => 'Sales Orders'},
     {:id => 8, :key => 'P', :name => 'Material Postings'},
     {:id => 9, :key => 'H', :name => 'Physical Inventory'},
   ]
   include ActiveHashMethods
+  
+  def self.all_receipts
+    [self.receipts, self.moves]
+  end
+  def self.outgoing
+    [self.issues, self.sales_orders]
+  end
 end

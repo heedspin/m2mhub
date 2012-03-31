@@ -24,7 +24,7 @@
 			<td><%= link_to i.sales_order.customer_name, customer_number_url(i.sales_order.fcustno) %></td>
 			<td>
 				<% if i.item %>
-				<%= link_to search_excerpt(i.item.part_number, @search.try(:part_number)), item_url(i.item.part_number) %>
+				<%= link_to search_excerpt(i.item.part_number, @search.try(:part_number)), item_url(i.item.id) %>
 				<% else %>
 				<%= i.part_number %>
 				<% end %>

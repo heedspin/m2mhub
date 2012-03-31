@@ -2,23 +2,32 @@ class M2m::Job < M2m::Base
   set_table_name 'jomast'
   
   has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
+  has_many :items, :class_name => 'M2m::JobItem', :foreign_key => 'fjobno', :primary_key => 'fjobno'
+  belongs_to_item :fpartno, :fpartrev
 
   scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
-
+  scope :with_job_number, lambda { |jobno|
+    {
+      :conditions => { :fjobno => jobno }
+    }
+  }
   scope :released, :conditions => { :fstatus => M2m::Status.released.name }
-  
   scope :by_date_desc, :order => 'jomast.fhold_dt desc'
   
-  def revision
-    self.fpartrev.strip
-  end
-
   def status
     M2m::Status.find_by_name(self.fstatus)
+  end
+  
+  def job_type
+    M2m::JobType.find_by_key(self.type_code)
+  end
+  
+  def internal_type
+    M2m::JobInternalType.find_by_key(self.internal_type_code)
   end
   
   def status_date
@@ -42,6 +51,14 @@ class M2m::Job < M2m::Base
   alias_date_attribute :last_labor_date, :flastlab
   alias_date_attribute :open_date, :fopen_dt
   alias_date_attribute :created_at, :fdstart
+  alias_attribute :customer_number, :fcus_id
+  alias_attribute :customer_name, :fcompany
+  alias_attribute :internal_type_code, :fitype
+  alias_attribute :type_code, :ftype
+  
+  def customer
+    @customer ||= M2m::Customer.with_customer_number(self.customer_number).first
+  end
 end
 
 # == Schema Information

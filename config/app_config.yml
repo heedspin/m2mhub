@@ -76,6 +76,7 @@ _shared_company_config: &_shared_company_config
     long_name: SMT, Inc.
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
     inventory_report_use_boms: true
+    inventory_report_cost_method: rolled_standard_cost
     fob_groups:
       - id: 1
         default: true

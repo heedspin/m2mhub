@@ -49,8 +49,7 @@ class M2m::Customer < M2m::Base
       :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
     }
   }
-
-  scope :with_custno, lambda { |custno|
+  scope :with_customer_number, lambda { |custno|
     {
       :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
     }

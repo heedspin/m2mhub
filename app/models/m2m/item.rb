@@ -140,6 +140,8 @@
 #  flSynchOn        :boolean         default(FALSE), not null
 #
 
+require 'm2m/belongs_to_item_group'
+
 class M2m::Item < M2m::Base
   set_table_name 'inmastx'
   # has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -150,6 +152,7 @@ class M2m::Item < M2m::Base
   has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :foreign_key => :fpartno, :primary_key => :fpartno
   has_many :revisions, :class_name => 'M2m::Item', :foreign_key => :fpartno, :primary_key => :fpartno
+  include ::BelongsToItemGroup # self.group, self.group_name, etc
   
   def locations
     @locations ||= M2m::InventoryLocation.for_item(self)
@@ -160,6 +163,10 @@ class M2m::Item < M2m::Base
   
   def vendors
     @vendors ||= M2m::InventoryVendor.for_item(self)
+  end
+  
+  def part_number_revision
+    @item_key ||= [self.part_number, self.revision]
   end
 
   alias_attribute :total_cost, :fdisptcost
@@ -237,14 +244,7 @@ class M2m::Item < M2m::Base
   def revision
     @revision ||= self.frev.strip
   end
-  
-  def group
-    M2m::ItemGroupCode.cached_lookup(self.group_code_key)
-  end
-  def group_name
-    self.group.try(:text)
-  end
-  
+
   scope :part_number, lambda { |pn| where(:fpartno => pn) }
   scope :revision, lambda { |r| where(:frev => r) }
   scope :with_part_number, lambda { |pn| 
@@ -260,7 +260,6 @@ class M2m::Item < M2m::Base
   scope :by_rev_desc, :order => 'inmastx.frev desc'
   scope :by_part_number, :order => 'inmastx.fpartno'
   scope :by_part_rev_desc, :order => 'inmastx.fpartno, inmastx.frev desc'
-  
   scope :company_or_vendor_part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {
@@ -273,10 +272,14 @@ class M2m::Item < M2m::Base
       SQL
     }
   }
-  
   scope :part_number_like, lambda { |text|
     {
       :conditions => [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
+    }
+  }
+  scope :id_in, lambda { |id_array|
+    {
+      :conditions => [ 'inmastx.identity_column in (?)', id_array ]
     }
   }
   
@@ -312,13 +315,55 @@ class M2m::Item < M2m::Base
     result
   end
   
-  def customers
-    M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).map { |i| i.sales_order.customer }.uniq
-  end
-
-  def last_customer
-    M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).by_sales_order_date_desc.first.try(:sales_order).try(:customer)
+  def source
+    M2m::ItemSource.find_by_key(self.fsource)
   end
   
+  # def customers
+  #   M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).map { |i| i.sales_order.customer }.uniq
+  # end
+
+  # class << self
+  #   def item_cache
+  #     @item_cache ||= {}
+  #   end
+  #   def parents_cache
+  #     @parents_cache ||= {}
+  #   end
+  # end
+  # 
+  # def bom_parents
+  #   return nil unless CompanyConfig.inventory_report_use_boms
+  #   if @bom_parents.nil?
+  #     unless parents = self.class.parents_cache[self.id]
+  #       parents = M2m::BomItem.with_child_item(self).map(&:parent_item).compact
+  #       self.class.parents_cache[self.id] = parents.map(&:id)
+  #       parents.each do |item_parent|
+  #         self.class.item_cache[item_parent.id] = item_parent
+  #       end
+  #     end
+  #     @bom_parents = if parents.size > 0
+  #       results = []
+  #       to_load = []
+  #       parents.each do |parent_id|
+  #         if found = self.class.item_cache[parent_id]
+  #           results.push found
+  #         else
+  #           to_load.push parent_id
+  #         end
+  #       end
+  #       if to_load.size > 0
+  #         M2m::Item.readonly.id_in(to_load).each do |parent|
+  #           self.class.item_cache[parent.id] = parent
+  #           results.push parent
+  #         end
+  #       end
+  #       results
+  #     else
+  #       []
+  #     end
+  #   end
+  #   @bom_parents
+  # end
 end
 

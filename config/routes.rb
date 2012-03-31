@@ -28,6 +28,9 @@ M2mhub::Application.routes.draw do
     resource :history, :controller => 'items/history'
     resources :shippers, :only => [:index], :controller => 'items/shippers'
     resources :jobs, :only => [:index], :controller => 'items/jobs'
+    resources :boms, :only => [:index], :controller => 'items/boms'
+    resources :bom_parents, :only => [:index], :controller => 'items/bom_parents'
+    resources :bom_children, :only => [:index], :controller => 'items/bom_children'
   end
   resources :customers do
     resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'

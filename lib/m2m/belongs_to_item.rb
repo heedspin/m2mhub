@@ -24,9 +24,9 @@ module BelongsToItem
       #{x.join("\n")}
       attr_accessor :#{item_method}
       def #{item_method}
-        unless @_loaded_item
+        unless @_loaded_#{item_method}
           @#{item_method} = M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first
-          @_loaded_item = true
+          @_loaded_#{item_method} = true
         end
         @#{item_method}
       end
@@ -34,9 +34,9 @@ module BelongsToItem
         @_loaded_item = true
         @#{item_method} = val
       end
-      def is_for_item?(item)
-        (self.part_number == item.part_number) && (self.revision == item.revision)
-      end
+      # def is_for_#{item_method}?(item)
+      #   (self.#{part_number_method} == item.part_number) && (self.#{revision_method} == item.revision)
+      # end
       RUBY
     end
   end

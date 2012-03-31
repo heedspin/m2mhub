@@ -2,6 +2,9 @@
 <br />
 
 <h2>Inventory Reports By Customer</h2>
+<p>
+	Oldest sales order release used: <%= @inventory_report.earliest_release_date.to_s(:report_date) %>
+</p>
 
 <%= will_paginate @customer_reports %>
 
