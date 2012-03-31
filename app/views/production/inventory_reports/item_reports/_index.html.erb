@@ -5,6 +5,7 @@
 	<thead>
 		<tr>
 			<th>Part</th>
+			<th>Group</th>
 			<% unless total_object %>
 			<th>Last Customer</th>
 			<% end %>
@@ -26,6 +27,7 @@
 				</span></a>
 				<%= link_to item_report.part_number, item_url(item_report.m2m_identity_column) %>
 			</td>
+			<td><%= item_report.item.group_name %></td>
 			<% unless total_object %>
 			<td>
 				<% if item_report.customer_report.try(:m2m_identity_column) %>
@@ -33,15 +35,37 @@
 				<% end %>
 			</td>
 			<% end %>
-			<td><%= item_report.last_receipt_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.last_ship_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.next_receipt_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.next_ship_date.try(:to_s, :report_date) %></td>
+			<td>
+				<%= item_report.last_incoming_date.try(:to_s, :report_date) %>
+			</td>
+			<td>
+				<% if item_report.last_sales_order_release_id %>
+				<%= item_report.last_sales_order_release.last_ship_date.to_s(:report_date) %>
+				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
+					<%= link_to "SO #{item_report.last_sales_order_release.sales_order_number}", sales_order_url(item_report.last_sales_order_release.sales_order_number) %>
+					<% if item_report.part_number != item_report.last_sales_order_release.part_number %>
+					<br />as <%= link_to item_report.last_sales_order_release.item.part_number, item_url(item_report.last_sales_order_release.item) %>
+					<% end %>
+				</div>
+				<% end %>
+			</td>
+			<td><%= item_report.next_incoming_date.try(:to_s, :report_date) %></td>
+			<td>
+				<%= item_report.next_outgoing_date.try(:to_s, :report_date) %>
+				<% if item_report.next_sales_order_release_id %>
+				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
+					<%= link_to "SO #{item_report.next_sales_order_release.sales_order_number}", sales_order_url(item_report.next_sales_order_release.sales_order_number) %>
+					<% if item_report.part_number != item_report.next_sales_order_release.part_number %>
+					<br />as <%= link_to item_report.next_sales_order_release.item.part_number, item_url(item_report.next_sales_order_release.item) %>
+					<% end %>
+				</div>
+				<% end %>
+			</td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right">
 				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
-					<br /><%= cm item_report.send(quantity.quantity_key), :item_quantity %></td>
+					<%= cm item_report.send(quantity.quantity_key), :item_quantity %>
 				</div>
 			</td>
 			<% end %>
@@ -49,7 +73,7 @@
 		<% end %>
 		<% if total_object %>
 		<tr>
-			<td class="right" colspan="5" class="right">Total</td>
+			<td class="right" colspan="6" class="right">Total</td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th class="right"><%= cm total_object.send(quantity.total_cost_key), :rounded_dollars %></th>
 			<% end %>

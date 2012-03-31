@@ -2,14 +2,16 @@
 <br />
 
 <div class="paging">
-	<%= link_to("&laquo; Previous".html_safe, inventory_report_customer_report_url(@inventory_report, @prev_customer_report)) if @prev_customer_report  %>
+	<%= link_to(" #{@prev_customer_report.customer_name} &laquo; Previous".html_safe, inventory_report_customer_report_url(@inventory_report, @prev_customer_report)) if @prev_customer_report  %>
 	<%= link_to('Top', inventory_report_customer_reports_url(@inventory_report)) %>
-	<%= link_to("Next &raquo;".html_safe, 
+	<%= link_to("Next &raquo; #{@next_customer_report.customer_name}".html_safe, 
 	inventory_report_customer_report_url(@inventory_report, @next_customer_report)) if @next_customer_report %>
 </div>
 
 
 <h2><%= @customer_report.customer_name %> <%= link_to '*', customer_url(@customer_report.m2m_identity_column) %></h2>
 
-<%= render 'production/inventory_reports/item_reports/index', :item_reports => @customer_report.item_reports.by_on_hand_cost_desc, :total_object => @customer_report %>
+<%= will_paginate @item_reports %>
+
+<%= render 'production/inventory_reports/item_reports/index', :item_reports => @item_reports, :total_object => @customer_report %>
 

@@ -29,6 +29,10 @@
 		<li class="<%= menu_selected(:parent => :items, :controller => :purchase_order_items) %>">
 			<%= link_to 'Purchase Orders', item_purchase_order_items_url(@item) %>
 		</li>
+
+		<li class="<%= menu_selected(:parent => :items, :controller => :boms) %>">
+			<%= link_to 'BOMS', item_boms_url(@item) %>
+		</li>
 	</ul>
 </div>
 

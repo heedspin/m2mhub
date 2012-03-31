@@ -38,6 +38,9 @@ authorization do
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
+    has_permission_on :items_boms, :to => :read
+    has_permission_on :items_bom_parents, :to => :read
+    has_permission_on :items_bom_children, :to => :read
     has_permission_on :quality_quality_dashboard, :to => :read
     has_permission_on :quality_customer_otd_reports, :to => :make
     has_permission_on :quality_rma_reports, :to => :make

@@ -94,7 +94,7 @@ class CustomersController < ApplicationController
 
     def current_object
       @current_object ||= if params[:custno] == 'true'
-        M2m::Customer.with_custno(params[:id]).first || (raise ActiveRecord::RecordNotFound)
+        M2m::Customer.with_customer_number(params[:id]).first || (raise ActiveRecord::RecordNotFound)
       else
         M2m::Customer.find(params[:id])
       end
