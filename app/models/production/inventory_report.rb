@@ -13,22 +13,24 @@
 #  total_on_order_cost             :float
 #  total_available_cost            :float
 #  total_committed_cost            :float
-#  total_on_hand_locations         :integer(4)
 #  total_run_time_seconds          :integer(4)
-#  total_sales_order_releases      :integer(4)
-#  total_purchase_order_items      :integer(4)
 #  earliest_release_date           :datetime
+#  movement_data                   :text
+#  report_date                     :date
 #
 
 require 'delayed_report'
 require 'active_hash_methods'
 require 'bom_children_cache'
+require 'production/inventory_report_quantity'
+require 'production/inventory_movement_data'
 
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   set_table_name 'inventory_reports'
   include DelayedReport
   include Production::InventoryReportQuantity::Helper
+  include Production::InventoryMovementData::Helper
   has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy
   has_many :item_reports, :class_name => '::Production::InventoryReportItem', :dependent => :destroy
   extend ActiveHash::Associations::ActiveRecordExtensions
@@ -52,34 +54,37 @@ class Production::InventoryReport < ActiveRecord::Base
     @bom_children = BomChildrenCache.new
     load_past_releases
     load_next_sales
-    # puts self.next_sales.keys.map { |key| key.join('-') }.join(', ')
-    # return 0
-    # self.total_sales_order_releases = self.pending_sales.size
     pending_purchases = {}
     M2m::PurchaseOrderItem.filtered.status_open.find_each do |poitem|
       pending_purchases[[poitem.part_number, poitem.revision]] = poitem.safe_promise_date
     end
-    self.total_purchase_order_items = pending_purchases.size
 
-    self.total_on_hand_locations = 0
+    @inventory_transactions = {}
+    self.report_date ||= Time.current.hour < 12 ? Date.current.advance(:days => -1) : Date.current
+    M2m::InventoryTransaction.between(self.report_date, self.report_date.advance(:days => 1)).each do |it|
+      (@inventory_transactions[it.part_number_revision] ||= []).push it
+    end
+
     reports_already_generated = Set.new
     M2m::InventoryLocation.with_quantity_on_hand.find_in_batches do |locations|
       # if locations = M2m::InventoryLocation.with_quantity_on_hand.limit(110)
-      self.total_on_hand_locations += locations.size
       items = M2m::Item.attach_items(locations)
       # Remove non inventory items.
       items.delete_if { |i|
-        groups_to_filter.include?(i.group_code_key.strip.downcase) ||
-        part_numbers_to_filter.include?(i.part_number.downcase) ||
-        reports_already_generated.member?(i.part_number_revision)
+        result = (groups_to_filter.include?(i.group_code_key.strip.downcase) ||
+                  part_numbers_to_filter.include?(i.part_number.downcase) ||
+                  reports_already_generated.member?(i.part_number_revision))
+        unless result
+          reports_already_generated.add(i.part_number_revision)
+        end
+        result
       }
 
       items.each do |item|
         inventory_item = Production::InventoryReportItem.new(:inventory_report_cost_method => self.inventory_report_cost_method,
                                                              :inventory_report_id => self.id)
         @inventory_items.push inventory_item
-        reports_already_generated.add(item.part_number_revision)
-        inventory_item.run(item, self.past_releases, self.next_sales, pending_purchases)
+        inventory_item.run(item, self.past_releases, self.next_sales, pending_purchases, @inventory_transactions[item.part_number_revision])
         last_customer = inventory_item.last_customer
         inventory_customer = @inventory_customers[last_customer.try(:customer_number)]
         if inventory_customer.nil?
@@ -111,19 +116,18 @@ class Production::InventoryReport < ActiveRecord::Base
     release_scope.find_in_batches(:batch_size => 500) do |releases|
       M2m::Item.attach_items(releases)
       @bom_children.for_releases(releases).each do |release, bom_children|
-        add_next_sale(release.part_number, release.revision, release)
+        add_next_sale(release.part_number_revision, release)
         bom_children.each do |bom_item|
-          add_next_sale(bom_item.part_number, bom_item.revision, release)
+          add_next_sale(bom_item.part_number_revision, release)
         end
       end
     end
   end
 
   # Only keep the earliest release.
-  def add_next_sale(part_number, revision, release)
-    item_key = [part_number, revision]
-    if (exists = self.next_sales[item_key]).nil? or (exists.due_date > release.due_date)
-      self.next_sales[item_key] = release
+  def add_next_sale(part_number_revision, release)
+    if (exists = self.next_sales[part_number_revision]).nil? or (exists.due_date > release.due_date)
+      self.next_sales[part_number_revision] = release
     end
   end
 
@@ -142,19 +146,18 @@ class Production::InventoryReport < ActiveRecord::Base
         if (self.earliest_release_date.nil? or (release.last_ship_date < self.earliest_release_date))
           self.earliest_release_date = release.last_ship_date
         end
-        add_past_release(release.part_number, release.revision, release)
+        add_past_release(release.part_number_revision, release)
         bom_children.each do |bom_item|
-          add_past_release(bom_item.part_number, bom_item.revision, release)
+          add_past_release(bom_item.part_number_revision, release)
         end
       end
     end
   end
 
   # Only keep the earliest release.
-  def add_past_release(part_number, revision, release)
-    item_key = [part_number, revision]
-    if (exists = self.past_releases[item_key]).nil? or (exists.due_date > release.due_date)
-      self.past_releases[item_key] = release
+  def add_past_release(part_number_revision, release)
+    if (exists = self.past_releases[part_number_revision]).nil? or (exists.due_date > release.due_date)
+      self.past_releases[part_number_revision] = release
     end
   end
 

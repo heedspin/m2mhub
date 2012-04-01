@@ -6,7 +6,10 @@
 <h2>Inventory Report</h2>
 
 <%= semantic_form_for :inventory_report, :url => inventory_reports_path do |f| %>
-<%= f.buttons do %>
-	<%= f.commit_button 'Create' %>
-<% end %>
+	<%= f.inputs do %>
+	 	<%= f.input :start_date, :as => :calendar %>
+	<% end %>
+	<%= f.buttons do %>
+		<%= f.commit_button 'Create' %>
+	<% end %>
 <% end %>

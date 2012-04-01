@@ -1,11 +1,14 @@
 <%= render 'production/submenu' %>
 
 <% if permitted_to?(:make, :production_inventory_reports) %>
-	<%= semantic_form_for :inventory_report, :url => inventory_reports_path do |f| %>
+<%= semantic_form_for :inventory_report, :url => inventory_reports_path do |f| %>
+	<%= f.inputs do %>
+	 	<%= f.input :report_date, :as => :calendar %>
+	<% end %>
 	<%= f.buttons do %>
 		<%= f.commit_button 'Create' %>
 	<% end %>
-	<% end %>
+<% end %>
 <% end %>
 
 
@@ -18,14 +21,20 @@
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th><%= quantity.name %></th>
 			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<th><%= ttype.short_name %></th>
+			<% end %>
 		</tr>
 	</thead>
 	<tbody>
 	<% @reports.each do |report| %>
 		<tr>
-			<td><%= link_to report.created_at.to_s(:report_date), inventory_report_customer_reports_url(report) %></td>
+			<td><%= link_to report.report_date.try(:to_s, :report_date) || report.created_at.to_s(:report_date), inventory_report_customer_reports_url(report) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
+			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<td class="right"><%= cm report.movements.cost_for(ttype), :rounded_dollars %></td>
 			<% end %>
 			<% if permitted_to?(:destroy, :production_inventory_reports) %>
 			<td>

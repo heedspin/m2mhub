@@ -16,6 +16,9 @@
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th><%= quantity.name %></th>
 			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<th><%= ttype.short_name %></th>
+			<% end %>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,7 +30,7 @@
 				</span></a>
 				<%= link_to item_report.part_number, item_url(item_report.m2m_identity_column) %>
 			</td>
-			<td><%= item_report.item.group_name %></td>
+			<td><%= item_report.item.short_group_name %></td>
 			<% unless total_object %>
 			<td>
 				<% if item_report.customer_report.try(:m2m_identity_column) %>
@@ -66,6 +69,14 @@
 				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
 					<%= cm item_report.send(quantity.quantity_key), :item_quantity %>
+				</div>
+			</td>
+			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<td class="right">
+				<%= cm item_report.movements.cost_for(ttype), :rounded_dollars %>
+				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
+					<%= cm item_report.movements.quantity_for(ttype), :item_quantity %>
 				</div>
 			</td>
 			<% end %>

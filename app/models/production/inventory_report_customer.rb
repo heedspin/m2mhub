@@ -11,11 +11,17 @@
 #  total_on_order_cost  :float
 #  total_available_cost :float
 #  total_committed_cost :float
+#  movement_data        :text
 #
 
+require 'production/inventory_report_quantity'
+require 'production/inventory_movement_data'
+
 class Production::InventoryReportCustomer < ActiveRecord::Base
-  include Production::InventoryReportQuantity::Helper
   set_table_name 'inventory_report_customers'
+  include Production::InventoryReportQuantity::Helper
+  include Production::InventoryMovementData::Helper
+  
   belongs_to :inventory_report, :class_name => 'Production::InventoryReport'
   has_many :item_reports, :class_name => 'Production::InventoryReportItem'
   scope :by_on_hand, :order => 'total_on_hand_cost'

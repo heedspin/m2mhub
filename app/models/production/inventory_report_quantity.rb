@@ -22,6 +22,7 @@ class Production::InventoryReportQuantity < ActiveHash::Base
         value = (self.send(quantity.total_cost_key) || 0) + (source.send(quantity.total_cost_key) || 0)
         self.send "#{quantity.total_cost_key}=", value
       end
+      self.movements.add(source.movements)
     end
   end
 

@@ -37,6 +37,9 @@ module BelongsToItem
       # def is_for_#{item_method}?(item)
       #   (self.#{part_number_method} == item.part_number) && (self.#{revision_method} == item.revision)
       # end
+      def #{part_number_method}_#{revision_method}
+        @#{part_number_method}_#{revision_method} ||= [self.#{part_number_method}, self.#{revision_method}]
+      end
       RUBY
     end
   end
