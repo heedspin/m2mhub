@@ -31,11 +31,7 @@
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
 			<td class="centered">
-				<% if r.status.open? %>
-					<%= cm r.quantity, :sales_order_quantity %>
-				<% else %>
-					<%= cm r.quantity_shipped, :sales_order_quantity %> / <%= cm r.quantity, :sales_order_quantity %>
-				<% end %>
+				<%= cm r.quantity_shipped, :sales_order_quantity, 0 %> / <%= cm r.quantity, :sales_order_quantity %>
 			</td>
 			<td class="centered"><%= r.status %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
