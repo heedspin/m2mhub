@@ -2,11 +2,11 @@ module ActiveHashMethods
   def self.included(base)
     static_methods = []
     instance_methods = []
-    cmethod_values = []
+    cmethod_values = {}
     base.data.each do |config|
       if (cname = config[:name]) and (cid = config[:id])
         cmethod = config[:method] || cname.gsub(/[ -\/]/, '_').downcase
-        cmethod_values.push cmethod
+        cmethod_values[cid] = cmethod
         firstchar = cmethod[0..0]
         unless (firstchar >= '0') and (firstchar <= '9')
           static_methods.push << <<-RUBY
@@ -35,8 +35,8 @@ module ActiveHashMethods
     RUBY
     # puts "evaluating:\n #{ruby}"
     base.class_eval ruby
-    cmethod_values.each do |cmethod|
-      base.send(cmethod).cmethod = cmethod.to_s
+    cmethod_values.each do |id, cmethod|
+      base.find(id).cmethod = cmethod.to_s
     end
   end
 end
