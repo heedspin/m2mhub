@@ -319,6 +319,10 @@ class M2m::Item < M2m::Base
     M2m::ItemSource.find_by_key(self.fsource)
   end
   
+  def bom_parents
+    M2m::BomItem.with_child_item(self).map(&:parent_item)
+  end
+  
   # def customers
   #   M2m::SalesOrderItem.for_item(self).scoped(:include => {:sales_order => :customer}).map { |i| i.sales_order.customer }.uniq
   # end
