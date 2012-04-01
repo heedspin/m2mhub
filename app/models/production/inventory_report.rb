@@ -141,6 +141,7 @@ class Production::InventoryReport < ActiveRecord::Base
     while offset < MAX_PAST_RELEASES
       # find_in_batches breaks sorting
       releases = M2m::SalesOrderRelease.by_last_ship_date_desc.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
+      break if releases.size == 0
       offset += releases.size
       @bom_children.for_releases(releases).each do |release, bom_children|
         if (self.earliest_release_date.nil? or (release.last_ship_date < self.earliest_release_date))
