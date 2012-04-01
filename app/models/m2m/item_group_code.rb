@@ -49,7 +49,10 @@ class M2m::ItemGroupCode < M2m::Base
     }
   }
   def text
-    self.fgc_desc.titleize
+    @text ||= self.fgc_desc.titleize
+  end
+  def short_text
+    @short_text ||= self.text.split(' ').first
   end
   
   @@cache = {}

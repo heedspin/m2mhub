@@ -23,6 +23,11 @@ class M2m::InventoryTransaction < M2m::Base
   scope :outgoing, :conditions => ['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]
   scope :incoming, :conditions => ['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]
   scope :to_sales, :conditions => 'intran.ftoso != \'\''
+  scope :between, lambda { |from_date, to_date|
+    {
+      :conditions => [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
+    }
+  }
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 

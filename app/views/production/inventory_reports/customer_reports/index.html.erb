@@ -3,6 +3,7 @@
 
 <h2>Inventory Reports By Customer</h2>
 <p>
+	Inventory Transactions from <%= @inventory_report.report_date.try(:to_s, :report_date) %><br />
 	Oldest sales order release used: <%= @inventory_report.earliest_release_date.to_s(:report_date) %>
 </p>
 
@@ -15,11 +16,17 @@
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th><%= quantity.name %></th>
 			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<th><%= ttype.short_name %></th>
+			<% end %>
 		</tr>
 		<tr>
 			<th class="right"><%= CompanyConfig.short_name %> Total</th>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th class="right"><%= cm @inventory_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<th class="right"><%= cm @inventory_report.movements.cost_for(ttype), :rounded_dollars %></th>
 			<% end %>
 		</tr>
 	</thead>
@@ -29,6 +36,9 @@
 			<td><%= link_to customer_report.customer_name, inventory_report_customer_report_url(@inventory_report, customer_report) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<% end %>
+			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+			<td class="right"><%= cm customer_report.movements.cost_for(ttype), :rounded_dollars %></td>
 			<% end %>
 		</tr>
 		<% end %>

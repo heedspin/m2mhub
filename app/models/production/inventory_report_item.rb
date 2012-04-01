@@ -21,17 +21,20 @@
 #  item_group_code_key             :string(255)
 #  next_sales_order_release_id     :integer(4)
 #  last_sales_order_release_id     :integer(4)
+#  movement_data                   :text
 #
 
 require 'm2m/belongs_to_item'
 require 'm2m/belongs_to_item_group'
-require 'production/inventory_report_quantity'
 require 'active_hash'
+require 'production/inventory_report_quantity'
+require 'production/inventory_movement_data'
 
 class Production::InventoryReportItem < ActiveRecord::Base
   set_table_name 'inventory_report_items'
   include ::BelongsToItem
   include ::BelongsToItemGroup # self.group, self.group_name, etc
+  include Production::InventoryMovementData::Helper
   belongs_to_item
   belongs_to :inventory_report, :class_name => 'Production::InventoryReport'
   belongs_to :customer_report, :class_name => 'Production::InventoryReportCustomer', :foreign_key => 'inventory_report_customer_id'
@@ -59,7 +62,7 @@ class Production::InventoryReportItem < ActiveRecord::Base
   end
 
   attr_accessor :last_customer
-  def run(item, past_releases, pending_sales, pending_purchases)
+  def run(item, past_releases, pending_sales, pending_purchases, inventory_transactions)
     @past_releases = past_releases
     @pending_sales = pending_sales
     @pending_purchases = pending_purchases
@@ -76,6 +79,7 @@ class Production::InventoryReportItem < ActiveRecord::Base
     self.find_last_incoming_transaction
     self.find_next_outgoing
     self.next_incoming_date = @pending_purchases[item.part_number_revision]
+    self.movements.add_transactions(inventory_transactions)
   end
 
   # Try default first.  Then just keep looking for something that has a value.

@@ -166,7 +166,7 @@ class M2m::Item < M2m::Base
   end
   
   def part_number_revision
-    @item_key ||= [self.part_number, self.revision]
+    @part_number_revision ||= [self.part_number, self.revision]
   end
 
   alias_attribute :total_cost, :fdisptcost
