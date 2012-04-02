@@ -11,6 +11,7 @@ class ImportContacts
     file = args[0]
     @dry_run = false
     @import_title = 'ESC 2012'
+    @add_to_lighthouse = false
     unless File.exists?(file)
       puts "Could not find #{file}"
       1
@@ -24,18 +25,28 @@ class ImportContacts
   end
 
   def import_file(file)
+    @mailchimper = Mailchimper.new
     CsvToHash.parse_file(file) do |row_hash|
       # puts row_hash.inspect
       @name = get_name(row_hash)
-      @email = row_hash['EMail'] || ''
+      @email = row_hash['EMail'] || ''      
       if @email.present?
-        with_retries do
-          Mailchimper.new.subscribe(:name => @name, :email => @email) unless @dry_run
+        case status = @mailchimper.status_for(@email)
+        when :subscribed
+          log "#{@name} #{@email} already subscribed"
+        when :unsubscribed
+          log "#{@name} #{@email} is unsubscribed"
+        when :never_subscribed
+          @mailchimper.subscribe(:name => @name, :email => @email) unless @dry_run
+          log "Mailchimp subscribed #{@name} #{@email}"
+          if @add_to_lighthouse
+            with_retries do
+              add_lighthouse_ticket(row_hash)
+            end
+          end
+        else
+          raise "Unknown mailchimper status: #{status}"
         end
-        log "Mailchimp subscribed #{@name} #{@email}"
-      end
-      with_retries do
-        add_lighthouse_ticket(row_hash)
       end
     end
     true
