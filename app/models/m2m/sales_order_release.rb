@@ -140,7 +140,7 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def status
-    if self.sales_order.status.closed?
+    if self.sales_order.status.try(:closed?)
       if quantity_shipped == 0
         M2m::Status.cancelled
       elsif backorder_quantity <= 0
@@ -148,7 +148,7 @@ class M2m::SalesOrderRelease < M2m::Base
       else
         M2m::Status.closed_short
       end
-    elsif self.sales_order.status.open?
+    elsif self.sales_order.status.try(:open?)
       if quantity_shipped == 0
         M2m::Status.open
       elsif backorder_quantity <= 0
