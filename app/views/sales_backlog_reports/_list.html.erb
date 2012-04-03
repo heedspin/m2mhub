@@ -46,9 +46,18 @@
 		</tr>
 		<tr>
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
-				FOB: <%= r.sales_order.fob %>, 
-				via: <%= r.sales_order.ship_via %><br />
-				notes: <%= h r.sales_order.customer.notes %>
+				<% if (description = r.item.try(:item).try(:description)).present? %>
+				Description: <%= description %><br />
+				<% end %>
+				<% if (fob = r.sales_order.fob).present? %>
+				FOB: <%= fob %>, 
+				<% end %>
+				<% if (ship_via = r.sales_order.ship_via).present? %>
+				Via: <%= ship_via %><br />
+				<% end %>
+				<% if (notes = r.sales_order.customer.notes).present? %>
+				notes: <%= h notes %>
+				<% end %>
 			</td>
 		</tr>
 		<tr class="spacer"><td></td></tr>
