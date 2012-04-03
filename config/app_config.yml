@@ -31,6 +31,7 @@ _default_company_config: &_default_company_config
   inventory_report_filter_groups: noninv, tool
   inventory_report_filter_part_numbers: samples
   use_boms: true
+  cost_method: standard_cost
   
 _shared_company_config: &_shared_company_config
   lxd:
@@ -76,7 +77,7 @@ _shared_company_config: &_shared_company_config
     short_name: SMT
     long_name: SMT, Inc.
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
-    inventory_report_cost_method: rolled_standard_cost
+    cost_method: rolled_standard_cost
     fob_groups:
       - id: 1
         default: true
