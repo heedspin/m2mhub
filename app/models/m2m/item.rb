@@ -169,7 +169,7 @@ class M2m::Item < M2m::Base
     @part_number_revision ||= [self.part_number, self.revision]
   end
 
-  alias_attribute :total_cost, :fdisptcost
+  # alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript
   alias_attribute :standard_cost, :fstdcost
   alias_attribute :rolled_standard_cost, :f2totcost
@@ -224,6 +224,9 @@ class M2m::Item < M2m::Base
   end
   def quantity_non_nettable
     call_item_quantity_proc(:NonNet)
+  end
+  def total_cost
+    self.send CompanyConfig.cost_method
   end
   
   # def self.check
