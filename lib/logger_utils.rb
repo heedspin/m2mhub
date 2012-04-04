@@ -12,6 +12,9 @@ module LoggerUtils
       end
       msg
     end
+    def log_error(msg)
+      log(msg)
+    end
   end
   def self.included(base)
     base.send(:include, Methods)
@@ -24,6 +27,9 @@ module LoggerUtils
       self.loggers.each do |logger|
         logger.info self.name.demodulize.to_s + ': ' + msg
       end
+    end
+    def self.log_error(msg)
+      log(msg)
     end
     RUBY
   end
