@@ -40,8 +40,8 @@ class Production::InventoryReport < ActiveRecord::Base
 
   def run
     report_start_time = Time.now.to_i
-    if CompanyConfig.inventory_report_cost_method
-      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(CompanyConfig.inventory_report_cost_method)
+    if CompanyConfig.cost_method
+      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(CompanyConfig.cost_method)
     end
     self.inventory_report_cost_method ||= Production::InventoryReportCostMethod.standard_cost
     self.save if self.new_record?

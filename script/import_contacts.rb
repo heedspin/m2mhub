@@ -10,8 +10,8 @@ class ImportContacts
   def run(args)
     file = args[0]
     @dry_run                = false
-    @source                 = :YOUVEGOTLEADS
-    @import_title           = 'You\'ve got leads'
+    @source                 = :MDM
+    @import_title           = 'MDM'
     @add_to_lighthouse      = false
     @subscribe_to_mailchimp = true
     @create_greetings       = false
@@ -167,20 +167,13 @@ end
 class SmartRow
   CONFIG={
     :defaults => {
-      :first_name => 'firstname',
-      :last_name => 'lastname',
-      :email => 'email',
-      :company => 'company',
-      :phone => 'phone',
-      :website => 'website'
-    },
-    :YOUVEGOTLEADS => {
-      :date => 'actionaate',
-      :company => 'companyname'
-    },
-    :ESC => {
-      :date => 'scandate',
-      :phone => 'phone1'
+      :first_name => ['firstname', 'first name'],
+      :last_name => ['lastname', 'last name'],
+      :email => ['email', 'email address'],
+      :company => ['company', 'companyname'],
+      :phone => ['phone', 'phone1'],
+      :website => 'website',
+      :date => ['actiondate', 'click date', 'scandate'],
     }
   }
   attr_accessor :history
@@ -234,16 +227,21 @@ class SmartRow
 
   def value(key,default_value=nil)
     key = key.to_sym
-    result = if CONFIG[@source].member?(key)
-      @row_hash[CONFIG[@source][key]]
-    elsif CONFIG[:defaults].member?(key)
-      @row_hash[CONFIG[:defaults][key]]
+    result = nil
+    if header_keys = CONFIG[@source].try('[]',key) || CONFIG[:defaults][key]
+      header_keys = [header_keys] if header_keys.is_a?(String)
+      header_keys.each do |header_key|
+        if @row_hash.member?(header_key)
+          result = @row_hash[header_key]
+          break
+        end
+      end
     end
     result || default_value
   end
   def respond_to?(mid)
     mid = mid.to_sym
-    CONFIG[@source].member?(mid) || CONFIG[:defaults].member?(mid)
+    CONFIG[@source].try(:member?,mid) || CONFIG[:defaults].member?(mid)
   end
 
   def method_missing(mid, *args)
