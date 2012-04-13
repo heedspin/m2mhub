@@ -1,5 +1,8 @@
+require 'active_hash'
+
 module ActiveHashSetter
   def self.included(base)
+    base.extend ActiveHash::Associations::ActiveRecordExtensions
     class << base
       def active_hash_setter(klass)
         attr_key = klass.name.demodulize.underscore
