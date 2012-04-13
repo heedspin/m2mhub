@@ -368,6 +368,7 @@ form.formtastic li.select option {
                       
 form.formtastic fieldset legend {
 	margin: 0 0 10px 0;
+	color: #666;
 }
 fieldset legend span {
 	text-transform:uppercase;
@@ -961,7 +962,7 @@ span.currency_symbol {
 }
 
 /* On Time Delivery Reports */
-div.closed_details {
+.closed_details {
 	display: none;
 }
 
@@ -1050,4 +1051,18 @@ div.similar_customers ul {
 
 div.display_search { 
 	font-size: 2em;
+}
+
+/* DOOGLE
+--------------------------------------------------- */
+form.formtastic li.doogle_dimensions input {
+	width:10%;
+	margin: 0 10px 0 5px;
+}
+
+/* Pagination
+---------------------------------------------------- */
+.pagination {
+	margin: 10px 0 10px 0;
+	font-size: 1.5em;
 }

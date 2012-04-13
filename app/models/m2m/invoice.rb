@@ -8,9 +8,12 @@ class M2m::Invoice < M2m::Base
   alias_attribute :invoice_source_code, :fcsource
   alias_attribute :invoice_type_code, :finvtype
   alias_attribute :amount, :fnamount
-  alias_attribute :date, :finvdate
+  alias_date_attribute :date, :finvdate
+  alias_date_attribute :due_date, :fduedate
+  alias_date_attribute :gl_date, :fdgldate
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :customer_number, :fcustno
+  alias_attribute :printed?, :flisprint
   
   scope :customer, lambda { |customer|
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
@@ -53,6 +56,14 @@ class M2m::Invoice < M2m::Base
     else
       nil
     end
+  end
+  
+  def paid?
+    self.fcstatus == 'F'
+  end
+  
+  def void?
+    self.fcstatus == 'V'
   end
   
   def customer_name

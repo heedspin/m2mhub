@@ -128,7 +128,7 @@ class BomFlattenCsv
       found
     else
       # Explode
-      bom_items = M2m::BomItem.for_parent_item(part_number, revision).all
+      bom_items = M2m::BomItem.with_parent_item(part_number, revision).all
       puts "Exploded #{part_number} into " + bom_items.map { |i| "#{i.quantity.to_i} #{i.part_number.strip}" }.join(', ')
 
       # Find if all the bom items have a common parent

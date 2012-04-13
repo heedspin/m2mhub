@@ -1,0 +1,35 @@
+<%= render 'production/submenu' %>
+<br />
+
+<% title 'Inventory Report' %>
+
+<h2>Inventory Report</h2>
+
+<% if @report.delayed_job_status.try(:in_progress?) %>
+<div id="inprogress" class="display_search">
+	Generating... <%= image_tag 'inprogress.gif' %>
+</div>
+<div id="report_results">
+</div>
+<% content_for :javascripts do %>
+<script>
+  $(document).ready(function() {
+    monitorStatus();
+  });
+  function monitorStatus() {
+	  var i = setInterval(function() { 
+			$.getJSON("<%= inventory_report_path(@report) %>", function(result) {
+			  if (!result.inprogress) {
+			  	clearInterval(i);
+					$("#inprogress").hide();
+					$("#report_results").html(result.html);
+				}
+			})
+	  }, 1000);
+  }
+</script>
+<% end %>
+
+<% else %>
+<%= render 'show' %>
+<% end %>

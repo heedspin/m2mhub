@@ -1,0 +1,9 @@
+<%= render 'production/inventory_reports/inventory_report_menu' %>
+<br />
+
+<h2>Obsolete Inventory Report</h2>
+
+<%= will_paginate @item_reports %>
+
+<%= render 'production/inventory_reports/item_reports/index', :item_reports => @item_reports %>
+

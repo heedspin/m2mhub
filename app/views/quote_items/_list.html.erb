@@ -33,9 +33,9 @@
 			<td><%= simple_format item.fdesc.strip %></td>
 			<td><%= cm item.quantity, :sales_order_quantity %></td>
 			<td><%= item.fcustpart %></td>
-			<td>$<%= cm item.item.try(:total_cost), :dollars %></td>
-			<td class="monitary">$<%= cm item.unit_price, :dollars %></td>
-			<td class="monitary">$<%= cm (item.unit_price * item.quantity), :dollars %></td>
+			<td><%= cm item.item.try(:total_cost), :dollars %></td>
+			<td class="monitary"><%= cm item.unit_price, :dollars %></td>
+			<td class="monitary"><%= cm (item.unit_price * item.quantity), :dollars %></td>
 			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>
 		</tr>
 <% end %>

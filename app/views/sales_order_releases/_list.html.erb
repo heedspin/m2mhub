@@ -47,8 +47,8 @@ $(function() {
 			<td><%= r.item.customer_part_number %></td>
 			<td><%= r.item.item.vendors.map { |v| v.vendor_part_number.strip }.join(', ') %></td>
 			<td><%= h r.item.item.fdescript %></td>
-			<td class="monitary">$<%= cm r.item.item.try(:total_cost), :dollars %></td>
-			<td class="monitary">$<%= cm r.unit_price, :dollars %></td>
+			<td class="monitary"><%= cm r.item.item.try(:total_cost), :dollars %></td>
+			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 		</tr>
 	<% end %>
 	<% if sales_order_releases.count { |r| r.closed? } > 0 %>

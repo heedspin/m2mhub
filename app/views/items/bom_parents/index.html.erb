@@ -1,0 +1,6 @@
+<%= render 'items/summary' %>
+
+<h2>Parents (parts that include <%= @item.part_number %>)</h2>
+
+<%= will_paginate @bom_items %>
+<%= render 'items/list', :items => @bom_items.map(&:parent_item) %>

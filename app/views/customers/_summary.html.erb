@@ -24,6 +24,9 @@
 		<li class="<%= menu_selected(:parent => :customers, :controller => :invoiced_sales_reports) %>">
 			<%= link_to 'Invoiced Sales', new_customer_invoiced_sales_report_url(@customer) %>
 		</li>
+		<li class="<%= menu_selected(:parent => :customers, :controller => :sales_backlog_reports) %>">
+			<%= link_to 'Backlog', customer_sales_backlog_reports_url(@customer) %>
+		</li>
 	</ul>
 </div>
 

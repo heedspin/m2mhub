@@ -6,7 +6,6 @@ class M2m::SalesOrderItem < M2m::Base
   belongs_to_item :fpartno, :fpartrev
 
   alias_attribute :quantity, :fquantity
-  alias_attribute :unit_price, :fprice
   alias_attribute :customer_part_number, :fcustpart
   alias_attribute :due_date, :fduedate
   alias_attribute :internal_number, :finumber
@@ -23,33 +22,30 @@ class M2m::SalesOrderItem < M2m::Base
     {
       :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
     }
-  }
-  
+  }  
   scope :order_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
       :joins => :sales_order,
       :conditions => [ 'somast.fcustpono like ? OR somast.fsono like ?', text, text]
     }
-  }
-  
+  }  
   scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
-  }
-  
+  }  
   scope :for_releases, lambda { |sales_order_releases|
     {
       :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
     }
   }
-  
   scope :for_release, lambda { |release|
     {
       :conditions => { :fsono => release.fsono, :fenumber => release.fenumber }
     }
   }
+  scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
   
   def self.attach_to_releases(sales_order_releases)
     if sales_order_releases.size > 0
@@ -75,6 +71,9 @@ class M2m::SalesOrderItem < M2m::Base
           i.item = item
         end
       end
+      sales_order_items
+    else
+      nil
     end
   end
 

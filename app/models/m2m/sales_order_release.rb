@@ -16,36 +16,57 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => ['shitem.identity_column in (?)', shipper_items.map(&:id)]
     }
   }
-
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
-
-  scope :by_due_date, :order => :fduedate
+  scope :by_due_date, :order => 'sorels.fduedate'
   scope :by_due_date_desc, :order => 'sorels.fduedate desc'
-
+  scope :by_last_ship_date_desc, :order => 'sorels.flshipdate desc'
   scope :due_by, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
     }
   }
-
   scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
-
+  scope :some_filled, :conditions => [ '(sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake) > 0' ]
   scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
-
   scope :for_item, lambda { |item|
-    fpartno = item.is_a?(M2m::Item) ? item.fpartno : item.to_s
+    {
+      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
+    }
+  }
+  scope :for_part_number, lambda { |item|
+    fpartno = item.is_a?(M2m::Item) ? item.part_number : item.to_s
     {
       :conditions => { :fpartno => fpartno.strip }
     }
   }
-
   scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :somast => { :fstatus => status_name.upcase } }
+    }
+  }
+  scope :customer, lambda { |customer|
+    {
+      :joins => :sales_order,
+      :conditions => { :somast => { :fcustno => customer.customer_number } }
+    }
+  }
+  scope :for_sales_order, lambda { |sono|
+    {
+      :conditions => { :fsono => sono }
+    }
+  }
+  scope :with_number, lambda { |num|
+    {
+      :conditions => { :finumber => num }
+    }
+  }
+  scope :shipped_after, lambda { |date|
+    {
+      :conditions => [ 'flshipdate >= ?', date ]
     }
   }
 
@@ -65,7 +86,6 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :sales_order_number, :fsono
   alias_attribute :sales_order_release_id, :finumber
   alias_attribute :sales_order_release_number, :frelease
-  alias_attribute :revision, :fpartrev
   alias_attribute :due_date, :fduedate
   alias_attribute :order_quantity, :forderqty
   alias_attribute :internal_number, :finumber
@@ -120,7 +140,7 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def status
-    if self.sales_order.status.closed?
+    if self.sales_order.status.try(:closed?)
       if quantity_shipped == 0
         M2m::Status.cancelled
       elsif backorder_quantity <= 0
@@ -128,7 +148,7 @@ class M2m::SalesOrderRelease < M2m::Base
       else
         M2m::Status.closed_short
       end
-    elsif self.sales_order.status.open?
+    elsif self.sales_order.status.try(:open?)
       if quantity_shipped == 0
         M2m::Status.open
       elsif backorder_quantity <= 0
@@ -247,3 +267,4 @@ end
 #  fsetuppadj       :decimal(16, 5)  default(0.0), not null
 #  fnISOQty         :decimal(15, 5)  default(0.0), not null
 #
+

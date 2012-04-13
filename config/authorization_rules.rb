@@ -34,9 +34,13 @@ authorization do
     has_permission_on :customers_quotes, :to => :read
     has_permission_on :customers_contacts, :to => :manage
     has_permission_on :customers_invoiced_sales_reports, :to => :manage
+    has_permission_on :customers_sales_backlog_reports, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
+    has_permission_on :items_boms, :to => :read
+    has_permission_on :items_bom_parents, :to => :read
+    has_permission_on :items_bom_children, :to => :read
     has_permission_on :quality_quality_dashboard, :to => :read
     has_permission_on :quality_customer_otd_reports, :to => :make
     has_permission_on :quality_rma_reports, :to => :make
@@ -44,6 +48,7 @@ authorization do
     has_permission_on :quality_rmas, :to => :read
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
     has_permission_on :invoiced_sales_reports, :to => :manage
+    has_permission_on :pro_forma_sales_reports, :to => :manage
     # TODO: factor this out or make configurable.
     has_permission_on :doogle_displays, :to => :manage
   end
@@ -51,6 +56,9 @@ authorization do
   role :production do
     has_permission_on :production_production_dashboard, :to => :read
     has_permission_on :production_work_center_load_reports, :to => :make
+    has_permission_on :production_inventory_reports, :to => :read
+    has_permission_on :production_inventory_reports_customer_reports, :to => :read
+    has_permission_on :production_inventory_reports_obsolete_reports, :to => :read
   end
   
   role :manager do
@@ -63,6 +71,7 @@ authorization do
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :content_modules, :to => :manage
     has_permission_on :user_activities, :to => :manage
+    has_permission_on :production_inventory_reports, :to => :manage
   end
 end
  

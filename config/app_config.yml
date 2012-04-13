@@ -17,8 +17,8 @@ _local_company_config: &_local_company_config
 _default_company_config: &_default_company_config
   otd_grace_period_days: 5
   otd_lead_time: 28
-  rounded_dollars: "%.0f"
-  dollars: "%.2f"
+  rounded_dollars: "$%.0f"
+  dollars: "$%.2f"
   sales_order_quantity: "%.0f"
   purchase_order_quantity: "%.0f"
   item_quantity: "%.0f"
@@ -28,12 +28,18 @@ _default_company_config: &_default_company_config
   quality_credit_memo_percentage: "%0.2f"
   work_center_load_percentage: "%.0f"
   work_center_load: "%.1f"
+  trim_decimals: trim_decimals
   epoch_year: 2000
   rma_company_rma_number_field: fcrmano
   rma_custom_codes_field: fcusrchr3
   credit_memo_report_severity_names: Quality
   default_country_name: United States
   use_item_revisions: true
+  enable_inventory_report: true
+  inventory_report_filter_groups: noninv, tool
+  inventory_report_filter_part_numbers: samples
+  use_boms: true
+  cost_method: standard_cost
   
 _shared_company_config: &_shared_company_config
   lxd:
@@ -45,6 +51,8 @@ _shared_company_config: &_shared_company_config
     short_name: LXD
     long_name: LXD Research &amp; Display
     hostname: <%= Rails.env.production? ? 'm2mhub.lxdinc.com' : 'staging.lxdinc.com' %>
+    use_boms: false
+    production_hostname: m2mhub.lxdinc.com
     epoch_year: 2010
     # rma_company_rma_number_field: fcusrchr1
     fob_groups:
@@ -67,7 +75,7 @@ _shared_company_config: &_shared_company_config
           - CIF:KOREA
           - BEIJING
     use_item_revisions: false
-    
+      
   smt:
     google_analytics_key:
     email_name: SMT WebBot
@@ -77,6 +85,7 @@ _shared_company_config: &_shared_company_config
     short_name: SMT
     long_name: SMT, Inc.
     hostname: <%= Rails.env.production? ? 'm2mhub.smtcoinc.com' : 'staging.smtcoinc.com' %>
+    cost_method: rolled_standard_cost
     fob_groups:
       - id: 1
         default: true

@@ -27,7 +27,7 @@ class MaterialAvailabilityReport
       true
     end
     def date
-      d = (self.actual_date || self.target_date)
+      d = self.actual_date || self.target_date || Date.current
       Date.new(d.year, d.month, d.day)
     end
     def <=>(rhs)

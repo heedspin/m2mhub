@@ -18,7 +18,7 @@
 			<td><%= so.customer_po %></td>
 			<td><%= so.order_date.to_s(:sales_date) %></td>
 			<td><%= link_to so.customer_name, customer_number_url(so.fcustno) %></td>
-			<td class="monitary"><span class="currency_symbol">$</span><%= cm so.total_price, :rounded_dollars %></td>
+			<td class="monitary"><%= cm so.total_price, :rounded_dollars %></td>
 			<td class="centered"><%= so.fsoldby %></td>
 			<td class="centered"><%= so.fsocoord %></td>
 			<td class="centered"><%= so.fstatus %></td>

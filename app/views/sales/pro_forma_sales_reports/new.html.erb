@@ -1,0 +1,39 @@
+<%= render 'sales_orders/submenu' %>
+<br />
+
+<h2>Open Pro-Forma Sales Orders</h2>
+	
+<table class="data">
+	<thead>
+		<tr>
+			<th>Sales Order</th>
+			<th>Company</th>
+			<th>Sales Order Due Date</th>
+			<th>Invoice</th>
+			<th>Invoice Status</th>
+			<th>GL Date</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @sales_orders.each do |so| %>
+	<% invoices = so.invoices.select { |i| !i.void? and i.invoice_type.pre_payment_memo? } %>
+		<tr>
+			<td rowspan="<%= invoices.size %>"><%= link_to so.order_number, sales_order_path(so) %></td>
+			<td rowspan="<%= invoices.size %>"><%= link_to so.customer_name, customer_number_url(so.fcustno) %></td>
+			<td rowspan="<%= invoices.size %>"><%= so.due_date.try(:to_s, :sales_date) %></td>
+	<% if invoices.size == 0 %>
+			<td colspan="3">
+	<% else %>
+  	<% invoices.each do |invoice| %>
+			<td><%= invoice.invoice_number %></td>
+			<td><%= invoice.status_name %></td>
+			<td><%= invoice.gl_date.try(:to_s, :invoice_date) %></td>
+		</tr>
+  		<% if invoice != invoices.last %>
+		</tr><tr>
+	  	<% end %>
+		<% end %>
+	<% end %>
+<% end %>
+	</tbody>
+</table>

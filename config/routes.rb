@@ -28,18 +28,23 @@ M2mhub::Application.routes.draw do
     resource :history, :controller => 'items/history'
     resources :shippers, :only => [:index], :controller => 'items/shippers'
     resources :jobs, :only => [:index], :controller => 'items/jobs'
+    resources :boms, :only => [:index], :controller => 'items/boms'
+    resources :bom_parents, :only => [:index], :controller => 'items/bom_parents'
+    resources :bom_children, :only => [:index], :controller => 'items/bom_children'
   end
   resources :customers do
     resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
     resources :quotes, :only => [:index], :controller => 'customers/quotes'
     resources :contacts, :controller => 'customers/contacts'
     resources :invoiced_sales_reports, :controller => 'customers/invoiced_sales_reports'
+    resources :sales_backlog_reports, :controller => 'customers/sales_backlog_reports'
   end
   resources :sales_backlog_reports, :only => [:index, :show]  
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
+  resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
   match 'quality' => 'quality/quality_dashboard#index'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
@@ -52,7 +57,11 @@ M2mhub::Application.routes.draw do
 
   match 'production' => 'production/production_dashboard#index'
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
+  resources :inventory_reports, :controller => 'production/inventory_reports' do
+    resources :customer_reports, :only => [:index, :show], :controller => 'production/inventory_reports/customer_reports'
+    resources :obsolete_reports, :only => [:index], :controller => 'production/inventory_reports/obsolete_reports'
+  end
 
   # Specify thing regular expression because the routes use '.' as separator.
-  match 'switch/:thing' => 'switch#switch', :thing => /.+/
+  match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end

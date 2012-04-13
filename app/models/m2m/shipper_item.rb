@@ -48,8 +48,8 @@ class M2m::ShipperItem < M2m::Base
       :joins => 'inner join sorels on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)',
       :conditions => [ 'sorels.fsono = ?', sales_order.id ]
     }
-  }  
-  
+  }
+  scope :by_ship_date_desc, { :joins => :shipper, :order => 'shmast.fshipdate desc, shitem.fitemno' }  
 end
 
 
