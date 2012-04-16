@@ -42,6 +42,7 @@ elsif Dir.getwd.include?('lxd')
 end
 
 group :development do
+  gem 'mongrel'
   gem 'ruby-debug'
   gem 'ruby-debug-base'
   gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
