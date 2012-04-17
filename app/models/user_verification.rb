@@ -2,11 +2,12 @@ class UserVerification < ApplicationMailer
   default_url_options[:host] = CompanyConfig.hostname
 
   def verification_instructions(user)
-    subject       "m2mhub Account Verification"
-    from          CompanyConfig.email_address
-    recipients    user.email
-    sent_on       Time.now
-    body          :verification_url => user_verification_url(user.perishable_token)
+    # Rails 3:
+    @verification_url = user_verification_url(user.perishable_token, :host => CompanyConfig.hostname)
+    mail( :subject => "#{CompanyConfig.company_key.upcase} M2mhub Account Verification",
+          :from => CompanyConfig.email_address,
+          :to => user.email,
+          :date => Time.now )
   end
 
 end
