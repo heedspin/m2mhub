@@ -12,9 +12,12 @@ class Mailchimper
     args ||= {}
     name = args[:name] || ''
     first_name, last_name = name.split(' ', 2)
+    first_name ||= ''
     last_name ||= ''
     email = args[:email]
-    if email.blank? or !Rails.env.production? or !CompanyConfig.mailchimp_api_key.present?
+    enabled = args[:enabled]
+    enabled = Rails.env.production? if enabled.nil?
+    if email.blank? or !enabled or !CompanyConfig.mailchimp_api_key.present?
       false
     else
       begin

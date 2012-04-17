@@ -9,3 +9,4 @@ data
 db/schema.rb
 db/migrate/*doogle*
 db/backups
+imports/*
