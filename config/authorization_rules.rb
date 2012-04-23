@@ -50,7 +50,7 @@ authorization do
     has_permission_on :invoiced_sales_reports, :to => :manage
     has_permission_on :pro_forma_sales_reports, :to => :manage
     # TODO: factor this out or make configurable.
-    has_permission_on :doogle_displays, :to => :manage
+    has_permission_on :doogle_displays, :to => [:manage, :next_model_number]
   end
   
   role :production do
