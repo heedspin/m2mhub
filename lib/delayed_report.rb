@@ -51,7 +51,7 @@ module DelayedReport
   
   def hopthetoad(error_title, backtrace=nil)
     if Rails.env.production?
-      HoptoadNotifier.notify :error_class => self.report_name, :error_message => error_title, :backtrace => backtrace
+      Airbrake.notify :error_class => self.report_name, :error_message => error_title, :backtrace => backtrace
     end
   end
 
