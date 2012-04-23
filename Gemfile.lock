@@ -5,7 +5,7 @@ GIT
     annotate (2.4.1.beta1)
 
 PATH
-  remote: ../../Dropbox/p/doogle
+  remote: ../doogle
   specs:
     doogle (0.0.1)
       acts_as_list
@@ -40,12 +40,14 @@ GEM
       activesupport (= 3.1.3)
       arel (~> 2.2.1)
       tzinfo (~> 0.3.29)
+    activerecord-sqlserver-adapter (3.1.5)
+      activerecord (~> 3.1.0)
     activeresource (3.1.3)
       activemodel (= 3.1.3)
       activesupport (= 3.1.3)
     activesupport (3.1.3)
       multi_json (~> 1.0)
-    acts_as_list (0.1.5)
+    acts_as_list (0.1.6)
     addressable (2.2.6)
     airbrake (3.0.9)
       activesupport
@@ -62,18 +64,20 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     builder (3.0.0)
+    cgi_multipart_eof_fix (2.5.0)
     cocaine (0.2.1)
     columnize (0.3.6)
     daemons (1.1.8)
     declarative_authorization (0.5.5)
-    delayed_job (2.1.4)
+    delayed_job (3.0.1)
       activesupport (~> 3.0)
-      daemons
     erubis (2.7.0)
     factory_girl (2.5.1)
       activesupport
+    fastthread (1.0.7)
     formtastic (2.0.2)
       rails (~> 3.0)
+    gem_plugin (0.2.3)
     hike (1.2.1)
     hominid (3.0.4)
     httparty (0.8.1)
@@ -94,6 +98,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.18)
+    mongrel (1.1.5)
+      cgi_multipart_eof_fix (>= 2.4)
+      daemons (>= 1.0.3)
+      fastthread (>= 1.0.1)
+      gem_plugin (>= 0.2.3)
     multi_json (1.2.0)
     multi_xml (0.4.2)
     mysql (2.8.1)
@@ -147,6 +156,7 @@ GEM
     thor (0.14.6)
     tilt (1.3.3)
     tins (0.3.12)
+    tiny_tds (0.5.1)
     transactional-factories (0.5.0)
       activerecord (>= 2.3.2)
       activesupport (>= 2.3.2)
@@ -162,6 +172,8 @@ PLATFORMS
 
 DEPENDENCIES
   active_hash
+  activerecord-sqlserver-adapter (= 3.1.5)
+  acts_as_list (= 0.1.6)
   addressable (= 2.2.6)
   airbrake (= 3.0.9)
   amatch
@@ -170,7 +182,7 @@ DEPENDENCIES
   aws-sdk (= 1.3.4)
   daemons (= 1.1.8)
   declarative_authorization (= 0.5.5)
-  delayed_job (= 2.1.4)
+  delayed_job (= 3.0.1)
   doogle!
   factory_girl (= 2.5.1)
   formtastic (= 2.0.2)
@@ -178,11 +190,13 @@ DEPENDENCIES
   jquery-rails
   json
   lighthouse-api (= 2.0)
+  mongrel
   mysql (= 2.8.1)
   paperclip (= 2.7.0)
   rails (= 3.1.3)
   ruby-debug
   ruby-debug-base
   spreadsheet (= 0.6.8)
+  tiny_tds (= 0.5.1)
   transactional-factories (= 0.5.0)
   will_paginate (= 3.0.3)

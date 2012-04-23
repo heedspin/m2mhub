@@ -29,6 +29,7 @@ gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 gem 'amatch'
 gem 'hominid' # mailchimp
+gem 'acts_as_list', '0.1.6'
 
 
 # Sadly this is the best approach until we turn M2MHub into an engine:
