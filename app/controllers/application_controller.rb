@@ -1,10 +1,10 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-require 'navigation_system'
+require 'menu_selected'
 require 'pdf_generation'
 
 class ApplicationController < ActionController::Base
-  include NavigationSystem
+  include MenuSelected
   # include Userstamp
   include PdfGeneration
 
