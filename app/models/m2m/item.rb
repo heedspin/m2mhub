@@ -141,9 +141,11 @@
 #
 
 require 'm2m/belongs_to_item_group'
+require 'active_hash_setter'
 
 class M2m::Item < M2m::Base
   set_table_name 'inmastx'
+  include ActiveHashSetter
   # has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   # has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
   # has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno
@@ -185,6 +187,10 @@ class M2m::Item < M2m::Base
   alias_attribute :source_facility, :sfac
   alias_attribute :product_class_key, :fprodcl
   alias_attribute :group_code_key, :fgroup
+  alias_attribute :location, :flocate1
+  alias_attribute :measure1, :fmeasure
+  alias_attribute :measure2, :fmeasure2
+  alias_attribute :abc_code, :fabccode
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -240,10 +246,12 @@ class M2m::Item < M2m::Base
   #   puts "Found #{errors.size} errors: " + errors.join("\n")
   # end    
 
+  alias_attribute :part_number, :fpartno
   def part_number
     @part_number ||= self.fpartno.strip
   end
   
+  alias_attribute :revision, :frev
   def revision
     @revision ||= self.frev.strip
   end
@@ -318,9 +326,10 @@ class M2m::Item < M2m::Base
     result
   end
   
-  def source
-    M2m::ItemSource.find_by_key(self.fsource)
-  end
+  # def source
+  #   M2m::ItemSource.find_by_key(self.fsource)
+  # end
+  active_hash_setter(M2m::ItemSource, :source, :fsource)
   
   def bom_parents
     M2m::BomItem.with_child_item(self).map(&:parent_item)

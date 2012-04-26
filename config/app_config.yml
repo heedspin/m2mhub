@@ -1,3 +1,11 @@
+<% local_app_config = File.join(Rails.root, 'config/local_app_config.yml') %>
+<% if File.exists?(local_app_config) %>
+<%= File.open(local_app_config).read %>
+<% else %>
+_local_app_config: &_local_app_config
+  nothing: here
+<% end %>
+
 <% local_company_config = File.join(Rails.root, 'config/local_company_config.yml') %>
 <% if File.exists?(local_company_config) %>
 <%= File.open(local_company_config).read %>
@@ -94,6 +102,7 @@ _shared_company_config: &_shared_company_config
           - your dock
 
 development:
+  <<: *_local_app_config
   local_company_config:
     <<: *_local_company_config
   shared_company_config:
@@ -102,6 +111,7 @@ development:
     <<: *_default_company_config
   
 production:
+  <<: *_local_app_config
   local_company_config:
     <<: *_local_company_config
   shared_company_config:
@@ -110,6 +120,7 @@ production:
     <<: *_default_company_config
   
 test:
+  <<: *_local_app_config
   local_company_config:
     <<: *_local_company_config
   shared_company_config:

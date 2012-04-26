@@ -17,7 +17,8 @@ gem 'declarative_authorization', '0.5.5'
 gem 'aws-sdk', '1.3.4'
 gem 'paperclip', '2.7.0'
 gem 'will_paginate', '3.0.3'
-gem 'delayed_job', '2.1.4'
+# gem 'delayed_job', '3.0.1'
+gem 'delayed_job_active_record', '~> 0.3.2'
 gem "airbrake", '3.0.9'
 #gem 'thinking-sphinx', '1.3.20', :require => 'thinking_sphinx'
 #gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
@@ -29,17 +30,21 @@ gem 'lighthouse-api', '2.0'
 gem 'addressable', '2.2.6'
 gem 'amatch'
 gem 'hominid' # mailchimp
+gem 'acts_as_list', '0.1.6'
 
 
 # Sadly this is the best approach until we turn M2MHub into an engine:
 # puts Dir.get_cwd
 if File.exists?('../doogle')
   gem 'doogle', :path => '../doogle'
+elsif File.exists?('../../Dropbox/p/doogle')
+  gem 'doogle', :path => '../../Dropbox/p/doogle'
 elsif Dir.getwd.include?('lxd')
   gem 'doogle', :git => 'git@github.com:heedspin/doogle.git'
 end
 
 group :development do
+  gem 'mongrel'
   gem 'ruby-debug'
   gem 'ruby-debug-base'
   gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'

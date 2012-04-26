@@ -10,8 +10,8 @@ class ImportContacts
   def run(args)
     file = args[0]
     @dry_run                = false
-    @source                 = :MDM
-    @import_title           = 'MDM'
+    @source                 = :YOUVEGOTLEADS
+    @import_title           = "You've got leads"
     @add_to_lighthouse      = false
     @subscribe_to_mailchimp = true
     @create_greetings       = false
@@ -19,6 +19,12 @@ class ImportContacts
     if @only_create_greetings
       @add_to_lighthouse = @subscribe_to_mailchimp = false
     end
+    @create_state_entries   = false
+    @only_create_state_entries = false
+    if @only_create_state_entries
+      @add_to_lighthouse = @subscribe_to_mailchimp = false
+    end
+
     unless File.exists?(file)
       puts "Could not find #{file}"
       1
@@ -38,6 +44,7 @@ class ImportContacts
     CsvToHash.parse_file(file, :downcase_keys => true) do |row_hash|
       csv_line_count += 1
       @current_row = SmartRow.new(@source, row_hash)
+      # require 'ruby-debug' ; debugger
       # puts row_hash.inspect
       if @current_row.email.present?
         if @current_row.history.ignore?
@@ -55,6 +62,7 @@ class ImportContacts
             subscribe_to_mailchimp
             add_lighthouse_ticket
             create_greeting(status)
+            create_state_entry(status)
           else
             raise "Unknown mailchimper status: #{status}"
           end
@@ -63,6 +71,7 @@ class ImportContacts
     end
     log "Parsed #{csv_line_count} lines from #{file}"
     persist_greetings
+    persist_state_entries
     ImportHistory.instance.persist unless @dry_run
     true
   end
@@ -72,7 +81,7 @@ class ImportContacts
       log "Created greeting for #{@current_row.name}"
       @current_row.history['greeting'] = 'created'
     end
-    return if @dry_run or !@create_greetings
+    return if @dry_run
     @greetings ||= []
     click_explanation = if @current_row.date
       "They tell us you clicked on one of our ads in there newsletter back on #{@current_row.date.to_s(:human_date)}."
@@ -112,6 +121,44 @@ TEXT
       out.puts "#{Time.now.strftime('%I:%M%p %m-%d-%y')}"
       out.puts @greetings.join("\n-----------------------------\n")
     end
+  end
+  
+  def persist_state_entries
+    return if @dry_run or !@create_state_entries or @state_entries.nil?
+    File.open( File.join(Rails.root, 'imports', "states.txt"), 'w+' ) do |out|
+      out.puts "File created: #{Time.now.strftime('%I:%M%p %m-%d-%y')}"
+      @state_entries.keys.sort.each do |state|
+        entries = @state_entries[state]
+        out.puts "\n****************************************************************\n"
+        out.puts "#{state}\n\n"
+        entries.each do |entry|
+          out.puts entry
+          out.puts "\n-----------------------------\n"
+        end
+      end
+    end
+  end
+  
+  def create_state_entry(status)
+    state = @current_row.state
+    return if !@create_state_entries or !state.present?
+
+    log "Creating state entry for #{state} #{@current_row.name}"
+    return if @dry_run
+    @current_row.history['state'] = 'created'
+
+    @state_entries ||= {}
+    state_entries = @state_entries[state] ||= []
+    fields = []
+    %w(phone company title industry website date address city country).each do |field|
+      if (value = @current_row.send(field)).present?
+        fields.push "#{field.capitalize}: #{value}"
+      end
+    end
+    state_entries.push <<-TEXT
+"#{@current_row.name}" <#{@current_row.email}>
+#{fields.join("\n")}
+TEXT
   end
 
   def log(txt)
@@ -174,6 +221,11 @@ class SmartRow
       :phone => ['phone', 'phone1'],
       :website => 'website',
       :date => ['actiondate', 'click date', 'scandate'],
+      :state => ['stateprovince', 'state'],
+      :title => ['jobfunctiondescription'],
+      :industry => ['industrydescription'],
+      :address1 => ['address1'],
+      :address2 => ['address2']
     }
   }
   attr_accessor :history
@@ -190,7 +242,7 @@ class SmartRow
   
   def m2mhub_link
     @m2mhub_link ||= M2mhubLink.new( :name => self.name,
-                                      :email => self.email,
+                                     :email => self.email,
                                      :company => self.company,
                                      :phone => self.phone )
   end
@@ -224,6 +276,9 @@ class SmartRow
   def email
     @email ||= value(:email).try(:downcase)
   end
+  def address
+    @address ||= [value(:address1), value(:address2)].compact.join(', ').strip
+  end
 
   def value(key,default_value=nil)
     key = key.to_sym
@@ -245,11 +300,12 @@ class SmartRow
   end
 
   def method_missing(mid, *args)
-    if self.respond_to?(mid)
-      value(mid)
-    else
-      super
-    end
+    value(mid)
+    # if self.respond_to?(mid)
+    #   value(mid)
+    # else
+    #   super
+    # end
   end
 end
 

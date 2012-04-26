@@ -9,3 +9,12 @@ else
   AppConfig.delayed_job = false
 end
 Delayed::Worker.logger.info "DelayedJobConfig: called from #{caller.last}.  delayed_job = #{AppConfig.delayed_job}"
+if Rails.env.development?
+  Delayed::Worker.destroy_failed_jobs = false
+end
+
+# We're in a fine mess now. This needs to be in LXD, but not SMT.  
+begin
+  require 'doogle/web_synchronizer'
+rescue
+end
