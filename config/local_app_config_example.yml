@@ -1,0 +1,4 @@
+_local_app_config: &_local_app_config
+  doogle_bucket: secret
+  doogle_access_key_id: secreter
+  doogle_secret_access_key: secretest

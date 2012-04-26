@@ -4,7 +4,6 @@ class CreateSalesBacklogReports < ActiveRecord::Migration
       t.date :due_date
       t.references :report_status
       t.timestamps
-      t.userstamps
     end
   end
 

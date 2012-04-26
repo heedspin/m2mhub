@@ -1055,9 +1055,13 @@ div.display_search {
 
 /* DOOGLE
 --------------------------------------------------- */
-form.formtastic li.doogle_dimensions input {
+form.doogle li.doogle_dimensions input {
 	width:10%;
 	margin: 0 10px 0 5px;
+}
+
+form.doogle fieldset > ol > li {
+	margin: 0 0 .9em 0;
 }
 
 /* Pagination
