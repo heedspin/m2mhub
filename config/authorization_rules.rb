@@ -51,6 +51,7 @@ authorization do
     has_permission_on :pro_forma_sales_reports, :to => :manage
     # TODO: factor this out or make configurable.
     has_permission_on :doogle_displays, :to => [:manage, :next_model_number]
+    has_permission_on :doogle_display_logs, :to => :read
   end
   
   role :production do

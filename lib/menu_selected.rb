@@ -1,4 +1,4 @@
-module NavigationSystem
+module MenuSelected
 
   def self.included(base)
     base.class_eval <<-EOS
