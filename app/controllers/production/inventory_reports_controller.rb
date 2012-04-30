@@ -34,7 +34,7 @@ class Production::InventoryReportsController < ApplicationController
   end
 
   def index
-    @reports = Production::InventoryReport.by_date_desc.paginate(:page => params[:page], :per_page => 10)
+    @reports = Production::InventoryReport.by_date_desc.paginate(:page => params[:page], :per_page => 30)
   end
 
   def destroy
