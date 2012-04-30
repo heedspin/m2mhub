@@ -1064,6 +1064,9 @@ form.doogle fieldset > ol > li {
 	margin: 0 0 .9em 0;
 }
 
+form.doogle textarea#display_comments { width:405px; height:4.5em; }
+
+
 /* Pagination
 ---------------------------------------------------- */
 .pagination {
