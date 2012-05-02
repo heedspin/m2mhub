@@ -3,7 +3,7 @@ class AttachmentInput < Formtastic::Inputs::FileInput
   def to_html
     delete_attachment_link  = "delete_#{method}_link"
     preview_id  = "#{method}_preview"
-    attachment_file_field = "#{method}_file_field"
+    attachment_file_field = method #"#{method}_file_field"
     unless (attachment = @object.send(method)).blank? or (not attachment.file?)
       if (attachment.content_type =~ /^image\/.+/) and (attachment.styles.member?(:thumbnail) or attachment.styles.member?(:edit))
         style = attachment.styles.member?(:thumbnail) ? :thumbnail : :edit
@@ -28,7 +28,7 @@ class AttachmentInput < Formtastic::Inputs::FileInput
           return false;
         });
         $('form').submit(function () {
-          if ($('##{attachment_file_field}').val() != '') {
+          if ($('##{object_name}_#{method}').val() != '') {
             $('##{deleter_input_id}').remove();
           }
           return true;
@@ -36,7 +36,7 @@ class AttachmentInput < Formtastic::Inputs::FileInput
       })
       </script>
     JAVASCRIPT
-    ff = builder.file_field(method, {:id => attachment_file_field}.merge(input_html_options.except(:required)))
+    ff = builder.file_field(method, input_html_options.except(:required))
     if preview
       preview << <<-HTML
       <span class="attachment_delete" id="#{delete_attachment_link}">(<a href="#delete">Delete</a>)</span>

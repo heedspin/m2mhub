@@ -2,8 +2,15 @@ authorization do
   
   role :guest do
   end
+  
+  role :doogle_admin do
+    # TODO: factor this out or make configurable.
+    has_permission_on :doogle_displays, :to => [:manage, :next_model_number]
+    has_permission_on :doogle_display_logs, :to => :read
+  end
 
   role :shipping do
+    includes :doogle_admin
     has_permission_on [:users, :passwords], :to => [:show,:update,:destroy] do
       if_attribute :id => is {user.id}
     end
@@ -49,9 +56,6 @@ authorization do
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
     has_permission_on :invoiced_sales_reports, :to => :manage
     has_permission_on :pro_forma_sales_reports, :to => :manage
-    # TODO: factor this out or make configurable.
-    has_permission_on :doogle_displays, :to => [:manage, :next_model_number]
-    has_permission_on :doogle_display_logs, :to => :read
   end
   
   role :production do
