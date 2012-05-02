@@ -48,8 +48,7 @@ class UsersController < ApplicationController
   # PUT /users/1
   def update
     @user = current_object
-
-    if @user.save
+    if @user.update_attributes(params[:user])
       flash[:notice] = 'User was successfully updated.'
       redirect_to(@user)
     else
