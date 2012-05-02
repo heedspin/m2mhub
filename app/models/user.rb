@@ -20,7 +20,7 @@ class User < ApplicationModel
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]
   def role_symbols
-    [(self.user_role || UserRole.default).name.downcase.to_sym]
+    [(self.user_role || UserRole.default).authorization_key]
   end
 
   def full_name
