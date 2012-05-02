@@ -47,7 +47,7 @@
 					<% end %>
 					<% if permitted_to?(:read, :sales_order_items) %>
 					<li class="<%= menu_selected(:controller => [:sales_order_items, :sales_orders, :invoiced_sales_reports, :pro_forma_sales_reports]) %>">
-						<%= link_to 'Sales Orders', sales_order_items_url %>
+						<%= link_to 'Sales', sales_order_items_url %>
 					</li>
 					<% end %>
 					<% if permitted_to?(:read, :customers) %>
@@ -73,6 +73,11 @@
 					<% if permitted_to?(:read, :production_production_dashboard) %>
 					<li class="<%= menu_selected(:controller => [:production_dashboard, :work_center_load_reports]) %>">
 						<%= link_to 'Production', production_url %>
+					</li>
+					<% end %>
+					<% if (CompanyConfig.company_key == 'lxd') and permitted_to?(:read, :doogle_displays) %>
+					<li class="<%= menu_selected(:controller => [:displays, :display_logs]) %>">
+						<%= link_to 'Doogle', doogle_displays_url %>
 					</li>
 					<% end %>
 				</ul>        
