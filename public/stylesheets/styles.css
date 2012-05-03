@@ -455,6 +455,11 @@ form.formtastic fieldset.buttons li.commit input:active {
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#254077', endColorstr='#3F7AC9');
 }
 
+fieldset.inputs li.boolean label, ol.choices-group li.choice label {
+	display: inline;
+/*	max-width: 20%;*/
+}
+
 	
 /* system messages
 ---------------------------------------------*/
