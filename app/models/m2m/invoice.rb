@@ -22,8 +22,10 @@ class M2m::Invoice < M2m::Base
     }
   }
   scope :invoice_dates, lambda { |start_date, end_date|
+    start_date = Date.parse(start_date) if start_date.is_a?(String)
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
     {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', Date.parse(start_date), Date.parse(end_date) ]
+      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
     }
   }
   # TODO: Replace 'V' with something intelligent?
