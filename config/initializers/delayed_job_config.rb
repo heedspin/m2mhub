@@ -16,5 +16,5 @@ end
 # We're in a fine mess now. This needs to be in LXD, but not SMT.  
 begin
   require 'doogle/web_synchronizer'
-rescue
+rescue LoadError
 end
