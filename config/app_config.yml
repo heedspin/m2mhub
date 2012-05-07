@@ -36,6 +36,8 @@ _default_company_config: &_default_company_config
   default_country_name: United States
   use_item_revisions: true
   enable_inventory_report: true
+  enable_labor_reports: true
+  labor_minutes_grace: 4
   inventory_report_filter_groups: noninv, tool
   inventory_report_filter_part_numbers: samples
   use_boms: true
@@ -75,6 +77,7 @@ _shared_company_config: &_shared_company_config
           - CIF:KOREA
           - BEIJING
     use_item_revisions: false
+    enable_labor_reports: false
       
   smt:
     google_analytics_key:

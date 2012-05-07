@@ -52,19 +52,21 @@ class M2m::LaborDetail < M2m::Base
   belongs_to :work_center, :class_name => 'M2m::WorkCenter', :foreign_key => :fpro_id, :primary_key => :fcpro_id
   belongs_to :employee, :class_name => 'M2m::Employee', :foreign_key => :fempno, :primary_key => :fempno
   
+  alias_attribute :employee_number, :fempno
   alias_attribute :date, :fdate
-  alias_attribute :time, :fedatetime
+  alias_attribute :start_time, :fsdatetime
+  alias_attribute :end_time, :fedatetime
   
   scope :between, lambda { |start_date, end_date|
     {
-      :conditions => ['ladetail.fdate >= ? and ladetail.fdate < ?', start_date, end_date]
+      :conditions => ['ladetail.fdate >= ? and ladetail.fdate < ?', start_date, end_date.advance(:days => 1)]
     }
   }
   scope :department, lambda { |department|
-    department_number = department.is_a?(M2m::Department) ? department.department_number : department
+    department = department.is_a?(M2m::Department) ? department : M2m::Department.find(department)
     {
       :joins => :employee,
-      :conditions => { :prempl => { :fdept => department_number } }
+      :conditions => { :prempl => { :fdept => department.department_number } }
     }
   }
   scope :by_date, :order => :fdate

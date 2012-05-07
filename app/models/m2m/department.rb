@@ -19,6 +19,6 @@ class M2m::Department < M2m::Base
   alias_attribute :department_number, :fdeptno
   
   def name
-    self.fdeptdesc.titleize
+    self.fdeptdesc.strip.titleize
   end
 end

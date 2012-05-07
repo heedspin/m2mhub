@@ -38,7 +38,7 @@ class M2m::Employee < M2m::Base
   end
   
   def last_name
-    self.ffname.titleize
+    self.fname.titleize
   end
   
   def name
