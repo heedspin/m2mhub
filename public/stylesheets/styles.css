@@ -1078,3 +1078,8 @@ form.doogle textarea#display_comments { width:405px; height:4.5em; }
 	margin: 10px 0 10px 0;
 	font-size: 1.5em;
 }
+
+span.late {
+	color: #f00;
+	font-weight: bold;
+}

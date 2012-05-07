@@ -1,0 +1,66 @@
+<%= render 'production/submenu' %>
+
+<h2>Labor Report</h2>
+
+<%= semantic_form_for @report, :as => :labor_report, :url => labor_reports_path, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+				  <%= f.input :start_date, :as => :calendar, :label => 'Start' %>
+				  <%= f.input :end_date, :as => :calendar, :label => 'End' %>
+				<% end %>
+			</td>
+			<td>
+				<%= link_to image_tag('/images/arrow_left.png'), @previous_week_url %>
+				<%= link_to image_tag('/images/arrow_right.png'), @next_week_url %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+			  	<%= f.input :department_id, :as => :select, :collection => M2m::Department.all %>
+				<% end %>
+				<%= f.buttons do %>
+				  <%= f.commit_button 'Run' %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<% end %>
+
+<table class="data">
+	<% @report.date_reports.each do |date_report| %>
+	<thead>
+		<tr>
+			<th><%= date_report.date.to_s(:with_day_of_week) %></th>
+			<th>Start Time</th>
+			<th>End Time</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% date_report.employee_reports.each do |employee_report| %>
+		<tr>
+			<td>
+				<%= employee_report.employee.name %>
+			</td>
+			<td>
+				<span class="<%= employee_report.late? ? 'late' : '' %>">
+					<%= employee_report.start_time.to_s(:time) %>
+				</span>
+			</td>
+			<td>
+				<%= employee_report.end_time.to_s(:time) %>
+			</td>
+			<td>
+				<%= employee_report.total_time.strftime('%R') %>
+			</td>
+		</tr>
+	<% end %>
+	</tbody>
+	<% end %>
+</table>
+		

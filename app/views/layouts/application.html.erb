@@ -71,7 +71,7 @@
 					</li>
 					<% end %>
 					<% if permitted_to?(:read, :production_production_dashboard) %>
-					<li class="<%= menu_selected(:controller => [:production_dashboard, :work_center_load_reports]) %>">
+					<li class="<%= menu_selected(:controller => [:production_dashboard, :work_center_load_reports, :labor_reports]) %>">
 						<%= link_to 'Production', production_url %>
 					</li>
 					<% end %>

@@ -15,5 +15,10 @@
 			<%= link_to 'Inventory Reports', inventory_reports_url %>
 		</li>
 		<% end %>
+		<% if CompanyConfig.enable_labor_reports? and permitted_to?(:read, :production_labor_reports) %>
+		<li class="<%= menu_selected(:controller => :labor_reports) %>">
+			<%= link_to 'Labor', labor_reports_url %>
+		</li>
+		<% end %>
 	</ul>
 </div>
