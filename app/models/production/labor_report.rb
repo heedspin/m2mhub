@@ -27,8 +27,11 @@ class Production::LaborReport
     def late?
       (self.minutes_after_hour > CompanyConfig.labor_minutes_grace) && (self.minutes_after_hour < 30)
     end
+    def employee_number
+      @employee_number ||= self.labor_details.first.employee_number
+    end
     def employee_name
-      self.employee.try(:name) || self.labor_details.first.employee_number
+      @employee_name ||= (self.employee.try(:name) || self.employee_number)
     end
   end
 
@@ -65,7 +68,7 @@ class Production::LaborReport
     s = M2m::LaborDetail.between(@start_date, @end_date).by_date.scoped(:include => :employee)
     s = s.department(@department_id) if @department_id.present?
     s.each do |labor_detail|
-      next unless labor_detail.employee.present?
+      # next unless labor_detail.employee.present?
       (@days[labor_detail.date] ||= DateReport.new(labor_detail.date)).add_labor_detail(labor_detail)
     end
   end
