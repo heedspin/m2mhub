@@ -25,7 +25,7 @@ class Production::LaborReport
       @minutes_after_hour ||= (self.start_time - self.start_time.change(:min => 0, :sec => 0, :usec => 0)) / 60
     end
     def late?
-      (self.minutes_after_hour > CompanyConfig.labor_minutes_grace) && (self.minutes_after_hour < 30)
+      (self.minutes_after_hour > CompanyConfig.labor_minutes_grace) && (self.minutes_after_hour < 25)
     end
     def employee_number
       @employee_number ||= self.labor_details.first.employee_number
