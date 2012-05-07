@@ -1,3 +1,6 @@
+# Cronhint:
+# 00 2 * * * /var/www/lxd_m2mhub/current/script/runner.sh 'LighthouseWakeup.new.run_in_background!'
+
 require 'logger_utils'
 class LighthouseWakeup
   include LoggerUtils
