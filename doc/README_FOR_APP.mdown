@@ -3,7 +3,7 @@
 # m h  dom mon dow   command
 00 1 * * 2-6 /var/www/lxd_m2mhub/current/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
 05 1 * * 2-6 /var/www/smt_m2mhub/current/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
-
+00 2 * * * /var/www/lxd_m2mhub/current/script/runner.sh 'LighthouseWakeup.new.run_in_background!'
 ================================
 
 Get CSV of all customers in past 12 months.  This format is for SurveyMonkey.
