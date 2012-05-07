@@ -45,8 +45,12 @@
 	<% date_report.employee_reports.each do |employee_report| %>
 		<tr>
 			<td>
+				<% if employee_report.employee.nil? %>
+				<span class="late"><%= employee_report.employee_number %></span>
+				<% else %>
 				<%= employee_report.employee_name %> &mdash;
 				<%= employee_report.employee_number %>
+				<% end %>
 			</td>
 			<td>
 				<span class="<%= employee_report.late? ? 'late' : '' %>">
