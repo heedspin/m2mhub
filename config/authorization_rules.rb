@@ -75,7 +75,6 @@ authorization do
     includes :manager
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
-    has_permission_on :content_modules, :to => :manage
     has_permission_on :user_activities, :to => :manage
     has_permission_on :production_inventory_reports, :to => :manage
   end
