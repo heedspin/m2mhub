@@ -12,7 +12,7 @@ class LighthouseWakeup
           break if comment.body.include?('Wake Up Call!')
           if (comment.body =~ /wakeup: ?([\d\-\/]+)/i) and (wakeup_date = Date.parse($1))
             log "Project #{project.name}, Ticket #{ticket.title} wakeup call at #{wakeup_date}"
-            if Date.current > wakeup_date
+            if Date.current >= wakeup_date
               ticket.state = 'open'
               ticket.body = 'Wake Up Call!'
               ticket.save
