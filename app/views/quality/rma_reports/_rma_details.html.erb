@@ -19,7 +19,7 @@
 			<td>
 				<%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
 				<% if rma.lighthouse_ticket_reference %>
-				<%= link_to image_tag('lighthouse.png', :width => 16), rma_url(rma.rma_number) %>
+				<%= link_to image_tag('m2mhub/lighthouse.png', :width => 16), rma_url(rma.rma_number) %>
 				<% end %>
 			</td>
 			<td><%= rma.status.try(:name) %></td>
