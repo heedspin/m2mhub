@@ -1,6 +1,6 @@
 <%= render 'sales_orders/submenu' %>
 
-<h2><%= CompanyConfig.short_name %> Invoiced Sales</h2>
+<h2><%= AppConfig.short_name %> Invoiced Sales</h2>
 <p>This is a slow report.  Be patient.</p>
 
 <%= semantic_form_for @report, :as => 'report', :url => invoiced_sales_reports_url(:format => 'xls') do |f| %>

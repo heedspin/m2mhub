@@ -20,7 +20,7 @@ class InvoicedSalesReport
   
   def filename
     # Time.now.strftime("%y%m%d") + '_' + 
-    customer_name = self.customer.is_a?(M2m::Customer) ? self.customer.name : CompanyConfig.short_name
+    customer_name = self.customer.is_a?(M2m::Customer) ? self.customer.name : AppConfig.short_name
     name = "#{self.start_date.year} #{customer_name} Invoiced Sales"
     name.gsub(' ', '_').gsub(',','')
   end
@@ -44,7 +44,7 @@ class InvoicedSalesReport
       @fields.push Field.new('Invoice Date') { |invoice_item| invoice_item.invoice.date }
       @fields.push Field.new('Invoice Number') { |invoice_item| invoice_item.invoice_number }
       @fields.push Field.new('Sales Order Number') { |invoice_item| invoice_item.sales_order_number }
-      @fields.push Field.new("#{CompanyConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
+      @fields.push Field.new("#{AppConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
       @fields.push Field.new('Part Description') { |invoice_item| invoice_item.item.try(:description) }
       @fields.push Field.new('Customer Part Number') { |invoice_item| clean_value invoice_item.customer_part_number }
       @fields.push Field.new('Quantity') { |invoice_item| invoice_item.ship_quantity }

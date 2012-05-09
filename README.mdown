@@ -17,9 +17,9 @@ The hardest part about any of this is just connecting your Rails app to a SQLSer
 
 Our M2M databases run in our building. I believe this is a typical setup for M2M. So I setup a small Ubuntu server behind our firewall and give it a public IP address. Though I'm a big believer in the cloud, I don't see another way to do this. I feel ok opening up HTTPS access to my Ubuntu box. I would be much more nervous opening up access to our M2M database to some web app in the cloud.  
 
-## Configuration with CompanyConfig
+## Configuration with AppConfig
 
-There are a lot of company-specific configuration needs in an ERP system. Everything from company name to how you want quantities and dates formatted. My abstraction for this is the CompanyConfig singleton. It's basically just a little method_missing wrapper around AppConfig which is an OpenStruct on top of yaml files.  app_config.yml is the starting point of all configurations. It contains configurations for all companies.
+There are a lot of company-specific configuration needs in an ERP system. Everything from company name to how you want quantities and dates formatted. My abstraction for this is the AppConfig singleton. It's basically just a little method_missing wrapper around AppConfig which is an OpenStruct on top of yaml files.  app_config.yml is the starting point of all configurations. It contains configurations for all companies.
 
 As I said, m2mhub is not a turn-key application. You'll notice that my two companies are referenced in the app_config.yml
 

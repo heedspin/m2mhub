@@ -1,5 +1,5 @@
-# Override values from m2mhub_config.yml or add application-specific configs.
-app_config:
+# This file should not be checked in.
+local_config:
   shared: &shared
   development:
     <<: *shared

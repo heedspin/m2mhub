@@ -3,7 +3,7 @@ class BomChildrenCache
     @cache = {}
   end
   def for_releases(releases)
-    if CompanyConfig.use_boms
+    if AppConfig.use_boms
       result = {}
       # hits = []
       # misses = []

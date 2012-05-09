@@ -19,9 +19,9 @@ module LayoutHelper
     txt = content_for(:meta_title)
     txt = content_for(:title) unless txt.present?
     txt = if txt.present?
-      "#{txt} | #{CompanyConfig.long_name}"
+      "#{txt} | #{AppConfig.long_name}"
     else
-      CompanyConfig.long_name
+      AppConfig.long_name
     end
     strip_tags(txt).html_safe
   end

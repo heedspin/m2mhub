@@ -93,7 +93,7 @@ class M2m::SalesOrderRelease < M2m::Base
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
   scope( :shipped_late,
          :joins => :sales_order,
-         :conditions => ['(DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?) AND (sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_lead_time, CompanyConfig.otd_grace_period_days] )
+         :conditions => ['(DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?) AND (sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', AppConfig.otd_lead_time, AppConfig.otd_grace_period_days] )
   scope :due, lambda { |start_date, end_date|
     {
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]

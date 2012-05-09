@@ -5,7 +5,7 @@ class Mailchimper
   include LoggerUtils
   
   def initialize(args={})
-    @mailchimp_list_id = (args[:list_id] || CompanyConfig.mailchimp_list_id)
+    @mailchimp_list_id = (args[:list_id] || AppConfig.mailchimp_list_id)
   end
 
   def subscribe(args)
@@ -17,7 +17,7 @@ class Mailchimper
     email = args[:email]
     enabled = args[:enabled]
     enabled = Rails.env.production? if enabled.nil?
-    if email.blank? or !enabled or !CompanyConfig.mailchimp_api_key.present?
+    if email.blank? or !enabled or !AppConfig.mailchimp_api_key.present?
       false
     else
       begin
@@ -35,7 +35,7 @@ class Mailchimper
   end
   
   def mailchimp
-    @mailchimp ||= Hominid::API.new(CompanyConfig.mailchimp_api_key)
+    @mailchimp ||= Hominid::API.new(AppConfig.mailchimp_api_key)
   end
   
   def status_for(email)

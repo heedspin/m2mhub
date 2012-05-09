@@ -24,10 +24,10 @@
 			<% end %>
 			<div class="banner">
 				<div class="logo">
-					<%= link_to image_tag("m2mhub/logo.gif", :alt => CompanyConfig.long_name, :title => 'Home'), root_url %>
+					<%= link_to image_tag("m2mhub/logo.gif", :alt => AppConfig.long_name, :title => 'Home'), root_url %>
 					<%= image_tag 'm2mhub/m2m.gif', :alt => 'm2m', :title => 'm2m rocks' %>
 				</div> 
-				<div class="tagline"><%= CompanyConfig.company_key.upcase %>'s Made2Manage Hub</div>				
+				<div class="tagline"><%= AppConfig.company_key.upcase %>'s Made2Manage Hub</div>				
 			</div><!-- banner -->
 			<div class="clear"></div>  
 			<div class="nav">    
@@ -75,7 +75,7 @@
 						<%= link_to 'Production', production_url %>
 					</li>
 					<% end %>
-					<% if (CompanyConfig.company_key == 'lxd') and permitted_to?(:read, :doogle_displays) %>
+					<% if (AppConfig.company_key == 'lxd') and permitted_to?(:read, :doogle_displays) %>
 					<li class="<%= menu_selected(:controller => [:displays, :display_logs]) %>">
 						<%= link_to 'Doogle', doogle_displays_url %>
 					</li>
@@ -99,9 +99,9 @@
 		<% end %>
 		<div id="footer">
 			<p>
-				&#169; <%= Date.current.year %> <%= raw CompanyConfig.long_name %> <span>&#149;</span> 7300 ACC Boulevard  
+				&#169; <%= Date.current.year %> <%= raw AppConfig.long_name %> <span>&#149;</span> 7300 ACC Boulevard  
 				<span>&#149;</span> Raleigh, North Carolina 27617 <span>&#149;</span>
-				<%= link_to CompanyConfig.website, "http://#{CompanyConfig.website}" %>
+				<%= link_to AppConfig.website, "http://#{AppConfig.website}" %>
 			</p>
 		</div><!-- footer -->
 	</div><!-- end wrapper -->
@@ -109,7 +109,7 @@
 <% if Rails.env.production? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', <%= CompanyConfig.google_analytics_key %>]);
+  _gaq.push(['_setAccount', <%= AppConfig.google_analytics_key %>]);
   _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

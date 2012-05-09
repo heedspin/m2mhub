@@ -35,7 +35,7 @@ module FormatHelper
 
   def company_sprintf(num, key)
     return num unless key
-    company_format = CompanyConfig.get(key) || '%.1f'
+    company_format = AppConfig.get(key) || '%.1f'
     if company_format.starts_with?('trim_decimals')
       company_format = num.to_i == num ? '%0.f' : (company_format.split(',')[1] || '%.1f')
     end

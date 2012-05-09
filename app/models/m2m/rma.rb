@@ -50,10 +50,10 @@ class M2m::Rma < M2m::Base
   end
 
   def company_rma_number
-    if CompanyConfig.rma_company_rma_number_field == 'fcrmano'
+    if AppConfig.rma_company_rma_number_field == 'fcrmano'
       self.rma_number
     else
-      self.send(CompanyConfig.rma_company_rma_number_field)
+      self.send(AppConfig.rma_company_rma_number_field)
     end
   end  
 
@@ -65,10 +65,10 @@ class M2m::Rma < M2m::Base
   end
 
   def company_codes
-    self.send(CompanyConfig.rma_custom_codes_field)
+    self.send(AppConfig.rma_custom_codes_field)
   end
   def company_codes=(val)
-    self.send(CompanyConfig.rma_custom_codes_field + '=', val)
+    self.send(AppConfig.rma_custom_codes_field + '=', val)
   end
 
   def severity
@@ -192,7 +192,7 @@ class M2m::Rma < M2m::Base
     def ticket
       if @ticket.nil?
         begin
-          if @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => CompanyConfig.lighthouse_rma_project_id })
+          if @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => AppConfig.lighthouse_rma_project_id })
             # Convert to time objects.
             @ticket.created_at = Time.parse(@ticket.created_at)
             @ticket.versions.each do |v|

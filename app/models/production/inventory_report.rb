@@ -40,8 +40,8 @@ class Production::InventoryReport < ActiveRecord::Base
 
   def run
     report_start_time = Time.now.to_i
-    if CompanyConfig.cost_method
-      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(CompanyConfig.cost_method)
+    if AppConfig.cost_method
+      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(AppConfig.cost_method)
     end
     self.inventory_report_cost_method ||= Production::InventoryReportCostMethod.standard_cost
     self.save if self.new_record?
@@ -49,8 +49,8 @@ class Production::InventoryReport < ActiveRecord::Base
     no_customer = self.customer_reports.build(:customer_name => 'No Customer')
     @inventory_customers = { nil => no_customer }
     @inventory_items = []
-    groups_to_filter = CompanyConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
-    part_numbers_to_filter = CompanyConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
+    groups_to_filter = AppConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
+    part_numbers_to_filter = AppConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
     @bom_children = BomChildrenCache.new
     load_past_releases
     load_next_sales

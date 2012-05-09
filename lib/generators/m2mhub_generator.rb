@@ -20,13 +20,29 @@ class M2mhubGenerator < Rails::Generators::Base
     end
   end
   
-  def copy_asset_directory(asset_directory)
+  def copy_config
+    %w(app_config.yml local_config.yml authorization_rules.rb routes.rb).each do |file|
+      source = File.join(M2mhubGenerator.source_root, 'config', file)
+      destination = source.sub(M2mhubGenerator.source_root, Rails.root)
+      unless File.exists?(destination)
+        copy_file source, destination
+      end
+    end
+    %w(main_config.yml m2mhub_config.yml).each do |file|
+      source = File.join(M2mhubGenerator.source_root, 'config', file)
+      destination = source.sub(M2mhubGenerator.source_root, Rails.root)
+      copy_file source, destination
+    end
+  end
+
+  private
+
+    def copy_asset_directory(asset_directory)
       Dir.glob(File.join(asset_directory, '*')).each do |source|
+        destination = source.sub(M2mhubGenerator.source_root, Rails.root)
         if File.directory?(source)
           copy_asset_directory(source)
         else
-          destination = source.clone
-          destination.sub(File.join(M2mhubGenerator.source_root, 'public'), File.join(Rails.root, 'public'))
           unless File.exists?(destination)
             puts "    \e[1m\e[34mcopying\e[0m  #{source} to #{destination}"
             copy_file source, destination
@@ -34,5 +50,4 @@ class M2mhubGenerator < Rails::Generators::Base
         end
       end
     end
-  end
 end

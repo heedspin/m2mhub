@@ -24,8 +24,8 @@ class SalesBacklogReportsController < ApplicationController
         correct_group && correct_status
       end
       if params[:commit] == 'Print'
-        @title = "#{CompanyConfig.short_name} Backlog #{@search.due_date.to_s(:sales_date)}"
-        @filename = [CompanyConfig.short_name.downcase, 'backlog', @search.due_date.strftime("%m_%d_%y")].join('_') + '.pdf'
+        @title = "#{AppConfig.short_name} Backlog #{@search.due_date.to_s(:sales_date)}"
+        @filename = [AppConfig.short_name.downcase, 'backlog', @search.due_date.strftime("%m_%d_%y")].join('_') + '.pdf'
         render_pdf :action => 'show.pdf.prince', :filename => @filename, :layout => false
       end
     end

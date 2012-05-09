@@ -25,7 +25,7 @@ class M2m::Customer < M2m::Base
   after_initialize :set_defaults
   def set_defaults
     begin
-      self.work_country_name = CompanyConfig.default_country_name if self.work_country_name.blank?
+      self.work_country_name = AppConfig.default_country_name if self.work_country_name.blank?
       # TODO: do something meaningful with ftype.
       self.ftype = 'C' if self.ftype.blank?
       # fcshipto => '0001', :fcsoldto => '0001'

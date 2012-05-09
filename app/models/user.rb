@@ -66,7 +66,7 @@ class User < ApplicationModel
   end
 
   def self.robo_mailer
-    find_by_email(CompanyConfig.email_address)
+    find_by_email(AppConfig.email_address)
   end
 
   def self.new_from_email(email)

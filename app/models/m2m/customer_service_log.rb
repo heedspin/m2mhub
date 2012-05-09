@@ -62,7 +62,7 @@ class M2m::CustomerServiceLog < M2m::Base
     if @lighthouse_ticket.nil?
       if self.user_defined2.present? and (self.user_defined2 =~ /(lighthouse|lh|ticket)\W*(\d+)/i)
         ticket_id = $2
-        @lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => CompanyConfig.lighthouse_customer_service_project_id })
+        @lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => AppConfig.lighthouse_customer_service_project_id })
       end
     end
     @lighthouse_ticket

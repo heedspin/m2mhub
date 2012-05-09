@@ -1,7 +1,7 @@
 <h1>
 	<%= M2m::Item.model_name.human %>: 
 	<%= @item.part_number %> 
-	<%= "Rev #{@item.revision}" if CompanyConfig.use_item_revisions? and @item.revision.present? %>
+	<%= "Rev #{@item.revision}" if AppConfig.use_item_revisions? and @item.revision.present? %>
 </h1>
 
 <div class="submenu">

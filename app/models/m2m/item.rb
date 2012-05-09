@@ -232,7 +232,7 @@ class M2m::Item < M2m::Base
     call_item_quantity_proc(:NonNet)
   end
   def total_cost
-    self.send CompanyConfig.cost_method
+    self.send AppConfig.cost_method
   end
   
   # def self.check
@@ -349,7 +349,7 @@ class M2m::Item < M2m::Base
   # end
   # 
   # def bom_parents
-  #   return nil unless CompanyConfig.inventory_report_use_boms
+  #   return nil unless AppConfig.inventory_report_use_boms
   #   if @bom_parents.nil?
   #     unless parents = self.class.parents_cache[self.id]
   #       parents = M2m::BomItem.with_child_item(self).map(&:parent_item).compact

@@ -1,6 +1,6 @@
 require 'active_hash_methods'
 class FobGroup < ActiveHash::Base
-  self.data = CompanyConfig.fob_groups
+  self.data = AppConfig.fob_groups
   include ActiveHashMethods
   
   def self.find_by_fob(fob)
