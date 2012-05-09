@@ -1,4 +1,4 @@
-class UserStatusToUserState < ActiveRecord::Migration
+class M2mhubUserStatusToUserState < ActiveRecord::Migration
   def up
     rename_column :users, :user_status_id, :user_state_id
   end

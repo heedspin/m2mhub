@@ -1,4 +1,4 @@
-class CreateUserActivities < ActiveRecord::Migration
+class M2mhubCreateUserActivities < ActiveRecord::Migration
   def self.up
     create_table :user_activities, :force => true do |t|
       t.references :user

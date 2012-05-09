@@ -1,4 +1,4 @@
-class AddInventoryReportNextDates < ActiveRecord::Migration
+class M2mhubAddInventoryReportNextDates < ActiveRecord::Migration
   def up
     add_column :inventory_report_items, :next_ship_date, :datetime
     add_column :inventory_report_items, :next_receipt_date, :datetime

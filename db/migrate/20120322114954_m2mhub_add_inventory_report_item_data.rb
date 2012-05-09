@@ -1,4 +1,4 @@
-class AddInventoryReportItemData < ActiveRecord::Migration
+class M2mhubAddInventoryReportItemData < ActiveRecord::Migration
   def up
     add_column :inventory_report_items, :item_group_code_key, :string
     rename_column :inventory_report_items, :last_receipt_date, :last_incoming_date

@@ -1,4 +1,4 @@
-class CreateUsers < ActiveRecord::Migration
+class M2mhubCreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users, :force => true do |t|
       t.string :first_name

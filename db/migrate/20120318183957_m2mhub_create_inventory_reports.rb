@@ -1,4 +1,4 @@
-class CreateInventoryReports < ActiveRecord::Migration
+class M2mhubCreateInventoryReports < ActiveRecord::Migration
   def up
     create_table :inventory_reports, :force => true do |t|
       t.references :delayed_job

@@ -1,4 +1,4 @@
-class AddInventoryReportMovements < ActiveRecord::Migration
+class M2mhubAddInventoryReportMovements < ActiveRecord::Migration
   def up
     add_column :inventory_reports, :movement_data, :text
     add_column :inventory_report_customers, :movement_data, :text
