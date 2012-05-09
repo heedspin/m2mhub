@@ -26,8 +26,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'daemons', '1.1.8'
   s.add_dependency 'formtastic', '2.0.2'
   s.add_dependency 'declarative_authorization', '0.5.5'
-  s.add_dependency 'aws-sdk', '1.3.4'
-  s.add_dependency 'paperclip', '2.7.0'
   s.add_dependency 'will_paginate', '~> 3.0.3'
   s.add_dependency 'delayed_job_active_record', '~> 0.3.2'
   s.add_dependency "airbrake", '3.0.9'
@@ -37,5 +35,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable', '2.2.6'
   s.add_dependency 'amatch', '0.2.10'
   s.add_dependency 'hominid', '3.0.4'
-  s.add_dependency 'acts_as_list', '0.1.6'
 end

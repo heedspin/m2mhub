@@ -30,3 +30,10 @@ m2mhub_config: &m2mhub_config
   cost_method: standard_cost
   logo_image: m2mhub/github_octocat.jpg
   in_progress_image: m2mhub/inprogress.gif
+  job_search_image: m2mhub/search.png
+  m2m_logo_image: m2mhub/m2m.gif
+  arrow_collapse_image: m2mhub/arrow_collapse.gif
+  arrow_expand_image: m2mhub/arrow_expand.gif
+  arrow_left_image: m2mhub/arrow_left.png
+  arrow_right_image: m2mhub/arrow_right.png
+  lighthouse_image: m2mhub/lighthouse.png

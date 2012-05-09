@@ -12,7 +12,14 @@
 <% if permitted_to?(:delete) %>
 <% links.push link_to "Delete From Database", delete_user_url(@user), :confirm => 'Are you sure?' %>
 <% end %>
-<%= raw links.join(' | ')%>
+
+<div class="submenu">
+	<ul>
+		<% links.each do |link| %>
+		<li><%= raw link %></li>
+		<% end %>
+	</ul>
+</div>
 
 <table class="data" border="0" cellspacing="0" cellpadding="0">
   <thead>

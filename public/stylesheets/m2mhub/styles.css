@@ -615,6 +615,7 @@ form.formtastic fieldset > ol > li.boolean label {
 	float: right;
 	margin: 0;
 	clear: none;
+	font-size: 1.3em;
 }
 
 /* General Tables */

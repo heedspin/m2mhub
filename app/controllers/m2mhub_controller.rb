@@ -13,8 +13,6 @@ class M2mhubController < ApplicationController
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  helper_method :current_user_session, :current_user
-  before_filter :set_current_user
   before_filter :require_login
   
   protected
@@ -54,18 +52,6 @@ class M2mhubController < ApplicationController
     def redirect_back_or_default(default)
       redirect_to params[:return_to] || session[:return_to] || default
       session[:return_to] = nil
-    end
-
-    def current_user_session
-      @current_user_session ||= UserSession.find
-    end
-
-    def current_user
-      @current_user ||= current_user_session.try(:record)
-    end
-
-    def set_current_user
-      Authorization.current_user = current_user
     end
 
     def require_login
