@@ -1,4 +1,4 @@
-class Quality::LighthouseTicketsController < ApplicationController
+class Quality::LighthouseTicketsController < M2mhubController
   def create
     @rma = parent_object
     @lighthouse_ticket = Lighthouse::Ticket.from_rma(@rma, current_user)

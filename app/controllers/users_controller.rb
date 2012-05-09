@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < M2mhubController
   filter_access_to_defaults
   # before_filter :require_login, :only => [:index, :show]
 

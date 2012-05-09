@@ -1,4 +1,4 @@
-class Production::InventoryReportsController < ApplicationController
+class Production::InventoryReportsController < M2mhubController
   filter_access_to_defaults
 
   def new

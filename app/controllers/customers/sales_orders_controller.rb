@@ -1,4 +1,4 @@
-class Customers::SalesOrdersController < ApplicationController
+class Customers::SalesOrdersController < M2mhubController
   filter_access_to_defaults
 
   def index

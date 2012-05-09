@@ -1,4 +1,4 @@
-M2mhub::Application.routes.draw do
+Rails.application.routes.draw do
   resource :user_session
   root :to => 'home#index'
   match 'login' => 'user_sessions#new', :as => :login

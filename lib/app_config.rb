@@ -38,7 +38,7 @@ class AppConfigClass
         return config[key]
       end
     end
-    if (config = @yaml_config['m2m_config']) and config.member?(key)
+    if (config = @yaml_config['m2mhub_config']) and config.member?(key)
       return config[key]
     end
     nil

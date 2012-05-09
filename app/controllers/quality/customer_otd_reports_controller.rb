@@ -1,4 +1,4 @@
-class Quality::CustomerOtdReportsController < ApplicationController
+class Quality::CustomerOtdReportsController < M2mhubController
   filter_access_to_defaults
 
   def new

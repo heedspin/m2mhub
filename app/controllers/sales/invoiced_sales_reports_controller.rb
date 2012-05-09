@@ -1,4 +1,4 @@
-class Sales::InvoicedSalesReportsController < ApplicationController
+class Sales::InvoicedSalesReportsController < M2mhubController
   filter_access_to_defaults :context => :invoiced_sales_reports
   # filter_access_to :create, :new, { :load_method => :build_object, :attribute_check => false }
 

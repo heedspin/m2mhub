@@ -1,4 +1,4 @@
-class Production::WorkCenterLoadReportsController < ApplicationController
+class Production::WorkCenterLoadReportsController < M2mhubController
   filter_access_to_defaults
 
   def new

@@ -1,4 +1,4 @@
-class PasswordResetsController < ApplicationController
+class PasswordResetsController < M2mhubController
   skip_before_filter :require_login
   
   before_filter :require_not_logged_in

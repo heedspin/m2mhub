@@ -8,5 +8,5 @@ local_config: &local_config
 <% end %>
 <% app_config = File.join(Rails.root, 'config/app_config.yml') %>
 <%= File.open(app_config).read if File.exists?(app_config) %>
-<% m2m_config = File.join(Rails.root, 'config/m2mhub_config.yml') %>
-<%= File.open(m2m_config).read if File.exists?(m2m_config) %>
+<% m2mhub_config = File.join(Rails.root, 'config/m2mhub_config.yml') %>
+<%= File.open(m2mhub_config).read if File.exists?(m2mhub_config) %>

@@ -1,4 +1,4 @@
-class SwitchController < ApplicationController
+class SwitchController < M2mhubController
   filter_access_to :switch, :context => :users
   def switch
     if (thing = params[:thing]).present?

@@ -28,3 +28,5 @@ m2mhub_config: &m2mhub_config
   inventory_report_filter_part_numbers: samples
   use_boms: true
   cost_method: standard_cost
+  logo_image: m2mhub/github_octocat.jpg
+  in_progress_image: m2mhub/inprogress.gif

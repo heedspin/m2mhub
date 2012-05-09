@@ -1,4 +1,4 @@
-class HomeController < ApplicationController
+class HomeController < M2mhubController
   def index
     yesterday = Date.current.advance(:days => -1)
     if permitted_to?(:manage, :user_activities)

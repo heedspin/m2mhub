@@ -9,8 +9,10 @@ class M2mhubGenerator < Rails::Generators::Base
   def copy_migration_files
     Dir.glob(File.join(M2mhubGenerator.source_root, 'db/migrate/*')).each do |source|
       destination = File.join(Rails.root, 'db/migrate', File.basename(source))
-      puts "    \e[1m\e[34mcopying\e[0m  #{source} to #{destination}"
-      copy_file source, destination
+      unless File.exists?(destination)
+        puts "    \e[1m\e[34mcopying\e[0m  #{source} to #{destination}"
+        copy_file source, destination
+      end
     end
   end
 
@@ -43,10 +45,8 @@ class M2mhubGenerator < Rails::Generators::Base
         if File.directory?(source)
           copy_asset_directory(source)
         else
-          unless File.exists?(destination)
-            puts "    \e[1m\e[34mcopying\e[0m  #{source} to #{destination}"
-            copy_file source, destination
-          end
+          puts "    \e[1m\e[34mcopying\e[0m  #{source} to #{destination}"
+          copy_file source, destination
         end
       end
     end

@@ -1,4 +1,4 @@
-class Customers::InvoicedSalesReportsController < ApplicationController
+class Customers::InvoicedSalesReportsController < M2mhubController
   filter_access_to_defaults
   
   def new

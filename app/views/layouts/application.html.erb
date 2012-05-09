@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%= stylesheet_link_tag 'formtastic', 'styles', 'blitzer/jquery-ui-1.8.6.custom' %>
+  <%= stylesheet_link_tag 'm2mhub/formtastic', 'm2mhub/styles', 'm2mhub/blitzer/jquery-ui-1.8.6.custom' %>
 	<%= yield :stylesheets %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
@@ -24,10 +24,10 @@
 			<% end %>
 			<div class="banner">
 				<div class="logo">
-					<%= link_to image_tag("m2mhub/logo.gif", :alt => AppConfig.long_name, :title => 'Home'), root_url %>
+					<%= link_to image_tag(AppConfig.logo_image, :alt => AppConfig.long_name, :title => 'Home'), root_url %>
 					<%= image_tag 'm2mhub/m2m.gif', :alt => 'm2m', :title => 'm2m rocks' %>
 				</div> 
-				<div class="tagline"><%= AppConfig.company_key.upcase %>'s Made2Manage Hub</div>				
+				<div class="tagline"><%= AppConfig.short_name.upcase %>'s Made2Manage Hub</div>				
 			</div><!-- banner -->
 			<div class="clear"></div>  
 			<div class="nav">    

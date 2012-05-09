@@ -6,7 +6,7 @@ $(document).ready(function(){
     yearRange: '-10:+4',
     dateFormat: 'mm/dd/yy',
     showOn: 'button',
-    buttonImage: '/images/calendar.png',
+    buttonImage: '/images/m2mhub/calendar.png',
     buttonImageOnly: true,
 		inline: true
   });
