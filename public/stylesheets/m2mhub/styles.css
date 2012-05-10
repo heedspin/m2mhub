@@ -35,7 +35,7 @@ abbr, acronym {
 /* common elements
 ---------------------------------------------*/
 body {	
-	background:url(../images/m2mhub/bg_pageshadow.gif) top center no-repeat;
+	background:url(../../images/m2mhub/bg_pageshadow.gif) top center no-repeat;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:62.5%;
 	color: #666;
@@ -125,17 +125,6 @@ th {
 	border-left:1px solid #fff;
 	line-height:1.1em;
 }
-#header .nav li.highlight,
-#header .nav li.highlight:hover,
-#header .nav li.highlight.current {
-	font-weight:bold;
-	background:url(../images/m2mhub/icon_quote.gif) 10px 10px no-repeat;
-	padding-left:34px;
-}
-
-#header .nav li.highlight:hover{
-	background:#ddd url(../images/m2mhub/icon_quote.gif) 10px 10px no-repeat;
-}
 
 #header .nav li:hover {
 	background:#ddd;
@@ -145,10 +134,6 @@ th {
 }
 #header .nav li.current{
 	background:#c00;
-	color:#fff;
-}
-#header .nav li.highlight.current {
-	background:#c00 url(../images/m2mhub/icon_quote_red.gif) 10px 10px no-repeat; 
 	color:#fff;
 }
 
@@ -942,7 +927,7 @@ input#search_fcompany {
 }
 
 p.inprogress {
-	background:url(../images/m2mhub/inprogress.gif) top left no-repeat;
+	background:url(../../images/m2mhub/inprogress.gif) top left no-repeat;
 	padding-left: 2em;
 	font-size: 1em;
 }
