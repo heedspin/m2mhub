@@ -33,13 +33,15 @@ class AppConfigClass
   # Check environment-specific setting first.  Then check shared setting.
   def get(key)
     key = key.to_s
-    %w(local_config app_config).each do |config_key|
-      if (config = @yaml_config[config_key]) and (config = config[Rails.env.downcase]) and config.member?(key)
-        return config[key]
+    %w(local_config app_config m2mhub_config).each do |config_key|
+      if (config = @yaml_config[config_key])
+        if config_key == 'app_config'
+          return unless config = config[Rails.env.downcase]
+        end
+        if config.member?(key)
+          return config[key]
+        end
       end
-    end
-    if (config = @yaml_config['m2mhub_config']) and config.member?(key)
-      return config[key]
     end
     nil
   end
