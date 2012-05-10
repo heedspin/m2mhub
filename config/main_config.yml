@@ -1,5 +1,5 @@
 # Leave this file alone.
-<% local_config = File.join(Rails.root, 'config/local_onfig.yml') %>
+<% local_config = File.join(Rails.root, 'config/local_config.yml') %>
 <% if File.exists?(local_config) %>
 <%= File.open(local_config).read %>
 <% else %>
