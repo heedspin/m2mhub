@@ -12,5 +12,3 @@ Delayed::Worker.logger.info "DelayedJobConfig: called from #{caller.last}.  dela
 if Rails.env.development?
   Delayed::Worker.destroy_failed_jobs = false
 end
-
-require 'doogle/web_synchronizer'
