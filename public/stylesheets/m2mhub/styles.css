@@ -807,6 +807,7 @@ table.backlog {
   border-collapse: collapse;
   border-spacing: 0;
   margin: 15px 0 15px 0;
+	clear:both;
   }
 table.backlog thead tr th {
   }
