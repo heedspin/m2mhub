@@ -904,12 +904,26 @@ form.formtastic table.flatform label {
 }
 
 form.formtastic table.flatform ol > li {
+	float: left;
 	display: inline;
 	margin: 0;
 }
 
 form.formtastic table.flatform li.commit input {
 	padding: .2em 1em .2em;
+}
+
+form.formtastic fieldset.floatyfields {
+	float: left;
+	display: inline;
+	padding-right: 30px;
+}
+form.formtastic fieldset.floatyfields > ol > li label {
+	width: auto;
+}
+form.formtastic fieldset.floatyfields > ol > li {
+	display: block;
+	float: none;
 }
 
 div.searchresults {
@@ -1043,20 +1057,6 @@ div.similar_customers ul {
 div.display_search { 
 	font-size: 2em;
 }
-
-/* DOOGLE
---------------------------------------------------- */
-form.doogle li.doogle_dimensions input {
-	width:10%;
-	margin: 0 10px 0 5px;
-}
-
-form.doogle fieldset > ol > li {
-	margin: 0 0 .9em 0;
-}
-
-form.doogle textarea#display_comments { width:405px; height:4.5em; }
-
 
 /* Pagination
 ---------------------------------------------------- */

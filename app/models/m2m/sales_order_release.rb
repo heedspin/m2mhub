@@ -28,6 +28,12 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
     }
   }
+  scope :due_after, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'sorels.fduedate >= ?', date.to_s(:database) ]
+    }
+  }
   scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
   scope :some_filled, :conditions => [ '(sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake) > 0' ]
   scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''

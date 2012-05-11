@@ -2,6 +2,7 @@ class SalesBacklogReport < ApplicationModel
   belongs_to_active_hash :report_status, :class_name => 'ReportStatus'
   belongs_to_active_hash :fob_group
   belongs_to_active_hash :customer_status, :class_name => 'M2m::CustomerStatus'
+  belongs_to_active_hash :backlog_group
 end
 
 # == Schema Information
@@ -17,5 +18,8 @@ end
 #  updater_id         :integer(4)
 #  fob_group_id       :integer(4)
 #  customer_status_id :integer(4)
+#  due_after          :date
+#  page_per_customer  :boolean(1)
+#  backlog_group_id   :integer(4)
 #
 

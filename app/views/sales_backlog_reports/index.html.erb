@@ -1,27 +1,20 @@
 <%= semantic_form_for @search, :as => 'search', :url => sales_backlog_reports_path, :html => {:method => :get} do |f| %>
-<table class="flatform">
-	<tbody>
-		<tr>
-			<td>
-				<%= f.inputs do %>
-				  <%= f.input :due_date, :as => :calendar, :label => 'Due' %>
-				<% end %>
-			</td>
-			<td>
-				<%= f.buttons do %>
-				  <%= f.commit_button 'View' %>
-					<%= f.commit_button 'Print' %>
-				<% end %>
-			</td>
-			<td>
-				<%= f.inputs do %>
-					<%= f.input :customer_status_id, :as => :select, :collection => M2m::CustomerStatus.all %>
-					<%= f.input :fob_group_id, :as => :select, :collection => FobGroup.all %>
-				<% end %>
-			</td>
-		</tr>
-	</tbody>
-</table>
+	<%= f.inputs :class => 'floatyfields' do %>
+	 	<%= f.input :due_after, :as => :calendar, :label => 'Due After', :value => @search.due_after %>
+	  <%= f.input :due_date, :as => :calendar, :label => 'Due By' %>
+	<% end %>
+	<%= f.inputs :class => 'floatyfields' do %>
+		<%= f.input :customer_status_id, :as => :select, :collection => M2m::CustomerStatus.all %>
+		<%= f.input :fob_group_id, :as => :select, :collection => FobGroup.all %>
+	<% end %>
+	<%= f.inputs :class => 'floatyfields' do %>
+		<%= f.input :backlog_group_id, :as => :select, :collection => BacklogGroup.all %>
+		<%= f.input :page_per_customer %>
+	<% end %>
+	<%= f.buttons :class => 'floatyfields buttons' do %>
+	  <%= f.commit_button 'View' %>
+		<%= f.commit_button 'Print' %>
+	<% end %>
 <% end %>
 
 <%= set_focus('#search_due_date') %>

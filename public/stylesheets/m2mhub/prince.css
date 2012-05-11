@@ -150,7 +150,6 @@ table.backlog td.c1 {
 
 table.backlog tr.spacer td {
 	padding-bottom: 50px;
-	border: none;
 }
 
 table.backlog p {
@@ -176,4 +175,12 @@ table.backlog td.right {
 
 .sbl_jobs_link {
 	display: none;
+}
+
+.page-break-before {
+	page-break-before:always;
+}
+
+.no-inside-page-break {
+	page-break-inside:avoid;
 }

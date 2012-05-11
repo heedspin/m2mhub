@@ -45,6 +45,7 @@ class M2m::SalesOrder < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :ship_via, :fshipvia
   alias_attribute :prepayment_required, :flprofrqd
+  alias_attribute :customer_number, :fcustno
   
   def customer_name
     M2m::Customer.customer_name(self.fcompany)

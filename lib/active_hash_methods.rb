@@ -7,19 +7,19 @@ module ActiveHashMethods
       if (cname = config[:name]) and (cid = config[:id])
         cmethod = config[:method] || cname.gsub(/[ -\/]/, '_').downcase
         cmethod_values[cid] = cmethod
+        next if ['all'].include?(cmethod)
         firstchar = cmethod[0..0]
-        unless (firstchar >= '0') and (firstchar <= '9')
-          static_methods.push << <<-RUBY
-          def #{cmethod}
-            @#{cmethod} ||= find(#{cid})
-          end
-          RUBY
-          instance_methods.push <<-RUBY
-          def #{cmethod}?
-            self.id == #{cid}
-          end
-          RUBY
+        next if (firstchar >= '0') and (firstchar <= '9')
+        static_methods.push << <<-RUBY
+        def #{cmethod}
+          @#{cmethod} ||= find(#{cid})
         end
+        RUBY
+        instance_methods.push <<-RUBY
+        def #{cmethod}?
+          self.id == #{cid}
+        end
+        RUBY
       end
     end
     ruby = <<-RUBY
