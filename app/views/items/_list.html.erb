@@ -19,7 +19,7 @@
 	<% items.each do |i| %>
 		<tr>
 			<% pn = @search.present? ? search_excerpt(i.part_number, @search.try(:fpartno)) : i.part_number %>
-			<td><%= link_to_unless_current pn, item_url(i) %></td>
+			<td><%= link_to_item i, pn %></td>
 			<td><%= i.revision %></td>
 			<td><%= i.is_current? ? 'X' : '' %></td>
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search.try(:fpartno)) }.join(', ').html_safe %></td>
