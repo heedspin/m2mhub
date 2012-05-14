@@ -2,6 +2,9 @@
 <html>
 <head>
   <%= stylesheet_link_tag 'm2mhub/formtastic', 'm2mhub/styles', 'm2mhub/blitzer/jquery-ui-1.8.6.custom' %>
+	<% if AppConfig.additional_stylesheets %>
+  <%= stylesheet_link_tag AppConfig.additional_stylesheets %>
+	<% end %>
 	<%= yield :stylesheets %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
