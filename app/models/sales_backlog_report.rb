@@ -14,8 +14,6 @@ end
 #  report_status_id   :integer(4)
 #  created_at         :datetime
 #  updated_at         :datetime
-#  creator_id         :integer(4)
-#  updater_id         :integer(4)
 #  fob_group_id       :integer(4)
 #  customer_status_id :integer(4)
 #  due_after          :date

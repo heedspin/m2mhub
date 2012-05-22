@@ -2,26 +2,27 @@
 #
 # Table name: inventory_report_items
 #
-#  id                              :integer(4)      not null, primary key
-#  inventory_report_id             :integer(4)
-#  inventory_report_customer_id    :integer(4)
-#  part_number                     :string(255)
-#  revision                        :string(255)
-#  m2m_identity_column             :integer(4)
-#  quantity_on_hand                :float
-#  quantity_committed              :float
-#  quantity_available              :float
-#  quantity_on_order               :float
-#  inventory_report_cost_method_id :integer(4)
-#  cost                            :float
-#  last_incoming_date              :datetime
-#  last_outgoing_date              :datetime
-#  next_outgoing_date              :datetime
-#  next_incoming_date              :datetime
-#  item_group_code_key             :string(255)
-#  next_sales_order_release_id     :integer(4)
-#  last_sales_order_release_id     :integer(4)
-#  movement_data                   :text
+#  id                                     :integer(4)      not null, primary key
+#  inventory_report_id                    :integer(4)
+#  inventory_report_customer_id           :integer(4)
+#  part_number                            :string(255)
+#  revision                               :string(255)
+#  m2m_identity_column                    :integer(4)
+#  quantity_on_hand                       :float
+#  quantity_committed                     :float
+#  quantity_available                     :float
+#  quantity_on_order                      :float
+#  inventory_report_cost_method_id        :integer(4)
+#  cost                                   :float
+#  last_incoming_date                     :datetime
+#  last_outgoing_date                     :datetime
+#  next_outgoing_date                     :datetime
+#  next_incoming_date                     :datetime
+#  item_group_code_key                    :string(255)
+#  last_incoming_inventory_transaction_id :integer(4)
+#  next_sales_order_release_id            :integer(4)
+#  last_sales_order_release_id            :integer(4)
+#  movement_data                          :text
 #
 
 require 'm2m/belongs_to_item'
