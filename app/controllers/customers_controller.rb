@@ -50,7 +50,7 @@ class CustomersController < M2mhubController
 
   def autocomplete_index
     # Autocomplete path.
-    @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 10)
+    @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 20)
     names = @customers.map(&:name)
     if params[:new_prompt] == '1'
       names.push "Create New: #{@search_term}"
