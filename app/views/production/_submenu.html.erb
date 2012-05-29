@@ -1,10 +1,5 @@
 <div class="submenu">
 	<ul>
-		<% if permitted_to?(:read, :production_production_dashboard) %>
-		<li class="<%= menu_selected(:controller => :production_dashboard) %>">
-			<%= link_to 'Production Home', production_url %>
-		</li>
-		<% end %>
 		<% if permitted_to?(:make, :production_work_center_load_reports) %>
 		<li class="<%= menu_selected(:controller => :work_center_load_reports) %>">
 			<%= link_to 'Work Center Load', new_work_center_load_report_url %>

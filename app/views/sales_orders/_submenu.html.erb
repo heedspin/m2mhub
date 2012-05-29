@@ -11,6 +11,12 @@
 			<%= link_to 'Browse All', sales_orders_url %>
 		</li>
 		<% end %>
+		
+		<% if permitted_to?(:read, :quotes) %>
+		<li class="<%= menu_selected(:controller => :quotes) %>">
+			<%= link_to 'Quotes', quotes_url %>
+		</li>
+		<% end %>
 
 		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
 		<li class="<%= menu_selected(:controller => :invoiced_sales_reports) %>">

@@ -6,7 +6,7 @@ class HomeController < M2mhubController
     else
       @user_activities = UserActivity.for_user(current_user).by_date_desc.all(:limit => 10)
     end
-    @sales_orders = M2m::SalesOrder.since(yesterday).all
+    @sales_orders = M2m::SalesOrder.by_order_number_desc.limit(20)
     # Optimization:
     @sales_orders.each do |so|
       so.releases.each { |r| r.attach_items_from_sales_order(so) }

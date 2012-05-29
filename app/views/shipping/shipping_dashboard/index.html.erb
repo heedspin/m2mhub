@@ -1,17 +1,15 @@
 <%= render 'shipping/submenu' %>
 <br />
 
-<h2>Today's Shipping Activity (<%= @date.to_s(:shipper_date) %>)</h2>
-
 <% if @receivers.size > 0 %>
-<h3>Receivers</h3>
+<h2>Recent Receivers</h2>
 <%= render 'shipping/receivers/list' %>
 <% else %>
 <h3>No Receivers</h3>
 <% end %>
 
 <% if @shippers.size > 0 %>
-<h3>Shippers</h3>
+<h2>Recent Shippers</h2>
 <%= render 'shipping/shippers/list' %>
 <% else %>
 <h3>No Shippers</h3>
