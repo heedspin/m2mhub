@@ -17,7 +17,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   # alias_date_attribute :request_date, :freqdate
   
   def safe_promise_date
-    self.last_promise_date || self.original_promise_date || Date.current.advance(:years => 1)
+    self.last_promise_date || self.original_promise_date || Time.current.advance(:years => 1)
   end
     
   scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
