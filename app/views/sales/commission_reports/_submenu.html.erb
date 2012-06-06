@@ -1,0 +1,13 @@
+<%= render 'sales/submenu' %>
+<br />
+
+<div class="submenu">
+	<ul>
+		<li class="<%= menu_selected(:controller => :commission_reports) %>">
+			<%= link_to 'Commission Reports', new_commission_report_url %>
+		</li>
+		<li class="<%= menu_selected(:controller => :commission_rates) %>">
+			<%= link_to 'Commission Rates', commission_rates_url %>
+		</li>
+	</ul>
+</div>

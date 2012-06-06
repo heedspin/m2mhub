@@ -21,6 +21,8 @@ class M2m::Customer < M2m::Base
   alias_attribute :work_state, :fstate
   alias_attribute :work_postal_code, :fzip
   alias_attribute :work_country_name, :fcountry
+  alias_attribute :sales_person, :fsalespn
+  alias_attribute :commission_percentage, :fsalcompct
 
   after_initialize :set_defaults
   def set_defaults

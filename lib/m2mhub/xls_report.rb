@@ -1,30 +1,6 @@
 require 'spreadsheet'
 
-class InvoicedSalesReport
-  attr_accessor :start_date, :end_date, :customer
-  
-  def initialize(args)
-    args ||= {}
-    self.customer = args[:customer]
-    self.start_date = args[:start_date]
-    self.end_date = args[:end_date]
-  end
-  
-  def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
-  end
-  
-  def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
-  end
-  
-  def filename
-    # Time.now.strftime("%y%m%d") + '_' + 
-    customer_name = self.customer.is_a?(M2m::Customer) ? self.customer.name : AppConfig.short_name
-    name = "#{self.start_date.year} #{customer_name} Invoiced Sales"
-    name.gsub(' ', '_').gsub(',','')
-  end
-  
+module M2mhub::XlsReport
   class Field
     attr_reader :column_header, :number_format
     def initialize(column_header, number_format=nil, &value_block)
@@ -39,27 +15,8 @@ class InvoicedSalesReport
   
   def fields
     if @fields.nil?
-      dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
       @fields = []
-      @fields.push Field.new('Invoice Date') { |invoice_item| invoice_item.invoice.date }
-      @fields.push Field.new('Invoice Number') { |invoice_item| invoice_item.invoice_number }
-      @fields.push Field.new('Sales Order Number') { |invoice_item| invoice_item.sales_order_number }
-      @fields.push Field.new("#{AppConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
-      @fields.push Field.new('Part Description') { |invoice_item| invoice_item.item.try(:description) }
-      @fields.push Field.new('Customer Part Number') { |invoice_item| clean_value invoice_item.customer_part_number }
-      @fields.push Field.new('Quantity') { |invoice_item| invoice_item.ship_quantity }
-      @fields.push Field.new('Unit Price', dollar_format) { |invoice_item| 
-        invoice_item.unit_price.to_f.round(2)
-      }
-      @fields.push Field.new('Invoice Amount', dollar_format) { |invoice_item| 
-        invoice_item.amount.to_f.round(2) 
-      }
-      if self.customer == :all
-        @fields.push Field.new('Customer Number') { |invoice_item| invoice_item.invoice.customer_number }
-        @fields.push Field.new('Customer Name') { |invoice_item| invoice_item.invoice.customer_name }
-        @fields.push Field.new('Group') { |invoice_item| invoice_item.item.try(:fgroup).try(:strip) }        
-        @fields.push Field.new('Invoice Description') { |invoice_item| invoice_item.description }
-      end
+      self.initialize_fields
     end
     @fields
   end
@@ -80,7 +37,7 @@ class InvoicedSalesReport
   def to_xls
     book = Spreadsheet::Workbook.new
     sheet = book.create_worksheet
-    sheet.name = 'Invoiced Sales'
+    sheet.name = self.sheet_name
     column_formats = get_column_formats(self.fields, sheet)
     self.all_data.each do |data_object|
       sheet_row = sheet.row(sheet.last_row_index+1)

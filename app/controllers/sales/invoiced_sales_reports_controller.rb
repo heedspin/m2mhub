@@ -23,12 +23,12 @@ class Sales::InvoicedSalesReportsController < M2mhubController
   protected
 
     def model_class
-      InvoicedSalesReport
+      Sales::InvoicedSalesReport
     end
     
     def build_object
       if @build_object.nil?
-        @build_object = InvoicedSalesReport.new((params[:report] || {}).merge(:customer => :all))
+        @build_object = Sales::InvoicedSalesReport.new((params[:report] || {}).merge(:customer => :all))
         @build_object.start_date ||= Date.current.beginning_of_year
         @build_object.end_date ||= Date.current.end_of_year
       end

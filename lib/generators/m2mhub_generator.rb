@@ -30,11 +30,11 @@ class M2mhubGenerator < Rails::Generators::Base
         copy_file source, destination
       end
     end
-    %w(main_config.yml m2mhub_config.yml).each do |file|
-      source = File.join(M2mhubGenerator.source_root, 'config', file)
-      destination = source.sub(M2mhubGenerator.source_root, Rails.root)
-      copy_file source, destination
-    end
+    # %w(main_config.yml).each do |file|
+    #   source = File.join(M2mhubGenerator.source_root, 'config', file)
+    #   destination = source.sub(M2mhubGenerator.source_root, Rails.root)
+    #   copy_file source, destination
+    # end
   end
 
   private

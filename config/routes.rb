@@ -45,6 +45,8 @@ Rails.application.routes.draw do
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
+  resources :commission_rates, :controller => 'sales/commission_rates'
+  resources :commission_reports, :controller => 'sales/commission_reports'
   match 'quality' => 'quality/quality_dashboard#index'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'

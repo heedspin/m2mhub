@@ -29,5 +29,11 @@
 			<%= link_to 'Pro Forma Sales', new_pro_forma_sales_report_url %>
 		</li>
 		<% end %>
+
+		<% if AppConfig.enable_commission_report? and permitted_to?(:manage, :sales_commission_reports) %>
+		<li class="<%= menu_selected(:controller => [:commission_reports, :commission_rates]) %>">
+			<%= link_to 'Commission Reports', new_commission_report_url %>
+		</li>
+		<% end %>
 	</ul>
 </div>

@@ -1,0 +1,40 @@
+<%= render 'sales/commission_reports/submenu' %>
+<br />
+
+<% if @commission_rates.size > 0 %>
+<%= will_paginate @commission_rates %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Sales Person</th>
+			<th>Customer</th>
+			<th>Item</th>
+			<th>Commission</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @commission_rates.each do |cr| %>
+		<tr>
+			<td><%= cr.id %></td>
+			<td><%= cr.sales_person.name %></td>
+			<td><%= link_to(cr.customer.name, customer_url(cr.customer)) if cr.customer %></td>
+			<td><%= link_to(cr.item.part_number, item_url(cr.item)) if cr.item %></td>
+			<td><%= cr.commission_percentage.nil? ? '' : sprintf("%.1f",cr.commission_percentage) + '%' %></td>
+			<% if permitted_to? :manage, :sales_commission_rates %>
+			<td>
+				<%= link_to 'edit', edit_commission_rate_url(cr) %> | 
+				<%= link_to 'delete', commission_rate_url(cr), :method => :delete, :confirm => 'Are you sure?' %>
+			</td>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			
+<% end %>
+
+<% if permitted_to? :manage, :sales_commission_rates %>
+	<ul>
+		<li><%= link_to 'New Rate', new_commission_rate_path %></li>
+	</ul>
+<% end %>

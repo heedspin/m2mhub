@@ -14,6 +14,8 @@ class M2m::Invoice < M2m::Base
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :customer_number, :fcustno
   alias_attribute :printed?, :flisprint
+  alias_attribute :commission_percentage, :fsalcompct
+  alias_attribute :sales_person, :fsalespn
   
   scope :customer, lambda { |customer|
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer

@@ -56,6 +56,8 @@ authorization do
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
     has_permission_on :invoiced_sales_reports, :to => :manage
     has_permission_on :pro_forma_sales_reports, :to => :manage
+    has_permission_on :sales_commission_rates, :to => :manage
+    has_permission_on :sales_commission_reports, :to => :manage
   end
   
   role :production do

@@ -8,6 +8,7 @@ en:
         format: "{{attribute}}: {{message}}."
     models:
       m2m/item: Part
+      sales/commission_rate: Commission Rate
     attributes:
       m2m/item:
         fpartno: Part Number
@@ -29,3 +30,8 @@ en:
         fccountry: Country
         fmnotes: Notes
         PostalCode: Postal Code
+      sales/commission_rate:
+        sales_person: Sales Person
+        customer_name: Customer Name
+        part_number: Part Number
+        commission_percentage: Commission Percentage

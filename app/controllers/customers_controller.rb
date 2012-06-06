@@ -54,6 +54,8 @@ class CustomersController < M2mhubController
     names = @customers.map(&:name)
     if params[:new_prompt] == '1'
       names.push "Create New: #{@search_term}"
+    elsif @customers.size == 0
+      names.push 'No Results'
     end
     render :json => names
   end

@@ -1,13 +1,14 @@
 class AppConfigClass
   def initialize
-    config_file = File.join(Rails.root, 'config', 'main_config.yml')
-    if File.exist?(config_file)
+    config_file = [ File.join(M2mhub::Engine.root, 'config', 'main_config.yml'),
+                    File.join(Rails.root, 'config', 'main_config.yml') ].detect { |p| File.exist?(p) }
+    if config_file
       @yaml_config = YAML::load(ERB.new(IO.read(config_file)).result)
     else
       @yaml_config = {}
     end
   end
-  
+
   def method_missing(mid, *args)
     mid = mid.to_s
     if mid =~ /(.+)\?$/
@@ -25,7 +26,7 @@ class AppConfigClass
       get(mid)
     end
   end
-  
+
   def set_local(key, value)
     ((@yaml_config['local_config'] ||= {})[Rails.env.downcase] ||= {})[key] = value
   end
@@ -48,4 +49,3 @@ class AppConfigClass
 end
 
 ::AppConfig = AppConfigClass.new
-

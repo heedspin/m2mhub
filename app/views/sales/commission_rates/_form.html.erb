@@ -1,0 +1,71 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("input#sales_commission_rate_customer_name").autocomplete({
+		source: "<%= customers_url %>",
+		search: function(event, ui) { 
+			$("input#sales_commission_rate_customer_name").autocomplete("close");
+			$("#customer_inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#customer_inprogress").hide();
+		},
+		select: function(event, ui) { 
+			if (ui.item.value == "No Results") {
+				$(this).val( "" ); 
+				// Do nothing.
+			}	else {
+				$(this).val( ui.item.value ); 
+			}
+			return false; 
+		}		
+	});
+
+	$("input#sales_commission_rate_part_number").autocomplete({
+		source: "<%= items_url %>",
+		search: function(event, ui) { 
+			$("input#sales_commission_rate_part_number").autocomplete("close");
+			$("#part_number_inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#part_number_inprogress").hide();
+		},
+		select: function(event, ui) { 
+			if (ui.item.value == "No Results") {
+				$(this).val( "" ); 
+				// Do nothing.
+			}	else {
+				$(this).val( ui.item.value ); 
+			}
+			return false; 
+		}		
+	});
+})
+</script>
+<% end %>
+
+<%= f.semantic_errors :base %>
+
+<%= f.inputs do %>
+  <%= f.input :sales_person, :collection => M2m::SalesPerson.by_name.all %> 
+	<li class="flat string input optional stringish" id="sales_commission_rate_customer_name_input">
+		<label class=" label" for="sales_commission_rate_customer_name"><%= Sales::CommissionRate.human_attribute_name(:customer_name) %></label>
+		<%= f.text_field :customer_name %>
+		<span id="customer_inprogress" class="hide">
+		<%= image_tag AppConfig.in_progress_image %>
+		</span>
+	</li>
+	<li class="flat string input optional stringish" id="sales_commission_rate_part_number_input">
+		<label class=" label" for="sales_commission_rate_part_number"><%= Sales::CommissionRate.human_attribute_name(:part_number) %></label>
+		<%= f.text_field :part_number %>
+		<span id="part_number_inprogress" class="hide">
+		<%= image_tag AppConfig.in_progress_image %>
+		</span>
+	</li>
+	<%= f.input :commission_percentage %>
+<% end %>
+
+<%= f.buttons do %>
+  <%= f.commit_button %>
+  <%= f.cancel_link %>
+<% end %>

@@ -1,9 +1,9 @@
-<%= render 'sales/submenu' %>
+<%= render 'sales/commission_reports/submenu' %>
 
-<h2><%= AppConfig.short_name %> Invoiced Sales</h2>
+<h2><%= AppConfig.short_name %> Commission Reports</h2>
 <p>This is a slow report.  Be patient.</p>
 
-<%= semantic_form_for @report, :as => 'report', :url => invoiced_sales_reports_url(:format => 'xls') do |f| %>
+<%= semantic_form_for @commission_report, :as => 'commission_report', :url => commission_reports_url(:format => 'xls') do |f| %>
 	<%= f.inputs do %>
   	<%= f.input :start_date, :as => :calendar %>
   	<%= f.input :end_date, :as => :calendar %>

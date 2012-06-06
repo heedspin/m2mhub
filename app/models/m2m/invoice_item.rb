@@ -3,6 +3,7 @@ class M2m::InvoiceItem < M2m::Base
 
   belongs_to :invoice, :class_name => 'M2m::Invoice', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to_item :fpartno, :frev
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => 'fcustno', :primary_key => 'fcustno'
 
   alias_attribute :rma_key, :fcrmakey
   alias_attribute :amount, :ftotprice
@@ -10,6 +11,7 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :ship_quantity, :fshipqty
   alias_attribute :unit_price, :fprice
   alias_attribute :description, :fmdescript
+  alias_attribute :customer_number, :fcustno
 
   scope :for_rma_item, lambda { |rma_item|
     {

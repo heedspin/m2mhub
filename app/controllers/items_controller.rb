@@ -5,7 +5,11 @@ class ItemsController < M2mhubController
     if (@search_term = params[:term]).present?
       # Autocomplete path.
       @items = M2m::Item.part_number_like(@search_term).by_part_number.all(:select => 'inmastx.fpartno', :limit => 20)
-      render :json => @items.map(&:part_number)
+      part_numbers = @items.map(&:part_number)
+      if part_numbers.size == 0
+        part_numbers.push 'No Results'
+      end
+      render :json => part_numbers
     else
       @search = M2m::Item.new
       search_params = params[:search] || {}
