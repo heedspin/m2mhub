@@ -85,7 +85,7 @@ class Sales::CommissionReport
   end
   
   def commission_rates
-    @commission_rates ||= CommissionRate.all
+    @commission_rates ||= Sales::CommissionRate.all
   end
 
   def commission_rate_for_customer_and_item(customer_number, part_number)
