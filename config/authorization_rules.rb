@@ -29,6 +29,8 @@ authorization do
     has_permission_on :items_history, :to => :read
     has_permission_on :items_shippers, :to => :read
     has_permission_on :items_jobs, :to => :read
+    has_permission_on :m2mhub_triggers, :to => :manage
+    has_permission_on :m2mhub_events, :to => :manage
   end
 
   role :sales do

@@ -64,6 +64,9 @@ Rails.application.routes.draw do
     resources :obsolete_reports, :only => [:index], :controller => 'production/inventory_reports/obsolete_reports'
   end
   resources :labor_reports, :only => [:index, :show], :controller => 'production/labor_reports'
+  
+  resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
+  resources :m2mhub_events, :controller => 'm2mhub/events'
 
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'

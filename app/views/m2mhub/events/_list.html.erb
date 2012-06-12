@@ -1,0 +1,23 @@
+<%= will_paginate @events %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Time</th>
+			<th>Summary</th>
+			<th>Trigger</th>
+			<th>User</th>
+			<th>Ticket State</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @events.each do |e| %>
+		<tr class="<%= e.resolved? ? 'resolved-event' : '' %>">
+			<td><%= e.created_at.to_s(:event_date) %></td>
+			<td><%= e.m2mhub_summary.html_safe %></td>
+			<td><%= link_to e.trigger.title, m2mhub_trigger_url(e.trigger) %></td>
+			<td><%= e.user.try(:full_name) %></td>
+			<td><%= link_to_event_status e %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			

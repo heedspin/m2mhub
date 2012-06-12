@@ -10,7 +10,7 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :internal_number, :finumber
   alias_attribute :external_number, :fenumber
-  
+  alias_attribute :order_number, :fsono
   alias_attribute :multiple_releases, :fmultiple
   
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
@@ -46,6 +46,12 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
+  scope :ordered_since, lambda { |date|
+    {
+      :joins => :sales_order, 
+      :conditions => ['somast.forderdate >= ?', date]
+    }
+  }
   
   def self.attach_to_releases(sales_order_releases)
     if sales_order_releases.size > 0

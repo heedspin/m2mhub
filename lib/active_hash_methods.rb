@@ -5,10 +5,10 @@ module ActiveHashMethods
     cmethod_values = {}
     base.data.each do |config|
       if (cname = config[:name]) and (cid = config[:id])
-        cmethod = config[:method] || cname.gsub(/[ -\/]/, '_').downcase
+        cmethod = (config[:cmethod] || cname.gsub(/[ -\/]/, '_')).to_s.downcase.to_sym
         cmethod_values[cid] = cmethod
-        next if ['all'].include?(cmethod)
-        firstchar = cmethod[0..0]
+        next if [:all].include?(cmethod)
+        firstchar = cmethod.to_s[0..0]
         next if (firstchar >= '0') and (firstchar <= '9')
         static_methods.push << <<-RUBY
         def #{cmethod}
@@ -36,7 +36,7 @@ module ActiveHashMethods
     # puts "evaluating:\n #{ruby}"
     base.class_eval ruby
     cmethod_values.each do |id, cmethod|
-      base.find(id).cmethod = cmethod.to_s
+      base.find(id).cmethod = cmethod
     end
   end
 end

@@ -4,11 +4,13 @@ require 'menu_selected'
 require 'pdf_generation'
 require 'declarative_authorization'
 require 'active_hash'
+require 'user_activity_logger'
 
 class M2mhubController < ApplicationController
   include MenuSelected
   # include Userstamp
   include PdfGeneration
+  include UserActivityLogger
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -16,34 +18,6 @@ class M2mhubController < ApplicationController
   before_filter :require_login
   
   protected
-
-    NO_USER_ACTIVITY_CONTROLLERS = %w()
-
-    around_filter :log_user_activity
-    # Log all requests unless one has been explicity logged.
-    def log_user_activity
-      @log_user_activity_start_time = Time.now.to_f
-      yield
-      if @last_user_activity.nil? and (not request.xhr?) and (not NO_USER_ACTIVITY_CONTROLLERS.include?(controller_name))
-        user_activity do
-          { :elapsed_time => Time.current.to_f - @log_user_activity_start_time }
-        end
-      end
-    end
-
-    def user_activity
-      begin
-        options = yield
-        options[:user_id] ||= current_user.try(:id)
-        options[:remote_ip] ||= request.try(:remote_ip)
-        options[:params] ||= params.try(:to_json)
-        options[:report_name] ||= (controller_name || 'no controller') + ' / ' + (action_name || 'no action')
-        options[:format] ||= params[:format]# || 'html'
-        @last_user_activity = UserActivity.create(options)
-      rescue
-        logger.error "Ignoring UserActivity exception: #{$!}"
-      end
-    end
 
     def store_location
       session[:return_to] = request.fullpath

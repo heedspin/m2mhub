@@ -1,0 +1,8 @@
+<%= render 'm2mhub/events/submenu' %>
+
+<% if @events.size == 0 %>
+<p>There are no events, yet. Boo hoo!</p>
+<% else %>
+<h2>Events</h2>
+<%= render 'm2mhub/events/list' %>
+<% end %>

@@ -50,6 +50,12 @@ class M2m::ShipperItem < M2m::Base
     }
   }
   scope :by_ship_date_desc, { :joins => :shipper, :order => 'shmast.fshipdate desc, shitem.fitemno' }  
+  scope :shipped_after, lambda { |date|
+    { 
+      :joins => :shipper, 
+      :conditions => [ 'shmast.fshipdate >= ?', date ]
+    }
+  }
 end
 
 

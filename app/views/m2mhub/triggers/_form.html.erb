@@ -1,0 +1,17 @@
+<%= f.semantic_errors :base %>
+
+<%= f.inputs do %>
+	<%= f.input :trigger_state, :collection => M2mhub::TriggerState.all, :include_blank => false %> 
+  <%= f.input :trigger_type, :collection => M2mhub::TriggerType.all, :include_blank => false %> 
+	<%= f.input :part_number %>
+	<%= f.input :notification_type, :collection => M2mhub::NotificationType.all, :include_blank => false %>
+	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] } %>
+	<%= f.input :target_user, :collection => User.active.by_name.with_lighthouse_account, :include_blank => false %>
+	<%= f.input :title %>
+	<%= f.input :instructions %>
+<% end %>
+
+<%= f.buttons do %>
+  <%= f.commit_button %>
+  <%= f.cancel_link %>
+<% end %>

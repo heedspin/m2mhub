@@ -76,5 +76,11 @@
       <td>Last Login IP</td>
       <td><%= @user.last_login_ip %></td>
     </tr>
+		<% if AppConfig.lighthouse_account %>
+	  <tr class="<%= cycle('odd','even') %>">
+      <td>Lighthouse User Id</td>
+      <td><%= @user.lighthouse_user_id %></td>
+    </tr>
+		<% end %>
 	</tbody>
 </table>

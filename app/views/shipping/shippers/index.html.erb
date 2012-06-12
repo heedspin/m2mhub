@@ -27,5 +27,7 @@
 <h2>Shippers for <%= @date.to_s(:shipper_date) %></h2>
 <% end %>
 
-<%= render 'shipping/shippers/list' %>
+<% @shippers.each do |s| %>
+	<%= render 'shipping/shippers/show', :shipper => s %>
+<% end %>
 

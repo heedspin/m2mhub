@@ -1,9 +1,10 @@
 ## Cron hints
 
 # m h  dom mon dow   command
-00 1 * * 2-6 /var/www/lxd_m2mhub/current/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
-05 1 * * 2-6 /var/www/smt_m2mhub/current/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
-00 2 * * * /var/www/lxd_m2mhub/current/script/runner.sh 'LighthouseWakeup.new.run_in_background!'
+00 1 * * 2-6 /var/www/lxdhub/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
+05 1 * * 2-6 /var/www/smthub/script/runner.sh 'Production::InventoryReport.new.run_in_background!'
+00 2 * * * /var/www/lxdhub/script/runner.sh 'LighthouseWakeup.new.run_in_background!'
+*/5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::RunAllTriggers.new.run_in_background!'
 
 =======
 

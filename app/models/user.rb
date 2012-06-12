@@ -16,6 +16,8 @@ class User < ApplicationModel
 
   attr_accessor :current_password
   scope :active, :conditions => { :user_state_id => UserState.active.id }
+  scope :by_name, :order => [:first_name, :last_name]
+  scope :with_lighthouse_account, :conditions => 'users.lighthouse_user_id is not null'
   
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]
@@ -112,5 +114,6 @@ end
 #  last_login_ip           :string(255)
 #  created_at              :datetime
 #  updated_at              :datetime
+#  lighthouse_user_id      :string(255)
 #
 

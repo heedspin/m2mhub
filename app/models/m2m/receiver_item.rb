@@ -22,6 +22,12 @@ class M2m::ReceiverItem < M2m::Base
   end
 
   scope :by_time_received_desc, { :joins => :receiver, :order => 'rcmast.fdaterecv desc, rcitem.fitemno' }  
+  scope :received_since, lambda { |date|
+    { 
+      :joins => :receiver, 
+      :conditions => [ 'rcmast.fdaterecv >= ?', date ]
+    }
+  }
 end
 
 

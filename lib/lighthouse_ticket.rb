@@ -31,6 +31,10 @@ class Lighthouse::Ticket
   def assigned_user_id=(value)
     attributes['assigned_user_id'] = value
   end
+  
+  def closed?
+    ['resolved', 'invalid'].include?(self.state)
+  end
 
   ######################################
   # Trick formtastic:
