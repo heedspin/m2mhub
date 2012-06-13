@@ -57,7 +57,7 @@ class M2mhub::TriggersController < M2mhubController
       @current_object ||= super
       @current_object.notification_type ||= M2mhub::NotificationType.ticket
       @current_object.trigger_state ||= M2mhub::TriggerState.enabled
-      @current_object.target_user ||= current_user
+      # @current_object.target_user ||= current_user
       @current_object
     end
 end
