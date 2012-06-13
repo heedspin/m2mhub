@@ -6,7 +6,7 @@
 	<%= f.input :part_number %>
 	<%= f.input :notification_type, :collection => M2mhub::NotificationType.all, :include_blank => false %>
 	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] } %>
-	<%= f.input :target_user, :collection => User.active.by_name.with_lighthouse_account, :include_blank => false %>
+	<%= f.input :target_user, :collection => User.active.by_name.with_lighthouse_account, :include_blank => true %>
 	<%= f.input :title %>
 	<%= f.input :instructions %>
 <% end %>
