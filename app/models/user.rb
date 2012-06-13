@@ -84,6 +84,15 @@ class User < ApplicationModel
       self.user_role_id ||= UserRole.default.id
       self.user_state_id ||= UserState.unconfirmed.id
     end
+    
+    before_save :find_lighthouse_account
+    def find_lighthouse_account
+      if AppConfig.lighthouse_account and self.lighthouse_user_id.blank?
+        if lighthouse_user = Lighthouse::User.find_by_name(self.full_name)
+          self.lighthouse_user_id = lighthouse_user.id
+        end
+      end
+    end
 end
 
 # == Schema Information
