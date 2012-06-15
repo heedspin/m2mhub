@@ -24,6 +24,8 @@ class M2mhub::Trigger < ApplicationModel
   belongs_to_active_hash :notification_type, :class_name => 'M2mhub::NotificationType'
   belongs_to :target_user, :class_name => 'User', :foreign_key => :target_user_id
   has_many :events, :class_name => 'M2mhub::Event', :foreign_key => 'trigger_id'
+  has_many :trigger_users, :class_name => 'M2mhub::TriggerUser'
+  has_many :users, :through => :trigger_users
 
   scope :enabled, :conditions => { :trigger_state_id => M2mhub::TriggerState.enabled.id }
   scope :not_deleted, :conditions => [ 'm2mhub_triggers.trigger_state_id != ?', M2mhub::TriggerState.deleted.id ]

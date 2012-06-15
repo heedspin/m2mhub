@@ -19,7 +19,7 @@ class M2mhub::ReceiverTriggerRunner < M2mhub::TriggerRunnerBase
       if @trigger.notification_type.ticket?
         title = "#{@trigger.title}: Receiver #{ri.receiver_number} for #{ri.part_number}"
         body = "[Receiver #{ri.receiver_number}](#{url})\n\n#{@trigger.instructions}"
-        new_event.create_ticket(@trigger.lighthouse_project_id, title, body)
+        new_event.create_ticket(title, body)
       end
       new_event.save
     end

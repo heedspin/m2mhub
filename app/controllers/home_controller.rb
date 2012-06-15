@@ -7,5 +7,6 @@ class HomeController < M2mhubController
     end
     yesterday = Date.current.advance(:days => -1)
     @quotes = M2m::Quote.since(yesterday).all
+    @events = M2mhub::Event.latest_first.limit(6)
   end
 end

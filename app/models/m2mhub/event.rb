@@ -8,6 +8,7 @@
 #  erp_id                :integer(4)
 #  erp_number            :string(255)
 #  lighthouse_ticket_id  :string(255)
+#  lighthouse_project_id :string(255)
 #  m2mhub_summary        :string(255)
 #  user_id               :integer(4)
 #  created_at            :datetime
@@ -42,14 +43,15 @@ class M2mhub::Event < ApplicationModel
     @ticket
   end
   
-  def create_ticket(project_id, title, body)
-    @ticket = Lighthouse::Ticket.new(:project_id => project_id)
+  def create_ticket(title, body)
+    @ticket = Lighthouse::Ticket.new(:project_id => self.trigger.lighthouse_project_id)
     @ticket.title = title
     @ticket.body = body
     @ticket.assigned_user_id = self.user.try(:lighthouse_user_id)
+    @ticket.watcher_ids = self.trigger.users.map(&:lighthouse_user_id)
     if @ticket.save
-      self.lighthouse_project_id = project_id
-      self.lighthouse_ticket_id = ticket.id
+      self.lighthouse_project_id = self.trigger.lighthouse_project_id
+      self.lighthouse_ticket_id = @ticket.id
     else
       false
     end

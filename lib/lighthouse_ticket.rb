@@ -32,6 +32,10 @@ class Lighthouse::Ticket
     attributes['assigned_user_id'] = value
   end
   
+  def watcher_ids=(value)
+    attributes['multiple_watchers'] = value
+  end
+  
   def closed?
     ['resolved', 'invalid'].include?(self.state)
   end

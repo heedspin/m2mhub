@@ -19,7 +19,7 @@ class M2mhub::SalesOrderTriggerRunner < M2mhub::TriggerRunnerBase
       if @trigger.notification_type.ticket?
         title = "#{@trigger.title}: SO #{soi.order_number} for #{soi.part_number}"
         body = "[Sales Order #{soi.order_number}](#{url})\n\n#{@trigger.instructions}"
-        new_event.create_ticket(@trigger.lighthouse_project_id, title, body)
+        new_event.create_ticket(title, body)
       end
       new_event.save
     end

@@ -16,7 +16,8 @@
 			<th>Part Number</th>
 			<th>Action</th>
 			<th>Lighthouse Project</th>
-			<th>User</th>
+			<th>Assigned To</th>
+			<th>Watchers</th>
 			<th>Status</th>
 		</tr>
 	</thead>
@@ -27,6 +28,7 @@
 			<td><%= @trigger.notification_type.name %></td>
 			<td><%= @trigger.lighthouse_project.try(:name) %></td>
 			<td><%= @trigger.target_user.try(:full_name) %></td>
+			<td><%= @trigger.users.map(&:full_name).join(', ') %></td>
 			<td><%= @trigger.trigger_state.name %></td>
 		</tr>
 		<tr>

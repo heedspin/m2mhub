@@ -1,9 +1,13 @@
 
+<% if @events.size > 0 %>
+<h3><%= link_to 'Events', m2mhub_events_url %></h3>
+<%= render 'm2mhub/events/list' %>
+<% end %>
 
-<h3>Recent Sales Orders</h3>
+<h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
 <%= render 'sales_orders/list' %>
 
 <% if @quotes.size > 0 %>
-<h3>Recent Quotes</h3>
+<h3><%= link_to 'Recent Quotes', quotes_url %></h3>
 <%= render 'quotes/list' %>
 <% end %>

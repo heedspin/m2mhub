@@ -4,5 +4,6 @@
 <p>There are no events, yet. Boo hoo!</p>
 <% else %>
 <h2>Events</h2>
+<%= will_paginate @events %>
 <%= render 'm2mhub/events/list' %>
 <% end %>
