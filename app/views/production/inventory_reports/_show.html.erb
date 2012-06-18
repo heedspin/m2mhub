@@ -36,10 +36,10 @@
 				</span></a>
 				<%= link_to item_report.part_number, item_url(item_report.m2m_identity_column) %>
 			</td>
-			<td><%= item_report.last_receipt_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.last_ship_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.next_receipt_date.try(:to_s, :report_date) %></td>
-			<td><%= item_report.next_ship_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.last_incoming_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.last_outgoing_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_incoming_date.try(:to_s, :report_date) %></td>
+			<td><%= item_report.next_outgoing_date.try(:to_s, :report_date) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
 			<td class="right">
 				<%= cm item_report.send(quantity.total_cost_key), :rounded_dollars %>
