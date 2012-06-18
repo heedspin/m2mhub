@@ -113,11 +113,11 @@ class M2m::SalesOrderRelease < M2m::Base
   end
 
   def last_ship_date
-    self.flshipdate == M2m::Constants.null_time ? nil : self.flshipdate
+    M2m::Constants.sanitize_date(self.flshipdate)
   end
 
   def due_date
-    self.fduedate == M2m::Constants.null_time ? nil : self.fduedate
+    M2m::Constants.sanitize_date(self.fduedate)
   end
 
   # def due_date_month

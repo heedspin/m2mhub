@@ -141,24 +141,24 @@ class Production::InventoryReport < ActiveRecord::Base
     offset = 0
     while offset < MAX_PAST_RELEASES
       # find_in_batches breaks sorting
-      releases = M2m::SalesOrderRelease.by_last_ship_date_desc.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
+      releases = M2m::SalesOrderRelease.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
       break if releases.size == 0
       offset += releases.size
       @bom_children.for_releases(releases).each do |release, bom_children|
-        if (self.earliest_release_date.nil? or (release.last_ship_date < self.earliest_release_date))
-          self.earliest_release_date = release.last_ship_date
+        next unless release.last_ship_date # skip it unless it's actually shipped
+        if (self.earliest_release_date.nil? or (release.due_date < self.earliest_release_date))
+          self.earliest_release_date = release.due_date
         end
-        add_past_release(release.part_number_revision, release)
+        keep_most_recent_release(release.part_number_revision, release)
         bom_children.each do |bom_item|
-          add_past_release(bom_item.part_number_revision, release)
+          keep_most_recent_release(bom_item.part_number_revision, release)
         end
       end
     end
   end
 
-  # Only keep the earliest release.
-  def add_past_release(part_number_revision, release)
-    if (exists = self.past_releases[part_number_revision]).nil? or (exists.last_ship_date > release.last_ship_date)
+  def keep_most_recent_release(part_number_revision, release)
+    if (exists = self.past_releases[part_number_revision]).nil? or (release.last_ship_date > exists.last_ship_date)
       self.past_releases[part_number_revision] = release
     end
   end
