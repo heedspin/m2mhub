@@ -43,7 +43,7 @@
 			</td>
 			<td>
 				<% if item_report.last_sales_order_release %>
-				<%= item_report.last_sales_order_release.last_ship_date.to_s(:report_date) %>
+				<%= item_report.last_sales_order_release.last_ship_date.try(:to_s, :report_date) %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
 					<%= link_to "SO #{item_report.last_sales_order_release.sales_order_number}", sales_order_url(item_report.last_sales_order_release.sales_order_number) %>
 					<% if item_report.part_number != item_report.last_sales_order_release.part_number %>
