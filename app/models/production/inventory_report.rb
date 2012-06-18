@@ -158,7 +158,7 @@ class Production::InventoryReport < ActiveRecord::Base
 
   # Only keep the earliest release.
   def add_past_release(part_number_revision, release)
-    if (exists = self.past_releases[part_number_revision]).nil? or (exists.due_date > release.due_date)
+    if (exists = self.past_releases[part_number_revision]).nil? or (exists.last_ship_date > release.last_ship_date)
       self.past_releases[part_number_revision] = release
     end
   end
