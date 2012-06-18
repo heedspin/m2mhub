@@ -3,7 +3,10 @@ class Items::ShippersController < M2mhubController
 
   def index
     @item = parent_object
-    @shippers = M2m::Shipper.for_item(@item).includes(:items).by_shipper_number_desc
+    # Do not eager load shipper items via .includes(:items).  \
+    # It will do this horrible query:
+    # M2m::Shipper Load (4.1ms)  EXEC sp_executesql N'SELECT TOP (5) [shmast].fshipno FROM [shmast] INNER JOIN [shitem] ON [shitem].[fshipno] = [shmast].[fshipno] WHERE [shitem].[fpartno] = N''H4235B '' AND [shitem].[frev] = N''000'' GROUP BY [shmast].fshipno ORDER BY MAX(shmast.fshipno)'
+    @shippers = M2m::Shipper.for_item(@item).by_shipper_number_desc
     @total_shippers = @shippers.count
     if limit = params[:limit]
       @shippers = @shippers.limit(limit.to_i)
