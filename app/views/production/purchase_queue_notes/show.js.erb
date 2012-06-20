@@ -1,0 +1,2 @@
+var new_note_content = "<%= escape_javascript render('production/purchase_queue_notes/inplace', :summary => @note.summary, :note => @note) %>";
+$("#summary_notes_<%= @note.summary.id %>").html(new_note_content).setupInPlaceActions();

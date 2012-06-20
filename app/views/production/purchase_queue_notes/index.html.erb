@@ -1,0 +1,34 @@
+<%= render 'production/submenu' %>
+<br />
+
+<h2>Purchase Queue Notes</h2>
+
+<p>
+	<%= link_to 'New Note', new_purchase_queue_note_url %>
+</p>
+
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Due Date</th>
+				<th class="purchase_queue_note">Note</th>
+			</tr>
+		</thead>
+<% @notes.each do |note| %>
+		<tr>
+			<td><%= link_to_item note.item, note.part_number %></td>
+			<td><%= note.due_date.try(:to_s, :sales_date) %></td>
+			<td><%= simple_format note.comments %></td>
+			<% if permitted_to? :manage, :purchase_queue_notes %>
+			<td>
+				<%= link_to 'edit', edit_purchase_queue_note_url(t) %> | 
+				<%= link_to 'delete', purchase_queue_note_url(t), :method => :delete, :confirm => 'Are you sure?' %>
+			</td>
+			<% end %>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+

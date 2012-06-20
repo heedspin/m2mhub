@@ -68,6 +68,9 @@ authorization do
     has_permission_on :production_inventory_reports, :to => :read
     has_permission_on :production_inventory_reports_customer_reports, :to => :read
     has_permission_on :production_inventory_reports_obsolete_reports, :to => :read
+    has_permission_on :production_purchase_queue_summaries, :to => :read
+    has_permission_on :production_purchase_queue_details, :to => :read
+    has_permission_on :production_purchase_queue_notes, :to => :manage
   end
   
   role :manager do

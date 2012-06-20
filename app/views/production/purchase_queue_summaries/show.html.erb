@@ -1,0 +1,7 @@
+<%= render 'production/submenu' %>
+<br />
+
+<h2>Purchase Queue Issue: <%= @summary.description %></h2>
+<%= render 'list', :summaries => [@summary] %>
+
+<%= render 'production/purchase_queue_details/list', :details => @details %>

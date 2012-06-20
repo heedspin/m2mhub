@@ -1,0 +1,6 @@
+<%= render 'production/submenu' %>
+<br />
+
+<h2>Purchase Queue Issues</h2>
+<%= will_paginate @summaries %>
+<%= render 'list', :summaries => @summaries %>

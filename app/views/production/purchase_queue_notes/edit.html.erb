@@ -1,0 +1,10 @@
+<% title 'Edit Purchase Queue Note' %>
+
+<%= render 'production/submenu' %>
+<br />
+
+<h2>Editing Note</h2>
+
+<%= semantic_form_for @note, :url => purchase_queue_note_url(@note) do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>

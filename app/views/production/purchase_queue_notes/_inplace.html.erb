@@ -1,0 +1,14 @@
+<div id="summary_notes_<%= summary.id %>" class="inplace_container">
+	<div class="inplace_show">
+		<%= simple_format note.comments %>
+		<span class="inplace_link">Edit</span>
+	</div>
+	<%= form_for note, :as => :purchase_queue_note, :url => (note.new_record? ? purchase_queue_notes_url : purchase_queue_note_url(note)), :html => { :class => 'inplace_form' } do |f| %>
+	<%= f.text_field :comments %>
+	<%= f.hidden_field :part_number %>
+	<%= f.hidden_field :revision %>
+	<%= f.hidden_field :due_date %>
+	<%= f.submit 'Save' %>
+	<%= link_to 'Cancel', '#', :class => 'inplace_cancel_link' %>
+	<% end %>
+</div>

@@ -703,6 +703,14 @@ table.data tr.primary-contact {
 	background-color: #efe;
 }
 
+table.data table.data td {
+  border: 1px dotted #ccc;
+  }
+
+table.data table.data th {
+  background: #F7F7F7;
+  }
+
 /* NEWS
 -------------------------------------------------------------------- */
 .post img, .last_post img {
@@ -922,11 +930,6 @@ form.formtastic fieldset.floatyfields > ol > li {
 	display: block;
 	float: none;
 }
-form.formtastic table ol > li.flat {
-	float: left;
-	display: inline;
-	margin: 0;
-}
 form.formtastic ul.errors  { 
 	border:1px solid red; 
 	outline:1px solid #f7941d;
@@ -934,7 +937,6 @@ form.formtastic ul.errors  {
 	padding: 10px 0 10px 20px;
 	font-size: 1.5em;
 }
-
 
 div.searchresults {
 	margin-top: 5px;
@@ -1078,4 +1080,14 @@ div.display_search {
 span.late {
 	color: #f00;
 	font-weight: bold;
+}
+
+tr.resolved-event {
+	background-color: #dddde5;
+}
+
+/* Purchase Queues 
+------------------------------------------------- */
+.purchase_queue_comment {
+	width: 35%;
 }

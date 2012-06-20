@@ -1,0 +1,26 @@
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Comment</th>
+				<th>Type</th>
+				<th>Status</th>
+				<th>Due Date</th>
+				<th>Supply</th>
+				<th>Demand</th>
+				<th>Net</th>
+			</tr>
+		</thead>
+<% details.each do |detail| %>
+		<tr>
+			<td><%= detail.comment %></td>
+			<td><%= detail.document_number %></td>
+			<td><%= detail.status %></td>
+			<td><%= detail.due_date.try(:to_s, :sales_date) %></td>
+			<td class="right"><%= cm detail.supply_quantity, :sales_order_quantity %></td>
+			<td class="right"><%= cm detail.demand_quantity, :sales_order_quantity %></td>
+			<td class="right"><%= cm detail.net_quantity_available, :sales_order_quantity, 0 %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>

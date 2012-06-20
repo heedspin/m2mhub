@@ -61,6 +61,7 @@ module FormatHelper
     content_for :javascripts, html.html_safe
   end
   
+  # Shorten, truncate, add ellipse...
   def limit_string(text, max)
     text[0..(max-1)] + (text.size > max ? '...' : '')
   end
