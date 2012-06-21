@@ -4,7 +4,7 @@ class Production::PurchaseQueueNotesController < M2mhubController
   def new
     @note = build_object
   end
-
+  
   def create
     @note = build_object
     respond_to do |format|
@@ -16,6 +16,7 @@ class Production::PurchaseQueueNotesController < M2mhubController
         end        
       }
       format.js {
+        @note.save!
         render :action => 'show'
       }
     end
@@ -23,31 +24,50 @@ class Production::PurchaseQueueNotesController < M2mhubController
 
   def show
     @note = current_object
-    @customer_reports = @note.customer_reports.by_on_hand_desc.paginate(:page => params[:page], :per_page => 1)
     respond_to do |format|
       format.html
-      format.json {
-        result = if @note.delayed_job_status.in_progress?
-          { :inprogress => true }
-        else
-          { :inprogress => false,
-            :html => render_to_string(:partial => 'show.html.erb',
-                                      :layout => false) }
-        end
-        render :json => result.to_json
-      }
+      format.json
     end
   end
+  
+  def edit
+    @note = current_object
+  end
+  
+  def update
+    @note = current_object
+    respond_to do |format|
+      format.html {
+        if @note.update_attributes(params[:purchase_queue_note])
+          redirect_to purchase_queue_note_url(@note)
+        else
+          render :action => 'new'
+        end        
+      }
+      format.js {
+        @note.update_attributes(params[:purchase_queue_note])
+        render :action => 'show'
+      }
+    end
+  end    
 
   def index
     @notes = Production::PurchaseQueueNote.by_date_desc.paginate(:page => params[:page], :per_page => 50)
   end
 
   def destroy
-    @note = current_object
-    @note.destroy
-    flash[:notice] = "Note deleted"
-    redirect_to purchase_queue_notes_url
+    old_note = current_object
+    old_note.destroy
+    respond_to do |format|
+      format.html {
+        flash[:notice] = "Note deleted"
+        redirect_to purchase_queue_notes_url        
+      }
+      format.js {
+        @note = Production::PurchaseQueueNote.new(:part_number => old_note.part_number, :revision => old_note.revision)
+        render :action => 'show'
+      }
+    end
   end
 
   protected

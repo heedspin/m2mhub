@@ -78,11 +78,11 @@ class M2m::PurchaseQueueSummary < M2m::Base
     @note ||= Production::PurchaseQueueNote.for_summary(self).first
   end
   def build_note
-    @note = Production::PurchaseQueueNote.new(:part_number => self.part_number, :revision => self.revision, :due_date => self.first_problem.try(:due_date))
+    @note = Production::PurchaseQueueNote.new(:part_number => self.part_number, :revision => self.revision)
   end
   scope :for_note, lambda { |note|
     {
-      :conditions => { :fcpartno => note.part_number, :fcpartrev => note.revision, :fdduedate => note.due_date }
+      :conditions => { :fcpartno => note.part_number, :fcpartrev => note.revision }
     }
   }
   

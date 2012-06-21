@@ -4,7 +4,6 @@ class CreateM2mhubPurchaseQueueNotes < ActiveRecord::Migration
       t.references :item
       t.string :part_number
       t.string :revision
-      t.datetime :due_date
       t.text :comments
       t.timestamps
     end

@@ -1091,3 +1091,20 @@ tr.resolved-event {
 .purchase_queue_comment {
 	width: 35%;
 }
+/* in place editing
+---------------------------------------------------- */
+.inplace_link, .inplace_cancel_link{
+	text-decoration:underline;
+	float: right;
+}
+.inplace_form, .inplace_delete_confirmation {
+	display:none;
+}
+.inplace_form textarea {
+	width: 220px;
+	height: 4em;
+}
+.inplace_taunt {
+	text-decoration: italic;
+	color: #aaa;
+}
