@@ -64,9 +64,8 @@ Rails.application.routes.draw do
     resources :obsolete_reports, :only => [:index], :controller => 'production/inventory_reports/obsolete_reports'
   end
   resources :labor_reports, :only => [:index, :show], :controller => 'production/labor_reports'
-  resources :purchase_queue_summaries, :only => [:index, :show], :controller => 'production/purchase_queue_summaries' do
-    resources :purchase_queue_summaries, :only => [:index], :controller => 'production/purchase_queue_summaries'
-  end
+  resources :purchase_queue_summaries, :only => [:index, :show], :controller => 'production/purchase_queue_summaries'
+  resources :purchase_queue_notes, :controller => 'production/purchase_queue_notes'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'
