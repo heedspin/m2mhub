@@ -3,7 +3,7 @@
 		<tr>
 			<th>SO</th>
 			<th>Qty</th>
-			<th>Days Late</th>
+			<th>Days Late<br />Biz / Cal</th>
 			<th>Due</th>
 			<th>Shipped</th>
 			<th>Customer</th>
@@ -15,7 +15,7 @@
 		<tr>
 			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
 			<td class="right"><%= cm r.order_quantity, :sales_order_quantity %></td>
-			<td class="right"><%= cm r.days_late %></td>
+			<td class="right"><%= cm r.business_days_late %> / <%= cm r.days_late %></td>
 			<td><%= r.due_date.to_s(:shipper_date) %></td>
 			<td><%= r.last_ship_date.to_s(:shipper_date) %></td>
 			<td><%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %></td>

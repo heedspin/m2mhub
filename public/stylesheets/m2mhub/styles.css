@@ -479,6 +479,16 @@ fieldset.inputs li.boolean label, ol.choices-group li.choice label {
 }
 .errorExplanation ul { list-style-type:decimal;list-style-position:inside;}
 
+.noticeContainer  { 
+	background-color: #eee;
+	margin: 0 0 15px;
+	padding: 10px;
+	width: auto;
+}
+.noticeContainer ul {
+	margin: 5px 0 0 10px;
+}
+
 
 /* OVERRIDES
  --------------------------------------------------------------------------------------------------*/
@@ -1107,4 +1117,10 @@ tr.resolved-event {
 .inplace_taunt {
 	text-decoration: italic;
 	color: #aaa;
+}
+
+/* Explanation Station
+-------------------------------------------------------- */
+.explanation {
+	
 }

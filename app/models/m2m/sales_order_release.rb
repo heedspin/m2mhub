@@ -96,10 +96,46 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :order_quantity, :forderqty
   alias_attribute :internal_number, :finumber
 
+  # select sorels.fduedate, sorels.flshipdate,
+  # ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+  # case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+  # case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) as business_days_late,
+  # DATEDIFF(day, sorels.fduedate, sorels.flshipdate) as days_late,
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) as weeks_late,
+  # DATEPART(dw, sorels.fduedate) as due_day_of_week,
+  # DATEPART(dw, sorels.flshipdate) as ship_day_of_week
+  # from SOMAST left join sorels on sorels.fsono = somast.fsono
+  # where
+  # (DATEDIFF(day, somast.forderdate, sorels.fduedate) > 14)
+  # AND (sorels.flshipdate > sorels.fduedate)
+  # AND (((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+  # case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+  # case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > 2)
+
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
-  scope( :shipped_late,
-         :joins => :sales_order,
-         :conditions => ['(DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?) AND (sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', AppConfig.otd_lead_time, AppConfig.otd_grace_period_days] )
+  scope :shipped_late, lambda {
+    select_sql = <<-SQL
+    sorels.*, ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+    DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) - 
+    case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+    case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) as business_days_late
+    SQL
+    conditions_sql = <<-SQL
+    (DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?)
+    AND (sorels.flshipdate > sorels.fduedate)
+    AND (((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+           DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+          case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+          case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > ?)
+    SQL
+    {
+      :joins => :sales_order,
+      :select => select_sql,
+      :conditions => [ conditions_sql, AppConfig.otd_lead_time, AppConfig.otd_grace_period_days ]
+    }
+  }
   scope :due, lambda { |start_date, end_date|
     {
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
@@ -273,4 +309,3 @@ end
 #  fsetuppadj       :decimal(16, 5)  default(0.0), not null
 #  fnISOQty         :decimal(15, 5)  default(0.0), not null
 #
-

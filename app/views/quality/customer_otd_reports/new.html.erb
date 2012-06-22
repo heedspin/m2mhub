@@ -2,6 +2,15 @@
 <%= render 'quality/submenu' %>
 <br />
 
+
+<div class="noticeContainer notice">
+	<strong>On Time Delivery Policy:</strong>
+	<ul>
+		<li>Lead Time: <%= AppConfig.otd_lead_time %> days</li>
+		<li>Business Days Grace Period: <%= AppConfig.otd_grace_period_days %> days</li>
+	</ul>
+</div>
+	
 <%= render 'quality/year_search', :search_url => new_customer_otd_report_url %>
 
 <% count = 0 %>
