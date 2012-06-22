@@ -30,16 +30,16 @@ class Quality::CustomerOtdReport
   
   def run
     results = M2m::SalesOrderRelease.connection.select_rows <<-SQL
-    select flshipdate, count(*) 
+    select sorels.fduedate, count(*) 
     from sorels
-    where sorels.flshipdate >= '#{@start_date.to_s(:db)}'
-      and sorels.flshipdate < '#{@end_date.to_s(:db)}'
-    group by sorels.flshipdate
-    order by sorels.flshipdate
+    where sorels.fduedate >= '#{@start_date.to_s(:db)}'
+      and sorels.fduedate < '#{@end_date.to_s(:db)}'
+    group by sorels.fduedate
+    order by sorels.fduedate
     SQL
     results.each do |result_row|
-      ship_date, count = result_row
-      month_for(ship_date).num_releases += count
+      due_date, count = result_row
+      month_for(due_date).num_releases += count
     end
     late_releases = M2m::SalesOrderRelease.shipped_late.due(@start_date, @end_date)
     M2m::SalesOrderItem.attach_to_releases(late_releases)
