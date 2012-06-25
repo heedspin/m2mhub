@@ -27,11 +27,19 @@ class M2m::SalesPerson < M2m::Base
   
   scope :by_name, :order => :flastname
   
-  def name
+  def short_name
     self.flastname.strip
   end
   
+  def name
+    if self.initials.present? and (self.initials != self.short_name)
+      "#{self.short_name} (#{self.initials})"
+    else
+      self.short_name
+    end
+  end
+  
   def initials
-    self.fdistno.strip
+    self.fsalespn.strip
   end
 end
