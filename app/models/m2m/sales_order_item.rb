@@ -54,7 +54,7 @@ class M2m::SalesOrderItem < M2m::Base
   }
   
   def self.attach_to_releases(sales_order_releases)
-    sales_order_releases = sales_order_releases.all
+    sales_order_releases = sales_order_releases.to_a
     if (sales_order_releases.size > 0)
       sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases)
       items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number))
