@@ -13,7 +13,6 @@
 #  total_on_order_cost             :float
 #  total_available_cost            :float
 #  total_committed_cost            :float
-#  total_on_hand_locations         :integer(4)
 #  total_run_time_seconds          :integer(4)
 #  earliest_release_date           :datetime
 #  movement_data                   :text
