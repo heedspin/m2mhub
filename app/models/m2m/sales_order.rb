@@ -21,7 +21,11 @@ class M2m::SalesOrder < M2m::Base
       :order => 'forderdate desc, fsono desc'
     }
   }
-
+  scope :order_dates, lambda { |start_date, end_date|
+    {
+      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
   scope :ordered_after, lambda { |day|
     {
       :conditions => ['somast.forderdate >= ?', day],

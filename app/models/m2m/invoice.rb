@@ -30,8 +30,20 @@ class M2m::Invoice < M2m::Base
       :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
     }
   }
+  scope :before, lambda { |end_date|
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    {
+      :conditions => [ 'armast.finvdate < ?', end_date ]
+    }
+  }
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
+  scope :by_date, :order => :finvdate
+  scope :for_date, lambda { |date|
+    {
+      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
+    }
+  }
 
   def invoice_type
     M2m::InvoiceType.find_by_key(self.invoice_type_code)

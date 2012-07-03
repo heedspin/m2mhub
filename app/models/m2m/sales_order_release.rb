@@ -75,6 +75,12 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => [ 'flshipdate >= ?', date ]
     }
   }
+  scope :order_dates, lambda { |start_date, end_date|
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -309,3 +315,4 @@ end
 #  fsetuppadj       :decimal(16, 5)  default(0.0), not null
 #  fnISOQty         :decimal(15, 5)  default(0.0), not null
 #
+
