@@ -1,0 +1,25 @@
+
+<table class="data">
+	<thead>
+		<tr>
+			<td class="ninjaborders"></td>
+			<% reports.each do |report| %>
+			<th><%= report.date.to_s(:month_year) %></th>
+			<% end %>			
+		</tr>
+	</thead>
+	<tbody>
+		<% [[:invoiced_sales, 'Invoiced Sales'], [:net_invoiced_sales, 'Net Invoiced Sales'], [:bookings, 'Bookings']].each do |key,txt| %>
+		<tr>
+			<th>
+				<%= txt %>
+			</th>
+			<% reports.each do |report| %>
+			<td>
+				<%= cm report.send(key), :rounded_dollars %>
+			</td>
+			<% end %>			
+		</tr>
+		<% end %>
+	</tbody>
+</table>

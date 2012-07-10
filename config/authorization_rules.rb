@@ -60,6 +60,7 @@ authorization do
     has_permission_on :pro_forma_sales_reports, :to => :manage
     has_permission_on :sales_commission_rates, :to => :manage
     has_permission_on :sales_commission_reports, :to => :manage
+    has_permission_on :sales_reports, :to => :read
   end
   
   role :production do
