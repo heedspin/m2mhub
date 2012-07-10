@@ -28,7 +28,7 @@ class AppConfigClass
   end
 
   def set_local(key, value)
-    ((@yaml_config['local_config'] ||= {})[Rails.env.downcase] ||= {})[key] = value
+    (@yaml_config['local_config'] ||= {})[key] = value
   end
 
   # Check environment-specific setting first.  Then check shared setting.
@@ -37,7 +37,7 @@ class AppConfigClass
     %w(local_config app_config m2mhub_config).each do |config_key|
       if (config = @yaml_config[config_key])
         if config_key == 'app_config'
-          return unless config = config[Rails.env.downcase]
+          next unless config = config[Rails.env.downcase]
         end
         if config.member?(key)
           return config[key]

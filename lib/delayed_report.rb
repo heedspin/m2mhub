@@ -3,7 +3,7 @@ module DelayedReport
     base.class_eval <<-RUBY
       include LoggerUtils
       belongs_to :delayed_job, :class_name => 'Delayed::Backend::ActiveRecord::Job'
-      before_save :save_delayed_job_log
+      before_save :save_string_logger
       extend ActiveHash::Associations::ActiveRecordExtensions
       belongs_to_active_hash :delayed_job_status, :class_name => 'DelayedJobStatus'
     RUBY
@@ -19,7 +19,7 @@ module DelayedReport
   end
   
   def set_loggers
-    self.loggers.push self.delayed_job_logger
+    self.loggers.push self.string_logger
   end
   
   def set_delayed_job_status!(status=nil)
@@ -68,24 +68,24 @@ module DelayedReport
     end
   end
   
-  def delayed_job_logger
-    @delayed_job_logger ||= Logger.new(self.delayed_job_logger_string)
+  def string_logger
+    @string_logger ||= Logger.new(self.string_logger_buffer)
   end
   
-  def truncate_delayed_job_logger_string
-    self.delayed_job_logger_string.rewind
-    txt = self.delayed_job_logger_string.read
-    self.delayed_job_logger_string.rewind
-    self.delayed_job_logger_string.truncate(0)
+  def truncate_string_logger_buffer
+    self.string_logger_buffer.rewind
+    txt = self.string_logger_buffer.read
+    self.string_logger_buffer.rewind
+    self.string_logger_buffer.truncate(0)
     txt
   end
   
-  def delayed_job_logger_string
-    @delayed_job_logger_string ||= StringIO.new
+  def string_logger_buffer
+    @string_logger_buffer ||= StringIO.new
   end
   
-  def save_delayed_job_log
-    txt = self.truncate_delayed_job_logger_string
+  def save_string_logger
+    txt = self.truncate_string_logger_buffer
     if txt.present?
       self.delayed_job_log = (self.delayed_job_log || '') + txt
       # logger.info txt

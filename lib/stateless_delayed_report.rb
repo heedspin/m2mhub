@@ -7,15 +7,17 @@ module StatelessDelayedReport
     RUBY
   end
 
-  def run_in_background!
+  def run_in_background!(method_to_run=nil)
+    @method_to_run = method_to_run
     self.send_later(:runner_main)
   end
 
   def runner_main
     begin
-      log "Starting"
-      self.run_report
-      log "Finished"
+      method_to_run = @method_to_run || 'run_report'
+      log "Starting #{method_to_run}"
+      self.send(method_to_run)
+      log "Finished #{method_to_run}"
       true
     rescue Exception => exc
       log_exception exc
@@ -27,7 +29,7 @@ module StatelessDelayedReport
   end
   
   def run_report
-    # Implement me!
+    log "Implement me!"
   end
   
   protected

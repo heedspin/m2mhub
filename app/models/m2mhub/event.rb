@@ -13,6 +13,8 @@
 #  user_id               :integer(4)
 #  created_at            :datetime
 #  updated_at            :datetime
+#  status                :string(255)
+#  closed                :boolean(1)
 #
 
 class M2mhub::Event < ApplicationModel
@@ -25,6 +27,11 @@ class M2mhub::Event < ApplicationModel
     }
   }
   scope :latest_first, :order => 'm2mhub_events.created_at desc'
+  scope :open_or_recently_closed, lambda { 
+    {
+      :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
+    }
+  }
 
   def ticket
     if @ticket.nil? and self.lighthouse_ticket_id
@@ -57,8 +64,13 @@ class M2mhub::Event < ApplicationModel
     end
   end
   
-  def resolved?
-    self.trigger.notification_type.ticket? && self.ticket && self.ticket.closed?
+  def update_status!
+    self.closed = self.trigger.notification_type.ticket? && self.ticket && self.ticket.closed?
+    if self.changed?
+      self.save!
+    else
+      true
+    end
   end
 
 end

@@ -1,38 +1,19 @@
-require 'logger_utils'
+require 'stateless_delayed_report'
 
 class M2mhub::RunAllTriggers
-  include LoggerUtils
+  include StatelessDelayedReport
 
-  def run_in_background!
-    self.send_later(:run_triggers)
-  end
-
-  # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_triggers
-  def run_triggers
-    begin
-      log "Running all triggers"
-      M2mhub::Trigger.enabled.each do |trigger|
-        trigger.run
-      end
-      log "Finished"
-      true
-    rescue Exception => exc
-      log_exception exc
-      raise exc
-    rescue => exc
-      log_exception exc
-      raise exc
+  # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_report
+  def run_report
+    log "Updating event status"
+    M2mhub::Event.open_or_recently_closed.each do |event|
+      event.update_status!
     end
-  end
-  
-  protected
-  
-    def log_exception(exc)
-      backtrace = exc.respond_to?(:backtrace) ? exc.backtrace : []
-      error_title = "Trigger exception: #{exc.class.name}: #{exc.message}"
-      log "#{error_title}\n" + backtrace.join("\n")
-      if Rails.env.production?
-        Airbrake.notify :error_class => "M2mhub Triggers", :error_message => error_title, :backtrace => backtrace
-      end
+    log "Running all triggers"
+    M2mhub::Trigger.enabled.each do |trigger|
+      trigger.run
     end
+    log "Finished"
+    true
+  end
 end
