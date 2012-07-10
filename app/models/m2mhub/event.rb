@@ -29,7 +29,7 @@ class M2mhub::Event < ApplicationModel
   scope :latest_first, :order => 'm2mhub_events.created_at desc'
   scope :open_or_recently_closed, lambda { 
     {
-      :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
+      :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.closed is null or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
     }
   }
 
