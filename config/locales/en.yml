@@ -12,10 +12,18 @@ en:
     attributes:
       m2m/item:
         fpartno: Part Number
+      m2m/sales_order:
+        order_date: Order Date
+        forderdate: Order Date
       m2m/sales_order_item:
         fcustpart: Customer Part Number
         search_order_number: Sales / Purchase Order Number
         search_part_number: Company / Customer Part Number
+        due_date: Ship Date
+        fduedate: Ship Date
+      m2m/sales_order_release:
+        due_date: Ship Date
+        fduedate: Ship Date
       sales_backlog_report:
         fob_group: FOB Group
         customer_status: Customer Status
@@ -35,3 +43,8 @@ en:
         customer_name: Customer Name
         part_number: Part Number
         commission_percentage: Commission Percentage
+      sales/sales_report:
+        invoiced_sales: Invoiced Sales
+        net_invoiced_sales: Net Invoiced Sales
+        bookings: Bookings
+        

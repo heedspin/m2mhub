@@ -9,13 +9,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% [[:invoiced_sales, 'Invoiced Sales'], [:net_invoiced_sales, 'Net Invoiced Sales'], [:bookings, 'Bookings']].each do |key,txt| %>
+		<% [:invoiced_sales, :net_invoiced_sales, :bookings].each do |key| %>
 		<tr>
 			<th>
-				<%= txt %>
+				<%= Sales::SalesReport.human_attribute_name(key) %>
 			</th>
 			<% reports.each do |report| %>
-			<td>
+			<td class="right">
 				<%= cm report.send(key), :rounded_dollars %>
 			</td>
 			<% end %>			

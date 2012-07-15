@@ -18,9 +18,9 @@
 		</li>
 		<% end %>
 
-		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
-		<li class="<%= menu_selected(:controller => :invoiced_sales_reports) %>">
-			<%= link_to 'Invoiced Sales', new_invoiced_sales_report_url %>
+		<% if permitted_to?(:read, :sales_reports) %>
+		<li class="<%= menu_selected(:controller => :sales_reports) %>">
+			<%= link_to 'Sales Reports', sales_reports_url %>
 		</li>
 		<% end %>
 

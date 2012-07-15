@@ -5,7 +5,7 @@
 			<th>Quantity</th>
 			<th>Status</th>
 			<th>Customer PO #</th>
-			<th>Due Date</th>
+			<th><%= M2m::SalesOrderItem.human_attribute_name(:due_date) %></th>
 			<th>Customer</th>
 			<th><%= AppConfig.short_name %> Part</th>
 			<th>Customer Part</th>
