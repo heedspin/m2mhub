@@ -13,7 +13,10 @@
 #  updated_at            :datetime
 #
 
+require 'plutolib/serialized_attributes'
+
 class Sales::SalesReport < ApplicationModel
+  include Plutolib::SerializedAttributes
   set_table_name 'sales_reports'
   belongs_to_active_hash :report_time_period
   scope :date, lambda { |date|
@@ -49,24 +52,15 @@ class Sales::SalesReport < ApplicationModel
     self.invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
     self.net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount)
     self.bookings = M2m::SalesOrderRelease.order_dates(self.date, next_month).sum(:fnetprice)
+
+    ar = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).not_cash.non_zero
+    self.ytd_invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
+    self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount)
+    self.ytd_bookings = M2m::SalesOrderRelease.order_dates(self.date.beginning_of_year, next_month).sum(:fnetprice)
     self.save!
   end
 
-  def data
-    if @data.nil?
-      if x = super
-        @data = ActiveSupport::JSON.decode(x)
-      else
-        @data = Hash.new(0)
-      end
-    end
-    @data
-  end
-
-  protected
-
-    before_save :serialize_data
-    def serialize_data
-      self.data = self.data.to_json
-    end
+  serialized_attribute :ytd_invoiced_sales, :des => :to_f
+  serialized_attribute :ytd_net_invoiced_sales, :des => :to_f
+  serialized_attribute :ytd_bookings, :des => :to_f
 end

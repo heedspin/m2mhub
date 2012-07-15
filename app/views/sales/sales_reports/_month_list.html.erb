@@ -9,7 +9,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% [:invoiced_sales, :net_invoiced_sales, :bookings].each do |key| %>
+		<% [:invoiced_sales, :net_invoiced_sales, :bookings, :ytd_net_invoiced_sales].each do |key| %>
 		<tr>
 			<th>
 				<%= Sales::SalesReport.human_attribute_name(key) %>
