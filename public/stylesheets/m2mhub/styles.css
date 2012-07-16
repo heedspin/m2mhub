@@ -720,6 +720,9 @@ table.data table.data td {
 table.data table.data th {
   background: #F7F7F7;
   }
+table.data tr.master-release {
+	background-color: #efe;
+}
 
 /* NEWS
 -------------------------------------------------------------------- */

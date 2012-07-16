@@ -22,6 +22,7 @@
 <table class="data">
 	<thead>
 		<tr>
+			<th>Number</th>
 			<th><%= M2m::SalesOrderRelease.human_attribute_name(:due_date) %></th>
 			<th>Delivery<br />Committment</th>
 			<th>Status</th>
@@ -36,8 +37,9 @@
 		</tr>
 	</thead>
 	<tbody>
-<% @releases.sort_by(&:due_date).each do |r| %>
-		<tr>
+<% @sales_order.releases.sort_by(&:due_date).each do |r| %>
+		<tr class="<%= r.master? ? 'master-release' : '' %>">
+			<td><%= r.master? ? 'Master' : r.sales_order_release_number %></td>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= h r.fdelivery.strip %></td>
 			<td class="centered"><%= r.status %></td>
