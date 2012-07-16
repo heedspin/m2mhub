@@ -92,6 +92,8 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => ['somast.forderdate >= ?', date]
     }
   }
+  scope :master, :conditions => { :fmasterrel => true }
+  scope :master_or_single, joins('inner join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('(soitem.fmultiple = ? and sorels.fmasterrel = ?) or (soitem.fmultiple = ?)', true, true, false)
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''

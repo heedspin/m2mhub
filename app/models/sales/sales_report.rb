@@ -51,7 +51,8 @@ class Sales::SalesReport < ApplicationModel
     ar = M2m::ArDistribution.dates(self.date, next_month).not_cash.non_zero
     self.invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
     self.net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount)
-    self.bookings = M2m::SalesOrderRelease.order_dates(self.date, next_month).sum(:fnetprice)
+    # M2m::SalesOrderRelease.master_or_single.order_dates(Date.parse('2012-03-01'), Date.parse('2012-04-01')).sum(:fnetprice).to_f
+    self.bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).sum(:fnetprice)
 
     ar = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).not_cash.non_zero
     self.ytd_invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
