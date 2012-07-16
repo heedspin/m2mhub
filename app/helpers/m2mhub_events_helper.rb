@@ -13,8 +13,8 @@ module M2mhubEventsHelper
   def link_to_event_status(event)
     case event.trigger.notification_type.cmethod
     when :ticket
-      if ticket = event.ticket
-        link_to image_tag(AppConfig.lighthouse_image, :width => 16) + ' ' + ticket.state, ticket.url
+      if event.ticket_url.present?
+        link_to image_tag(AppConfig.lighthouse_image, :width => 16) + ' ' + event.ticket_status, event.ticket_url
       else
         "No ticket"
       end

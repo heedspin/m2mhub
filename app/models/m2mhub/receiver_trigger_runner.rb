@@ -7,6 +7,7 @@ class M2mhub::ReceiverTriggerRunner < M2mhub::TriggerRunnerBase
     if recent_events.size > 0
       receiver_items = receiver_items.scoped(:conditions => ["#{M2m::ReceiverItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
     end
+    result = 0
     receiver_items.each do |ri|
       log "Creating event for receiver #{ri.receiver_number}"
       new_event = @trigger.events.build
@@ -15,14 +16,15 @@ class M2mhub::ReceiverTriggerRunner < M2mhub::TriggerRunnerBase
       new_event.erp_number = ri.receiver_number
       new_event.user = @trigger.target_user
       url = Rails.application.routes.url_helpers.receivers_url(:date => ri.receiver.time_received.to_date.to_s(:database), :host => AppConfig.hostname)
-      new_event.m2mhub_summary = "#{@trigger.title}: " + link_to("Receiver #{ri.receiver_number}", url)
+      new_event.title = "#{@trigger.title}: " + link_to("Receiver #{ri.receiver_number}", url)
       if @trigger.notification_type.ticket?
         title = "#{@trigger.title}: Receiver #{ri.receiver_number} for #{ri.part_number}"
         body = "[Receiver #{ri.receiver_number}](#{url})\n\n#{@trigger.instructions}"
         new_event.create_ticket(title, body)
       end
-      new_event.save
+      new_event.save!
+      result += 1
     end
-    true
+    result
   end
 end

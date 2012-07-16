@@ -2,7 +2,7 @@ class M2m::SalesOrderItem < M2m::Base
   default_scope :order => 'soitem.fenumber'
   set_table_name 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
-  has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
+  # has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
   belongs_to_item :fpartno, :fpartrev
 
   alias_attribute :quantity, :fquantity
@@ -22,7 +22,7 @@ class M2m::SalesOrderItem < M2m::Base
     {
       :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
     }
-  }  
+  }
   scope :order_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
@@ -46,12 +46,6 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
-  scope :ordered_since, lambda { |date|
-    {
-      :joins => :sales_order, 
-      :conditions => ['somast.forderdate >= ?', date]
-    }
-  }
   
   def self.attach_to_releases(sales_order_releases)
     sales_order_releases = sales_order_releases.to_a
@@ -90,6 +84,9 @@ class M2m::SalesOrderItem < M2m::Base
         r.item = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
       end
     end
+  end
+  
+  def number_of_releases
   end
   
 end

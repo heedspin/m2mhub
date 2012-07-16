@@ -37,8 +37,10 @@ class Lighthouse::Ticket
   end
   
   def closed?
-    ['resolved', 'invalid'].include?(self.state)
+    ['resolved', STATE_INVALID].include?(self.state)
   end
+  
+  STATE_INVALID = 'invalid'
 
   ######################################
   # Trick formtastic:

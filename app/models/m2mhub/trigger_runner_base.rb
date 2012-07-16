@@ -5,5 +5,6 @@ class M2mhub::TriggerRunnerBase
     @trigger = trigger
   end
   def run
+    0
   end
 end

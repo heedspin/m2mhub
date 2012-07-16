@@ -48,6 +48,11 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :fpartno => fpartno.strip }
     }
   }
+  scope :part_number_starts_with, lambda { |part_number|
+    {
+      :conditions => [ 'sorels.fpartno like ?', part_number + '%' ]
+    }
+  }
   scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
@@ -79,6 +84,12 @@ class M2m::SalesOrderRelease < M2m::Base
     {
       :joins => :sales_order,
       :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
+  scope :ordered_since, lambda { |date|
+    {
+      :joins => :sales_order, 
+      :conditions => ['somast.forderdate >= ?', date]
     }
   }
 

@@ -7,6 +7,7 @@ class M2mhub::ShipperTriggerRunner < M2mhub::TriggerRunnerBase
     if recent_events.size > 0
       items = items.scoped(:conditions => ["#{M2m::ShipperItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
     end
+    result = 0
     items.each do |i|
       log "Creating event for shipper #{i.shipper_number}"
       new_event = @trigger.events.build
@@ -15,14 +16,15 @@ class M2mhub::ShipperTriggerRunner < M2mhub::TriggerRunnerBase
       new_event.erp_number = i.shipper_number
       new_event.user = @trigger.target_user
       url = Rails.application.routes.url_helpers.shippers_url(:date => i.shipper.ship_date.to_date.to_s(:database), :host => AppConfig.hostname)
-      new_event.m2mhub_summary = "#{@trigger.title}: " + link_to("Shipper #{i.shipper_number}", url)
+      new_event.title = "#{@trigger.title}: " + link_to("Shipper #{i.shipper_number}", url)
       if @trigger.notification_type.ticket?
         title = "#{@trigger.title}: Shipper #{i.shipper_number} for #{i.part_number}"
         body = "[Shipper #{i.shipper_number}](#{url})\n\n#{@trigger.instructions}"
         new_event.create_ticket(title, body)
       end
-      new_event.save
+      new_event.save!
+      result += 1
     end
-    true
+    result
   end
 end

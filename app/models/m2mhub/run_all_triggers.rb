@@ -10,10 +10,11 @@ class M2mhub::RunAllTriggers
       event.update_status!
     end
     log "Running all triggers"
+    total_events_created = 0
     M2mhub::Trigger.enabled.each do |trigger|
-      trigger.run
+      total_events_created += trigger.run
     end
-    log "Finished"
+    log "Finished.  Created #{total_events_created} events"
     true
   end
 end

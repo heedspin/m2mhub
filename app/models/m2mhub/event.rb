@@ -9,12 +9,14 @@
 #  erp_number            :string(255)
 #  lighthouse_ticket_id  :string(255)
 #  lighthouse_project_id :string(255)
-#  m2mhub_summary        :string(255)
+#  title                 :string(255)
 #  user_id               :integer(4)
 #  created_at            :datetime
 #  updated_at            :datetime
-#  status                :string(255)
+#  ticket_status         :string(255)
 #  closed                :boolean(1)
+#  ticket_url            :string(255)
+#  body                  :text
 #
 
 class M2mhub::Event < ApplicationModel
@@ -32,6 +34,7 @@ class M2mhub::Event < ApplicationModel
       :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.closed is null or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
     }
   }
+  scope :valid, :conditions => ['m2mhub_events.ticket_status != ?', Lighthouse::Ticket::STATE_INVALID]
 
   def ticket
     if @ticket.nil? and self.lighthouse_ticket_id
@@ -54,18 +57,28 @@ class M2mhub::Event < ApplicationModel
     @ticket = Lighthouse::Ticket.new(:project_id => self.trigger.lighthouse_project_id)
     @ticket.title = title
     @ticket.body = body
-    @ticket.assigned_user_id = self.user.try(:lighthouse_user_id)
-    @ticket.watcher_ids = self.trigger.users.map(&:lighthouse_user_id)
+    @ticket.assigned_user_id = Rails.env.production? ? self.user.try(:lighthouse_user_id) : AppConfig.m2mhub_event_test_lighthouse_user_id
+    @ticket.watcher_ids = Rails.env.production? ? self.trigger.users.map(&:lighthouse_user_id) : []
     if @ticket.save
       self.lighthouse_project_id = self.trigger.lighthouse_project_id
       self.lighthouse_ticket_id = @ticket.id
+      self.closed = @ticket.closed?
+      self.ticket_status = @ticket.state
+      self.ticket_url = @ticket.url
     else
       false
     end
   end
   
   def update_status!
-    self.closed = self.trigger.notification_type.ticket? && self.ticket && self.ticket.closed?
+    if self.trigger.notification_type.ticket? and self.ticket
+      self.closed = self.ticket.closed?
+      self.ticket_status = self.ticket.state
+      self.ticket_url = ticket.url
+    else
+      self.ticket_status = nil
+      self.ticket_url = nil
+    end
     if self.changed?
       self.save!
     else

@@ -2,7 +2,7 @@ class M2mhub::EventsController < M2mhubController
   filter_access_to_defaults
 
   def index
-    @events = M2mhub::Event.latest_first.paginate(:page => params[:page], :per_page => 5)
+    @events = M2mhub::Event.latest_first.paginate(:page => params[:page], :per_page => 30)
   end
 
   def new
