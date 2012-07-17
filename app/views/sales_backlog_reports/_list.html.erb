@@ -27,7 +27,7 @@
 				<% end %>
 				<%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %><br />
 				SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
-				Due: <%= r.due_date.to_s(:sales_date) %>
+				Ship: <%= r.due_date.to_s(:sales_date) %>
 			</td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>">
