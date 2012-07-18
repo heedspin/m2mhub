@@ -46,22 +46,41 @@ class Sales::SalesReport < ApplicationModel
   # Invoiced Sales
   # M2m::ArDistribution.dates('2012-06-01', '2012-07-01').gl_category('R').not_cash.non_zero.not_receivables_or_credits.sum(:fnamount).to_f * -1
   # M2m::ArDistribution.dates('2012-06-01', '2012-07-01').gl_category('R').not_cash.non_zero.not_receivables_or_credits.all(:include => :gl_account).sum(&:value).to_f
+  # M2m::GlTransaction.post_dates('2012-05-01', '2012-06-01').gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value).to_f
   def run!
     next_month = self.date.advance(:months => 1)
-    ar = M2m::ArDistribution.dates(self.date, next_month).not_cash.non_zero
-    self.invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
-    self.net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount)
-    # M2m::SalesOrderRelease.master_or_single.order_dates(Date.parse('2012-03-01'), Date.parse('2012-04-01')).sum(:fnetprice).to_f
-    self.bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).sum(:fnetprice)
 
-    ar = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).not_cash.non_zero
-    self.ytd_invoiced_sales = ar.gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value)
-    self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount)
-    self.ytd_bookings = M2m::SalesOrderRelease.order_dates(self.date.beginning_of_year, next_month).sum(:fnetprice)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account)
+    self.gl_transaction_ids = revenue_journal_entries.map(&:id)
+    ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
+    self.ar_distribution_ids = ar_distributions.map(&:id)
+
+    self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
+    # self.net_invoiced_sales = M2m::ArDistribution.dates(self.date, next_month).non_zero.not_cash.receivables_and_credits.sum(:fnamount) + revenue_journal_entries.sum(&:value)
+
+    self.bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).all.sum(&:total_price)
+
+    jsum = M2m::GlTransaction.post_dates(self.date.beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account).sum(&:value)
+    ar_distributions = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
+
+    self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
+    # self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount) + revenue_journal_entries
+
+    self.ytd_bookings = M2m::SalesOrderRelease.order_dates(self.date.beginning_of_year, next_month).all.sum(&:total_price)
+
     self.save!
   end
 
   serialized_attribute :ytd_invoiced_sales, :des => :to_f
   serialized_attribute :ytd_net_invoiced_sales, :des => :to_f
   serialized_attribute :ytd_bookings, :des => :to_f
+  serialized_attribute :ar_distribution_ids
+  serialized_attribute :gl_transaction_ids
+  
+  def ar_distributions
+    @ar_distributions ||= M2m::ArDistribution.ids(self.ar_distribution_ids).all(:include => :gl_account)
+  end
+  def gl_transactions
+    @gl_transactions ||= M2m::GlTransaction.ids(self.gl_transaction_ids).all(:include => :gl_account)
+  end
 end

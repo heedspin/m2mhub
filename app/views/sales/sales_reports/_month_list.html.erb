@@ -9,14 +9,18 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% [:invoiced_sales, :net_invoiced_sales, :bookings, :ytd_net_invoiced_sales].each do |key| %>
+		<% [:invoiced_sales, :bookings, :ytd_invoiced_sales].each do |key| %>
 		<tr>
 			<th>
 				<%= Sales::SalesReport.human_attribute_name(key) %>
 			</th>
 			<% reports.each do |report| %>
 			<td class="right">
+				<% if key == :invoiced_sales %>
+				<%= link_to cm(report.invoiced_sales, :rounded_dollars), sales_report_url(report) %>
+				<% else %>
 				<%= cm report.send(key), :rounded_dollars %>
+				<% end %>
 			</td>
 			<% end %>			
 		</tr>

@@ -4,6 +4,7 @@ class M2m::SalesOrderRelease < M2m::Base
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to_item :fpartno, :fpartrev
+  attr_accessor :sales_order_item
 
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
 
@@ -189,7 +190,8 @@ class M2m::SalesOrderRelease < M2m::Base
 
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)
-    self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+    self.sales_order_item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+    self.item = self.sales_order_item.try(:item)
   end
 
   def self.attach_to_sales_orders(sales_orders)
@@ -237,10 +239,6 @@ class M2m::SalesOrderRelease < M2m::Base
   def master?
     self.fmasterrel
   end
-
-  # def master_release?
-  #   (self.frelease == '000') && self.item.try(:multiple_releases?)
-  # end
 
 end
 

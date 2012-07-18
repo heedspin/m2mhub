@@ -12,6 +12,7 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :external_number, :fenumber
   alias_attribute :order_number, :fsono
   alias_attribute :multiple_releases, :fmultiple
+  alias_attribute :description, :fdesc
 
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
@@ -188,3 +189,4 @@ end
 #  Flrfqreqd        :boolean         default(FALSE), not null
 #  Fcostfrom        :string(9)       default(""), not null
 #
+

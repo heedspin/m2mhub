@@ -3,6 +3,13 @@ require 'stateless_delayed_report'
 class Sales::SalesReportRunner
   include StatelessDelayedReport
   
+  # Sales::SalesReportRunner.new.recreate_all
+  def recreate_all
+    Sales::SalesReport.delete_all
+    self.update_12_months
+    self.update_month
+  end
+  
   # Sales::SalesReportRunner.new.run_in_background!(:update_month)
   def update_month
     this_month = Date.current.beginning_of_month

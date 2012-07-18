@@ -165,7 +165,7 @@ class M2m::Rma < M2m::Base
       self.encode
     end
     def db_invoice_number
-      M2m::Invoice.invoice_number(M2m::InvoiceType.credit_memo, self.invoice_number[/\d+/])
+      M2m::Invoice.format_invoice_number(M2m::InvoiceType.credit_memo, self.invoice_number[/\d+/])
     end
   end
   

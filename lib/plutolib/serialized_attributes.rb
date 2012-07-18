@@ -1,7 +1,7 @@
 module Plutolib::SerializedAttributes
   def self.included(base)
     class << base
-      def serialized_attribute(key, args)
+      def serialized_attribute(key, args=nil)
         args ||= {}
         storage_column = args[:data] || 'data'
         deserialize = args[:deserialize] || args[:des]

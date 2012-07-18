@@ -27,6 +27,7 @@ class M2m::GlAccount < M2m::Base
   alias_attribute :account_number, :fcacctnum
   alias_attribute :parent_account_number, :fcparentid
   alias_attribute :class_key, :fcclass
+  alias_attribute :description, :fcdescr
   scope :account_number, lambda { |n|
     {
       :conditions => { :fcacctnum => n }

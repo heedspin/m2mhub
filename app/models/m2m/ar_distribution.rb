@@ -27,6 +27,8 @@ class M2m::ArDistribution < M2m::Base
 
   alias_attribute :gl_account_number, :fcacctnum
   alias_attribute :amount, :fnamount
+  alias_attribute :date, :fddate
+  alias_attribute :ref_key, :fcrefname
 
   scope :dates, lambda { |start_date, end_date|
     start_date = Date.parse(start_date) if start_date.is_a?(String)
@@ -55,11 +57,27 @@ class M2m::ArDistribution < M2m::Base
                       [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
     }
   }
-  def document_id
+  scope :ids, lambda { |ids|
+    {
+      :conditions => [ 'ardist.identity_column in (?)', ids ]
+    }
+  }
+  
+  def ref_id
     self.fccashid[7..17]
   end
+  def ref_invoice?
+    self.ref_key.strip == 'INV'
+  end
+  def invoice
+    @invoice ||= self.ref_invoice? && M2m::Invoice.invoice_number(self.ref_id).first
+  end
+  
   def customer_id
-    self.fccashid[1..5]
+    self.fccashid[1..6]
+  end
+  def customer
+    @customer ||= M2m::Customer.with_customer_number(self.customer_id).first
   end
   def value
     self.amount * self.gl_account.value_multiplier

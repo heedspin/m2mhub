@@ -39,26 +39,26 @@
 	<tbody>
 <% @sales_order.releases.sort_by(&:due_date).each do |r| %>
 		<tr class="<%= r.master? ? 'master-release' : '' %>">
-			<td><%= r.master? ? 'Master' : r.sales_order_release_number %></td>
+			<td><%= r.sales_order_release_id %>-<%= r.sales_order_release_number %> <%= 'Master' if r.master? %></td>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= h r.fdelivery.strip %></td>
 			<td class="centered"><%= r.status %></td>
 			<% if r.item.nil? %>
 			<td colspan="5"></td>
 			<% else %>
-			<td><%= link_to_item r.item.try(:item), r.part_number %></td>
-			<td><%= simple_format r.item.fdesc.strip %></td>
-			<td><%= r.item.fcustpart %></td>
-			<td class="monitary"><%= cm r.item.try(:item).try(:total_cost), :dollars %></td>
+			<td><%= link_to_item r.item, r.part_number %></td>
+			<td><%= simple_format r.sales_order_item.description.strip %></td>
+			<td><%= r.sales_order_item.customer_part_number %></td>
+			<td class="monitary"><%= cm r.item.try(:total_cost), :dollars %></td>
 			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 			<% end %>
 			<td class="right">
 				<%= cm r.quantity_shipped, :sales_order_quantity, 0 %> / <%= cm r.quantity, :sales_order_quantity %>
 			</td>
 			<td class="centered">
-				<% if r.item.try(:item) %>
-				<%= cm(r.item.item.quantity_on_hand, :sales_order_quantity, 0) %>
-				/ <%= cm(r.item.item.quantity_committed, :sales_order_quantity, 0) %>
+				<% if r.item %>
+				<%= cm(r.item.quantity_on_hand, :sales_order_quantity, 0) %>
+				/ <%= cm(r.item.quantity_committed, :sales_order_quantity, 0) %>
 				<% end %>
 			</td>
 			<td class="monitary"><%= cm(r.release_price, :dollars) %></td>

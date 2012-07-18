@@ -1,0 +1,64 @@
+<%= render 'sales/sales_reports/submenu' %>
+<br />
+
+<h2>Sales Report for <%= @sales_report.date.to_s(:month_year) %></h2>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Post Date</th>
+			<th>Customer</th>
+			<th>GL Account</th>
+			<th>Description</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="4">Total</td>
+			<th class="right"><%= cm @sales_report.invoiced_sales, :rounded_dollars %></th>
+		</tr>
+		<% @sales_report.ar_distributions.sort_by { |ard| ard.customer.try(:company_name) || '' }.each do |ard| %>
+		<tr>
+			<td><%= ard.date.to_s(:invoice_date) %></td>
+			<td><%= link_to ard.customer.company_name, customer_url(ard.customer) %></td>
+			<td><%= ard.gl_account_number %> <%= ard.gl_account.description %></td>
+			<td>
+				<% if ard.ref_invoice? %>
+				Invoice <%= ard.ref_id.to_i %>
+				<% if ard.invoice.sales_order_number.present? %>
+				 	for <%= link_to "SO #{ard.invoice.sales_order_number.to_i}", sales_order_url(ard.invoice.sales_order_number) %>
+				<% end %>
+				<% if ard.invoice.number.present? %>
+					shipper <%= ard.invoice.number.to_i %>
+				<% end %>
+				<% else %>
+				<%= ard.ref_key %>: <%= ard.ref_id %>
+				<% end %>
+			</td>
+			<td class="right"><%= cm ard.value, :rounded_dollars %></td>
+		</tr>
+		<% end %>
+		<% @sales_report.gl_transactions.each do |glt| %>
+		<tr>
+			<td><%= glt.post_date.to_s(:invoice_date) %></td>
+			<td></td>
+			<td><%= glt.gl_account_number %> <%= glt.gl_account.description %></td>
+			<td>
+				<% if glt.journal_entry? %>
+				Journal Entry
+				<% else %>
+				<%= glt.ref_key %> 
+				<% end %>
+				<%= glt.ref_id.to_i %>:
+				<%= glt.description %>
+			</td>
+			<td><%= cm glt.value, :rounded_dollars %></td>
+		</tr>
+		<% end %>
+		<tr>
+			<td colspan="4">Total</td>
+			<th class="right"><%= cm @sales_report.invoiced_sales, :rounded_dollars %></th>
+		</tr>
+	</tbody>
+</table>
