@@ -55,7 +55,7 @@ class M2m::SalesOrderItem < M2m::Base
       items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number))
       sales_order_releases.each do |r|
         if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
-          r.item = i
+          r.sales_order_item = i
           i.sales_order = r.sales_order
           i.item = items.detect { |c| (c.part_number == i.part_number) && (c.revision == i.revision) }
         end

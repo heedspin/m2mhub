@@ -13,6 +13,7 @@ class M2m::SalesOrder < M2m::Base
   
   scope :by_order_number_desc, :order => 'somast.fsono desc'  
   scope :by_due_date, :order => 'somast.fduedate'
+  scope :by_order_date, :order => 'somast.forderdate'
   
   scope :since, lambda { |day|
     {
@@ -42,6 +43,12 @@ class M2m::SalesOrder < M2m::Base
     }
   }
   scope :prepayment_required, :conditions => { :flprofrqd => true }
+  scope :customer, lambda { |customer|
+    customer_number = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
+    {
+      :conditions => { :fcustno => customer_number }
+    }
+  }
   
   alias_attribute :order_number, :fsono
   alias_attribute :order_date, :forderdate
