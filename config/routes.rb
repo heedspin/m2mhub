@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   resources :commission_reports, :controller => 'sales/commission_reports'
   match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
+  resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'

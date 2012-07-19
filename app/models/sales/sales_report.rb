@@ -8,7 +8,6 @@
 #  data                  :text
 #  invoiced_sales        :decimal(12, 2)
 #  net_invoiced_sales    :decimal(12, 2)
-#  bookings              :decimal(12, 2)
 #  created_at            :datetime
 #  updated_at            :datetime
 #
@@ -58,15 +57,11 @@ class Sales::SalesReport < ApplicationModel
     self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
     # self.net_invoiced_sales = M2m::ArDistribution.dates(self.date, next_month).non_zero.not_cash.receivables_and_credits.sum(:fnamount) + revenue_journal_entries.sum(&:value)
 
-    self.bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).all.sum(&:total_price)
-
     jsum = M2m::GlTransaction.post_dates(self.date.beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account).sum(&:value)
     ar_distributions = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
     # self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount) + revenue_journal_entries
-
-    self.ytd_bookings = M2m::SalesOrderRelease.order_dates(self.date.beginning_of_year, next_month).all.sum(&:total_price)
 
     self.save!
   end

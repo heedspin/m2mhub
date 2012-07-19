@@ -161,6 +161,11 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
     }
   }
+  scope :ids, lambda { |ids|
+    {
+      :conditions => ['sorels.identity_column in (?)', ids]
+    }
+  }
 
   def days_late
     return 0 unless self.due_date.present?

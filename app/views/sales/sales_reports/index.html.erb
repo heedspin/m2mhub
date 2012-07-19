@@ -2,25 +2,26 @@
 <br />
 
 <h2>Sales Reports</h2>
-<% if @sales_reports.size > 0 %>
+<% if @date_reports.size > 0 %>
 <%= will_paginate @sales_reports %>
 <table class="data">
 	<thead>
 		<tr>
 			<th>Date</th>
-			<% [:invoiced_sales, :bookings, :ytd_invoiced_sales, :ytd_bookings].each do |key| %>
-			<th><%= Sales::SalesReport.human_attribute_name(key) %></th>
-			<% end %>
+			<th><%= Sales::SalesReport.human_attribute_name(:invoiced_sales) %></th>
+			<th><%= Sales::BookingsReport.human_attribute_name(:bookings) %></th>
+			<th><%= Sales::SalesReport.human_attribute_name(:ytd_invoiced_sales) %></th>
+			<th><%= Sales::BookingsReport.human_attribute_name(:ytd_bookings) %></th>
 		</tr>
 	</thead>
 	<tbody>
-		<% @sales_reports.each do |report| %>
+		<% @date_reports.each do |dr| %>
 		<tr>
-			<td><%= report.date.to_s(:month_year) %></td>
-			<td class="right"><%= link_to cm(report.invoiced_sales, :rounded_dollars), sales_report_url(report) %></td>
-			<% [:bookings, :ytd_invoiced_sales, :ytd_bookings].each do |key| %>
-			<td class="right"><%= cm report.send(key), :rounded_dollars %></td>
-			<% end %>
+			<td><%= dr.date.to_s(:month_year) %></td>
+			<td class="right"><%= link_to cm(dr.sales_report.invoiced_sales, :rounded_dollars), sales_report_url(dr.sales_report) %></td>
+			<td class="right"><%= link_to cm(dr.bookings_report.bookings, :rounded_dollars), bookings_report_url(dr.bookings_report) %></td>
+			<td class="right"><%= cm dr.sales_report.ytd_invoiced_sales, :rounded_dollars %></td>
+			<td class="right"><%= cm dr.bookings_report.ytd_bookings, :rounded_dollars %></td>
 		</tr>
 		<% end %>
 	</tbody>

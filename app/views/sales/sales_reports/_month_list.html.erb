@@ -3,27 +3,41 @@
 	<thead>
 		<tr>
 			<td class="ninjaborders"></td>
-			<% reports.each do |report| %>
-			<th><%= report.date.to_s(:month_year) %></th>
+			<% date_reports.each do |dr| %>
+			<th><%= dr.date.to_s(:month_year) %></th>
 			<% end %>			
 		</tr>
 	</thead>
 	<tbody>
-		<% [:invoiced_sales, :bookings, :ytd_invoiced_sales].each do |key| %>
 		<tr>
 			<th>
-				<%= Sales::SalesReport.human_attribute_name(key) %>
+				<%= Sales::SalesReport.human_attribute_name(:invoiced_sales) %>
 			</th>
-			<% reports.each do |report| %>
+			<% date_reports.each do |dr| %>
 			<td class="right">
-				<% if key == :invoiced_sales %>
-				<%= link_to cm(report.invoiced_sales, :rounded_dollars), sales_report_url(report) %>
-				<% else %>
-				<%= cm report.send(key), :rounded_dollars %>
-				<% end %>
+				<%= link_to cm(dr.sales_report.invoiced_sales, :rounded_dollars), sales_report_url(dr.sales_report) %>
 			</td>
-			<% end %>			
+			<% end %>
 		</tr>
-		<% end %>
+		<tr>
+			<th>
+				<%= Sales::BookingsReport.human_attribute_name(:bookings) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= link_to cm(dr.bookings_report.bookings, :rounded_dollars), bookings_report_url(dr.bookings_report) %>
+			</td>
+			<% end %>
+		</tr>
+		<tr>
+			<th>
+				<%= Sales::SalesReport.human_attribute_name(:ytd_invoiced_sales) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= cm(dr.sales_report.ytd_invoiced_sales, :rounded_dollars) %>
+			</td>
+			<% end %>
+		</tr>
 	</tbody>
 </table>

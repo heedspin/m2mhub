@@ -4,9 +4,9 @@
 <%= render 'm2mhub/events/list' %>
 <% end %>
 
-<% if @monthly_sales_reports and (@monthly_sales_reports.size > 0) %>
+<% if @date_reports and (@date_reports.size > 0) %>
 <h3><%= link_to 'Sales Reports', sales_reports_url %></h3>
-<%= render 'sales/sales_reports/month_list', :reports => @monthly_sales_reports %>
+<%= render 'sales/sales_reports/month_list', :date_reports => @date_reports %>
 <% end %>
 
 <h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
