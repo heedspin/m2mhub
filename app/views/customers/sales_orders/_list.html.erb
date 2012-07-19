@@ -27,10 +27,10 @@
 		<tr class="<%= so_style %>">
 			<% end %>
 			<td><%= r.due_date.to_s(:sales_date) %></td>
-			<td><%= link_to_item(r.item.item, r.part_number) %></td>
-			<td><%= simple_format r.item.fdesc.strip %></td>
-			<td><%= r.item.fcustpart %></td>
-			<td class="monitary"><%= cm(r.item.item.total_cost, :dollars) if r.item.item %></td>
+			<td><%= link_to_item(r.item, r.part_number) %></td>
+			<td><%= simple_format r.item.description.strip %></td>
+			<td><%= r.sales_order_item.customer_part_number %></td>
+			<td class="monitary"><%= cm(r.item.total_cost, :dollars) if r.item %></td>
 			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 			<td class="centered"><%= cm(r.quantity, :sales_order_quantity) %></td>
 			<td class="monitary"><%= cm r.total_price, :dollars %></td>
