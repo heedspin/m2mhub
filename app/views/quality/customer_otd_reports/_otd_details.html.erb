@@ -19,7 +19,7 @@
 			<td><%= r.due_date.to_s(:shipper_date) %></td>
 			<td><%= r.last_ship_date.to_s(:shipper_date) %></td>
 			<td><%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %></td>
-			<td><%= link_to_item r.item.item, r.item.item.part_number %></td>
+			<td><%= link_to_item r.item, r.item.part_number %></td>
 		</tr>
 <% end %>
 	</tbody>
