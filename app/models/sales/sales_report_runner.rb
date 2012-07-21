@@ -7,24 +7,32 @@ class Sales::SalesReportRunner
   def recreate_all
     Sales::SalesReport.delete_all
     Sales::BookingsReport.delete_all
-    self.update_12_months
+    self.update_nightly
     self.update_month
   end
 
+  # Sales::SalesReportRunner.new.run_in_background!(:update_nightly)
+  def update_nightly
+    self.update_month
+    self.update_12_months
+    self.update_day_report
+  end
+  
   # Sales::SalesReportRunner.new.run_in_background!(:update_month)
   def update_month
     [Sales::SalesReport, Sales::BookingsReport].each do |klass|
       @klass = klass
       this_month = Date.current.beginning_of_month
-      last_month = this_month.advance(:months => -1)
-      [this_month, last_month].each do |month|
+      months = [this_month, this_month.advance(:months => -1)]
+      # Do two months prior one last time!
+      months.push this_month.advance(:months => -2) if (Date.current.day == 1) and (Time.now.hour <= 6)
+      months.each do |month|
         run_month(month)
       end
     end
     self
   end
 
-  # Sales::SalesReportRunner.new.run_in_background!(:update_12_months)
   def update_12_months
     end_date = Date.current.beginning_of_month.advance(:months => -2) # update_month handles recent months.
     [Sales::SalesReport, Sales::BookingsReport].each do |klass|

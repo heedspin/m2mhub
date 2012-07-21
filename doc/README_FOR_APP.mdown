@@ -5,7 +5,7 @@
 01 1 * * * /var/www/lxdhub/script/runner.sh 'LighthouseWakeup.new.run_in_background!'
 */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::RunAllTriggers.new.run_in_background!'
 */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.run_in_background!(:update_month)'
-02 1 * * * /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.run_in_background!(:update_12_months)'
+02 1 * * * /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.run_in_background!(:update_nightly)'
 */15 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.run_in_background!(:update_day_report)'
 
 =======
