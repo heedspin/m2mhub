@@ -1,0 +1,48 @@
+<%= render 'sales/sales_reports/submenu' %>
+<br />
+
+<h2>Backlog Report For <%= @backlog_report.date.to_s(:sales_date) %></h2>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Due Date</th>
+			<th>Customer</th>
+			<th>Sales Order</th>
+			<th>Item</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="4">Total</td>
+			<th class="right"><%= cm @backlog_report.total_backlog, :rounded_dollars %></th>
+		</tr>
+		<% [@backlog_report.late_bucket, @backlog_report.buckets, @backlog_report.future_bucket].flatten.each do |bucket| %> 
+		<% if bucket.key == :month %>
+		<tr>
+			<th colspan="4"><%= bucket.month.to_s(:month_year) %></th>
+			<th class="right"><%= cm bucket.total_backlog, :rounded_dollars %></th>
+		</tr>
+		<% elsif bucket.key == :future %>
+		<tr>
+			<th colspan="4">And Beyond</th>
+			<th class="right"><%= cm bucket.total_backlog, :rounded_dollars %></th>
+		</tr>
+		<% end %>
+		<% bucket.summaries.each do |summary| %>
+		<tr class="<%= summary.late? ? 'late-release' : '' %>">
+			<td><%= summary.due_date.to_s(:sales_date) %></td>
+			<td><%= link_to summary.release.sales_order.customer.company_name, customer_url(summary.release.sales_order.customer) %></td>
+			<td><%= link_to "SO #{summary.release.sales_order.order_number}", sales_order_url(summary.release.sales_order) %></td>
+			<td><%= link_to_item summary.release.item %></td>
+			<td class="right"><%= cm summary.backlog_price, :rounded_dollars %></td>
+		</tr>
+		<% end %>
+		<% end %>
+		<tr>
+			<td colspan="4">Total</td>
+			<th class="right"><%= cm @backlog_report.total_backlog, :rounded_dollars %></th>
+		</tr>
+	</tbody>
+</table>

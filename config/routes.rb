@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
+  resources :backlog_report, :only => [:index, :show], :controller => 'sales/backlog_reports'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'

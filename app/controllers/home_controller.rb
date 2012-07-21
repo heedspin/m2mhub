@@ -12,6 +12,7 @@ class HomeController < M2mhubController
     if permitted_to? :read, :sales_reports
       @date_reports = Sales::DateReport.create( :sales_reports => Sales::SalesReport.by_date_desc.limit(8),
                                                 :bookings_reports => Sales::BookingsReport.by_date_desc.limit(8) )
+      @backlog_report = Sales::BacklogReport.by_date_desc.first
     end
   end
 end

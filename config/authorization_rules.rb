@@ -62,6 +62,7 @@ authorization do
     has_permission_on :sales_commission_reports, :to => :manage
     has_permission_on :sales_reports, :to => :read
     has_permission_on :bookings_reports, :to => :read
+    has_permission_on :backlog_reports, :to => :read
   end
   
   role :production do

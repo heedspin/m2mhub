@@ -43,6 +43,17 @@ class Sales::SalesReportRunner
     end
     self
   end
+  
+  # Sales::SalesReportRunner.new.run_in_background!(:update_day_report)
+  def update_day_report
+    date = if Time.now.hour <= 6
+      Date.current.advance(:days => -1)
+    else
+      Date.current
+    end
+    report = Sales::BacklogReport.date(date).first || Sales::BacklogReport.new(:date => date)
+    report.run!
+  end
 
   protected
 

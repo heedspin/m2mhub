@@ -10,7 +10,7 @@ module Plutolib::SerializedAttributes
           def #{storage_column}
             if @#{storage_column}.nil?
               if x = super
-                @#{storage_column} = ActiveSupport::JSON.decode(x)
+                @#{storage_column} = x.is_a?(String) ? ActiveSupport::JSON.decode(x) : x
               else
                 @#{storage_column} = Hash.new(0)
               end

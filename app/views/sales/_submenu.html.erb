@@ -19,7 +19,7 @@
 		<% end %>
 
 		<% if permitted_to?(:read, :sales_reports) %>
-		<li class="<%= menu_selected(:controller => :sales_reports) %>">
+		<li class="<%= menu_selected(:controller => [:sales_reports, :bookings_reports, :backlog_reports]) %>">
 			<%= link_to 'Sales Reports', sales_reports_url %>
 		</li>
 		<% end %>

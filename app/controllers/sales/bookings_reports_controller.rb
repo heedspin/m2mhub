@@ -7,10 +7,6 @@ class Sales::BookingsReportsController < M2mhubController
   
   protected
   
-    def model_name
-      :bookings_report
-    end
-
     def model_class
       Sales::BookingsReport
     end

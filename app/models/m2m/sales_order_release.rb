@@ -167,10 +167,10 @@ class M2m::SalesOrderRelease < M2m::Base
     }
   }
 
-  def days_late
+  def days_late(date=nil)
     return 0 unless self.due_date.present?
-    date = self.last_ship_date || Time.current
-    (date - self.due_date).to_i / 86400
+    date ||= self.last_ship_date || Time.current
+    (date.to_time - self.due_date).to_i / 86400
   end
 
   def last_ship_date
@@ -192,6 +192,10 @@ class M2m::SalesOrderRelease < M2m::Base
   def backorder_quantity
     quantity - quantity_shipped
   end
+  
+  def backlog_price
+    self.backorder_quantity * self.unit_price
+  end  
 
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)

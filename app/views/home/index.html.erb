@@ -9,6 +9,11 @@
 <%= render 'sales/sales_reports/month_list', :date_reports => @date_reports %>
 <% end %>
 
+<% if @backlog_report %>
+<h3><%= link_to 'Backlog', backlog_report_url(@backlog_report) %></h3>
+<%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
+<% end %>
+
 <h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
 <%= render 'sales_orders/list' %>
 

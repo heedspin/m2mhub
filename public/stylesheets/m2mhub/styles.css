@@ -1121,3 +1121,8 @@ tr.resolved-event {
 	text-decoration: italic;
 	color: #aaa;
 }
+/* Backlog Reports
+------------------------------------------------ */
+.late-release {
+	background-color: #fdd;
+}

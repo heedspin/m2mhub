@@ -2,7 +2,6 @@ class Sales::DateReport
   attr_accessor :date
   attr_accessor :sales_report
   attr_accessor :bookings_report
-  attr_accessor :backlog_report
   
   def initialize(date)
     @date = date
@@ -10,7 +9,7 @@ class Sales::DateReport
   
   def self.create(args)
     result = {}
-    [:sales_reports, :bookings_reports, :backlog_reports].each do |key|
+    [:sales_reports, :bookings_reports].each do |key|
       if reports = args[key]
         reports.each do |r|
           date_report = result[r.date] ||= new(r.date)
