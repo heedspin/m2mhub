@@ -7,5 +7,10 @@
 
 <%= semantic_form_for @commission_rate, :url => commission_rates_url do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>
+	<%= f.buttons do %>
+	  <%= f.commit_button 'Create' %>
+	  <%= f.commit_button 'Create & New' %>
+	  <%= f.cancel_link :url => commission_rates_url %>
+	<% end %>
 <% end %>
 

@@ -1,6 +1,12 @@
 <%= render 'sales/commission_reports/submenu' %>
 <br />
 
+<% if permitted_to? :manage, :sales_commission_rates %>
+	<ul>
+		<li><%= link_to 'New Rate', new_commission_rate_path %></li>
+	</ul>
+<% end %>
+
 <% if @commission_rates.size > 0 %>
 <%= will_paginate @commission_rates %>
 <table class="data">
@@ -31,10 +37,4 @@
 		<% end %>
 	</tbody>
 </table>			
-<% end %>
-
-<% if permitted_to? :manage, :sales_commission_rates %>
-	<ul>
-		<li><%= link_to 'New Rate', new_commission_rate_path %></li>
-	</ul>
 <% end %>

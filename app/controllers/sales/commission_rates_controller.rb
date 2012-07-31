@@ -19,7 +19,12 @@ class Sales::CommissionRatesController < M2mhubController
   def create
     @commission_rate = build_object
     if @commission_rate.save
-      redirect_to commission_rates_url
+      flash[:notice] = "Created Commission Rate #{@commission_rate.id}"
+      if params[:commit] == 'Create & New'
+        redirect_to new_commission_rate_url
+      else
+        redirect_to commission_rates_url
+      end
     else
       render :action => 'new'
     end
