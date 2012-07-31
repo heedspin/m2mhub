@@ -27,7 +27,7 @@
 	<% count += 1 %>
 	<tr>
 		<td><%= month.date.to_s(:month_year) %></td>
-		<td><%= cm month.percent_late, :on_time_delivery_report %>% Late (<%= month.num_late_releases %> / <%= month.num_releases %>)</td>
+		<td><%= cm month.percent_late, :on_time_delivery_report %>% Late (<%= month.num_late_releases %> / <%= cm month.num_releases %>)</td>
 		<td class="otd_details">
 			<% if month.num_late_releases > 0 %>
 			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">Show Details</span></a>
@@ -40,6 +40,6 @@
 <% end %>
 	<tr>
 		<th>Total</th>
-		<th><%= cm @report.percent_late, :on_time_delivery_report %>% Late (<%= @report.num_late_releases %> / <%= @report.num_releases %>)</th>
+		<th><%= cm @report.percent_late, :on_time_delivery_report %>% Late (<%= @report.num_late_releases %> / <%= cm @report.num_releases %>)</th>
 	</tr>
 </table>

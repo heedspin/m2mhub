@@ -35,7 +35,7 @@
 		<tr>
 			<td><%= link_to customer_report.customer_name, inventory_report_customer_report_url(@inventory_report, customer_report) %></td>
 			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></th>
+			<td class="right"><%= cm customer_report.send(quantity.total_cost_key), :rounded_dollars %></td>
 			<% end %>
 			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
 			<td class="right"><%= cm customer_report.movements.cost_for(ttype), :rounded_dollars %></td>

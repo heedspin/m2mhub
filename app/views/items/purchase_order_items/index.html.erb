@@ -1,8 +1,8 @@
 <%= render 'items/summary' %>
 
-<h2>Purchase Orders Items for <%= @item.part_number %></h2>
+<h2>Purchase Orders Items for <%= item_part_number(@item) %></h2>
 <%= will_paginate @purchase_order_items %>
 
-<%= render 'list' %>
+<%= render 'list', :include_browse_all => false %>
 
 <%= will_paginate @purchase_order_items %>

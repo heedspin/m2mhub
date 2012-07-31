@@ -723,6 +723,9 @@ table.data table.data th {
 table.data tr.master-release {
 	background-color: #efe;
 }
+table.data th.date {
+	width:5em;
+}
 
 /* NEWS
 -------------------------------------------------------------------- */
