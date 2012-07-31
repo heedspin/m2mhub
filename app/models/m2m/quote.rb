@@ -32,6 +32,7 @@ class M2m::Quote < M2m::Base
   alias_attribute :customer_number, :fcustno
   alias_attribute :contact_first_name, :fquoteto
   alias_attribute :contact_last_name, :fcfname
+  alias_attribute :memo, :fclosmemo
   
   accepts_nested_attributes_for :items
   

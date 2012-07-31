@@ -1,6 +1,6 @@
 <h1>
 	<%= M2m::Item.model_name.human %>: 
-	<%= @item.part_number %> 
+	<%= item_part_number(@item) %> 
 	<%= "Rev #{@item.revision}" if AppConfig.use_item_revisions? and @item.revision.present? %>
 </h1>
 

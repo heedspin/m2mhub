@@ -1,6 +1,6 @@
 <div class="closewindow"><a href="javascript:window.close();">Close Window</a></div>
 
-<h2>Jobs for <%= @item.part_number %></h2>
+<h2>Jobs for <%= item_part_number(@item) %></h2>
 <%= will_paginate @jobs %>
 
 <%= render 'list' %>

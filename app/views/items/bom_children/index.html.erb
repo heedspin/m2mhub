@@ -1,6 +1,6 @@
 <%= render 'items/summary' %>
 
-<h2>Children (parts included in <%= @item.part_number %>)</h2>
+<h2>Children (parts included in <%= item_part_number(@item) %>)</h2>
 
 <%= will_paginate @bom_items %>
 <%= render 'items/list', :items => @bom_items.map(&:item) %>

@@ -9,4 +9,11 @@ module LinkToItemHelper
       part_number
     end
   end
+  def item_part_number(item)
+    if defined?(Obfuscator)
+      Obfuscator.instance.part_number(item.part_number)
+    else
+      item.part_number
+    end
+  end
 end
