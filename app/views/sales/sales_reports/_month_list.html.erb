@@ -15,7 +15,7 @@
 			</th>
 			<% date_reports.each do |dr| %>
 			<td class="right">
-				<%= link_to cm(dr.sales_report.invoiced_sales, :rounded_dollars), sales_report_url(dr.sales_report) %>
+				<%= link_to cm(dr.sales_report.invoiced_sales, :rounded_dollars, 0), sales_report_url(dr.sales_report) %>
 			</td>
 			<% end %>
 		</tr>
@@ -25,7 +25,7 @@
 			</th>
 			<% date_reports.each do |dr| %>
 			<td class="right">
-				<%= link_to cm(dr.bookings_report.bookings, :rounded_dollars), bookings_report_url(dr.bookings_report) %>
+				<%= link_to cm(dr.bookings_report.bookings, :rounded_dollars, 0), bookings_report_url(dr.bookings_report) %>
 			</td>
 			<% end %>
 		</tr>
@@ -35,7 +35,7 @@
 			</th>
 			<% date_reports.each do |dr| %>
 			<td class="right">
-				<%= cm(dr.sales_report.ytd_invoiced_sales, :rounded_dollars) %>
+				<%= cm(dr.sales_report.ytd_invoiced_sales, :rounded_dollars, 0) %>
 			</td>
 			<% end %>
 		</tr>
