@@ -38,4 +38,5 @@ m2mhub_config: &m2mhub_config
   arrow_right_image: m2mhub/arrow_right.png
   lighthouse_image: m2mhub/lighthouse.png
   enable_commission_report: true
+  enable_events: true
   

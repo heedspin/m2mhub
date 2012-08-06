@@ -3,8 +3,10 @@
 		<tr>
 			<th colspan="<%= backlog_report.buckets.size %>">
 				<%= cm backlog_report.total_backlog, :rounded_dollars %> Total
-				(<%= cm backlog_report.future_bucket.total_future, :rounded_dollars %> Future, 
-				<%= cm backlog_report.late_bucket.total_late, :rounded_dollars %> Late)
+				(<% if backlog_report.future_bucket.total_future > 0 %>
+				<%= cm backlog_report.future_bucket.total_future, :rounded_dollars %> Future, 
+				<% end %>
+				<%= cm backlog_report.late_bucket.total_late, :rounded_dollars %> Late )
 			</th>
 		</tr>
 		<tr>
@@ -26,10 +28,10 @@
 			<% backlog_report.buckets.each do |bucket| %>
 			<td class="right">
 				<% if bucket.in_current_month? %>
-					<%= cm bucket.total_future, :rounded_dollars %> Due<br />
-					<%= cm bucket.total_late, :rounded_dollars %> Late
+					<%= cm bucket.total_future, :rounded_dollars, 0 %> Due<br />
+					<%= cm bucket.total_late, :rounded_dollars, 0 %> Late
 				<% elsif bucket.future? %>
-					<%= cm bucket.total_future, :rounded_dollars %>
+					<%= cm bucket.total_future, :rounded_dollars, 0 %>
 				<% end %>
 			</td>
 			<% end %>

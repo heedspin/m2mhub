@@ -150,7 +150,10 @@ class Sales::BacklogReport < ApplicationModel
           end
         end
       end
-      @backlog_buckets = buckets.values.sort_by(&:month)
+      sorted_buckets = buckets.values.sort_by(&:month)
+      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 }
+      # Chop off trailing buckets with 0 backlog.
+      @backlog_buckets = sorted_buckets[0..(sorted_buckets.size - trailing_zero_buckets - 1)]
     end
     @backlog_buckets
   end
