@@ -116,8 +116,8 @@ class Sales::CommissionReport
     if invoice_item.sales_order and invoice_item.sales_order.sales_person.present?
       return invoice_item.sales_order.sales_person, invoice_item.sales_order.commission_percentage, "Sales Order #{invoice_item.sales_order_number}"
     end
-    if invoice_item.customer and invoice_item.customer.sales_person.present?
-      return invoice_item.customer.sales_person, invoice_item.customer.commission_percentage, "Customer #{invoice_item.customer_number}"
+    if invoice_item.customer and invoice_item.customer.sales_person_key.present?
+      return invoice_item.customer.sales_person_key, invoice_item.customer.commission_percentage, "Customer #{invoice_item.customer_number}"
     end
     nil
   end

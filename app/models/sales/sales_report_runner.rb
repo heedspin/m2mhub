@@ -16,6 +16,7 @@ class Sales::SalesReportRunner
     self.update_month
     self.update_12_months
     self.update_day_report
+    self.update_customer_reports
   end
   
   # Sales::SalesReportRunner.new.run_in_background!(:update_month)
@@ -61,6 +62,10 @@ class Sales::SalesReportRunner
     end
     report = Sales::BacklogReport.date(date).first || Sales::BacklogReport.new(:date => date)
     report.run!
+  end
+  
+  def update_customer_reports
+    Sales::CustomerReport.run
   end
 
   protected
