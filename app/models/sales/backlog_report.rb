@@ -47,7 +47,7 @@ class Sales::BacklogReport < ApplicationModel
   serialized_attribute :total_late_backlog, :des => :to_f
 
   class SalesReleaseSummary
-    attr_accessor :release, :backlog_price, :due_date
+    attr_accessor :release_id, :release, :backlog_price, :due_date
     def initialize(release, backlog_price, due_date, current_date)
       @release = release
       @backlog_price = backlog_price
