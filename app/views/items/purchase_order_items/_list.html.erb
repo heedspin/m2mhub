@@ -10,6 +10,7 @@
 <table class="data">
 	<thead>
 		<tr>
+			<th>Vendor</th>
 			<th>PO No</th>
 			<th>Item No</th>
 			<th>Rel</th>
@@ -25,6 +26,7 @@
 	<tbody>
 	<% @purchase_order_items.each do |i| %>
 		<tr>
+			<td><%= i.purchase_order.vendor.try(:name) %></td>
 			<td><%= i.purchase_order_number %></td>
 			<td><%= i.item_number %></td>
 			<td><%= i.release %></td>
