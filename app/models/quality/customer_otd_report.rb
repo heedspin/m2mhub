@@ -25,6 +25,9 @@ class Quality::CustomerOtdReport
     args ||= {}
     @start_date = args[:start_date] ||= Date.current.beginning_of_year    
     @end_date = args[:end_date] || @start_date.advance(:years => 1)
+    if @end_date > Date.current
+      @end_date = Date.current.advance(:days => 1)
+    end
     @months = {}
   end
   

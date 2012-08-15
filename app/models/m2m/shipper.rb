@@ -64,6 +64,25 @@ class M2m::Shipper < M2m::Base
     }
   }
   
+  def self.monthly_quantity_shipped(start_date, end_date)
+    results = connection.select_rows <<-SQL
+    select cast( cast(datepart(year, shmast.fshipdate) as varchar) + '-' +
+                 cast(datepart(month, shmast.fshipdate) as varchar) + '-01' as date) as month,
+           sum(shitem.fshipqty) as quantity_shipped
+    from shmast
+    left join shitem on shitem.fshipno = shmast.fshipno
+    where shmast.fshipdate >= '#{start_date.to_s(:database)}'
+      and shmast.fshipdate < '#{end_date.to_s(:database)}'
+    group by datepart(month, shmast.fshipdate), datepart(year,shmast.fshipdate)
+    order by month
+    SQL
+    months = {}
+    results.each do |month, quantity_shipped|
+      months[Date.parse(month)] = quantity_shipped
+    end
+    months
+  end
+  
 end
 
 

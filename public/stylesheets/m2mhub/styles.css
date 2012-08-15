@@ -693,12 +693,17 @@ table.data tr.not_counted {
 	background-color: #eee;	
 }
 
-table.data td.rma_details {
-	width: 85%;
+table.data td.fixnum, table.data th.fixnum {
+	width: 5em;
 }
-
-table.data td.otd_details {
-	width: 75%;
+table.data td.fixnname, table.data th.fixname {
+	width: 25em;
+}
+table.data td.fixdouble, table.data th.fixdouble {
+	width: 10em;
+}
+table.data td.fixtriple, table.data th.fixtriple {
+	width: 15em;
 }
 
 table.fullsize {
