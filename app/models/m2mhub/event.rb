@@ -29,12 +29,16 @@ class M2mhub::Event < ApplicationModel
     }
   }
   scope :latest_first, :order => 'm2mhub_events.created_at desc'
-  scope :open_or_recently_closed, lambda { 
+  scope :open_or_recently_closed, lambda {
     {
       :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.closed is null or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
     }
   }
-  scope :valid, :conditions => ['m2mhub_events.ticket_status != ?', Lighthouse::Ticket::STATE_INVALID]
+  scope :valid, lambda {
+    {
+      :conditions => ['m2mhub_events.ticket_status != ?', Lighthouse::Ticket::STATE_INVALID]
+    }
+  }
 
   def ticket
     if @ticket.nil? and self.lighthouse_ticket_id
@@ -52,7 +56,7 @@ class M2mhub::Event < ApplicationModel
     end
     @ticket
   end
-  
+
   def create_ticket(title, body)
     @ticket = Lighthouse::Ticket.new(:project_id => self.trigger.lighthouse_project_id)
     @ticket.title = title
@@ -69,7 +73,7 @@ class M2mhub::Event < ApplicationModel
       false
     end
   end
-  
+
   def update_status!
     if self.trigger.notification_type.ticket? and self.ticket
       self.closed = self.ticket.closed?
