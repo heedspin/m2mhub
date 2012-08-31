@@ -20,7 +20,7 @@ end
 #
 # Table name: apvend
 #
-#  fvendno          :string(6)       not null, primary key
+#  fvendno          :string(6)       not null
 #  fcompany         :string(35)      not null
 #  fbuyer           :string(3)       not null
 #  fcacctnum        :string(25)      not null
@@ -59,7 +59,7 @@ end
 #  flistaxabl       :boolean         not null
 #  fcemail          :string(60)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null
+#  identity_column  :integer(4)      not null, primary key
 #  fmstreet         :text            not null
 #  fmuser1          :text            not null
 #  fdisttype        :string(10)      not null

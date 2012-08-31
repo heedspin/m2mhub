@@ -12,7 +12,7 @@
 
 require 'plutolib/serialized_attributes'
 
-class Sales::BacklogReport < ApplicationModel
+class Sales::BacklogReport < M2mhub::Base
   include Plutolib::SerializedAttributes
   set_table_name 'backlog_reports'
   belongs_to_active_hash :report_time_period

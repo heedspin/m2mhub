@@ -47,6 +47,7 @@ class M2m::Invoice < M2m::Base
     }
   }
   scope :invoice_number, lambda { |n|
+    # Zero pad.
     n = "%010d" % n if n.is_a?(Fixnum)
     {
       :conditions => { :fcinvoice => n }
@@ -65,6 +66,7 @@ class M2m::Invoice < M2m::Base
   end
 
   def self.format_invoice_number(invoice_type, invoice_number)
+    # Zero pad.
     if invoice_type.credit_memo?
       'CM-' + "%07d" % invoice_number
     elsif invoice_type.pre_payment_memo?

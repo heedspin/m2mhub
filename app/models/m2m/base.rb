@@ -1,8 +1,10 @@
 require 'm2m/belongs_to_item'
-class M2m::Base < ApplicationModel
+
+class M2m::Base < ActiveRecord::Base
   self.abstract_class = true
   set_primary_key 'identity_column'
   include ::BelongsToItem
+  extend ActiveHash::Associations::ActiveRecordExtensions
 
   def self.m2m_id_setter(column, num_digits, name=nil)
     name ||= column

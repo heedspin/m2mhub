@@ -63,6 +63,8 @@ authorization do
     has_permission_on :sales_reports, :to => :read
     has_permission_on :bookings_reports, :to => :read
     has_permission_on :backlog_reports, :to => :read
+    has_permission_on :sales_opportunities, :to => :manage
+    has_permission_on :sales_opportunity_comments, :to => :manage
   end
   
   role :production do
@@ -87,6 +89,7 @@ authorization do
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :user_activities, :to => :manage
     has_permission_on :production_inventory_reports, :to => :manage
+    has_permission_on :sales_opportunities, :to => :delete_permanently
   end
 end
  

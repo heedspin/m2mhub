@@ -19,10 +19,12 @@
 #  body                  :text
 #
 
-class M2mhub::Event < ApplicationModel
+class M2mhub::Event < M2mhub::Base
   set_table_name 'm2mhub_events'
   belongs_to :trigger, :class_name => 'M2mhub::Trigger', :foreign_key => 'trigger_id'
   belongs_to :user
+  belongs_to_lighthouse_ticket
+  
   scope :since, lambda { |date|
     {
       :conditions => [ 'created_at >= ?', date ]
@@ -40,45 +42,30 @@ class M2mhub::Event < ApplicationModel
     }
   }
 
-  def ticket
-    if @ticket.nil? and self.lighthouse_ticket_id
-      begin
-        if @ticket = Lighthouse::Ticket.find(self.lighthouse_ticket_id, :params => { :project_id => self.lighthouse_project_id })
-          # Convert to time objects.
-          @ticket.created_at = Time.parse(@ticket.created_at)
-          @ticket.versions.each do |v|
-            v.created_at = Time.parse(v.created_at)
-          end
-        end
-      rescue ActiveResource::ResourceNotFound
-        # Bad link...
-      end
-    end
-    @ticket
-  end
-
   def create_ticket(title, body)
-    @ticket = Lighthouse::Ticket.new(:project_id => self.trigger.lighthouse_project_id)
-    @ticket.title = title
-    @ticket.body = body
-    @ticket.assigned_user_id = Rails.env.production? ? self.user.try(:lighthouse_user_id) : AppConfig.m2mhub_event_test_lighthouse_user_id
-    @ticket.watcher_ids = Rails.env.production? ? self.trigger.users.map(&:lighthouse_user_id) : []
-    if @ticket.save
+    self.lighthouse_ticket = Lighthouse::Ticket.new(:project_id => self.trigger.lighthouse_project_id)
+    self.lighthouse_ticket.title = title
+    self.lighthouse_ticket.body = body
+    self.lighthouse_ticket.assigned_user_id = Rails.env.production? ? self.user.try(:lighthouse_user_id) : AppConfig.m2mhub_event_test_lighthouse_user_id
+    self.lighthouse_ticket.watcher_ids = Rails.env.production? ? self.trigger.users.map(&:lighthouse_user_id) : []
+    if self.lighthouse_ticket.save
       self.lighthouse_project_id = self.trigger.lighthouse_project_id
-      self.lighthouse_ticket_id = @ticket.id
-      self.closed = @ticket.closed?
-      self.ticket_status = @ticket.state
-      self.ticket_url = @ticket.url
+      self.lighthouse_ticket_id = self.lighthouse_ticket.id
+      self.update_ticket_state
     else
       false
     end
   end
+  
+  def update_ticket_state
+    self.closed = self.lighthouse_ticket.closed?
+    self.ticket_status = self.lighthouse_ticket.state
+    self.ticket_url = self.lighthouse_ticket.url
+  end
 
   def update_status!
-    if self.trigger.notification_type.ticket? and self.ticket
-      self.closed = self.ticket.closed?
-      self.ticket_status = self.ticket.state
-      self.ticket_url = ticket.url
+    if self.trigger.notification_type.ticket? and self.lighthouse_ticket
+      self.update_ticket_state
     else
       self.ticket_status = nil
       self.ticket_url = nil

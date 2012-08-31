@@ -22,15 +22,34 @@ function ajax_link(target_id) {
 
 function ajax_load_content(href, target_id) {
 	$.ajax({
-  url: href,
-  type: 'GET',
-  dataType: 'html',
-  success: function(data) {
-		$(target_id).html(data);
-		ajax_link(target_id);
-  },
-  error: function(){
-    // alert('Unable to load. Please try again later.');
-  }
-})
+	  url: href,
+	  type: 'GET',
+	  dataType: 'html',
+	  success: function(data) {
+			$(target_id).html(data);
+			ajax_link(target_id);
+	  },
+	  error: function(){
+	    // alert('Unable to load. Please try again later.');
+	  }
+	})
+}
+
+function turn_on_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.show();
+		}
+		obj.children('input, select').attr('disabled', false)
+	})
+}
+function turn_off_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.hide();
+		}
+		obj.children('input, select').attr('disabled', true)
+	})
 }

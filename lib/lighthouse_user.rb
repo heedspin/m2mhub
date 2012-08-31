@@ -13,4 +13,8 @@ class Lighthouse::User
     end
     @users_cache
   end
+  
+  def self.options
+    @options ||= users_cache.values.map { |u| [u.name, u.id] }.uniq.sort_by(&:first)
+  end
 end

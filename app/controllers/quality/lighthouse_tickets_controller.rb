@@ -12,7 +12,6 @@ class Quality::LighthouseTicketsController < M2mhubController
       @rma.save
       redirect_to rma_url(@rma.rma_number)
     else
-      @lighthouse_users = Lighthouse::Ticket.user_options(AppConfig.lighthouse_rma_project_id)
       render :action => 'quality/rmas/show'
     end
   end

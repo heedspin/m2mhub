@@ -119,6 +119,7 @@ class M2m::InvoiceItem < M2m::Base
     rma_key[15..-1].to_i
   end
   def self.rma_key(rma_item)
+    # Zero pad and space pad.
     ("%015d" % rma_item.rma_number) + ("% 3d" % rma_item.item_number.to_i)
   end
   def rma_item=(rma_item)

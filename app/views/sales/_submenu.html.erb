@@ -8,7 +8,13 @@
 
 		<% if permitted_to?(:read, :sales_orders) %>
 		<li class="<%= menu_selected(:controller => :sales_orders, :action => :index) %>">
-			<%= link_to 'Browse All', sales_orders_url %>
+			<%= link_to 'Sales Orders', sales_orders_url %>
+		</li>
+		<% end %>
+
+		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
+		<li class="<%= menu_selected(:controller => :opportunities) %>">
+			<%= link_to 'Opportunities', opportunities_url %>
 		</li>
 		<% end %>
 		

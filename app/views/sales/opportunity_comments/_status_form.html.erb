@@ -1,0 +1,28 @@
+<%= f.inputs :class => 'inputs not_ticket_field horizontal' do %>
+	<%= f.input :status, :collection => Sales::OpportunityStatus.not_deleted, :include_blank => false %>
+	<%= f.input :sales_order_id, :wrapper_html => { :class => 'won_field number' } %>
+	<%= f.input :quote_id, :wrapper_html => { :class => 'active_field number' } %>
+	<%= f.input :loss_reason, :collection => Sales::OpportunityLossReason.all, :include_blank => false, :wrapper_html => { :class => 'lost_field' } %>
+	<%= f.input :wakeup, :as => :calendar, :wrapper_html => { :class => 'hold_field' } %>
+	<%= f.input :date, :as => :calendar, :wrapper_html => { :class => 'won_field active_field lost_field' } %>
+<% end %>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	var all_fields = ["won_field", "active_field", "lost_field", "hold_field"];
+	var show_map = <%= raw Hash[*Sales::OpportunityStatus.all.map { |s| [s.id, "#{s.cmethod}_field"] }.flatten].to_json %>
+	$("#sales_opportunity_comment_status_id").change(function() {
+		var to_show = show_map[$(this).val()];
+		for (var i = 0; i < all_fields.length; i++) {
+			field = all_fields[i];
+			if (to_show == field) {
+				$("." + field).show();
+			} else {
+				$("." + field).hide();
+			}
+		}
+	}).trigger('change');
+});
+</script>
+<% end %>

@@ -14,7 +14,7 @@
 
 require 'plutolib/serialized_attributes'
 
-class Sales::BookingsReport < ApplicationModel
+class Sales::BookingsReport < M2mhub::Base
   include Plutolib::SerializedAttributes
   set_table_name 'bookings_reports'
   belongs_to_active_hash :report_time_period

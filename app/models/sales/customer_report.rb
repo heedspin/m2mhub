@@ -12,7 +12,7 @@
 
 require 'csv'
 
-class Sales::CustomerReport < ApplicationModel
+class Sales::CustomerReport < M2mhub::Base
   set_table_name 'customer_reports'
   belongs_to :customer, :class_name => 'M2m::Customer', :primary_key => 'fcustno', :foreign_key => :customer_number
 

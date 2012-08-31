@@ -1,4 +1,4 @@
-class User < ApplicationModel
+class User < M2mhub::Base
   # model_stamper
   acts_as_authentic do |c|
     c.validate_password_field = true

@@ -316,20 +316,25 @@ form.formtastic fieldset > ol > li#quote_request_other_service_input > label {
 form.formtastic {
 	margin-top:15px;
 }
-form.formtastic li.string input, form.formtastic li.text textarea, form.formtastic li.select select {
+form.formtastic li.number input, form.formtastic li.string input, form.formtastic li.text textarea, form.formtastic li.select select {
 	background:#F9F9F9;
 	margin:2px 0 0 0;
 	border:1px solid #999;
 	border-color: #999 #ddd #ddd #999;
 }
-form.formtastic li.string input:focus, form.formtastic li.text textarea:focus, form.formtastic li.select select:focus {
+form.formtastic li.number input:focus, form.formtastic li.string input:focus, form.formtastic li.text textarea:focus, form.formtastic li.select select:focus {
 	border:1px solid #666;
 	background:#F2F9FF;
 }
-form.formtastic li.string input {
+form.formtastic li.string input, form.formtastic li.text textarea {
 	padding:4px;
 	font-size:1.1em;
 	width: 399px;
+}
+form.formtastic li.number input {
+	padding:4px;
+	font-size:1.1em;
+	width: 100px;
 }
 form.formtastic li.calendar input {
 	padding:4px;
@@ -1118,7 +1123,7 @@ tr.resolved-event {
 	text-decoration:underline;
 	float: right;
 }
-.inplace_form, .inplace_delete_confirmation {
+.inplace_form, .inplace_delete_confirmation, .deletastic_confirmation {
 	display:none;
 }
 .inplace_form textarea {
@@ -1133,4 +1138,62 @@ tr.resolved-event {
 ------------------------------------------------ */
 .late-release {
 	background-color: #fdd;
+}
+/* Opportunities
+---------------------------------------------- */
+li#sales_opportunity_body_input textarea, li#sales_opportunity_comment_comment_input textarea {
+	height: 6.5em;
+}
+li#sales_opportunity_comment_lighthouse_ticket_body_input textarea {
+	height: 16em;
+	width: 100%;
+}
+li#sales_opportunity_title_input input, li#sales_opportunity_comment_lighthouse_ticket_title_input input {
+	font-size: 1.5em;
+	padding:4px;
+}
+div.opportunity {
+	background-color: #efffef;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+div.opportunity_comment_container {
+}
+.hiddenedit {
+	font-size:1.8em;
+	display: none;
+	float:right;
+}
+div.opportunity_comment {	
+	padding: 10px 10px 0px 30px;
+/*	margin-bottom: 10px;*/
+}
+div.opportunity_ticket {
+	padding: 10px 10px 0px 30px;	
+	margin-bottom: 10px;
+}
+div.lighthouse_ticket_closed {
+	background-color: #e0e0e0;
+}
+div.lighthouse_ticket_readonly {
+	border:5px solid #dddddd;	
+}
+div.opportunity_comment_caption {
+	margin: 10px 0 10px 0;
+}
+form.sales_opportunity_comment fieldset > ol > li {
+	margin-bottom: .5em;
+}
+form.formtastic fieldset.horizontal > ol > li label {
+	width: auto;
+}
+form.formtastic fieldset.horizontal > ol > li {
+	display: block;
+	float: left;
+	margin-right:15px;
+}
+/* Deletastic
+--------------------------------------- */
+form.formtastic fieldset ol li.deletastic_param {
+	display: none;
 }

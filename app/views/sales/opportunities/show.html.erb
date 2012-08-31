@@ -1,0 +1,77 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$(".opportunity,.opportunity_comment,.opportunity_ticket").hover(
+	  function () {
+	    $(this).find(".hiddenedit").show();
+	  }, 
+	  function () {
+	    $(this).find(".hiddenedit").hide();
+	  }
+	);
+})
+</script>
+<% end %>
+
+<%= render 'sales/submenu' %>
+<br />
+
+<div class="opportunity">
+	<% if permitted_to?(:edit, :sales_opportunities) %>
+	<div class="hiddenedit">
+		<%= link_to 'Edit', edit_opportunity_url(@opportunity) %>
+	</div>
+	<% end %>
+	<h2>#<%= @opportunity.id %> - <%= @opportunity.title %></h2>
+	
+	<p>
+		<strong><%= Sales::Opportunity.human_attribute_name(:customer) %>:</strong>
+		<%= @opportunity.customer.present? ? link_to(@opportunity.customer_name, customer_url(@opportunity.customer)) : @opportunity.customer_name %>
+
+		<br />
+		<strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
+		<%= @opportunity.status.try(:name) %>
+		<% if @opportunity.status.try(:hold?) and @opportunity.wakeup %>
+		- Wakeup: <%= @opportunity.wakeup.to_s(:short_human_date) %>
+		<% end %>
+
+		<% if @opportunity.amount %>
+		<br />	
+		<strong><%= Sales::Opportunity.human_attribute_name(:amount) %>:</strong>
+		<%= cm @opportunity.amount, :dollars %>
+		<% end %>
+
+		<% if @opportunity.source %>
+		<br />	
+		<strong><%= Sales::Opportunity.human_attribute_name(:source) %>:</strong>
+		<%= @opportunity.source.name %>
+		<% end %>
+
+		<% if @opportunity.sales_person %>
+		<br />	
+		<strong><%= Sales::Opportunity.human_attribute_name(:sales_person) %>:</strong>
+		<%= @opportunity.full_sales_person %>
+		<% end %>
+		
+		<br />	
+		<strong><%= Sales::Opportunity.human_attribute_name(:start_date) %>:</strong>
+		<%= @opportunity.start_date.to_s(:short_human_date) %>
+
+		<% if @opportunity.end_date %>
+		<br />	
+		<strong><%= Sales::Opportunity.human_attribute_name(:end_date) %>:</strong>
+		<%= @opportunity.end_date.to_s(:short_human_date) %>
+		<% end %>
+	</p>
+
+	<%= simple_format @opportunity.body if @opportunity.body.present? %>
+</div>
+
+<% @comments.each do |comment| %>
+<%= render 'sales/opportunity_comments/show', :comment => comment %>
+<hr />
+<% end %>
+
+<% if permitted_to?(:create, :sales_opportunity_comments) %>
+	<%= render 'sales/opportunity_comments/new' %>
+<% end %>

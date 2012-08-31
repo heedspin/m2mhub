@@ -11,7 +11,7 @@
 #  updated_at  :datetime
 #
 
-class Production::PurchaseQueueNote < ApplicationModel
+class Production::PurchaseQueueNote < M2mhub::Base
   belongs_to :item, :class_name => 'M2m::Item'
   scope :by_date_desc, :order => 'purchase_queue_notes.created_at desc'
   scope :for_summary, lambda { |summary|

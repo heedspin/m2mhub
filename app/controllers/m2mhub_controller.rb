@@ -18,6 +18,10 @@ class M2mhubController < ApplicationController
   before_filter :require_login
   
   protected
+  
+    def value_to_bool(val)
+      ActiveRecord::ConnectionAdapters::Column.value_to_boolean(val)
+    end
 
     def store_location
       session[:return_to] = request.fullpath

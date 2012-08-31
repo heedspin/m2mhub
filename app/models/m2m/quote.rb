@@ -1,50 +1,3 @@
-class M2m::Quote < M2m::Base
-  set_table_name 'qtmast'
-  set_primary_key 'fquoteno'
-  
-  has_many :items, :class_name => 'M2m::QuoteItem', :foreign_key => :fquoteno, :primary_key => :fquoteno
-  
-  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
-
-  scope :by_quote_number_desc, :order => 'fquoteno desc'  
-
-  scope :since, lambda { |day|
-    {
-      :conditions => ['qtmast.fquotedate >= ?', day],
-      :order => 'fquotedate desc, fquoteno desc'
-    }
-  }
-
-  def terms
-    M2m::Terms.find_by_key(self.fterm.try(:strip))
-  end
-  
-  def customer_name
-    M2m::Customer.customer_name(self.fcompany)
-  end
-  
-  alias_attribute :discount_rate, :fdisrate
-  alias_attribute :quote_number, :fquoteno
-  alias_attribute :date, :fdcurdate
-  alias_attribute :company_name, :fcompany
-  alias_attribute :customer_number, :fcustno
-  alias_attribute :contact_first_name, :fquoteto
-  alias_attribute :contact_last_name, :fcfname
-  alias_attribute :memo, :fclosmemo
-  
-  accepts_nested_attributes_for :items
-  
-  attr_accessor :contact_name
-  def contact_name
-    [(self.contact_first_name || '').titleize, (self.contact_last_name || '').capitalize].join(' ')
-  end
-end
-
-
-
-
 # == Schema Information
 #
 # Table name: qtmast
@@ -119,3 +72,51 @@ end
 #  fbilladdr        :string(4)       default(""), not null
 #
 
+class M2m::Quote < M2m::Base
+  set_table_name 'qtmast'
+  set_primary_key 'fquoteno'
+  
+  has_many :items, :class_name => 'M2m::QuoteItem', :foreign_key => :fquoteno, :primary_key => :fquoteno
+  
+  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+
+  scope :by_quote_number_desc, :order => 'fquoteno desc'  
+
+  scope :since, lambda { |day|
+    {
+      :conditions => ['qtmast.fquotedate >= ?', day],
+      :order => 'fquotedate desc, fquoteno desc'
+    }
+  }
+
+  def terms
+    M2m::Terms.find_by_key(self.fterm.try(:strip))
+  end
+  
+  def customer_name
+    M2m::Customer.customer_name(self.fcompany)
+  end
+  
+  alias_attribute :discount_rate, :fdisrate
+  alias_attribute :quote_number, :fquoteno
+  alias_attribute :date, :fdcurdate
+  alias_attribute :company_name, :fcompany
+  alias_attribute :customer_number, :fcustno
+  alias_attribute :contact_first_name, :fquoteto
+  alias_attribute :contact_last_name, :fcfname
+  alias_attribute :memo, :fclosmemo
+  
+  accepts_nested_attributes_for :items
+  
+  attr_accessor :contact_name
+  def contact_name
+    [(self.contact_first_name || '').titleize, (self.contact_last_name || '').capitalize].join(' ')
+  end
+  
+  def self.pad_quote_number(txt)
+    "%06d" % txt.to_i
+  end
+  
+end

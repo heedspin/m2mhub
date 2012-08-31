@@ -39,4 +39,4 @@ m2mhub_config: &m2mhub_config
   lighthouse_image: m2mhub/lighthouse.png
   enable_commission_report: true
   enable_events: true
-  
+  enable_opportunities: true

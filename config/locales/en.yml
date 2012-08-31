@@ -51,4 +51,10 @@ en:
       sales/bookings_report:
         bookings: Bookings
         ytd_bookings: YTD Bookings
-        
+      sales/opportunity:
+        amount: Potential Revenue
+      sales/opportunity_comment:
+        lighthouse_title: Ticket Title
+        lighthouse_body: Ticket Body
+        lighthouse_assigned_user_id: Assigned To
+        lighthouse_project_id: Project

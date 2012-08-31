@@ -15,7 +15,7 @@
 #  customer_number       :string(255)
 #
 
-class Sales::CommissionRate < ApplicationModel
+class Sales::CommissionRate < M2mhub::Base
   belongs_to :customer, :class_name => 'M2m::Customer'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson'
   belongs_to :item, :class_name => 'M2m::Item'

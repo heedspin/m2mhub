@@ -17,7 +17,7 @@
 
 require 'active_hash_methods'
 
-class M2mhub::Trigger < ApplicationModel
+class M2mhub::Trigger < M2mhub::Base
   set_table_name 'm2mhub_triggers'
   belongs_to_active_hash :trigger_state, :class_name => 'M2mhub::TriggerState'
   belongs_to_active_hash :trigger_type, :class_name => 'M2mhub::TriggerType'
@@ -26,7 +26,8 @@ class M2mhub::Trigger < ApplicationModel
   has_many :events, :class_name => 'M2mhub::Event', :foreign_key => 'trigger_id'
   has_many :trigger_users, :class_name => 'M2mhub::TriggerUser'
   has_many :users, :through => :trigger_users
-
+  belongs_to_lighthouse_project
+  
   scope :enabled, :conditions => { :trigger_state_id => M2mhub::TriggerState.enabled.id }
   scope :not_deleted, :conditions => [ 'm2mhub_triggers.trigger_state_id != ?', M2mhub::TriggerState.deleted.id ]
   scope :by_part_number, :order => [:part_number, :created_at]
@@ -42,9 +43,5 @@ class M2mhub::Trigger < ApplicationModel
   
   def run
     self.trigger_type.runner_class.new(self).run
-  end
-  
-  def lighthouse_project
-    @lighthouse_project ||= (self.lighthouse_project_id && Lighthouse::Project.find(self.lighthouse_project_id))
-  end
+  end  
 end
