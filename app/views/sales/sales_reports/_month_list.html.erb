@@ -39,5 +39,15 @@
 			</td>
 			<% end %>
 		</tr>
+		<tr>
+			<th>
+				<%= Sales::SalesReport.human_attribute_name(:new_opportunities) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= cm(dr.sales_report.new_opportunities, :rounded_dollars, 0) %>
+			</td>
+			<% end %>
+		</tr>
 	</tbody>
 </table>

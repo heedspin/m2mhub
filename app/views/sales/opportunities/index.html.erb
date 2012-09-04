@@ -33,7 +33,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :prompt => 'All' %>
+					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
 					<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
 						<label class=" label" for="search_customer_name"><%= Sales::Opportunity.human_attribute_name(:customer_name) %></label>
 						<%= f.text_field :customer_name %>
@@ -48,6 +48,7 @@ $(function() {
 			<td>
 				<%= f.buttons do %>
 				  <%= f.commit_button 'Search' %>
+					<li><%= link_to 'New Opportunity', new_opportunity_path %></li>
 				<% end %>
 			</td>
 		</tr>
@@ -56,10 +57,6 @@ $(function() {
 <% end %>
 
 <%= set_focus('#search_company_name') %>
-
-<ul>
-	<li><%= link_to 'New Opportunity', new_opportunity_path %></li>
-</ul>
 
 <% if @opportunities.size > 0 %>
 <%= will_paginate @opportunities %>

@@ -48,6 +48,7 @@ class Sales::SalesReport < M2mhub::Base
   # M2m::GlTransaction.post_dates('2012-05-01', '2012-06-01').gl_category('R').not_receivables_or_credits.all(:include => :gl_account).sum(&:value).to_f
   def run!
     next_month = self.date.advance(:months => 1)
+    beginning_of_year = self.date.beginning_of_year
 
     revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account)
     self.gl_transaction_ids = revenue_journal_entries.map(&:id)
@@ -57,11 +58,14 @@ class Sales::SalesReport < M2mhub::Base
     self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
     # self.net_invoiced_sales = M2m::ArDistribution.dates(self.date, next_month).non_zero.not_cash.receivables_and_credits.sum(:fnamount) + revenue_journal_entries.sum(&:value)
 
-    jsum = M2m::GlTransaction.post_dates(self.date.beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account).sum(&:value)
-    ar_distributions = M2m::ArDistribution.dates(self.date.beginning_of_year, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
+    jsum = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account).sum(&:value)
+    ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
     # self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount) + revenue_journal_entries
+    
+    self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
+    # self.ytd_new_opportunities = Sales::Opportunity.start_dates(beginning_of_year, next_month).sum(:amount)
 
     self.save!
   end
@@ -71,6 +75,8 @@ class Sales::SalesReport < M2mhub::Base
   serialized_attribute :ytd_bookings, :des => :to_f
   serialized_attribute :ar_distribution_ids
   serialized_attribute :gl_transaction_ids
+  serialized_attribute :new_opportunities, :des => :to_i
+  serialized_attribute :ytd_new_opportunities, :des => :to_i
   
   def ar_distributions
     @ar_distributions ||= M2m::ArDistribution.ids(self.ar_distribution_ids).all(:include => :gl_account)

@@ -48,6 +48,7 @@ en:
         net_invoiced_sales: Net Invoiced Sales
         ytd_invoiced_sales: YTD Invoiced Sales
         ytd_net_invoiced_sales: YTD Net Invoiced Sales
+        new_opportunities: New Opportunities
       sales/bookings_report:
         bookings: Bookings
         ytd_bookings: YTD Bookings

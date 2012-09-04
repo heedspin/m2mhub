@@ -51,6 +51,13 @@ class Sales::Opportunity < M2mhub::Base
     }
   }
   scope :not_deleted, :conditions => [ 'sales_opportunities.status_id != ?', Sales::OpportunityStatus.deleted.id ]
+  scope :start_dates, lambda { |start_date, end_date|
+    start_date = Date.parse(start_date) if start_date.is_a?(String)
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    {
+      :conditions => [ 'sales_opportunities.start_date >= ? and sales_opportunities.start_date < ?', start_date, end_date ]
+    }
+  }
 
   before_save :set_customer
   def set_customer
@@ -92,7 +99,6 @@ class Sales::Opportunity < M2mhub::Base
           Sales::OpportunityFromTicket.create_opportunity(ticket.reload)
         end
       end
-      return true
       break if tickets.size == 0
       page += 1
     end

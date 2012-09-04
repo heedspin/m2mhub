@@ -37,6 +37,7 @@ class CreateM2mhubOpportunities < ActiveRecord::Migration
       t.string :lighthouse_last_assigned_user_name
       t.string :sales_order_id
       t.string :quote_id
+      t.date :date
       t.integer :loss_reason_id
       t.date :wakeup
       t.text :comment

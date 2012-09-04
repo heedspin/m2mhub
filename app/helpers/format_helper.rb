@@ -11,7 +11,7 @@ module FormatHelper
   def cm(thing, company_config_key=nil, default=nil)
     if thing and (thing.to_f != 0)
       case thing
-      when BigDecimal, Float
+      when BigDecimal, Float, Fixnum
         comma(company_sprintf(thing, company_config_key))
       else
         comma(thing)

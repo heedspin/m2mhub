@@ -938,6 +938,7 @@ form.formtastic table.flatform ol > li {
 	float: left;
 	display: inline;
 	margin: 0;
+	padding: 0 10px 10px 0;
 }
 
 form.formtastic table.flatform li.commit input {
@@ -1192,6 +1193,10 @@ form.formtastic fieldset.horizontal > ol > li {
 	float: left;
 	margin-right:15px;
 }
+form.formtastic fieldset > ol > li.opportunity_search_status {
+	margin-top: 3px;
+}
+
 /* Deletastic
 --------------------------------------- */
 form.formtastic fieldset ol li.deletastic_param {
