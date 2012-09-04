@@ -46,6 +46,12 @@ class Sales::OpportunityComment < M2mhub::Base
 
   scope :by_id, :order => :id
   scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
+  scope :with_ticket, lambda { |ticket|
+    ticket_id = ticket.is_a?(Lighthouse::Ticket) ? ticket.id : ticket
+    {
+      :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
+    }
+  }
   
   attr_accessor :create_lighthouse_ticket
   attr_accessor :lighthouse_assigned_user_id

@@ -82,17 +82,11 @@ class Sales::Opportunity < M2mhub::Base
   # Sales::Opportunity.import_from_lighthouse
   def self.import_from_lighthouse(project_id=nil)
     project_id ||= AppConfig.opportunities_default_lighthouse_project_id
-
-    existing_opportunity_tickets = Set.new
-    Sales::OpportunityComment.connection.select_values("select lighthouse_ticket_id from sales_opportunity_comments where comment_type_id = #{Sales::OpportunityCommentType.ticket.id}").each do |ticket_id|
-      existing_opportunity_tickets.add(ticket_id)
-    end
-
     page = 0
     while true
       tickets = Lighthouse::Ticket.find(:all, :params => { :q => 'all', :page => page, :project_id => project_id })
       tickets.each do |ticket|
-        if existing_opportunity_tickets.member?(ticket.id.to_s)
+        if Sales::OpportunityComment.with_ticket(ticket).count > 0
           puts "Skipping #{ticket.id}"
         else
           # Reload ticket to load versions.
