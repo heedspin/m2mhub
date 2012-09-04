@@ -69,6 +69,14 @@ class Sales::SalesReport < M2mhub::Base
 
     self.save!
   end
+  
+  # To use after adding new stat.
+  def upgrade!
+    next_month = self.date.advance(:months => 1)
+    beginning_of_year = self.date.beginning_of_year
+    self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
+    self.save!
+  end
 
   serialized_attribute :ytd_invoiced_sales, :des => :to_f
   serialized_attribute :ytd_net_invoiced_sales, :des => :to_f
