@@ -1,3 +1,5 @@
+require 'plutolib/logger_utils'
+
 class PdfGenerationError < StandardError; end
 
 module PdfGeneration
@@ -32,7 +34,7 @@ end
 class PdfGenerator
   require 'net/http'
   require 'uri'
-  include LoggerUtils
+  include Plutolib::LoggerUtils
 
   attr_accessor :file, :success, :command_output
 
