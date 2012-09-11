@@ -7,7 +7,7 @@
 <%= semantic_form_for @comment, :url => opportunity_comment_url(@comment) do |f| %>
   <%= f.semantic_errors :base %>
 
-	<% if @comment.comment_type.ticket? %>
+	<% if @comment.comment_type.try(:ticket?) %>
 	<div class="opportunity_comment_caption">
 		<p>Please use Lighthouse to update tickets.</p>
 	</div>
@@ -25,7 +25,7 @@
 	<% end %>
 	
 	<%= f.buttons do %>
-	  <%= f.commit_button('Save') unless @comment.comment_type.ticket? %>
+	  <%= f.commit_button('Save') unless @comment.comment_type.try(:ticket?) %>
 	  <%= f.cancel_link :url => opportunity_url(@opportunity) %>
 		<li class="deletastic_container">
 			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>

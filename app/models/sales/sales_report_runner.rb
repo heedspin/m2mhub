@@ -1,7 +1,7 @@
-require 'stateless_delayed_report'
+require 'plutolib/stateless_delayed_report'
 
 class Sales::SalesReportRunner
-  include StatelessDelayedReport
+  include Plutolib::StatelessDelayedReport
 
   # Sales::SalesReportRunner.new.recreate_all
   def recreate_all

@@ -28,11 +28,14 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :primary_key => 'fsalespn'
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus'
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :customer_id, :primary_key => :identity_column
+  
+  validates_presence_of :customer_name
 
   attr_accessor :delete_permanently
 
   def number_and_title
-    "##{id} - #{title}"
+    txt = self.title.present? ? self.title : self.customer_name
+    "##{id} - #{txt}"
   end
   def full_sales_person
     @full_sales_person ||= [self.sales_person.try(:name), self.sales_person_name].compact.join(', ')
@@ -77,6 +80,27 @@ class Sales::Opportunity < M2mhub::Base
       self.status = Sales::OpportunityStatus.deleted
       self.save
     end
+  end
+  
+  def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
+    comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
+    comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
+    comment.lighthouse_title = self.title
+    lighthouse_body = [ self.body ]
+    # self.body.split("\n").each do |line|
+    #   mdown_line = line.gsub(/^([\w ]+):/).each do |txt|
+    #     "**#{$1}**:"
+    #   end
+    #   lighthouse_body.push mdown_line
+    # end
+    lighthouse_body.push "\n---"
+    lighthouse_body.push "Ticket Created By: *#{ticket_created_by}*"
+    url = Rails.application.routes.url_helpers.opportunity_url(self, :host => AppConfig.hostname)
+    lighthouse_body.push "M2MHub Opportunity: [#{comment.lighthouse_title}](#{url})"
+    comment.lighthouse_body = lighthouse_body.join("\n")
+    comment.lighthouse_assigned_user_id = lighthouse_assigned_user_id
+    comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
+    comment
   end
 
   # Sales::Opportunity.import_from_lighthouse

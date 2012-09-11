@@ -1,7 +1,7 @@
-require 'stateless_delayed_report'
+require 'plutolib/stateless_delayed_report'
 
 class M2mhub::RunAllTriggers
-  include StatelessDelayedReport
+  include Plutolib::StatelessDelayedReport
 
   # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_report
   def run_report

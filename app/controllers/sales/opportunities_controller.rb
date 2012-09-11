@@ -52,17 +52,8 @@ class Sales::OpportunitiesController < M2mhubController
 
   def show
     @opportunity = current_object
-    @comment = @opportunity.comments.build(:status_id => @opportunity.status_id)
-    @comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    @comment.lighthouse_title = "Opportunity #{@opportunity.number_and_title}"
-    body = []
-    body.push @opportunity.body
-    body.push "\n---"
-    body.push "Ticket Created By: *#{current_user.full_name}*"
-    body.push "[m2mhub: #{@comment.lighthouse_title}](http://#{opportunity_url(@opportunity)})"
-    @comment.lighthouse_body = body.join("\n")
-    @comment.lighthouse_assigned_user_id = current_user.lighthouse_user_id
-    @comment.wakeup = @opportunity.wakeup || Date.current.advance(:days => 7)
+    @comment = @opportunity.build_ticket_comment(current_user.full_name,
+                                                 current_user.lighthouse_user_id)
     @comments = @opportunity.comments.by_id
   end
 
@@ -88,7 +79,7 @@ class Sales::OpportunitiesController < M2mhubController
     def model_name
       :sales_opportunity
     end
-    
+
     def model_class
       Sales::Opportunity
     end

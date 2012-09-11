@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'
+  resources :external_event_resources, :controller => 'm2mhub/external_event_resources', :only => [:create]
 
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'

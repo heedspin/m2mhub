@@ -19,7 +19,7 @@
 #  report_date                     :date
 #
 
-require 'delayed_report'
+require 'plutolib/stateful_delayed_report'
 require 'active_hash_methods'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
@@ -28,7 +28,7 @@ require 'production/inventory_movement_data'
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   set_table_name 'inventory_reports'
-  include DelayedReport
+  include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy

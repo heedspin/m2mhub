@@ -1,6 +1,6 @@
-require 'logger_utils'
+require 'plutolib/logger_utils'
 class M2mhub::TriggerRunnerBase
-  include LoggerUtils
+  include Plutolib::LoggerUtils
   def initialize(trigger)
     @trigger = trigger
   end

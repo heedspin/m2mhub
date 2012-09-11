@@ -1,5 +1,5 @@
 <div class="opportunity_comment_container">
-	<% if comment.comment_type.comment? %>
+	<% if comment.comment_type.try(:comment?) %>
 	<div class="opportunity_comment">
 		<div class="hiddenedit">
 			<%= link_to 'Edit', edit_opportunity_comment_url(comment) %>

@@ -1,4 +1,4 @@
-class M2mhubLink
+class M2mhub::NewCustomerLink
   include ActionView::Helpers::UrlHelper
   def initialize(args)
     @args = args

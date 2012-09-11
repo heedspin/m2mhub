@@ -59,7 +59,7 @@ class Sales::OpportunityComment < M2mhub::Base
   attr_accessor :delete_lighthouse_ticket
   
   def destroy
-    if self.comment_type.ticket? and self.lighthouse_ticket and self.delete_lighthouse_ticket
+    if self.comment_type.try(:ticket?) and self.lighthouse_ticket and self.delete_lighthouse_ticket
       self.lighthouse_ticket.destroy
     end
     if next_last_comment = self.opportunity.comments.where(['sales_opportunity_comments.id != ?', self.id]).order('sales_opportunity_comments.id desc').first
@@ -97,7 +97,7 @@ class Sales::OpportunityComment < M2mhub::Base
       self.lighthouse_ticket = Lighthouse::Ticket.new(:project_id => self.lighthouse_project_id)
       self.lighthouse_ticket.title = self.lighthouse_title
       self.lighthouse_ticket.body = self.lighthouse_body
-      self.lighthouse_ticket.assigned_user_id = self.lighthouse_assigned_user_id
+      self.lighthouse_ticket.assigned_user_id = self.lighthouse_assigned_user_id if self.lighthouse_assigned_user_id
       if self.lighthouse_ticket.save
         self.lighthouse_ticket_id = self.lighthouse_ticket.id
         self.update_ticket_state
