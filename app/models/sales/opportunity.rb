@@ -65,8 +65,8 @@ class Sales::Opportunity < M2mhub::Base
   before_save :set_customer
   def set_customer
     if self.customer_name.present? and (self.customer_id.nil? or self.customer.nil? or (self.customer.name != self.customer_name))
-      if found = M2m::Customer.name_like(self.customer_name).first
-        self.customer_id = found.id
+      if (found = M2m::Customer.name_like(self.customer_name)) and (found.size == 1)
+        self.customer_id = found.first.id
         self.customer_name = self.customer.name
       end
     end
@@ -86,13 +86,15 @@ class Sales::Opportunity < M2mhub::Base
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
     comment.lighthouse_title = self.title
-    lighthouse_body = [ self.body ]
-    # self.body.split("\n").each do |line|
-    #   mdown_line = line.gsub(/^([\w ]+):/).each do |txt|
-    #     "**#{$1}**:"
-    #   end
-    #   lighthouse_body.push mdown_line
-    # end
+    lighthouse_body = [ ]
+    
+    # Filter out lines starting with M2MHub:
+    self.body.split("\n").each do |line|
+      unless line.starts_with?('M2MHub:')
+        lighthouse_body.push line
+      end
+    end
+    
     lighthouse_body.push "\n---"
     lighthouse_body.push "Ticket Created By: *#{ticket_created_by}*"
     url = Rails.application.routes.url_helpers.opportunity_url(self, :host => AppConfig.hostname)

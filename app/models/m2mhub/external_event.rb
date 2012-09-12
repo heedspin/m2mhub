@@ -43,14 +43,11 @@ class M2mhub::ExternalEvent < M2mhub::Base
   def encode_data
     self.json_data = self.data_hash.to_json
   end  
-  
+
+  # Fail silently if an unknown method is called.  
+  # Dangerous, but helpful.
   def method_missing(mid, *args)
-    mid = mid.to_s
-    if self.data_hash.member?(mid)
-      self.data_hash[mid]
-    else
-      super(mid, *args)
-    end
+    self.data_hash[mid.to_s]
   end
   
   def human_attribute_name(field)
