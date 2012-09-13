@@ -1,7 +1,7 @@
-require 'm2mhub/xls_report'
+require 'plutolib/xls_report'
 
 class Sales::CommissionReport
-  include M2mhub::XlsReport
+  include Plutolib::XlsReport
   attr_accessor :start_date, :end_date
   
   def initialize(args)
