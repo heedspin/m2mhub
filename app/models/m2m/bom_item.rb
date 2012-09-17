@@ -11,6 +11,11 @@ class M2m::BomItem < M2m::Base
       :conditions => { :fparent => item.part_number, :fparentrev => item.revision }
     }
   }
+  scope :with_parent, lambda { |part_number, revision|
+    {
+      :conditions => { :fparent => part_number, :fparentrev => revision }
+    }
+  }
   scope :with_child_item, lambda { |item|
     {
       :conditions => { :fcomponent => item.part_number, :fcomprev => item.revision }

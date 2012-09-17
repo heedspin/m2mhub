@@ -39,13 +39,16 @@ class M2m::Customer < M2m::Base
       # Ignore this exception.  Probably because we used a :select.
     end
   end
-
   scope :name_like, lambda { |text|
     {
       :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
     }
   }
-
+  scope :with_names, lambda { |names|
+    {
+      :conditions => [ 'slcdpmx.fcompany in (?)', names ]
+    }
+  }
   scope :by_name, :order => 'fcompany'
 
   scope :with_customer_numbers, lambda { |customer_numbers|

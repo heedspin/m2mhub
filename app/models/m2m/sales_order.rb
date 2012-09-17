@@ -102,13 +102,13 @@ class M2m::SalesOrder < M2m::Base
   scope :by_due_date, :order => 'somast.fduedate'
   scope :by_order_date, :order => 'somast.forderdate'
   
-  scope :since, lambda { |day|
-    {
-      :conditions => ['somast.forderdate >= ?', day],
-      :include => [:releases, :items], 
-      :order => 'forderdate desc, fsono desc'
-    }
-  }
+  # scope :since, lambda { |day|
+  #   {
+  #     :conditions => ['somast.forderdate >= ?', day],
+  #     :include => [:releases, :items], 
+  #     :order => 'forderdate desc, fsono desc'
+  #   }
+  # }
   scope :order_dates, lambda { |start_date, end_date|
     {
       :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
@@ -134,6 +134,12 @@ class M2m::SalesOrder < M2m::Base
     customer_number = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
     {
       :conditions => { :fcustno => customer_number }
+    }
+  }
+  scope :customers, lambda { |customers|
+    customer_numbers = customers.map(&:customer_number)
+    {
+      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
     }
   }
   

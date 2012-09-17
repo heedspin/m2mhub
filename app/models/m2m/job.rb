@@ -17,6 +17,18 @@ class M2m::Job < M2m::Base
   }
   scope :released, :conditions => { :fstatus => M2m::Status.released.name }
   scope :by_date_desc, :order => 'jomast.fhold_dt desc'
+  scope :customers, lambda { |customers|
+    customer_numbers = customers.map(&:customer_number)
+    {
+      :conditions => [ 'jomast.fcus_id in (?)', customer_numbers ]
+    }
+  }
+  scope :released_since, lambda { |date|
+    date = Date.parse(date) if date.is_a?(String)
+    {
+      :conditions => [ 'jomast.fact_rel >= ?', date ]
+    }
+  }
   
   def status
     M2m::Status.find_by_name(self.fstatus)
