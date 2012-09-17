@@ -701,8 +701,14 @@ table.data tr.not_counted {
 table.data td.fixnum, table.data th.fixnum {
 	width: 5em;
 }
+table.data th.fixshortname {
+	width: 18em;
+}
 table.data td.fixnname, table.data th.fixname {
 	width: 25em;
+}
+table.data th.fixlongname {
+	width: 30em;
 }
 table.data td.fixdouble, table.data th.fixdouble {
 	width: 10em;

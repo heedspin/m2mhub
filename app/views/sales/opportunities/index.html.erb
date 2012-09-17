@@ -63,11 +63,12 @@ $(function() {
 <table class="data">
 	<thead>
 		<tr>
-			<th>Title</th>
-			<th>Customer</th>
+			<th class="fixshortname">Title</th>
+			<th class="fixshortname">Customer</th>
 			<th>Product</th>
 			<th>Amount</th>
 			<th>Status</th>
+			<th>Last Update</th>
 			<th>Wakeup</th>
 		</tr>
 	</thead>
@@ -79,6 +80,7 @@ $(function() {
 			<td><%= o.product %></td>
 			<td><%= cm o.amount, :rounded_dollars %></td>
 			<td><%= o.status.try(:name) %></td>
+			<td><%= o.updated_at.to_s(:short_human_date_time) %></td>
 			<td><%= o.wakeup.to_s(:short_human_date) if o.status.hold? and o.wakeup %></td>
 		</tr>
 		<% end %>

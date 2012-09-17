@@ -15,7 +15,7 @@ class Sales::OpportunitiesController < M2mhubController
     if @search.customer_name.present?
       s = s.customer_name_like(@search.customer_name)
     end
-    @opportunities = s.by_customer_name.paginate(:page => params[:page], :per_page => 50)
+    @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
   end
 
   def new

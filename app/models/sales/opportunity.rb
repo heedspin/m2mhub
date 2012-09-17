@@ -48,6 +48,7 @@ class Sales::Opportunity < M2mhub::Base
     }
   }
   scope :by_customer_name, :order => :customer_name
+  scope :by_last_update_desc, :order => 'sales_opportunities.updated_at desc'
   scope :customer_name_like, lambda { |text|
     {
       :conditions => [ 'sales_opportunities.customer_name like ?', '%' + (text || '') + '%' ]
