@@ -38,7 +38,7 @@ class Production::InventoryReport < ActiveRecord::Base
 
   scope :by_date_desc, :order => 'inventory_reports.report_date desc, inventory_reports.created_at desc'
 
-  def run
+  def run_report
     report_start_time = Time.now.to_i
     if AppConfig.cost_method
       self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(AppConfig.cost_method)
