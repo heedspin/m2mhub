@@ -41,7 +41,7 @@
 		</tr>
 		<tr>
 			<th>
-				<%= Sales::SalesReport.human_attribute_name(:new_opportunities) %>
+				<%= link_to Sales::SalesReport.human_attribute_name(:new_opportunities), opportunities_url %>
 			</th>
 			<% date_reports.each do |dr| %>
 			<td class="right">

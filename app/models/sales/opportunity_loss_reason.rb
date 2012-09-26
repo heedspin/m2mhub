@@ -7,7 +7,8 @@ class Sales::OpportunityLossReason < ActiveHash::Base
     {:id => 4, :name => 'Dimensions'},
     {:id => 5, :name => 'Resolution'},
     {:id => 6, :name => 'Features'},
-    {:id => 7, :name => 'Other'}
+    {:id => 7, :name => 'Other'},
+    {:id => 8, :name => 'Customer Event (E.g., project cancelled)'}
   ]
   include ActiveHashMethods
 end

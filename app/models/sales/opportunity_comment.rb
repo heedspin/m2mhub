@@ -52,6 +52,7 @@ class Sales::OpportunityComment < M2mhub::Base
       :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
     }
   }
+  scope :to_monitor, :joins => :opportunity, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.open.map(&:id)]
   
   attr_accessor :create_lighthouse_ticket
   attr_accessor :lighthouse_assigned_user_id
@@ -74,6 +75,10 @@ class Sales::OpportunityComment < M2mhub::Base
   def status_change?
     self.status_id != self.previous_status_id
   end 
+  
+  def ticket?
+    self.comment_type.try(:ticket?)
+  end
   
   before_create :update_opportunity
   def update_opportunity
@@ -144,6 +149,7 @@ class Sales::OpportunityComment < M2mhub::Base
         self.lighthouse_last_comment            = last_comment.body_html
         self.lighthouse_last_updated_at         = last_comment.created_at
         self.lighthouse_last_updater            = last_comment.user_name
+        self.updated_at                         = self.lighthouse_last_updated_at
       else
         self.lighthouse_last_assigned_user_name = self.lighthouse_ticket.assigned_user_name
         self.lighthouse_last_comment            = self.lighthouse_ticket.body_html
@@ -153,13 +159,23 @@ class Sales::OpportunityComment < M2mhub::Base
     end
   end
 
-  # Sales::OpportunityComment.open_tickets.each(&:update_status!)
+  # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
   def update_status!
+    # Bypass readonly exception.
     self.update_ticket_state
     if self.changed?
-      self.save!
+      self.save_without_timestamping!
     else
       true
     end
+  end
+  
+  after_save :update_opportunity
+  def update_opportunity
+    if self.opportunity.updated_at < self.updated_at
+      self.opportunity.updated_at = self.updated_at
+    end
+    self.opportunity.last_comment = self
+    self.opportunity.save_without_timestamping!
   end
 end

@@ -191,6 +191,8 @@ class M2m::Item < M2m::Base
   alias_attribute :measure1, :fmeasure
   alias_attribute :measure2, :fmeasure2
   alias_attribute :abc_code, :fabccode
+  alias_attribute :user_memo, :fmusrmemo1
+  alias_attribute :standard_memo, :fstdmemo
   
   # Uses same calculation that m2m uses.
   def quantity_available

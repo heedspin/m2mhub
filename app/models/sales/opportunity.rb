@@ -2,23 +2,24 @@
 #
 # Table name: sales_opportunities
 #
-#  id                    :integer(4)      not null, primary key
-#  start_date            :date
-#  end_date              :date
-#  customer_id           :string(255)
-#  customer_name         :string(255)
-#  amount                :integer(4)
-#  opportunity_source_id :integer(4)
-#  product               :string(255)
-#  title                 :string(255)
-#  body                  :text
-#  sales_person_id       :string(255)
-#  sales_person_name     :string(255)
-#  status_id             :integer(4)
-#  wakeup                :date
-#  created_at            :datetime
-#  updated_at            :datetime
-#  creator_id            :integer(4)
+#  id                      :integer(4)      not null, primary key
+#  start_date              :date
+#  end_date                :date
+#  customer_id             :string(255)
+#  customer_name           :string(255)
+#  amount                  :integer(4)
+#  opportunity_source_id   :integer(4)
+#  product                 :string(255)
+#  title                   :string(255)
+#  body                    :text
+#  sales_person_id         :string(255)
+#  sales_person_name       :string(255)
+#  status_id               :integer(4)
+#  wakeup                  :date
+#  created_at              :datetime
+#  updated_at              :datetime
+#  creator_id              :integer(4)
+#  last_comment_updated_id :integer(4)
 #
 
 class Sales::Opportunity < M2mhub::Base
@@ -28,8 +29,9 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :primary_key => 'fsalespn'
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus'
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :customer_id, :primary_key => :identity_column
+  belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
   
-  validates_presence_of :customer_name
+  # validates_presence_of :customer_name
 
   attr_accessor :delete_permanently
 
@@ -86,7 +88,7 @@ class Sales::Opportunity < M2mhub::Base
   def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    comment.lighthouse_title = self.title
+    comment.lighthouse_title = [self.customer_name.strip, self.product.strip, self.title].select(&:present?).join(' - ')
     lighthouse_body = [ ]
     
     # Filter out lines starting with M2MHub:
