@@ -1179,7 +1179,7 @@ div.opportunity_ticket {
 	padding: 10px 10px 0px 30px;	
 	margin-bottom: 10px;
 }
-div.lighthouse_ticket_closed {
+.lighthouse_ticket_closed {
 	background-color: #e0e0e0;
 }
 div.lighthouse_ticket_readonly {
@@ -1201,6 +1201,13 @@ form.formtastic fieldset.horizontal > ol > li {
 }
 form.formtastic fieldset > ol > li.opportunity_search_status {
 	margin-top: 3px;
+}
+table.data tbody tr.opportunity_spacer td {
+  border: none;
+}
+div.expand_on_hover {
+	height: 35px;
+	overflow: hidden;
 }
 
 /* Deletastic
