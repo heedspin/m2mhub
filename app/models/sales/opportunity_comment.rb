@@ -172,10 +172,11 @@ class Sales::OpportunityComment < M2mhub::Base
   
   after_save :update_opportunity
   def update_opportunity
-    if self.opportunity.updated_at < self.updated_at
+    if self.updated_at and (self.opportunity.updated_at < self.updated_at)
       self.opportunity.updated_at = self.updated_at
     end
-    self.opportunity.last_comment = self
+    # self.opportunity.last_comment = self ; self.opportunity.save! ====> BOOOOM!!!!!!!!!!
+    self.opportunity.last_comment_updated_id = self.id
     self.opportunity.save_without_timestamping!
   end
 end
