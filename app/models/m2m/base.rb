@@ -14,14 +14,14 @@ class M2m::Base < ActiveRecord::Base
     self.class_eval <<-RUBY
     #{alias_code}
     def self.#{name}_for(val)
-      '%0#{num_digits}d' % val.to_i
+        '%0#{num_digits}d' % val.to_i
     end
     def #{name}=(val)
       write_attribute('#{column}', self.class.send('#{name}_for', val))
     end
     RUBY
   end
-  
+
   def self.alias_date_attribute(new_name, old_name)
     self.class_eval <<-RUBY
     alias_attribute '#{new_name}', '#{old_name}'
@@ -38,6 +38,12 @@ class M2m::Base < ActiveRecord::Base
         self.send("#{column.name}=", self.send(column.name).try(:strip))
       end
     end
+  end
+
+  # Turn off all time zone conversions.
+  # http://info.michael-simons.eu/2008/11/01/turn-off-rors-automatic-timezone-conversion-for-columns/
+  def self.time_zone_aware_attributes
+    false
   end
 
   m2m_key = "#{Rails.env}_m2m"
