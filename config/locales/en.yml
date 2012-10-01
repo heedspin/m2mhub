@@ -19,11 +19,13 @@ en:
         fcustpart: Customer Part Number
         search_order_number: Sales / Purchase Order Number
         search_part_number: Company / Customer Part Number
-        due_date: Ship Date
-        fduedate: Ship Date
+        due_date: Due
+        # fduedate: Due Date
       m2m/sales_order_release:
-        due_date: Ship Date
-        fduedate: Ship Date
+        due_date: Due
+        # fduedate: To Ship
+      m2m/shipper:
+        ship_date: Shipped
       sales_backlog_report:
         fob_group: FOB Group
         customer_status: Customer Status
