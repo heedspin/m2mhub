@@ -4,7 +4,8 @@
 <h2>Inventory Reports By Customer</h2>
 <p>
 	Inventory Transactions from <%= @inventory_report.report_date.try(:to_s, :report_date) %><br />
-	Oldest sales order release used: <%= @inventory_report.earliest_release_date.to_s(:report_date) %>
+	Oldest sales order release used: <%= @inventory_report.earliest_release_date.to_s(:report_date) %><br />
+	<%= link_to 'Export', inventory_report_url(@inventory_report, :format => 'xls') %>
 </p>
 
 <%= will_paginate @customer_reports %>
@@ -44,3 +45,6 @@
 		<% end %>
 	</tbody>
 </table>
+
+<%= will_paginate @customer_reports %>
+

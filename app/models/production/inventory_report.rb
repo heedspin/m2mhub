@@ -20,6 +20,7 @@
 #
 
 require 'plutolib/stateful_delayed_report'
+require 'plutolib/to_xls'
 require 'active_hash_methods'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
@@ -28,6 +29,7 @@ require 'production/inventory_movement_data'
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   set_table_name 'inventory_reports'
+  include Plutolib::ToXls
   include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
@@ -164,6 +166,39 @@ class Production::InventoryReport < ActiveRecord::Base
 
   def past_releases
     @past_releases ||= {}
+  end
+  
+  def xls_initialize  
+    dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
+    xls_field("Part Number") { |r| r.part_number_and_revision }
+    xls_field('Part Description') { |r| r.item.try(:description) }
+    xls_field('Group') { |r| r.item.try(:short_group_name) }
+    never = Date.parse('1901-01-01')
+    xls_field('Latest Activity Date') { |r| r.latest_activity || never }
+    xls_field('On Hand Cost', dollar_format) { |r| r.total_on_hand_cost }
+    xls_field('Last Customer') { |r| r.customer_report.try(:customer_name) }
+    xls_field('Quantity On Hand') { |r| r.quantity_on_hand }
+    xls_field('Committed Cost', dollar_format) { |r| r.total_committed_cost }
+    xls_field('Quantity Committed') { |r| r.quantity_committed }
+    xls_field('Available Cost', dollar_format) { |r| r.total_available_cost }
+    xls_field('Quantity Available') { |r| r.quantity_available }
+    xls_field('Total On Order') { |r| r.total_on_order_cost }
+    xls_field('Quantity On Order') { |r| r.quantity_on_order }
+    xls_field('Unit Cost', dollar_format) { |r| r.cost.round(2) }
+    xls_field('Last Receipt', xls_date_format) { |r| r.last_incoming_date }
+    xls_field('Last Ship', xls_date_format) { |r| r.last_ship }
+    xls_field('Last Sales Order') { |r| r.last_sales_order_release.try(:sales_order_number) }
+    xls_field('Next Receipt', xls_date_format) { |r| r.next_incoming_date }
+    xls_field('Next Ship', xls_date_format) { |r| r.next_outgoing_date }
+    xls_field('Next Sales Order') { |r| r.next_sales_order_release.try(:sales_order_number) }
+  end
+  
+  def all_data
+    self.item_reports
+  end
+  
+  def xls_filename
+    "#{report_date.to_s(:sortable)}_#{AppConfig.short_name}_inventory"
   end
 
 end

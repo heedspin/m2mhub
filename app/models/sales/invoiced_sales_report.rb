@@ -1,7 +1,7 @@
-require 'plutolib/xls_report'
+require 'plutolib/to_xls'
 
 class Sales::InvoicedSalesReport
-  include Plutolib::XlsReport
+  include Plutolib::ToXls
   attr_accessor :start_date, :end_date, :customer
   
   def initialize(args)
@@ -19,37 +19,37 @@ class Sales::InvoicedSalesReport
     @end_date = val.is_a?(String) ? Date.parse(val) : val
   end
   
-  def filename
+  def xls_filename
     # Time.now.strftime("%y%m%d") + '_' + 
     customer_name = self.customer.is_a?(M2m::Customer) ? self.customer.name : AppConfig.short_name
     name = "#{self.start_date.year} #{customer_name} Invoiced Sales"
     name.gsub(' ', '_').gsub(',','')
   end
   
-  def sheet_name
+  def xls_sheet_name
     'Invoiced Sales'
   end
   
   def initialize_fields  
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
-    self.fields.push M2mhub::XlsReport::Field.new('Invoice Date') { |invoice_item| invoice_item.invoice.date }
-    self.fields.push M2mhub::XlsReport::Field.new('Invoice Number') { |invoice_item| invoice_item.invoice_number }
-    self.fields.push M2mhub::XlsReport::Field.new('Sales Order Number') { |invoice_item| invoice_item.sales_order_number }
-    self.fields.push M2mhub::XlsReport::Field.new("#{AppConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
-    self.fields.push M2mhub::XlsReport::Field.new('Part Description') { |invoice_item| invoice_item.item.try(:description) }
-    self.fields.push M2mhub::XlsReport::Field.new('Customer Part Number') { |invoice_item| clean_value invoice_item.customer_part_number }
-    self.fields.push M2mhub::XlsReport::Field.new('Quantity') { |invoice_item| invoice_item.ship_quantity }
-    self.fields.push M2mhub::XlsReport::Field.new('Unit Price', dollar_format) { |invoice_item| 
+    xls_field('Invoice Date') { |invoice_item| invoice_item.invoice.date }
+    xls_field('Invoice Number') { |invoice_item| invoice_item.invoice_number }
+    xls_field('Sales Order Number') { |invoice_item| invoice_item.sales_order_number }
+    xls_field("#{AppConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
+    xls_field('Part Description') { |invoice_item| invoice_item.item.try(:description) }
+    xls_field('Customer Part Number') { |invoice_item| xls_clean invoice_item.customer_part_number }
+    xls_field('Quantity') { |invoice_item| invoice_item.ship_quantity }
+    xls_field('Unit Price', dollar_format) { |invoice_item| 
       invoice_item.unit_price.to_f.round(2)
     }
-    self.fields.push M2mhub::XlsReport::Field.new('Invoice Amount', dollar_format) { |invoice_item| 
+    xls_field('Invoice Amount', dollar_format) { |invoice_item| 
       invoice_item.amount.to_f.round(2) 
     }
     if self.customer == :all
-      self.fields.push M2mhub::XlsReport::Field.new('Customer Number') { |invoice_item| invoice_item.invoice.customer_number }
-      self.fields.push M2mhub::XlsReport::Field.new('Customer Name') { |invoice_item| invoice_item.invoice.customer_name }
-      self.fields.push M2mhub::XlsReport::Field.new('Group') { |invoice_item| invoice_item.item.try(:fgroup).try(:strip) }        
-      self.fields.push M2mhub::XlsReport::Field.new('Invoice Description') { |invoice_item| invoice_item.description }
+      xls_field('Customer Number') { |invoice_item| invoice_item.invoice.customer_number }
+      xls_field('Customer Name') { |invoice_item| invoice_item.invoice.customer_name }
+      xls_field('Group') { |invoice_item| invoice_item.item.try(:fgroup).try(:strip) }        
+      xls_field('Invoice Description') { |invoice_item| invoice_item.description }
     end
   end
   

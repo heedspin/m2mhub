@@ -14,6 +14,7 @@ Date::DATE_FORMATS[:report_date] = '%m-%d-%y'
 Date::DATE_FORMATS[:event_date] = '%b %d, %Y'
 Date::DATE_FORMATS[:human_date] = '%B %d, %Y'
 Date::DATE_FORMATS[:short_human_date] = '%b %d, %Y'
+Date::DATE_FORMATS[:sortable] = '%y%m%d'
 
 Time::DATE_FORMATS[:number_date] = '%m-%d-%y'
 Time::DATE_FORMATS[:job_date] = '%m-%d-%y'

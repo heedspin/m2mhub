@@ -30,6 +30,11 @@ class Production::InventoryReportsController < M2mhubController
         end
         render :json => result.to_json
       }
+      format.xls do
+        headers['Content-Disposition'] = "attachment; filename=\"#{@report.xls_filename}.xls\""
+        headers['Content-type'] = 'application/vnd.ms-excel'
+        render :text => @report.to_xls
+      end
     end
   end
 

@@ -49,6 +49,14 @@ class Production::InventoryReportItem < ActiveRecord::Base
   scope :by_latest_activity, :select => "inventory_report_items.*,
   greatest(coalesce(last_outgoing_date, '1900-01-01'), coalesce(last_incoming_date, '1900-01-01'), coalesce(next_outgoing_date, '1900-01-01'), coalesce(next_incoming_date, '1900-01-01')) as latest_activity_date", :order => 'latest_activity_date'
 
+  def latest_activity
+    @latest_activity ||= [self.last_outgoing_date, self.last_incoming_date, self.next_outgoing_date, self.next_incoming_date].compact.max
+  end
+  
+  def last_ship
+    self.last_sales_order_release.try(:last_ship_date)
+  end
+
   attr_accessor :next_outgoing_parent_item
   def next_outgoing_parent_item
     unless @_loaded_next_outgoing_parent_item
