@@ -30,7 +30,7 @@ class Sales::InvoicedSalesReport
     'Invoiced Sales'
   end
   
-  def initialize_fields  
+  def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Invoice Date') { |invoice_item| invoice_item.invoice.date }
     xls_field('Invoice Number') { |invoice_item| invoice_item.invoice_number }
