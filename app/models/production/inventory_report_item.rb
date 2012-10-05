@@ -8,12 +8,7 @@
 #  part_number                            :string(255)
 #  revision                               :string(255)
 #  m2m_identity_column                    :integer(4)
-#  quantity_on_hand                       :float
-#  quantity_committed                     :float
-#  quantity_available                     :float
-#  quantity_on_order                      :float
 #  inventory_report_cost_method_id        :integer(4)
-#  cost                                   :float
 #  last_incoming_date                     :datetime
 #  last_outgoing_date                     :datetime
 #  next_outgoing_date                     :datetime
@@ -23,6 +18,11 @@
 #  next_sales_order_release_id            :integer(4)
 #  last_sales_order_release_id            :integer(4)
 #  movement_data                          :text
+#  quantity_on_hand                       :decimal(12, 2)
+#  quantity_committed                     :decimal(12, 2)
+#  quantity_available                     :decimal(12, 2)
+#  quantity_on_order                      :decimal(12, 2)
+#  cost                                   :decimal(12, 2)
 #
 
 require 'm2m/belongs_to_item'

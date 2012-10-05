@@ -9,14 +9,14 @@
 #  created_at                      :datetime
 #  updated_at                      :datetime
 #  inventory_report_cost_method_id :integer(4)
-#  total_on_hand_cost              :float
-#  total_on_order_cost             :float
-#  total_available_cost            :float
-#  total_committed_cost            :float
 #  total_run_time_seconds          :integer(4)
 #  earliest_release_date           :datetime
 #  movement_data                   :text
 #  report_date                     :date
+#  total_on_hand_cost              :decimal(12, 2)
+#  total_on_order_cost             :decimal(12, 2)
+#  total_available_cost            :decimal(12, 2)
+#  total_committed_cost            :decimal(12, 2)
 #
 
 require 'plutolib/stateful_delayed_report'
