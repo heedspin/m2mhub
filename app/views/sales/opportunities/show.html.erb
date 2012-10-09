@@ -55,12 +55,12 @@ $(function() {
 		
 		<br />	
 		<strong><%= Sales::Opportunity.human_attribute_name(:start_date) %>:</strong>
-		<%= @opportunity.start_date.to_s(:short_human_date) %>
+		<%= @opportunity.start_date.try(:to_s, :short_human_date) %>
 
 		<% if @opportunity.end_date %>
 		<br />	
 		<strong><%= Sales::Opportunity.human_attribute_name(:end_date) %>:</strong>
-		<%= @opportunity.end_date.to_s(:short_human_date) %>
+		<%= @opportunity.end_date.try(:to_s, :short_human_date) %>
 		<% end %>
 	</p>
 

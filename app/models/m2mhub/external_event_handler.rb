@@ -15,7 +15,16 @@ class M2mhub::ExternalEventHandler
         @handler_classes[source_key] = handler_class_name.constantize
       end
     end
-    @handler_classes[external_event.source] || @handler_classes['default']
-  end  
+    @handler_classes[external_event.source_type] || @handler_classes['default']
+  end 
+  
+  def run_main
+    begin
+      self.run
+    rescue => exc
+      @external_event.status = M2mhub::ExternalEventStatus.error
+      log_error 'External Event failed', exc
+    end
+  end
 end
 

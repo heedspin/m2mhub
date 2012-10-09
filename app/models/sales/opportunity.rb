@@ -88,7 +88,7 @@ class Sales::Opportunity < M2mhub::Base
   def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    comment.lighthouse_title = [self.customer_name.try(:strip), self.product.try(:strip), self.title.try(:strip)].select(&:present?).join(' - ')
+    comment.lighthouse_title = [self.product.try(:strip), self.title.try(:strip)].select(&:present?).join(' - ')
     lighthouse_body = [ ]
     
     # Filter out lines starting with M2MHub:
