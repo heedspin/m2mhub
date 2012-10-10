@@ -32,37 +32,54 @@ class Sales::InvoicedSalesReport
   
   def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
-    xls_field('Invoice Date') { |invoice_item| invoice_item.invoice.date }
-    xls_field('Invoice Number') { |invoice_item| invoice_item.invoice_number }
-    xls_field('Sales Order Number') { |invoice_item| invoice_item.sales_order_number }
-    xls_field("#{AppConfig.short_name} Part Number") { |invoice_item| invoice_item.part_number }
-    xls_field('Part Description') { |invoice_item| invoice_item.item.try(:description) }
-    xls_field('Customer Part Number') { |invoice_item| xls_clean invoice_item.customer_part_number }
-    xls_field('Quantity') { |invoice_item| invoice_item.ship_quantity }
-    xls_field('Unit Price', dollar_format) { |invoice_item| 
-      invoice_item.unit_price.to_f.round(2)
-    }
-    xls_field('Invoice Amount', dollar_format) { |invoice_item| 
-      invoice_item.amount.to_f.round(2) 
-    }
-    if self.customer == :all
-      xls_field('Customer Number') { |invoice_item| invoice_item.invoice.customer_number }
-      xls_field('Customer Name') { |invoice_item| invoice_item.invoice.customer_name }
-      xls_field('Group') { |invoice_item| invoice_item.item.try(:fgroup).try(:strip) }        
-      xls_field('Invoice Description') { |invoice_item| invoice_item.description }
+    xls_field('Post Date') { |r| r.post_date }
+    xls_field('Customer') { |r| r.customer_name }
+    xls_field('GL Account') { |r| r.gl_account }
+    xls_field('Description') { |r| r.description }
+    xls_field('Amount', dollar_format) { |r| r.amount.to_f.round(2) }
+  end
+  
+  class ArdistOrGlTransaction
+    attr_accessor :post_date, :customer_name, :gl_account, :description, :amount
+    def initialize(t)
+      @gl_account = t.gl_account_number.strip + ' ' + t.gl_account.description.strip
+			@amount = t.value
+      if t.is_a?(M2m::ArDistribution)
+        @post_date = t.date
+        @customer_name = t.customer.company_name
+        d = []
+        if t.ref_invoice?
+				  d.push "Invoice #{t.ref_id.to_i}"
+				  if t.invoice.sales_order_number.present?
+				 	  d.push "for SO #{t.invoice.sales_order_number.to_i}"
+			 	  end
+				  if t.invoice.number.present?
+					  d.push "shipper #{t.invoice.number.to_i}"
+				  end
+        else
+				  d.push "#{t.ref_key.strip}: #{t.ref_id.strip}"
+				end
+				@description = d.join(' ')
+      else
+  			@post_date = t.post_date
+  			d = []
+        if t.journal_entry?
+  			  d.push "Journal Entry"
+        else
+          d.push t.ref_key.strip
+  			end
+        d.push "#{t.ref_id.to_i}: #{t.description.strip}"
+				@description = d.join(' ')
+      end
     end
   end
   
   def all_data
-    if @invoice_items.nil?
-      raise ':start_date required' unless self.start_date
-      raise ':end_date required' unless self.end_date
-      raise ':customer required' unless self.customer
-      @invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date).not_void.scoped(:include => :invoice)
-      @invoice_items = @invoice_items.customer(self.customer) if self.customer.is_a?(M2m::Customer)
-      M2m::Item.attach_items(@invoice_items)
-      M2m::SalesOrder.attach_sales_orders(@invoice_items)
-    end
-    @invoice_items
+    end_date = self.end_date.advance(:days => 1)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
+    journal_entries = M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account)
+    all = ar_distributions.map { |ar| ArdistOrGlTransaction.new(ar) } + journal_entries.map { |je| ArdistOrGlTransaction.new(je) }
+    all.sort_by(&:post_date)
   end
 end
