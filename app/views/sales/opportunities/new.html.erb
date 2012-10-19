@@ -1,0 +1,15 @@
+<% title 'New Opportunity' %>
+
+<%= render 'sales/submenu' %>
+<br />
+
+<h2>Create New Opportunity</h2>
+
+<%= semantic_form_for @opportunity, :url => opportunities_url do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+	<%= f.buttons do %>
+	  <%= f.commit_button 'Create' %>
+	  <%= f.cancel_link :url => opportunities_url %>
+	<% end %>
+<% end %>
+

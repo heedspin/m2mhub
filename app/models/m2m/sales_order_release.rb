@@ -4,6 +4,7 @@ class M2m::SalesOrderRelease < M2m::Base
   set_table_name 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to_item :fpartno, :fpartrev
+  attr_accessor :sales_order_item
 
   has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
 
@@ -19,6 +20,7 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
+  scope :status_not_cancelled, :joins => :sales_order, :conditions => ['somast.fstatus != ?', M2m::Status.cancelled.name]
   scope :by_due_date, :order => 'sorels.fduedate'
   scope :by_due_date_desc, :order => 'sorels.fduedate desc'
   scope :by_last_ship_date_desc, :order => 'sorels.flshipdate desc'
@@ -26,6 +28,12 @@ class M2m::SalesOrderRelease < M2m::Base
     date = date.is_a?(String) ? Date.parse(date) : date
     {
       :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
+    }
+  }
+  scope :due_after, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'sorels.fduedate >= ?', date.to_s(:database) ]
     }
   }
   scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
@@ -40,6 +48,11 @@ class M2m::SalesOrderRelease < M2m::Base
     fpartno = item.is_a?(M2m::Item) ? item.part_number : item.to_s
     {
       :conditions => { :fpartno => fpartno.strip }
+    }
+  }
+  scope :part_number_starts_with, lambda { |part_number|
+    {
+      :conditions => [ 'sorels.fpartno like ?', part_number + '%' ]
     }
   }
   scope :with_status, lambda { |status|
@@ -69,6 +82,20 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => [ 'flshipdate >= ?', date ]
     }
   }
+  scope :order_dates, lambda { |start_date, end_date|
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
+  scope :ordered_since, lambda { |date|
+    {
+      :joins => :sales_order, 
+      :conditions => ['somast.forderdate >= ?', date]
+    }
+  }
+  scope :master, :conditions => { :fmasterrel => true }
+  scope :master_or_single, joins('inner join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('(soitem.fmultiple = ? and sorels.fmasterrel = ?) or (soitem.fmultiple = ?)', true, true, false)
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -90,28 +117,69 @@ class M2m::SalesOrderRelease < M2m::Base
   alias_attribute :order_quantity, :forderqty
   alias_attribute :internal_number, :finumber
 
+  # select sorels.fduedate, sorels.flshipdate,
+  # ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+  # case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+  # case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) as business_days_late,
+  # DATEDIFF(day, sorels.fduedate, sorels.flshipdate) as days_late,
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) as weeks_late,
+  # DATEPART(dw, sorels.fduedate) as due_day_of_week,
+  # DATEPART(dw, sorels.flshipdate) as ship_day_of_week
+  # from SOMAST left join sorels on sorels.fsono = somast.fsono
+  # where
+  # (DATEDIFF(day, somast.forderdate, sorels.fduedate) > 14)
+  # AND (sorels.flshipdate > sorels.fduedate)
+  # AND (((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+  # DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+  # case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+  # case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > 2)
+
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
-  scope( :shipped_late,
-         :joins => :sales_order,
-         :conditions => ['(DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?) AND (sorels.flshipdate > sorels.fduedate) AND (DATEDIFF(day, sorels.fduedate, sorels.flshipdate) > ?)', CompanyConfig.otd_lead_time, CompanyConfig.otd_grace_period_days] )
+  scope :shipped_late, lambda {
+    select_sql = <<-SQL
+    sorels.*, ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+    DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) - 
+    case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+    case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) as business_days_late
+    SQL
+    conditions_sql = <<-SQL
+    (DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?)
+    AND (sorels.flshipdate > sorels.fduedate)
+    AND (((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
+           DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
+          case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
+          case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > ?)
+    SQL
+    {
+      :joins => :sales_order,
+      :select => select_sql,
+      :conditions => [ conditions_sql, AppConfig.otd_lead_time, AppConfig.otd_grace_period_days ]
+    }
+  }
   scope :due, lambda { |start_date, end_date|
     {
       :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
     }
   }
+  scope :ids, lambda { |ids|
+    {
+      :conditions => ['sorels.identity_column in (?)', ids]
+    }
+  }
 
-  def days_late
+  def days_late(date=nil)
     return 0 unless self.due_date.present?
-    date = self.last_ship_date || Time.current
-    (date - self.due_date).to_i / 86400
+    date ||= self.last_ship_date || Time.current
+    (date.to_time - self.due_date).to_i / 86400
   end
 
   def last_ship_date
-    self.flshipdate == M2m::Constants.null_time ? nil : self.flshipdate
+    M2m::Constants.sanitize_date(self.flshipdate)
   end
 
   def due_date
-    self.fduedate == M2m::Constants.null_time ? nil : self.fduedate
+    M2m::Constants.sanitize_date(self.fduedate)
   end
 
   # def due_date_month
@@ -125,10 +193,15 @@ class M2m::SalesOrderRelease < M2m::Base
   def backorder_quantity
     quantity - quantity_shipped
   end
+  
+  def backlog_price
+    self.backorder_quantity * self.unit_price
+  end  
 
   # Optimization to avoid the inefficiency of the belongs_to above.
   def attach_items_from_sales_order(sales_order)
-    self.item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+    self.sales_order_item = sales_order.items.detect { |i| i.fenumber == self.fenumber }
+    self.item = self.sales_order_item.try(:item)
   end
 
   def self.attach_to_sales_orders(sales_orders)
@@ -176,10 +249,6 @@ class M2m::SalesOrderRelease < M2m::Base
   def master?
     self.fmasterrel
   end
-
-  # def master_release?
-  #   (self.frelease == '000') && self.item.try(:multiple_releases?)
-  # end
 
 end
 

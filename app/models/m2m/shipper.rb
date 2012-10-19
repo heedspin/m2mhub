@@ -26,8 +26,7 @@ class M2m::Shipper < M2m::Base
     {
       :conditions => [ 'shmast.fshipdate = ?', date.to_s(:database) ],
     }
-  }
-  
+  }  
   scope :for_next_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
@@ -35,7 +34,6 @@ class M2m::Shipper < M2m::Base
       :order => :fshipdate
     }
   }
-  
   scope :for_previous_day, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
@@ -43,9 +41,7 @@ class M2m::Shipper < M2m::Base
       :order => 'shmast.fshipdate desc'
     }
   }
-  
   scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
-
   scope :next_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno > ?', shipper.fsono], 
@@ -53,7 +49,6 @@ class M2m::Shipper < M2m::Base
       :limit => 1
     }
   }
-
   scope :previous_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno < ?', shipper.fsono], 
@@ -61,13 +56,32 @@ class M2m::Shipper < M2m::Base
       :limit => 1
     }
   }
-  
   scope :for_item, lambda { |item|
     {
-      :joins => :items,
+      # Using include vs joins eliminates duplicates.
+      :include => :items,
       :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
     }
   }
+  
+  def self.monthly_quantity_shipped(start_date, end_date)
+    results = connection.select_rows <<-SQL
+    select cast( cast(datepart(year, shmast.fshipdate) as varchar) + '-' +
+                 cast(datepart(month, shmast.fshipdate) as varchar) + '-01' as date) as month,
+           sum(shitem.fshipqty) as quantity_shipped
+    from shmast
+    left join shitem on shitem.fshipno = shmast.fshipno
+    where shmast.fshipdate >= '#{start_date.to_s(:database)}'
+      and shmast.fshipdate < '#{end_date.to_s(:database)}'
+    group by datepart(month, shmast.fshipdate), datepart(year,shmast.fshipdate)
+    order by month
+    SQL
+    months = {}
+    results.each do |month, quantity_shipped|
+      months[Date.parse(month)] = quantity_shipped
+    end
+    months
+  end
   
 end
 

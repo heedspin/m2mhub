@@ -1,4 +1,4 @@
-class User < ApplicationModel
+class User < M2mhub::Base
   # model_stamper
   acts_as_authentic do |c|
     c.validate_password_field = true
@@ -16,6 +16,8 @@ class User < ApplicationModel
 
   attr_accessor :current_password
   scope :active, :conditions => { :user_state_id => UserState.active.id }
+  scope :by_name, :order => [:first_name, :last_name]
+  scope :with_lighthouse_account, :conditions => 'users.lighthouse_user_id is not null'
   
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]
@@ -66,7 +68,7 @@ class User < ApplicationModel
   end
 
   def self.robo_mailer
-    find_by_email(CompanyConfig.email_address)
+    find_by_email(AppConfig.email_address)
   end
 
   def self.new_from_email(email)
@@ -81,6 +83,15 @@ class User < ApplicationModel
     def set_default_status_and_role
       self.user_role_id ||= UserRole.default.id
       self.user_state_id ||= UserState.unconfirmed.id
+    end
+    
+    before_save :find_lighthouse_account
+    def find_lighthouse_account
+      if AppConfig.lighthouse_account and self.lighthouse_user_id.blank?
+        if lighthouse_user = Lighthouse::User.find_by_name(self.full_name)
+          self.lighthouse_user_id = lighthouse_user.id
+        end
+      end
     end
 end
 
@@ -112,5 +123,6 @@ end
 #  last_login_ip           :string(255)
 #  created_at              :datetime
 #  updated_at              :datetime
+#  lighthouse_user_id      :string(255)
 #
 

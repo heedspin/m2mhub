@@ -30,6 +30,12 @@ class M2m::QuoteItem < M2m::Base
   alias_attribute :unit_price, :funetprice
   alias_attribute :sales_order_number, :fsono
   alias_attribute :item_number, :fenumber
+  alias_attribute :customer_part_number, :fcustpart
+  alias_attribute :description, :fdesc
+  
+  def total_price
+    self.unit_price * self.quantity
+  end
 end
 
 

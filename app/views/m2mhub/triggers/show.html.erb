@@ -1,0 +1,45 @@
+<%= render 'm2mhub/events/submenu' %>
+<br />
+
+<% if permitted_to? :manage, :m2mhub_triggers %>
+<ul class="submenu">
+	<li><%= link_to 'edit', edit_m2mhub_trigger_url(@trigger) %></li>
+	<li><%= link_to 'delete', m2mhub_trigger_url(@trigger), :method => :delete, :confirm => 'Are you sure?' %></li>
+</ul>
+<% end %>
+
+<h2>Trigger: <%= @trigger.title %></h2>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Type</th>
+			<th>Part Number</th>
+			<th>Action</th>
+			<th>Lighthouse Project</th>
+			<th>Assigned To</th>
+			<th>Watchers</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @trigger.trigger_type.name %></td>
+			<td><%= @trigger.part_number %></td>
+			<td><%= @trigger.notification_type.name %></td>
+			<td><%= @trigger.lighthouse_project.try(:name) %></td>
+			<td><%= @trigger.target_user.try(:full_name) %></td>
+			<td><%= @trigger.users.map(&:full_name).join(', ') %></td>
+			<td><%= @trigger.trigger_state.name %></td>
+		</tr>
+		<tr>
+			<td colspan="6"><%= simple_format @trigger.instructions %></td>
+		</tr>
+	</tbody>
+</table>			
+
+<% if @events.size == 0 %>
+<p>No events</p>
+<% else %>
+<h3>Events</h3>
+<%= render 'm2mhub/events/list' %>
+<% end %>

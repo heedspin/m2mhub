@@ -1,4 +1,4 @@
-<% include_closed_details_javascript(image_tag('arrow_collapse.gif'),image_tag('arrow_expand.gif')) %>
+<% include_closed_details_javascript(image_tag(AppConfig.arrow_collapse_image),image_tag(AppConfig.arrow_expand_image)) %>
 
 <% total_object = nil unless defined?(total_object) %>
 <table class="data">
@@ -26,7 +26,7 @@
 		<tr>
 			<td>
 				<a href="#<%= item_report.id %>"><span class="show_closed_details" id="closed_details_<%= item_report.m2m_identity_column %>">
-				<%= image_tag('arrow_collapse.gif') %>
+				<%= image_tag(AppConfig.arrow_collapse_image) %>
 				</span></a>
 				<%= link_to item_report.part_number, item_url(item_report.m2m_identity_column) %>
 			</td>
@@ -42,8 +42,8 @@
 				<%= item_report.last_incoming_date.try(:to_s, :report_date) %>
 			</td>
 			<td>
-				<% if item_report.last_sales_order_release_id %>
-				<%= item_report.last_sales_order_release.last_ship_date.to_s(:report_date) %>
+				<% if item_report.last_ship %>
+				<%= item_report.last_ship.to_s(:report_date) %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
 					<%= link_to "SO #{item_report.last_sales_order_release.sales_order_number}", sales_order_url(item_report.last_sales_order_release.sales_order_number) %>
 					<% if item_report.part_number != item_report.last_sales_order_release.part_number %>
@@ -55,7 +55,7 @@
 			<td><%= item_report.next_incoming_date.try(:to_s, :report_date) %></td>
 			<td>
 				<%= item_report.next_outgoing_date.try(:to_s, :report_date) %>
-				<% if item_report.next_sales_order_release_id %>
+				<% if item_report.next_sales_order_release %>
 				<div class="closed_details xclosed_details_<%= item_report.m2m_identity_column %>">
 					<%= link_to "SO #{item_report.next_sales_order_release.sales_order_number}", sales_order_url(item_report.next_sales_order_release.sales_order_number) %>
 					<% if item_report.part_number != item_report.next_sales_order_release.part_number %>

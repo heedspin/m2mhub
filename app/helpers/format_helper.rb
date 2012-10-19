@@ -1,17 +1,11 @@
+require 'plutolib/comma'
 module FormatHelper
-  # From http://rubyforge.org/snippet/detail.php?type=snippet&id=8
-  def comma(thing)
-    return '' if thing.nil?
-    parts = thing.to_s.split('.',2)
-    result = parts[0].gsub(/(\d)(?=\d{3}+(?:\D|$))/, '\\1,')
-    result += ('.' + parts[1]) if parts.size > 1
-    result
-  end
-
+  include Plutolib::Comma
+  
   def cm(thing, company_config_key=nil, default=nil)
     if thing and (thing.to_f != 0)
       case thing
-      when BigDecimal, Float
+      when BigDecimal, Float, Fixnum
         comma(company_sprintf(thing, company_config_key))
       else
         comma(thing)
@@ -35,7 +29,7 @@ module FormatHelper
 
   def company_sprintf(num, key)
     return num unless key
-    company_format = CompanyConfig.get(key) || '%.1f'
+    company_format = AppConfig.get(key) || '%.1f'
     if company_format.starts_with?('trim_decimals')
       company_format = num.to_i == num ? '%0.f' : (company_format.split(',')[1] || '%.1f')
     end
@@ -59,5 +53,10 @@ module FormatHelper
     </script>
     HTML
     content_for :javascripts, html.html_safe
+  end
+  
+  # Shorten, truncate, add ellipse...
+  def limit_string(text, max)
+    text[0..(max-1)] + (text.size > max ? '...' : '')
   end
 end

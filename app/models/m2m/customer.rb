@@ -6,6 +6,7 @@ class M2m::Customer < M2m::Base
   has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM' }
   has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
   has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
+  belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
 
   alias_attribute :notes, :fmnotes
   alias_attribute :last_name, :fcontact
@@ -21,11 +22,14 @@ class M2m::Customer < M2m::Base
   alias_attribute :work_state, :fstate
   alias_attribute :work_postal_code, :fzip
   alias_attribute :work_country_name, :fcountry
+  alias_attribute :sales_person_key, :fsalespn
+  alias_attribute :commission_percentage, :fsalcompct
+  alias_attribute :created_date, :fcreated
 
   after_initialize :set_defaults
   def set_defaults
     begin
-      self.work_country_name = CompanyConfig.default_country_name if self.work_country_name.blank?
+      self.work_country_name = AppConfig.default_country_name if self.work_country_name.blank?
       # TODO: do something meaningful with ftype.
       self.ftype = 'C' if self.ftype.blank?
       # fcshipto => '0001', :fcsoldto => '0001'
@@ -35,13 +39,16 @@ class M2m::Customer < M2m::Base
       # Ignore this exception.  Probably because we used a :select.
     end
   end
-
   scope :name_like, lambda { |text|
     {
       :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
     }
   }
-
+  scope :with_names, lambda { |names|
+    {
+      :conditions => [ 'slcdpmx.fcompany in (?)', names ]
+    }
+  }
   scope :by_name, :order => 'fcompany'
 
   scope :with_customer_numbers, lambda { |customer_numbers|
@@ -52,6 +59,13 @@ class M2m::Customer < M2m::Base
   scope :with_customer_number, lambda { |custno|
     {
       :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
+    }
+  }
+  scope :created_between, lambda { |start_date, end_date|
+    start_date = Date.parse(start_date) if start_date.is_a?(String)
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    {
+      :conditions => [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
     }
   }
 
@@ -103,18 +117,18 @@ class M2m::Customer < M2m::Base
         @running_after_save_madness = true
         need_to_save_self = false
         if self.fcustno.blank?
-          self.fcustno = self.id 
+          self.fcustno = self.id
           need_to_save_self = true
         end
         contact = self.primary_contact || self.contacts.primary.new
         soldto = self.addresses.sold_to.first
         if soldto.nil?
-          soldto = self.addresses.sold_to.new 
+          soldto = self.addresses.sold_to.new
           soldto.set_fcaddrkey
         end
         shipto = self.addresses.ship_to.first
         if shipto.nil?
-          shipto = self.addresses.ship_to.new 
+          shipto = self.addresses.ship_to.new
           shipto.set_fcaddrkey
         end
         # self.addresses << address

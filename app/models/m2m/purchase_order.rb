@@ -3,10 +3,13 @@ class M2m::PurchaseOrder < M2m::Base
   set_primary_key 'fpono'
   
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
 
   scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  
+  alias_attribute :vendor_name, :fcompany
 
   def status
     M2m::Status.find_by_name(self.fstatus)

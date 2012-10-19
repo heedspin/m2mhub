@@ -42,7 +42,7 @@ class AttachmentInput < Formtastic::Inputs::FileInput
       <span class="attachment_delete" id="#{delete_attachment_link}">(<a href="#delete">Delete</a>)</span>
       HTML
     end
-    l = builder.label(method, input_html_options.delete(:label), input_html_options.slice(:required))
+    l = builder.label(method, input_html_options.delete(:label) || options.delete(:label), input_html_options.slice(:required))
 
     result = <<-HTML
       #{l}

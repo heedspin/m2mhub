@@ -1,8 +1,0 @@
-development:
-  bucket:
-  access_key_id: 
-  secret_access_key: 
-production:
-  bucket:
-  access_key_id:
-  secret_access_key:

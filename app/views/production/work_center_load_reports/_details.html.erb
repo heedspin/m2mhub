@@ -27,7 +27,7 @@
 			<td class="centered">
 				<span class="nowrap hoverinfo">
 					<% wcname = wcr.work_center.work_center_id.strip + ' ' + wcr.work_center.name.strip %>
-					<%= link_to wcname[0..15] + (wcname.size > 16 ? '...' : ''), '#', :title => wcname %>
+					<%= link_to limit_string(wcname, 16), '#', :title => wcname %>
 				</span>
 			</td>
 			<td class="right">

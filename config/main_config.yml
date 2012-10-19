@@ -1,0 +1,11 @@
+<% local_config = File.join(Rails.root, 'config/local_config.yml') %>
+<% if File.exists?(local_config) %>
+<%= File.open(local_config).read %>
+<% else %>
+local_config:
+  nothing: here
+<% end %>
+<% app_config = File.join(Rails.root, 'config/app_config.yml') %>
+<%= File.open(app_config).read if File.exists?(app_config) %>
+<% m2mhub_config = File.join(M2mhub::Engine.root, 'config/m2mhub_config.yml') %>
+<%= File.open(m2mhub_config).read if File.exists?(m2mhub_config) %>

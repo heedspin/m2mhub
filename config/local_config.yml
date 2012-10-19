@@ -1,0 +1,9 @@
+# This file should not be checked in.
+local_config:
+  shared: &shared
+  development:
+    <<: *shared
+  production:
+    <<: *shared
+  test:
+    <<: *shared

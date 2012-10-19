@@ -4,7 +4,7 @@ class StagnantCompanies
   def run
     stagnant_date = Date.current.advance(:months => -6)
     active_companies = []
-    M2m::SalesOrder.ordered_after(stagnant_date).all(:include => :customer).each do |so|
+    M2m::SalesOrder.ordered_since(stagnant_date).all(:include => :customer).each do |so|
       company_name = so.customer.company_name.downcase.strip
       unless active_companies.include?(company_name)
         active_companies.push company_name

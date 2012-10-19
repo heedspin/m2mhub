@@ -1,0 +1,29 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Time</th>
+			<th>Description</th>
+			<th>Trigger</th>
+			<th>User</th>
+			<th>Ticket State</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @events.each do |e| %>
+		<tr class="<%= e.closed ? 'resolved-event' : '' %>">
+			<td>#<%= e.id %></td>
+			<td><%= e.created_at.to_s(:event_date) %></td>
+			<td>
+				<%= e.title.html_safe %>
+				<% if e.body.present? %>
+					<br /><%= e.body.html_safe %>
+				<% end %>
+			</td>
+			<td><%= link_to e.trigger.title, m2mhub_trigger_url(e.trigger) %></td>
+			<td><%= e.user.try(:full_name) %></td>
+			<td><%= link_to_event_status e %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			

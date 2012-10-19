@@ -1,4 +1,4 @@
-class Shipping::ReceiversController < ApplicationController
+class Shipping::ReceiversController < M2mhubController
   filter_access_to_defaults
 
   def index

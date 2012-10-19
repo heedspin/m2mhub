@@ -1,7 +1,7 @@
-class Quality::RmasController < ApplicationController
+class Quality::RmasController < M2mhubController
   def show
     @rma = current_object
-    if CompanyConfig.lighthouse_account
+    if AppConfig.lighthouse_account
       unless @lighthouse_ticket = @rma.lighthouse_ticket
         @lighthouse_ticket = Lighthouse::Ticket.from_rma(@rma, current_user)
       end

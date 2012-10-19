@@ -1,0 +1,45 @@
+<div class="submenu">
+	<ul>
+		<% if permitted_to?(:read, :sales_order_items) %>
+		<li class="<%= menu_selected(:controller => :sales_order_items) %>">
+			<%= link_to 'Search', sales_order_items_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:read, :sales_orders) %>
+		<li class="<%= menu_selected(:controller => :sales_orders, :action => :index) %>">
+			<%= link_to 'Sales Orders', sales_orders_url %>
+		</li>
+		<% end %>
+
+		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
+		<li class="<%= menu_selected(:controller => :opportunities) %>">
+			<%= link_to 'Opportunities', opportunities_url %>
+		</li>
+		<% end %>
+		
+		<% if permitted_to?(:read, :quotes) %>
+		<li class="<%= menu_selected(:controller => :quotes) %>">
+			<%= link_to 'Quotes', quotes_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:read, :sales_reports) %>
+		<li class="<%= menu_selected(:controller => [:sales_reports, :bookings_reports, :backlog_reports]) %>">
+			<%= link_to 'Sales Reports', sales_reports_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:manage, :pro_forma_sales_reports) %>
+		<li class="<%= menu_selected(:controller => :pro_forma_sales_reports) %>">
+			<%= link_to 'Pro Forma Sales', new_pro_forma_sales_report_url %>
+		</li>
+		<% end %>
+
+		<% if AppConfig.enable_commission_report? and permitted_to?(:manage, :sales_commission_reports) %>
+		<li class="<%= menu_selected(:controller => [:commission_reports, :commission_rates]) %>">
+			<%= link_to 'Commission Reports', new_commission_report_url %>
+		</li>
+		<% end %>
+	</ul>
+</div>

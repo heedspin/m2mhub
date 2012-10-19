@@ -1,6 +1,0 @@
-<% s3_local = File.join(Rails.root, 'config/s3_local.yml') %>
-<% if File.exists?(s3_local) %>
-<%= File.open(s3_local).read %>
-<% else %>
-<%# You can do an ENV[] approach here (like heroku) %>
-<% end %>

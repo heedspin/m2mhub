@@ -1,9 +1,9 @@
-<%= render 'sales_orders/submenu' %>
+<%= render 'sales/submenu' %>
 
 <%= semantic_form_for :search, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
 	<%= f.inputs do %>
-  	<%= f.input :order_number, :as => :string %>
-	  <%= f.input :part_number, :as => :string %>
+  	<%= f.input :order_number, :as => :string, :label => M2m::SalesOrderItem.human_attribute_name(:search_order_number) %>
+	  <%= f.input :part_number, :as => :string, :label => M2m::SalesOrderItem.human_attribute_name(:search_part_number) %>
 	<% end %>
   <%= f.buttons do %>
 	  <%= f.commit_button 'Search' %>

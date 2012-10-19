@@ -1,3 +1,5 @@
+require 'plutolib/logger_utils'
+
 class PdfGenerationError < StandardError; end
 
 module PdfGeneration
@@ -32,7 +34,7 @@ end
 class PdfGenerator
   require 'net/http'
   require 'uri'
-  include LoggerUtils
+  include Plutolib::LoggerUtils
 
   attr_accessor :file, :success, :command_output
 
@@ -44,7 +46,7 @@ class PdfGenerator
     logfile = tempfile.path + '.log'
     FileUtils.mv tempfile.path, source
     destination = tempfile.path + '.pdf'
-    command = "/usr/bin/prince -v -s #{Rails.root}/public/stylesheets/prince.css --log #{logfile} #{source} -o #{destination}"
+    command = "/usr/bin/prince -v -s #{Rails.root}/public/stylesheets/m2mhub/prince.css --log #{logfile} #{source} -o #{destination}"
     log "Prince command: #{command}"
     `#{command}`
     status = $?

@@ -9,17 +9,18 @@
 #  created_at                      :datetime
 #  updated_at                      :datetime
 #  inventory_report_cost_method_id :integer(4)
-#  total_on_hand_cost              :float
-#  total_on_order_cost             :float
-#  total_available_cost            :float
-#  total_committed_cost            :float
 #  total_run_time_seconds          :integer(4)
 #  earliest_release_date           :datetime
 #  movement_data                   :text
 #  report_date                     :date
+#  total_on_hand_cost              :decimal(12, 2)
+#  total_on_order_cost             :decimal(12, 2)
+#  total_available_cost            :decimal(12, 2)
+#  total_committed_cost            :decimal(12, 2)
 #
 
-require 'delayed_report'
+require 'plutolib/stateful_delayed_report'
+require 'plutolib/to_xls'
 require 'active_hash_methods'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
@@ -28,7 +29,8 @@ require 'production/inventory_movement_data'
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   set_table_name 'inventory_reports'
-  include DelayedReport
+  include Plutolib::ToXls
+  include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy
@@ -38,10 +40,10 @@ class Production::InventoryReport < ActiveRecord::Base
 
   scope :by_date_desc, :order => 'inventory_reports.report_date desc, inventory_reports.created_at desc'
 
-  def run
+  def run_report
     report_start_time = Time.now.to_i
-    if CompanyConfig.cost_method
-      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(CompanyConfig.cost_method)
+    if AppConfig.cost_method
+      self.inventory_report_cost_method = Production::InventoryReportCostMethod.find_by_item_key(AppConfig.cost_method)
     end
     self.inventory_report_cost_method ||= Production::InventoryReportCostMethod.standard_cost
     self.save if self.new_record?
@@ -49,8 +51,8 @@ class Production::InventoryReport < ActiveRecord::Base
     no_customer = self.customer_reports.build(:customer_name => 'No Customer')
     @inventory_customers = { nil => no_customer }
     @inventory_items = []
-    groups_to_filter = CompanyConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
-    part_numbers_to_filter = CompanyConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
+    groups_to_filter = AppConfig.inventory_report_filter_groups.split(',').map(&:strip).map(&:downcase)
+    part_numbers_to_filter = AppConfig.inventory_report_filter_part_numbers.split(',').map(&:strip).map(&:downcase)
     @bom_children = BomChildrenCache.new
     load_past_releases
     load_next_sales
@@ -140,30 +142,63 @@ class Production::InventoryReport < ActiveRecord::Base
     offset = 0
     while offset < MAX_PAST_RELEASES
       # find_in_batches breaks sorting
-      releases = M2m::SalesOrderRelease.by_last_ship_date_desc.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
+      releases = M2m::SalesOrderRelease.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
       break if releases.size == 0
       offset += releases.size
       @bom_children.for_releases(releases).each do |release, bom_children|
-        if (self.earliest_release_date.nil? or (release.last_ship_date < self.earliest_release_date))
-          self.earliest_release_date = release.last_ship_date
+        next unless release.last_ship_date # skip it unless it's actually shipped
+        if (self.earliest_release_date.nil? or (release.due_date < self.earliest_release_date))
+          self.earliest_release_date = release.due_date
         end
-        add_past_release(release.part_number_revision, release)
+        keep_most_recent_release(release.part_number_revision, release)
         bom_children.each do |bom_item|
-          add_past_release(bom_item.part_number_revision, release)
+          keep_most_recent_release(bom_item.part_number_revision, release)
         end
       end
     end
   end
 
-  # Only keep the earliest release.
-  def add_past_release(part_number_revision, release)
-    if (exists = self.past_releases[part_number_revision]).nil? or (exists.due_date > release.due_date)
+  def keep_most_recent_release(part_number_revision, release)
+    if (exists = self.past_releases[part_number_revision]).nil? or (release.last_ship_date > exists.last_ship_date)
       self.past_releases[part_number_revision] = release
     end
   end
 
   def past_releases
     @past_releases ||= {}
+  end
+  
+  def xls_initialize  
+    dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
+    xls_field("Part Number") { |r| r.part_number_and_revision }
+    xls_field('Part Description') { |r| r.item.try(:description) }
+    xls_field('Group') { |r| r.item.try(:short_group_name) }
+    never = Date.parse('1901-01-01')
+    xls_field('Latest Activity Date') { |r| r.latest_activity || never }
+    xls_field('On Hand Cost', dollar_format) { |r| r.total_on_hand_cost }
+    xls_field('Last Customer') { |r| r.customer_report.try(:customer_name) }
+    xls_field('Quantity On Hand') { |r| r.quantity_on_hand }
+    xls_field('Committed Cost', dollar_format) { |r| r.total_committed_cost }
+    xls_field('Quantity Committed') { |r| r.quantity_committed }
+    xls_field('Available Cost', dollar_format) { |r| r.total_available_cost }
+    xls_field('Quantity Available') { |r| r.quantity_available }
+    xls_field('Total On Order') { |r| r.total_on_order_cost }
+    xls_field('Quantity On Order') { |r| r.quantity_on_order }
+    xls_field('Unit Cost', dollar_format) { |r| r.cost.round(2) }
+    xls_field('Last Receipt', xls_date_format) { |r| r.last_incoming_date }
+    xls_field('Last Ship', xls_date_format) { |r| r.last_ship }
+    xls_field('Last Sales Order') { |r| r.last_sales_order_release.try(:sales_order_number) }
+    xls_field('Next Receipt', xls_date_format) { |r| r.next_incoming_date }
+    xls_field('Next Ship', xls_date_format) { |r| r.next_outgoing_date }
+    xls_field('Next Sales Order') { |r| r.next_sales_order_release.try(:sales_order_number) }
+  end
+  
+  def all_data
+    self.item_reports
+  end
+  
+  def xls_filename
+    "#{report_date.to_s(:sortable)}_#{AppConfig.short_name}_inventory"
   end
 
 end

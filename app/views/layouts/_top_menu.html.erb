@@ -1,0 +1,42 @@
+<div class="nav">    
+	<ul>
+		<li class="<%= menu_selected(:controller => :home) %>">
+			<%= link_to 'Home', root_url %>
+		</li>
+		<% if permitted_to?(:read, :quality_quality_dashboard) %>
+		<li class="<%= menu_selected :controllers => [:rmas, :quality_dashboard, :rma_reports, :customer_otd_reports, :credit_memo_reports] %>">
+			<%= link_to 'Quality', quality_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :sales_order_items) %>
+		<li class="<%= menu_selected(:controller => [:sales_order_items, :sales_orders, :quotes, :invoiced_sales_reports, :pro_forma_sales_reports, :quotes, :commission_reports, :commission_rates, :sales_reports, :bookings_reports, :backlog_reports, :opportunities, :opportunity_comments]) %>">
+			<%= link_to 'Sales', sales_order_items_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :customers) %>
+		<li class="<%= menu_selected(:controller => :customers) %>">
+			<%= link_to 'Customers', customers_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :items) %>
+		<li class="<%= menu_selected(:path_starts_with => '/items') %>">
+			<%= link_to 'Items', items_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :shipping_shipping_dashboard) %>
+		<li class="<%= menu_selected(:path => /^\/(shipp|receivers)/) %>">
+			<%= link_to 'Shipping', shipping_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :sales_backlog_reports) %>
+		<li class="<%= menu_selected(:controller => :sales_backlog_reports) %>">
+			<%= link_to 'backlog', sales_backlog_reports_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :production_production_dashboard) %>
+		<li class="<%= menu_selected(:controller => [:production_dashboard, :work_center_load_reports, :obsolete_reports, :customer_reports, :inventory_reports, :labor_reports, :purchase_queue_summaries]) %>">
+			<%= link_to 'Production', inventory_reports_url %>
+		</li>
+		<% end %>
+	</ul>        
+</div><!-- nav -->

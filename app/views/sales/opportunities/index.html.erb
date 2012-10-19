@@ -1,0 +1,132 @@
+<%= render 'sales/submenu' %>
+<br />
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("input#search_customer_name").autocomplete({
+		source: "<%= customers_url %>",
+		search: function(event, ui) { 
+			$("input#search_customer_name").autocomplete("close");
+			$("#customer_inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#customer_inprogress").hide();
+		},
+		select: function(event, ui) { 
+			if (ui.item.value == "No Results") {
+				$(this).val( "" ); 
+				// Do nothing.
+			}	else {
+				$(this).val( ui.item.value ); 
+			}
+			return false; 
+		}		
+	});
+	
+	// http://jsfiddle.net/hQkFH/3/
+	$(".expand_on_hover").hover(function() {
+		var height = $(this).height();
+		var pad = height + 5;
+		var height2 = $(this)[0].scrollHeight;
+		if (height2 > 35) {
+			$(this).animate({	height: height2	}, 300);
+		}
+	}, function() {
+		$(this).stop(true, false).animate({ height: 35 }, 150);
+	});
+})
+</script>
+<% end %>
+
+<%= semantic_form_for @search, :as => :search, :url => opportunities_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
+					<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
+						<label class=" label" for="search_customer_name"><%= Sales::Opportunity.human_attribute_name(:customer_name) %></label>
+						<%= f.text_field :customer_name %>
+						<span id="customer_inprogress" class="hide">
+						<%= image_tag AppConfig.in_progress_image %>
+						</span>
+					</li>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.buttons do %>
+				  <%= f.commit_button 'Search' %>
+					<li><%= link_to 'New Opportunity', new_opportunity_path %></li>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<% end %>
+
+<%= set_focus('#search_company_name') %>
+
+<% 
+  show_won = @search.status.try(:won?)
+  show_hold = @search.status.try(:hold?)
+  show_active = @search.status.try(:active?)
+	lighthouse_comment_columns = 4
+%>
+
+<% if @opportunities.size > 0 %>
+<%= will_paginate @opportunities %>
+<table class="data">
+	<thead>
+		<tr>
+			<th class="fixname">Title</th>
+			<th class="fixshortname">Customer</th>
+			<th>Product</th>
+			<% if show_won %>
+			<th>Amount</th>
+			<% end %>
+			<% if show_hold %>
+			<th>Wakeup</th>
+			<% end %>
+			<th>Updated</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @opportunities.each do |o| %>
+		<tr>
+			<td><%= link_to o.number_and_title, opportunity_url(o) %></td>
+			<td><%= o.customer.present? ? link_to(o.customer_name, customer_url(o.customer)) : o.customer_name %></td>
+			<td><%= o.product %></td>
+			<% if show_won %>
+			<td><%= cm o.amount, :rounded_dollars %></td>
+			<% end %>
+			<% if show_hold %>
+			<td>
+ 				<%= o.wakeup.to_s(:short_human_date) %>
+			</td>
+			<% end %>
+			<td><%= o.updated_at.to_s(:short_human_date_time) %></td>
+		</tr>
+		<% if o.last_comment.try(:ticket?) %>
+		<tr class="<%= o.last_comment.lighthouse_closed ? 'lighthouse_ticket_closed' : '' %>">
+			<td>
+				Status: <%= o.last_comment.lighthouse_status %><br />
+				Assigned: <%= o.last_comment.lighthouse_last_assigned_user_name %>
+			</td>
+			<td colspan="<%= lighthouse_comment_columns %>">
+				<div class="expand_on_hover"><%= raw o.last_comment.lighthouse_last_comment %></div>
+			</td>
+		</tr>
+		<% elsif o.last_comment %>
+		<% end %>
+		<tr class="opportunity_spacer">
+			<td colspan="<%= lighthouse_comment_columns + 1 %>"></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			
+<%= will_paginate @opportunities %>
+<% end %>

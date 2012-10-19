@@ -1,4 +1,4 @@
-class Items::BomParentsController < ApplicationController
+class Items::BomParentsController < M2mhubController
   filter_access_to_defaults
 
   def index

@@ -1,4 +1,4 @@
-class Sales::ProFormaSalesReportsController < ApplicationController
+class Sales::ProFormaSalesReportsController < M2mhubController
   filter_access_to_defaults :context => :pro_forma_sales_reports
 
   def new

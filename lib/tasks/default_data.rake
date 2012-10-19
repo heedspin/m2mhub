@@ -1,11 +1,8 @@
-namespace :default_data do
-  desc "Load all default data"
-  task :all => %w(users content_modules).map{ |task| "default_data:#{task}" }
-
-  desc "Load default users"
-  task :users => :environment do
+namespace :m2mhub do
+  desc "Create default user"
+  task :create_default_user => :environment do
     users = [
-      ['Robo', 'Mailer', CompanyConfig.email_address, 'betterchangemequick']
+      ['Robo', 'Mailer', AppConfig.email_address, 'betterchangemequick']
     ]
 
     users.each do |user|
@@ -21,14 +18,5 @@ namespace :default_data do
       end
       u.save(:validate => false)
     end
-  end
-
-  desc 'Create all the content modules'
-  task :content_modules => [ :environment ] do
-    #TODO: How to initialize company-specific content modules?
-    # configs = AppConfig.lxd? ? lxd_content_modules : smt_content_modules
-    # configs.each do |config|
-    #   ContentModule.make! config
-    # end
   end
 end

@@ -1,0 +1,10 @@
+<% title 'New Trigger' %>
+
+<%= render 'm2mhub/events/submenu' %>
+
+<h2>Create New Trigger</h2>
+
+<%= semantic_form_for @trigger, :url => m2mhub_triggers_url do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>
+

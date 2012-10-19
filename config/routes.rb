@@ -1,4 +1,4 @@
-M2mhub::Application.routes.draw do
+Rails.application.routes.draw do
   resource :user_session
   root :to => 'home#index'
   match 'login' => 'user_sessions#new', :as => :login
@@ -45,7 +45,14 @@ M2mhub::Application.routes.draw do
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
+  resources :commission_rates, :controller => 'sales/commission_rates'
+  resources :commission_reports, :controller => 'sales/commission_reports'
   match 'quality' => 'quality/quality_dashboard#index'
+  resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
+  resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
+  resources :backlog_report, :only => [:index, :show], :controller => 'sales/backlog_reports'
+  resources :opportunities, :controller => 'sales/opportunities'
+  resources :opportunity_comments, :controller => 'sales/opportunity_comments'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'
@@ -62,6 +69,12 @@ M2mhub::Application.routes.draw do
     resources :obsolete_reports, :only => [:index], :controller => 'production/inventory_reports/obsolete_reports'
   end
   resources :labor_reports, :only => [:index, :show], :controller => 'production/labor_reports'
+  resources :purchase_queue_summaries, :only => [:index, :show], :controller => 'production/purchase_queue_summaries'
+  resources :purchase_queue_notes, :controller => 'production/purchase_queue_notes'
+  
+  resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
+  resources :m2mhub_events, :controller => 'm2mhub/events'
+  resources :external_event_resources, :controller => 'm2mhub/external_event_resources', :only => [:create]
 
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'

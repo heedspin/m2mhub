@@ -4,13 +4,16 @@ class CalendarInput < Formtastic::Inputs::StringInput
   # end
 
   def input_html_options
-    {
+    excellent_options = {
       :maxlength => options[:input_html].try(:[], :maxlength) || limit,
       :size => builder.default_text_field_size,
       :placeholder => placeholder_text,
-      :value => (value || Date.current).to_s(:calendar_date),
       :class => 'calendar'
-    }.merge(super)
+    }
+    unless options.member?(:value)
+      excellent_options[:value] = (value || Date.current).to_s(:calendar_date)
+    end
+    excellent_options.merge(super)
   end
 
   def value

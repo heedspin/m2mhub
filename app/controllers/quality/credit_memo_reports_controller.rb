@@ -1,4 +1,4 @@
-class Quality::CreditMemoReportsController < ApplicationController
+class Quality::CreditMemoReportsController < M2mhubController
   filter_access_to_defaults
 
   def new

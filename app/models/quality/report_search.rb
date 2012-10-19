@@ -9,7 +9,7 @@ class Quality::ReportSearch
   end
 
   def self.year_options
-    Date.current.year.downto(CompanyConfig.epoch_year || 2000).map(&:to_s)
+    Date.current.year.downto(AppConfig.epoch_year || 2000).map(&:to_s)
   end
 end
 

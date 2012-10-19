@@ -1,0 +1,12 @@
+<%= f.semantic_errors :base %>
+
+<%= f.inputs do %>
+	<%= f.input :part_number %> 
+	<%= f.input :revision %>
+  <%= f.input :comments %> 
+<% end %>
+
+<%= f.buttons do %>
+  <%= f.commit_button %>
+  <%= f.cancel_link %>
+<% end %>

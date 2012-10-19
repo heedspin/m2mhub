@@ -1,0 +1,55 @@
+
+<table class="data">
+	<thead>
+		<tr>
+			<td class="ninjaborders"></td>
+			<% date_reports.each do |dr| %>
+			<th><%= dr.date.to_s(:month_year) %></th>
+			<% end %>			
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>
+				<%= Sales::SalesReport.human_attribute_name(:invoiced_sales) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= link_to cm(dr.sales_report.invoiced_sales, :rounded_dollars, 0), sales_report_url(dr.sales_report) %>
+			</td>
+			<% end %>
+		</tr>
+		<tr>
+			<th>
+				<%= Sales::BookingsReport.human_attribute_name(:bookings) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= link_to cm(dr.bookings_report.bookings, :rounded_dollars, 0), bookings_report_url(dr.bookings_report) %>
+			</td>
+			<% end %>
+		</tr>
+		<tr>
+			<th>
+				<%= Sales::SalesReport.human_attribute_name(:ytd_invoiced_sales) %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= cm(dr.sales_report.ytd_invoiced_sales, :rounded_dollars, 0) %>
+			</td>
+			<% end %>
+		</tr>
+		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
+		<tr>
+			<th>
+				<%= link_to Sales::SalesReport.human_attribute_name(:new_opportunities), opportunities_url %>
+			</th>
+			<% date_reports.each do |dr| %>
+			<td class="right">
+				<%= cm(dr.sales_report.new_opportunities, :rounded_dollars, 0) %>
+			</td>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

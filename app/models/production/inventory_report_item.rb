@@ -2,26 +2,27 @@
 #
 # Table name: inventory_report_items
 #
-#  id                              :integer(4)      not null, primary key
-#  inventory_report_id             :integer(4)
-#  inventory_report_customer_id    :integer(4)
-#  part_number                     :string(255)
-#  revision                        :string(255)
-#  m2m_identity_column             :integer(4)
-#  quantity_on_hand                :float
-#  quantity_committed              :float
-#  quantity_available              :float
-#  quantity_on_order               :float
-#  inventory_report_cost_method_id :integer(4)
-#  cost                            :float
-#  last_incoming_date              :datetime
-#  last_outgoing_date              :datetime
-#  next_outgoing_date              :datetime
-#  next_incoming_date              :datetime
-#  item_group_code_key             :string(255)
-#  next_sales_order_release_id     :integer(4)
-#  last_sales_order_release_id     :integer(4)
-#  movement_data                   :text
+#  id                                     :integer(4)      not null, primary key
+#  inventory_report_id                    :integer(4)
+#  inventory_report_customer_id           :integer(4)
+#  part_number                            :string(255)
+#  revision                               :string(255)
+#  m2m_identity_column                    :integer(4)
+#  inventory_report_cost_method_id        :integer(4)
+#  last_incoming_date                     :datetime
+#  last_outgoing_date                     :datetime
+#  next_outgoing_date                     :datetime
+#  next_incoming_date                     :datetime
+#  item_group_code_key                    :string(255)
+#  last_incoming_inventory_transaction_id :integer(4)
+#  next_sales_order_release_id            :integer(4)
+#  last_sales_order_release_id            :integer(4)
+#  movement_data                          :text
+#  quantity_on_hand                       :decimal(12, 2)
+#  quantity_committed                     :decimal(12, 2)
+#  quantity_available                     :decimal(12, 2)
+#  quantity_on_order                      :decimal(12, 2)
+#  cost                                   :decimal(12, 2)
 #
 
 require 'm2m/belongs_to_item'
@@ -47,6 +48,14 @@ class Production::InventoryReportItem < ActiveRecord::Base
   scope :by_on_hand_cost_desc, :order => '(inventory_report_items.cost * inventory_report_items.quantity_on_hand) desc'
   scope :by_latest_activity, :select => "inventory_report_items.*,
   greatest(coalesce(last_outgoing_date, '1900-01-01'), coalesce(last_incoming_date, '1900-01-01'), coalesce(next_outgoing_date, '1900-01-01'), coalesce(next_incoming_date, '1900-01-01')) as latest_activity_date", :order => 'latest_activity_date'
+
+  def latest_activity
+    @latest_activity ||= [self.last_outgoing_date, self.last_incoming_date, self.next_outgoing_date, self.next_incoming_date].compact.max
+  end
+  
+  def last_ship
+    self.last_sales_order_release.try(:last_ship_date)
+  end
 
   attr_accessor :next_outgoing_parent_item
   def next_outgoing_parent_item

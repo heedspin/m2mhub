@@ -4,7 +4,7 @@
 			<th>RMA Number</th>
 			<th>Status</th>
 			<th>Category</th>
-			<th>Date</th>
+			<th class="date">Date</th>
 			<th>Qty</th>
 			<th>Customer</th>
 			<th>Part</th>
@@ -19,7 +19,7 @@
 			<td>
 				<%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
 				<% if rma.lighthouse_ticket_reference %>
-				<%= link_to image_tag('lighthouse.png', :width => 16), rma_url(rma.rma_number) %>
+				<%= link_to image_tag(AppConfig.lighthouse_image, :width => 16), rma_url(rma.rma_number) %>
 				<% end %>
 			</td>
 			<td><%= rma.status.try(:name) %></td>

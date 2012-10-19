@@ -1,4 +1,4 @@
-class Shipping::ShippersController < ApplicationController
+class Shipping::ShippersController < M2mhubController
   filter_access_to_defaults
 
   def index

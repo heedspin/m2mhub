@@ -2,7 +2,7 @@ class M2m::SalesOrderItem < M2m::Base
   default_scope :order => 'soitem.fenumber'
   set_table_name 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
-  has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
+  # has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
   belongs_to_item :fpartno, :fpartrev
 
   alias_attribute :quantity, :fquantity
@@ -10,31 +10,32 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :due_date, :fduedate
   alias_attribute :internal_number, :finumber
   alias_attribute :external_number, :fenumber
-  
+  alias_attribute :order_number, :fsono
   alias_attribute :multiple_releases, :fmultiple
-  
+  alias_attribute :description, :fdesc
+
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
-  
-  scope :part_number_like, lambda { |text| 
+
+  scope :part_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
       :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
     }
-  }  
+  }
   scope :order_number_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
       :joins => :sales_order,
       :conditions => [ 'somast.fcustpono like ? OR somast.fsono like ?', text, text]
     }
-  }  
+  }
   scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
-  }  
+  }
   scope :for_releases, lambda { |sales_order_releases|
     {
       :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
@@ -46,14 +47,15 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
-  
+
   def self.attach_to_releases(sales_order_releases)
-    if sales_order_releases.size > 0
+    sales_order_releases = sales_order_releases.to_a
+    if (sales_order_releases.size > 0)
       sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases)
       items = M2m::Item.with_part_numbers(sales_order_items.map(&:part_number))
       sales_order_releases.each do |r|
         if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
-          r.item = i
+          r.sales_order_item = i
           i.sales_order = r.sales_order
           i.item = items.detect { |c| (c.part_number == i.part_number) && (c.revision == i.revision) }
         end
@@ -63,7 +65,7 @@ class M2m::SalesOrderItem < M2m::Base
 
   def self.attach_to_releases_with_item(sales_order_releases, item)
     if sales_order_releases.size > 0
-      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)    
+      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)
       sales_order_releases.each do |r|
         if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
           r.item = i
@@ -84,7 +86,27 @@ class M2m::SalesOrderItem < M2m::Base
       end
     end
   end
-  
+
+  attr_accessor :releases
+
+  def attach_releases_from_sales_order(sales_order)
+    self.releases = sales_order.releases.select { |r| self.fenumber == r.fenumber }
+  end
+
+  def total_price
+    return nil unless self.releases
+    release = if self.multiple_releases
+      self.releases.detect { |r| r.master? }
+    else
+      self.releases.first
+    end
+    if release
+      release.total_price
+    else
+      nil
+    end
+  end
+
 end
 
 

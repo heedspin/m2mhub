@@ -1,11 +1,15 @@
-class ItemsController < ApplicationController
+class ItemsController < M2mhubController
   filter_access_to_defaults
 
   def index
     if (@search_term = params[:term]).present?
       # Autocomplete path.
       @items = M2m::Item.part_number_like(@search_term).by_part_number.all(:select => 'inmastx.fpartno', :limit => 20)
-      render :json => @items.map(&:part_number)
+      part_numbers = @items.map(&:part_number)
+      if part_numbers.size == 0
+        part_numbers.push 'No Results'
+      end
+      render :json => part_numbers
     else
       @search = M2m::Item.new
       search_params = params[:search] || {}
@@ -23,7 +27,7 @@ class ItemsController < ApplicationController
     M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => :purchase_order)
+    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => {:purchase_order => :vendor})
     @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
 
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,

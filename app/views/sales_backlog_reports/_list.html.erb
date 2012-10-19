@@ -3,7 +3,7 @@
 		<tr>
 			<th>Customer / SO</th>
 			<th>Cust PO</th>
-			<th><%= CompanyConfig.short_name %> Part</th>
+			<th><%= AppConfig.short_name %> Part</th>
 			<th>Cust Part</th>
 			<th>Ordered</th>
 			<th>Shipped</th>
@@ -12,8 +12,14 @@
 			<th>Bin</th>
 		</tr>
 	</thead>
+<% last_customer = nil %>
 <% @releases.each do |r| %>
-	<tbody style="page-break-inside:avoid">
+	<% current_customer = r.sales_order.customer_number %>
+	<% pagebreak = "page-break-before" if (@page_per_customer and last_customer and (last_customer != current_customer)) %>
+	<%# if last_customer and (last_customer != current_customer) %>
+	<%# end %>
+	<% last_customer = current_customer %>
+	<tbody class="<%= pagebreak %> no-inside-page-break">
 		<tr>
 			<td class="<%= sbl_shippable(r, 'c1') %>" rowspan="2">
 				<% if r.sales_order.customer.status.try(:credit_hold?) %>
@@ -21,7 +27,7 @@
 				<% end %>
 				<%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %><br />
 				SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
-				Due: <%= r.due_date.to_s(:sales_date) %>
+				Ship: <%= r.due_date.to_s(:sales_date) %>
 			</td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>">
@@ -37,7 +43,7 @@
 				<%= cm r.item.item.try(:quantity_on_hand), :sales_order_quantity, 0 %>
 				<% unless r.can_be_fully_shipped? %>
 				<span class="sbl_jobs_link">
-				<%= link_to image_tag('search.png'), item_jobs_url(r.item.item, :layout => 'popup'), :class => 'jobspopup' %>
+				<%= link_to image_tag(AppConfig.job_search_image), item_jobs_url(r.item.item, :layout => 'popup'), :class => 'jobspopup' %>
 				</span>
 				<% end %>
 				<% end %>

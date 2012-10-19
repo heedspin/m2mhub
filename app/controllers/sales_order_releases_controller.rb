@@ -1,4 +1,4 @@
-class SalesOrderReleasesController < ApplicationController
+class SalesOrderReleasesController < M2mhubController
   filter_access_to_defaults
 
   class SearchItem < M2m::SalesOrderRelease

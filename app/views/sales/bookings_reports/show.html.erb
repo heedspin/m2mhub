@@ -1,0 +1,34 @@
+<%= render 'sales/sales_reports/submenu' %>
+<br />
+
+<h2>Bookings Report for <%= @bookings_report.date.to_s(:month_year) %></h2>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<th>Order Date</th>
+			<th>Sales Order</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="3">Total</td>
+			<th class="right"><%= cm @bookings_report.bookings, :rounded_dollars %></th>
+		</tr>
+		<% @bookings_report.sales_order_summaries.sort_by { |s| s.sales_order.customer.try(:company_name) || '' }.each do |s| %>
+		<% sales_order = s.sales_order %>
+		<tr>
+			<td><%= link_to sales_order.customer.company_name, customer_url(sales_order.customer) %></td>
+			<td><%= sales_order.order_date.to_s(:sales_date) %></td>
+			<td><%= link_to "SO #{sales_order.order_number}", sales_order_url(sales_order) %></td>
+			<td class="right"><%= cm s.total_price.to_f, :rounded_dollars %></td>
+		</tr>
+		<% end %>
+		<tr>
+			<td colspan="3">Total</td>
+			<th class="right"><%= cm @bookings_report.bookings, :rounded_dollars %></th>
+		</tr>
+	</tbody>
+</table>

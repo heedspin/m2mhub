@@ -1,4 +1,4 @@
-class Production::InventoryReportsController < ApplicationController
+class Production::InventoryReportsController < M2mhubController
   filter_access_to_defaults
 
   def new
@@ -30,6 +30,11 @@ class Production::InventoryReportsController < ApplicationController
         end
         render :json => result.to_json
       }
+      format.xls do
+        headers['Content-Disposition'] = "attachment; filename=\"#{@report.xls_filename}.xls\""
+        headers['Content-type'] = 'application/vnd.ms-excel'
+        render :text => @report.to_xls
+      end
     end
   end
 

@@ -1,16 +1,23 @@
 
+<% if @events and (@events.size > 0) %>
+<h3><%= link_to 'Events', m2mhub_events_url %></h3>
+<%= render 'm2mhub/events/list' %>
+<% end %>
 
-<div class="column1">
-	<h3>Recent Sales Orders</h3>
-	<%= render 'sales_orders/list' %>
+<% if @date_reports and (@date_reports.size > 0) %>
+<h3><%= link_to 'Sales Reports', sales_reports_url %></h3>
+<%= render 'sales/sales_reports/month_list', :date_reports => @date_reports %>
+<% end %>
 
-	<% if @quotes.size > 0 %>
-	<h3>Recent Quotes</h3>
-	<%= render 'quotes/list' %>
-	<% end %>
-</div>
+<% if @backlog_report %>
+<h3><%= link_to 'Backlog', backlog_report_url(@backlog_report) %></h3>
+<%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
+<% end %>
 
-<div class="column2 small">
-	<h4>Recently Viewed Pages</h4>
-	<%= render 'user_activities/list' %>
-</div>
+<h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
+<%= render 'sales_orders/list' %>
+
+<% if @quotes.size > 0 %>
+<h3><%= link_to 'Recent Quotes', quotes_url %></h3>
+<%= render 'quotes/list' %>
+<% end %>

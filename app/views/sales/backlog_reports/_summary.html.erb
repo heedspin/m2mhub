@@ -1,0 +1,40 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th colspan="<%= backlog_report.buckets.size %>">
+				<%= cm backlog_report.total_backlog, :rounded_dollars %> Total
+				(<% if backlog_report.future_bucket.total_future > 0 %>
+				<%= cm backlog_report.future_bucket.total_future, :rounded_dollars %> Future, 
+				<% end %>
+				<%= cm backlog_report.late_bucket.total_late, :rounded_dollars %> Late )
+			</th>
+		</tr>
+		<tr>
+			<% backlog_report.buckets.each do |bucket| %>
+			<th>
+				<% if bucket.key == :late %>
+				Late
+				<% elsif bucket.key == :month %>
+				<%= bucket.month.to_s(:month_year) %>
+				<% else # :future %>
+				Future
+				<% end %>
+			</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<% backlog_report.buckets.each do |bucket| %>
+			<td class="right">
+				<% if bucket.in_current_month? %>
+					<%= cm bucket.total_future, :rounded_dollars, 0 %> Due<br />
+					<%= cm bucket.total_late, :rounded_dollars, 0 %> Late
+				<% elsif bucket.future? %>
+					<%= cm bucket.total_future, :rounded_dollars, 0 %>
+				<% end %>
+			</td>
+			<% end %>
+		</tr>
+	</tbody>
+</table>

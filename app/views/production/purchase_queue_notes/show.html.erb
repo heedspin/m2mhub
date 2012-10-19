@@ -1,0 +1,24 @@
+<%= render 'production/submenu' %>
+<br />
+
+<% if permitted_to? :manage, :production_purchase_queue_notes %>
+<ul class="submenu">
+	<li><%= link_to 'edit', edit_purchase_queue_note_url(@note) %></li>
+	<li><%= link_to 'delete', purchase_queue_note_url(@note), :method => :delete, :confirm => 'Are you sure?' %></li>
+</ul>
+<% end %>
+
+<br />
+<p>
+	<b>Part Number:</b>
+	<%= @note.part_number %>
+	<br />
+	
+	<b>Revision:</b>
+	<%= @note.revision %>
+	<br />
+	
+	<b>Comments:</b>
+	<br />
+	<%= simple_format @note.comments %>
+</p>

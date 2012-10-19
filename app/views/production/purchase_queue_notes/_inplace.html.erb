@@ -1,0 +1,29 @@
+<div id="summary_notes_<%= summary.id %>" class="inplace_container">
+	<div class="inplace_show">
+		<% if note.comments.present? %>
+		<%= simple_format note.comments %>
+		<% else %>
+		<span class="inplace_taunt">&nbsp;</span>
+		<% end %>
+	</div>
+	<%= form_for note, :as => :purchase_queue_note, :url => (note.new_record? ? purchase_queue_notes_url : purchase_queue_note_url(note)), :html => { :class => 'inplace_form' } do |f| %>
+	<%= link_to 'Cancel', '#', :class => 'inplace_cancel_link' %>
+	
+	<%= f.text_area :comments %>
+	<%= f.hidden_field :part_number %>
+	<%= f.hidden_field :revision %>
+	<br />
+	<%= f.submit 'Save' %>
+	<% unless note.new_record? %>
+	<%= link_to 'Delete', '#', :class => 'inplace_delete_link' %>
+	<div class="inplace_delete_confirmation">
+		<p>
+			Are you sure?
+			<%= link_to 'Delete', '#', :class => 'inplace_delete_confirmation_link' %>
+			<br />
+			<%= link_to 'Cancel', '#', :class => 'inplace_delete_cancel_link' %>
+		</p>
+	</div>
+	<% end %>
+	<% end %>
+</div>

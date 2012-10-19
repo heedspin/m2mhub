@@ -3,6 +3,8 @@ class M2m::InvoiceItem < M2m::Base
 
   belongs_to :invoice, :class_name => 'M2m::Invoice', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to_item :fpartno, :frev
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => 'fcustno', :primary_key => 'fcustno'
+  belongs_to :sales_gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fincacc', :primary_key => 'fcacctnum'
 
   alias_attribute :rma_key, :fcrmakey
   alias_attribute :amount, :ftotprice
@@ -10,6 +12,9 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :ship_quantity, :fshipqty
   alias_attribute :unit_price, :fprice
   alias_attribute :description, :fmdescript
+  alias_attribute :customer_number, :fcustno
+  alias_attribute :invoice_item_type, :fctype
+  alias_attribute :sales_gl_account_number, :fincacc
 
   scope :for_rma_item, lambda { |rma_item|
     {
@@ -38,6 +43,12 @@ class M2m::InvoiceItem < M2m::Base
   }
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, :joins => :invoice, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
+  scope :gl_category, lambda { |code|
+    {
+      :joins => :sales_gl_account,
+      :conditions => { :glmast => { :fccode => code } }
+    }
+  }
 
   def invoice_number
     self.fcinvoice.strip
@@ -108,6 +119,7 @@ class M2m::InvoiceItem < M2m::Base
     rma_key[15..-1].to_i
   end
   def self.rma_key(rma_item)
+    # Zero pad and space pad.
     ("%015d" % rma_item.rma_number) + ("% 3d" % rma_item.item_number.to_i)
   end
   def rma_item=(rma_item)

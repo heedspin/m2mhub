@@ -1,4 +1,4 @@
-class Items::HistoryController < ApplicationController
+class Items::HistoryController < M2mhubController
   filter_access_to_defaults
 
   def show

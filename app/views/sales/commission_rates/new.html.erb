@@ -1,0 +1,16 @@
+<% title 'New Commission Rate' %>
+
+<%= render 'sales/commission_reports/submenu' %>
+<br />
+
+<h2>Create New Commission Rate</h2>
+
+<%= semantic_form_for @commission_rate, :url => commission_rates_url do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+	<%= f.buttons do %>
+	  <%= f.commit_button 'Create' %>
+	  <%= f.commit_button 'Create & New' %>
+	  <%= f.cancel_link :url => commission_rates_url %>
+	<% end %>
+<% end %>
+

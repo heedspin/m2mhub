@@ -40,6 +40,9 @@ module BelongsToItem
       def #{part_number_method}_#{revision_method}
         @#{part_number_method}_#{revision_method} ||= [self.#{part_number_method}, self.#{revision_method}]
       end
+      def #{part_number_method}_and_#{revision_method}
+        @#{part_number_method}_#{revision_method} ||= (AppConfig.use_item_revisions ? self.#{part_number_method} + ' Rev ' + self.#{revision_method} : self.#{part_number_method})
+      end
       RUBY
     end
   end

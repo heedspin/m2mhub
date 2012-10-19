@@ -1,0 +1,16 @@
+<div class="submenu">
+	<ul>
+		<% if permitted_to?(:read, :m2mhub_events) %>
+		<li class="<%= menu_selected(:controller => :events) %>">
+			<%= link_to 'Events', m2mhub_events_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:read, :m2mhub_triggers) %>
+		<li class="<%= menu_selected(:controller => :triggers) %>">
+			<%= link_to 'Triggers', m2mhub_triggers_url %>
+		</li>
+		<% end %>
+	</ul>
+</div>
+<br />

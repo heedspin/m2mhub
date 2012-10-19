@@ -14,6 +14,10 @@ class M2m::Invoice < M2m::Base
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :customer_number, :fcustno
   alias_attribute :printed?, :flisprint
+  alias_attribute :commission_percentage, :fsalcompct
+  alias_attribute :sales_person, :fsalespn
+  alias_attribute :sales_order_number, :fsono
+  alias_attribute :number, :fnumber
   
   scope :customer, lambda { |customer|
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
@@ -28,8 +32,27 @@ class M2m::Invoice < M2m::Base
       :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
     }
   }
+  scope :before, lambda { |end_date|
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    {
+      :conditions => [ 'armast.finvdate < ?', end_date ]
+    }
+  }
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
+  scope :by_date, :order => :finvdate
+  scope :for_date, lambda { |date|
+    {
+      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
+    }
+  }
+  scope :invoice_number, lambda { |n|
+    # Zero pad.
+    n = "%010d" % n if n.is_a?(Fixnum)
+    {
+      :conditions => { :fcinvoice => n }
+    }
+  }
 
   def invoice_type
     M2m::InvoiceType.find_by_key(self.invoice_type_code)
@@ -42,7 +65,8 @@ class M2m::Invoice < M2m::Base
     M2m::InvoiceSource.find_by_key(self.invoice_source_code)
   end
 
-  def self.invoice_number(invoice_type, invoice_number)
+  def self.format_invoice_number(invoice_type, invoice_number)
+    # Zero pad.
     if invoice_type.credit_memo?
       'CM-' + "%07d" % invoice_number
     elsif invoice_type.pre_payment_memo?

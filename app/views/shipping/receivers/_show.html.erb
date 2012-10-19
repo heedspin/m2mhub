@@ -1,0 +1,8 @@
+<div class="shipper">
+	<p>
+		<%= receiver.status %>: <%= receiver.id %>
+		Received By: <%= receiver.received_by %>
+		PO: <%= receiver.purchase_order_number %>
+	</p>
+	<%= render 'shipping/receivers/items', :receiver => receiver %>
+</div>

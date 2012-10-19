@@ -4,6 +4,13 @@ $(function() {
 	new_company_matcher = /^Create New: (.+)$/;
 	$("input#search_fcompany").autocomplete({
 		source: "<%= customers_url(:new_prompt => 1) %>",
+		search: function(event, ui) {
+			$("input#search_fcompany").autocomplete("close");
+			$("#inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#inprogress").hide();
+		},
 		select: function(event, ui) { 
 			$("#inprogress").show();
 			var matches = ui.item.value.match(new_company_matcher);
@@ -31,7 +38,7 @@ $(function() {
 			</td>
 			<td>
 				<div id="inprogress" class="hide">
-				<%= image_tag 'inprogress.gif' %>
+				<%= image_tag AppConfig.in_progress_image %>
 				</div>
 			  <%# f.buttons do %>
 				  <%#= f.commit_button 'Search' %>

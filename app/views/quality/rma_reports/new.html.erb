@@ -1,4 +1,4 @@
-<% include_closed_details_javascript %>
+<% include_closed_details_javascript(image_tag(AppConfig.arrow_collapse_image) + ' Show Details', image_tag(AppConfig.arrow_expand_image) + ' Hide Details') %>
 <%= render 'quality/submenu' %>
 <br />
 
@@ -7,8 +7,8 @@
 <table class="data fullsize">
 	<thead>
 		<tr>
-			<th>Date</th>
-			<th>Count</th>
+			<th class="fixnum">Date</th>
+			<th class="fixtriple">Returned Parts</th>
 			<th>Details</th>
 		</tr>
 	</thead>
@@ -17,15 +17,21 @@
 <% @report.ordered_months.each do |month| %>
 	<% count += 1 %>
 	<tr>
-		<td><%= month.date.to_s(:month_year) %></td>
-		<td class="right"><%= cm month.total_rmas %></td>
-		<td class="rma_details">
-			<% if month.total_rmas > 0 %>
-			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">Show Details</span></a>
-			<div class="closed_details xclosed_details_<%= count %>">
+		<td class="fixnum"><%= month.date.to_s(:month_year) %></td>
+		<td class="right fixtriple">
+			<%= percent1 month.rma_quantity / month.total_shipments %>%
+			(<%= cm month.rma_quantity, :rma_quantity %> / <%= cm month.total_shipments, :rma_quantity %>)
+		</td>
+		<td>
+			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">
+			<%= image_tag(AppConfig.arrow_collapse_image) %>
+			Show Details
+			</span></a>
+		</td>
+	</tr>
+	<tr class="closed_details xclosed_details_<%= count %>">
+		<td colspan="3">
 			<%= render 'rma_details', :rmas => month.rmas.sort_by(&:date) %>
-			</div>
-			<% end %>
 		</td>
 	</tr>
 <% end %>

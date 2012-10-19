@@ -1,90 +1,3 @@
-class M2m::SalesOrder < M2m::Base
-  set_table_name 'somast'
-  set_primary_key 'fsono'
-  
-  has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
-  has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
-  has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
-  has_many :invoices, :class_name => 'M2m::Invoice', :foreign_key => :fsono, :primary_key => :fsono
-  
-  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
-  
-  scope :by_order_number_desc, :order => 'somast.fsono desc'  
-  scope :by_due_date, :order => 'somast.fduedate'
-  
-  scope :since, lambda { |day|
-    {
-      :conditions => ['somast.forderdate >= ?', day],
-      :include => [:releases, :items], 
-      :order => 'forderdate desc, fsono desc'
-    }
-  }
-
-  scope :ordered_after, lambda { |day|
-    {
-      :conditions => ['somast.forderdate >= ?', day],
-    }
-  }
-  scope :with_order_number, lambda { |order_number|
-    {
-      :conditions => { :fsono => order_number }
-    }
-  }
-  scope :with_order_numbers, lambda { |order_numbers|
-    {
-      :conditions => [ 'somast.fsono in (?)', order_numbers ]
-    }
-  }
-  scope :prepayment_required, :conditions => { :flprofrqd => true }
-  
-  alias_attribute :order_number, :fsono
-  alias_attribute :order_date, :forderdate
-  alias_attribute :customer_po, :fcustpono
-  alias_attribute :due_date, :fduedate
-  alias_attribute :ship_via, :fshipvia
-  alias_attribute :prepayment_required, :flprofrqd
-  
-  def customer_name
-    M2m::Customer.customer_name(self.fcompany)
-  end
-  
-  def total_price
-    self.releases.to_a.sum { |r| r.master? ? 0.0 : r.total_price }
-  end
-  
-  def status
-    M2m::Status.find_by_name(self.fstatus)
-  end
-  
-  def closed?
-    self.status.closed?
-  end
-  
-  # Default to customer sales master
-  def fob
-    self.ffob.present? ? self.ffob.strip : self.customer.ffob
-  end
-
-  def self.attach_sales_orders(objects)
-    sales_orders = M2m::SalesOrder.with_order_numbers(objects.map(&:sales_order_number).uniq).scoped(:include => :items)
-    sales_order_hash = {}
-    sales_orders.each { |so| sales_order_hash[so.order_number] = so }
-    objects.each do |o|
-      if o.sales_order_number.present? and (found = sales_order_hash[o.sales_order_number])
-        o.sales_order = found
-      else
-        # Explicitly set to prevent lazy load
-        o.sales_order = nil
-      end
-    end
-    sales_orders
-  end
-  
-end
-
-
 # == Schema Information
 #
 # Table name: somast
@@ -171,4 +84,113 @@ end
 #  OppCrType        :string(3)       default(""), not null
 #  QuoteNumber      :string(6)       default(""), not null
 #
+
+class M2m::SalesOrder < M2m::Base
+  set_table_name 'somast'
+  set_primary_key 'fsono'
+  
+  has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono
+  has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
+  has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
+  has_many :invoices, :class_name => 'M2m::Invoice', :foreign_key => :fsono, :primary_key => :fsono
+  
+  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  
+  scope :by_order_number_desc, :order => 'somast.fsono desc'  
+  scope :by_due_date, :order => 'somast.fduedate'
+  scope :by_order_date, :order => 'somast.forderdate'
+  
+  # scope :since, lambda { |day|
+  #   {
+  #     :conditions => ['somast.forderdate >= ?', day],
+  #     :include => [:releases, :items], 
+  #     :order => 'forderdate desc, fsono desc'
+  #   }
+  # }
+  scope :order_dates, lambda { |start_date, end_date|
+    {
+      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
+  scope :ordered_since, lambda { |day|
+    {
+      :conditions => ['somast.forderdate >= ?', day],
+    }
+  }
+  scope :with_order_number, lambda { |order_number|
+    {
+      :conditions => { :fsono => order_number }
+    }
+  }
+  scope :with_order_numbers, lambda { |order_numbers|
+    {
+      :conditions => [ 'somast.fsono in (?)', order_numbers ]
+    }
+  }
+  scope :prepayment_required, :conditions => { :flprofrqd => true }
+  scope :customer, lambda { |customer|
+    customer_number = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
+    {
+      :conditions => { :fcustno => customer_number }
+    }
+  }
+  scope :customers, lambda { |customers|
+    customer_numbers = customers.map(&:customer_number)
+    {
+      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
+    }
+  }
+  
+  alias_attribute :order_number, :fsono
+  alias_attribute :order_date, :forderdate
+  alias_attribute :customer_po, :fcustpono
+  alias_attribute :due_date, :fduedate
+  alias_attribute :ship_via, :fshipvia
+  alias_attribute :prepayment_required, :flprofrqd
+  alias_attribute :customer_number, :fcustno
+  alias_attribute :commission_percentage, :fsalcompct
+  alias_attribute :sales_person, :fsoldby
+  
+  def customer_name
+    M2m::Customer.customer_name(self.fcompany)
+  end
+  
+  def total_price
+    self.items.to_a.sum { |i| i.total_price || 0.0 }
+  end
+  
+  def status
+    M2m::Status.find_by_name(self.fstatus)
+  end
+  
+  def closed?
+    self.status.closed?
+  end
+  
+  # Default to customer sales master
+  def fob
+    self.ffob.present? ? self.ffob.strip : self.customer.ffob
+  end
+
+  def self.attach_sales_orders(objects)
+    sales_orders = M2m::SalesOrder.with_order_numbers(objects.map(&:sales_order_number).uniq).scoped(:include => :items)
+    sales_order_hash = {}
+    sales_orders.each { |so| sales_order_hash[so.order_number] = so }
+    objects.each do |o|
+      if o.sales_order_number.present? and (found = sales_order_hash[o.sales_order_number])
+        o.sales_order = found
+      else
+        # Explicitly set to prevent lazy load
+        o.sales_order = nil
+      end
+    end
+    sales_orders
+  end
+  
+  def self.pad_sales_order_number(txt)
+    "%06d" % txt.to_i
+  end
+end
 

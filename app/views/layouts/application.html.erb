@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%= stylesheet_link_tag 'formtastic', 'styles', 'blitzer/jquery-ui-1.8.6.custom' %>
+	<% if AppConfig.default_stylesheets %>
+  <%= stylesheet_link_tag AppConfig.default_stylesheets %>
+	<% else %>
+  <%= stylesheet_link_tag 'm2mhub/formtastic', 'm2mhub/styles', 'm2mhub/blitzer/jquery-ui-1.8.6.custom' %>
+	<% end %>
 	<%= yield :stylesheets %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
@@ -20,68 +24,18 @@
 				<% links.push link_to('Log Out', logout_path) %>
 				<% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
 				<% links.push link_to_unless_current('History', history_index_url) if permitted_to?(:read, :user_activities) %>
+				<% links.push link_to('Events', m2mhub_events_url) if permitted_to?(:read, :m2mhub_events) %>
 				<div class="usermenu"><%= raw links.join(' | ') %></div>
 			<% end %>
 			<div class="banner">
 				<div class="logo">
-					<%= link_to image_tag("companies/#{CompanyConfig.company_key}/logo.gif", :alt => CompanyConfig.long_name, :title => 'Home'), root_url %>
-					<%= image_tag 'm2m.gif', :alt => 'm2m', :title => 'm2m rocks' %>
+					<%= link_to image_tag(AppConfig.logo_image, :alt => AppConfig.long_name, :title => 'Home'), root_url %>
+					<%= image_tag AppConfig.m2m_logo_image, :alt => 'm2m', :title => 'm2m rocks' %>
 				</div> 
-				<div class="tagline"><%= CompanyConfig.company_key.upcase %>'s Made2Manage Hub</div>				
+				<div class="tagline"><%= AppConfig.short_name.upcase %>'s Made2Manage Hub</div>				
 			</div><!-- banner -->
 			<div class="clear"></div>  
-			<div class="nav">    
-				<ul>
-					<li class="<%= menu_selected(:controller => :home) %>">
-						<%= link_to 'Home', root_url %>
-					</li>
-					<% if permitted_to?(:read, :quality_quality_dashboard) %>
-					<li class="<%= menu_selected :controllers => [:rmas, :quality_dashboard, :rma_reports, :customer_otd_reports, :credit_memo_reports] %>">
-						<%= link_to 'Quality', quality_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :quotes) %>
-					<li class="<%= menu_selected(:controller => :quotes) %>">
-						<%= link_to 'Quotes', quotes_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :sales_order_items) %>
-					<li class="<%= menu_selected(:controller => [:sales_order_items, :sales_orders, :invoiced_sales_reports, :pro_forma_sales_reports]) %>">
-						<%= link_to 'Sales', sales_order_items_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :customers) %>
-					<li class="<%= menu_selected(:controller => :customers) %>">
-						<%= link_to 'Customers', customers_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :items) %>
-					<li class="<%= menu_selected(:path_starts_with => '/items') %>">
-						<%= link_to 'Items', items_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :shipping_shipping_dashboard) %>
-					<li class="<%= menu_selected(:path => /^\/(shipp|receivers)/) %>">
-						<%= link_to 'Shipping', shipping_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :sales_backlog_reports) %>
-					<li class="<%= menu_selected(:controller => :sales_backlog_reports) %>">
-						<%= link_to 'backlog', sales_backlog_reports_url %>
-					</li>
-					<% end %>
-					<% if permitted_to?(:read, :production_production_dashboard) %>
-					<li class="<%= menu_selected(:controller => [:production_dashboard, :work_center_load_reports, :labor_reports]) %>">
-						<%= link_to 'Production', production_url %>
-					</li>
-					<% end %>
-					<% if (CompanyConfig.company_key == 'lxd') and permitted_to?(:read, :doogle_displays) %>
-					<li class="<%= menu_selected(:controller => [:displays, :display_logs]) %>">
-						<%= link_to 'Doogle', doogle_displays_url %>
-					</li>
-					<% end %>
-				</ul>        
-			</div><!-- nav -->
+			<%= render 'layouts/top_menu' %>
 		</div><!-- header -->
 		<div class="clear"></div>
 		<div id="main">
@@ -98,18 +52,14 @@
 		<%= raw post_main %>
 		<% end %>
 		<div id="footer">
-			<p>
-				&#169; <%= Date.current.year %> <%= raw CompanyConfig.long_name %> <span>&#149;</span> 7300 ACC Boulevard  
-				<span>&#149;</span> Raleigh, North Carolina 27617 <span>&#149;</span>
-				<%= link_to CompanyConfig.website, "http://#{CompanyConfig.website}" %>
-			</p>
+			<p><%= raw AppConfig.long_name %> <%= link_to AppConfig.website, "http://#{AppConfig.website}"%></p>			
 		</div><!-- footer -->
 	</div><!-- end wrapper -->
 </body>
 <% if Rails.env.production? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', <%= CompanyConfig.google_analytics_key %>]);
+  _gaq.push(['_setAccount', <%= AppConfig.google_analytics_key %>]);
   _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

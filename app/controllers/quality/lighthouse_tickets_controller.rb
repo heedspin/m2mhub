@@ -1,4 +1,4 @@
-class Quality::LighthouseTicketsController < ApplicationController
+class Quality::LighthouseTicketsController < M2mhubController
   def create
     @rma = parent_object
     @lighthouse_ticket = Lighthouse::Ticket.from_rma(@rma, current_user)
@@ -12,7 +12,6 @@ class Quality::LighthouseTicketsController < ApplicationController
       @rma.save
       redirect_to rma_url(@rma.rma_number)
     else
-      @lighthouse_users = Lighthouse::Ticket.user_options(CompanyConfig.lighthouse_rma_project_id)
       render :action => 'quality/rmas/show'
     end
   end

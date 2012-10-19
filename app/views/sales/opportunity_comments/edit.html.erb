@@ -1,0 +1,41 @@
+<% title 'Edit Comment' %>
+<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+
+<%= render 'sales/submenu' %>
+<br />
+
+<%= semantic_form_for @comment, :url => opportunity_comment_url(@comment) do |f| %>
+  <%= f.semantic_errors :base %>
+
+	<% if @comment.comment_type.try(:ticket?) %>
+	<div class="opportunity_comment_caption">
+		<p>Please use Lighthouse to update tickets.</p>
+	</div>
+	<div class="opportunity_ticket lighthouse_ticket_readonly">
+		<%= render 'show_ticket', :comment => @comment %>
+	</div>
+	<%= f.inputs do %>
+		<%= f.input :delete_lighthouse_ticket, :as => :boolean, :wrapper_html => { :class => 'deletastic_param' } %>
+	<% end %>
+	<% else %>
+		<%= f.inputs do %>
+			<%= f.input :comment %>
+		<% end %>
+		<%= render 'sales/opportunity_comments/status_form', :f => f %>
+	<% end %>
+	
+	<%= f.buttons do %>
+	  <%= f.commit_button('Save') unless @comment.comment_type.try(:ticket?) %>
+	  <%= f.cancel_link :url => opportunity_url(@opportunity) %>
+		<li class="deletastic_container">
+			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>
+			<div class="deletastic_confirmation">
+				Are you sure?
+				<%= link_to 'Delete', '#', :class => 'deletastic_boom' %>
+				<br />
+				<%= link_to 'Cancel', '#', :class => 'deletastic_delete_cancel_link' %>
+			</div>
+		</li>
+	<% end %>
+<% end %>
+

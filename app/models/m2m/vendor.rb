@@ -1,8 +1,7 @@
 class M2m::Vendor < M2m::Base
   set_table_name 'apvend'
-  set_primary_key 'fvendno'
   alias_attribute :vendor_number, :fvendno
-  alias_attribute :name, :fcompany
+  # alias_attribute :name, :fcompany
   has_many :inventory_vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fvendno, :primary_key => :fvendno
   
   scope :with_vendor_numbers, lambda { |vendor_numbers|
@@ -10,6 +9,10 @@ class M2m::Vendor < M2m::Base
       :conditions => [ 'apvend.fvendno in (?)', vendor_numbers ]
     }
   }
+  
+  def name
+    self.fcompany.titleize
+  end
 end
 
 
@@ -17,7 +20,7 @@ end
 #
 # Table name: apvend
 #
-#  fvendno          :string(6)       not null, primary key
+#  fvendno          :string(6)       not null
 #  fcompany         :string(35)      not null
 #  fbuyer           :string(3)       not null
 #  fcacctnum        :string(25)      not null
@@ -56,7 +59,7 @@ end
 #  flistaxabl       :boolean         not null
 #  fcemail          :string(60)      not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null
+#  identity_column  :integer(4)      not null, primary key
 #  fmstreet         :text            not null
 #  fmuser1          :text            not null
 #  fdisttype        :string(10)      not null

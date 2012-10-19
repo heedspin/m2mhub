@@ -1,0 +1,46 @@
+<% include_toggle_javascript('toggle_details', image_tag(AppConfig.arrow_collapse_image),image_tag(AppConfig.arrow_expand_image)) %>
+<% include_toggle_javascript('toggle_form', 'edit', 'cancel') %>
+<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Vendor</th>
+				<th>Item</th>
+				<th>Due Date</th>
+				<th>Order Qty</th>
+				<th>Qty Available</th>
+				<th class="purchase_queue_comment">Comment</th>
+			</tr>
+		</thead>
+<% summaries.each do |summary| %>
+		<tr>
+			<td>
+				<a href="#<%= summary.id %>" class="toggle_details" id="toggle_details_<%= summary.id %>">
+					<span class="replace_toggle_details_<%= summary.id %>"><%= image_tag(AppConfig.arrow_collapse_image) %></span>
+					<%= summary.description %>
+				</a>
+			</td>
+			<td><%= limit_string summary.vendor_name1, 16 %></td>
+			<td><%= link_to_item summary.item, summary.part_number %></td>
+			<% if summary.first_problem %>
+			<td><%= summary.first_problem.due_date.try(:to_s, :sales_date) %></td>
+			<td><%= cm summary.first_problem.order_quantity, :sales_order_quantity %></td>
+			<td><%= cm summary.first_problem.net_quantity_available, :sales_order_quantity %></td>
+			<% else %>
+			<td colspan="3"></td>
+			<% end %>
+			<td>
+				<%= render 'production/purchase_queue_notes/inplace', :summary => summary, :note => (summary.note || summary.build_note) %>
+			</td>
+		</tr>
+		<tr class="hide" id="xtoggle_details_<%= summary.id %>">
+			<td class="left" colspan="7">
+				<%= render 'production/purchase_queue_details/list', :details => summary.details %>
+			</td>
+		</tr>
+<% end %>
+	</tbody>
+</table>

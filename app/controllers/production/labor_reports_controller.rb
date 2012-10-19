@@ -1,4 +1,4 @@
-class Production::LaborReportsController < ApplicationController
+class Production::LaborReportsController < M2mhubController
   filter_access_to_defaults
 
   def index

@@ -8,13 +8,24 @@ en:
         format: "{{attribute}}: {{message}}."
     models:
       m2m/item: Part
+      sales/commission_rate: Commission Rate
     attributes:
       m2m/item:
         fpartno: Part Number
+      m2m/sales_order:
+        order_date: Order Date
+        forderdate: Order Date
       m2m/sales_order_item:
         fcustpart: Customer Part Number
-        order_number: Sales / Purchase Order Number
-        part_number: Company / Customer Part Number
+        search_order_number: Sales / Purchase Order Number
+        search_part_number: Company / Customer Part Number
+        due_date: Due
+        # fduedate: Due Date
+      m2m/sales_order_release:
+        due_date: Due
+        # fduedate: To Ship
+      m2m/shipper:
+        ship_date: Shipped
       sales_backlog_report:
         fob_group: FOB Group
         customer_status: Customer Status
@@ -29,48 +40,24 @@ en:
         fccountry: Country
         fmnotes: Notes
         PostalCode: Postal Code
-      doogle/display:
-        id: Database ID
-        type: Display Type
-        model_number: Model Number
-        specification_type: Specification
-        touch_panel_type: Touch Panel
-        timing_controller_type: Timing Controller
-        number_of_digits: Number Of Digits
-        technology_type: Tech Type
-        module_dimensions: Module Dimensions
-        digit_height: Digit Height
-        polarizer_mode: Polarizer Mode
-        number_of_pins: Number Of Pins
-        configuration: Config
-        lcd_type: LCD Type
-        viewing_dimensions: Viewing Dimensions
-        diagonal_size: Diag Size
-        dot_format: "Dot\nFormat"
-        brightness: Bright-ness
-        contrast: Contrast
-        backlight_type: "Back Light"
-        backlight_color: Back Light Color
-        viewing_angle: Viewing Angle
-        operational_temperature: Operational Temp (°C)
-        storage_temperature: Storage Temp (°C)
-        interface: Interface
-        resolution: Resolution
-        weight: Weight
-        power_consumption: Power Consumption
-        active_area: Active Area
-        outline_dimensions: Outline Dimension
-        view_direction: View Direction
-        bonding_type: Bonding Type
-        pixel_configuration: Pixel Config
-        controller: Controller
-        operating_voltage: Operating Voltage
-        colors: Colors
-        dot_size: Dot Size
-        dot_pitch: Dot Pitch
-        thickness: Thick-ness
-        integrated_circuit: IC
-        panel_size: Panel Size
-        source_id: Manufacturer
-        source: Manufacturer
-        source_model_number: Manufacturer Model Number
+      sales/commission_rate:
+        sales_person: Sales Person
+        customer_name: Customer Name
+        part_number: Part Number
+        commission_percentage: Commission Percentage
+      sales/sales_report:
+        invoiced_sales: Invoiced Sales
+        net_invoiced_sales: Net Invoiced Sales
+        ytd_invoiced_sales: YTD Invoiced Sales
+        ytd_net_invoiced_sales: YTD Net Invoiced Sales
+        new_opportunities: New Opportunities
+      sales/bookings_report:
+        bookings: Bookings
+        ytd_bookings: YTD Bookings
+      sales/opportunity:
+        amount: Potential Revenue
+      sales/opportunity_comment:
+        lighthouse_title: Ticket Title
+        lighthouse_body: Ticket Body
+        lighthouse_assigned_user_id: Assigned To
+        lighthouse_project_id: Project

@@ -1,6 +1,6 @@
 <%= render 'items/summary' %>
 
-<h2>Shippers for <%= @item.part_number %></h2>
+<h2>Shippers for <%= item_part_number(@item) %></h2>
 <%= will_paginate @shippers %>
 
 <%= render 'list' %>

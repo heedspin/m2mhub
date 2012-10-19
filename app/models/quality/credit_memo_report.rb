@@ -110,7 +110,7 @@ class Quality::CreditMemoReport
       @vendor_for_item[rma_item_identity_column] = vendor_number
     end
     rmas.each do |rma|
-      next unless rma.severity.nil? || CompanyConfig.credit_memo_report_severity_names.include?(rma.severity_name)
+      next unless rma.severity.nil? || AppConfig.credit_memo_report_severity_names.include?(rma.severity_name)
       rma.items.each do |rma_item|
         rma_item.rma = rma
         # Rails.logger.debug "Looking for #{M2m::InvoiceItem.rma_key(rma_item)} in " + invoice_items.map(&:rma_key).sort.join(', ')

@@ -1,4 +1,4 @@
-class Sales::InvoicedSalesReportsController < ApplicationController
+class Sales::InvoicedSalesReportsController < M2mhubController
   filter_access_to_defaults :context => :invoiced_sales_reports
   # filter_access_to :create, :new, { :load_method => :build_object, :attribute_check => false }
 
@@ -13,7 +13,7 @@ class Sales::InvoicedSalesReportsController < ApplicationController
         render :text => 'not implemented'
       end
       f.xls do
-        headers['Content-Disposition'] = "attachment; filename=\"#{@report.filename}.xls\""
+        headers['Content-Disposition'] = "attachment; filename=\"#{@report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
         render :text => @report.to_xls
       end
@@ -23,12 +23,12 @@ class Sales::InvoicedSalesReportsController < ApplicationController
   protected
 
     def model_class
-      InvoicedSalesReport
+      Sales::InvoicedSalesReport
     end
     
     def build_object
       if @build_object.nil?
-        @build_object = InvoicedSalesReport.new((params[:report] || {}).merge(:customer => :all))
+        @build_object = Sales::InvoicedSalesReport.new((params[:report] || {}).merge(:customer => :all))
         @build_object.start_date ||= Date.current.beginning_of_year
         @build_object.end_date ||= Date.current.end_of_year
       end

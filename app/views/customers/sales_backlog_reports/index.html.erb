@@ -1,7 +1,7 @@
 <%= render 'customers/summary' %>
 
 <% content_for :javascripts do %>
-	<%= javascript_include_tag 'jquery.popupWindow.js' %>
+	<%= javascript_include_tag 'm2mhub/jquery.popupWindow.js' %>
 <script type="text/javascript">
 $(function() {
 	$('.jobspopup').popupWindow({ 
@@ -18,7 +18,7 @@ $(function() {
 		<tr>
 			<th>SO</th>
 			<th>Cust PO</th>
-			<th><%= CompanyConfig.short_name %> Part</th>
+			<th><%= AppConfig.short_name %> Part</th>
 			<th>Cust Part</th>
 			<th>Ordered</th>
 			<th>Shipped</th>
@@ -36,7 +36,7 @@ $(function() {
 				<% end %>
 				<%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %><br />
 				SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
-				Due: <%= r.due_date.to_s(:sales_date) %>
+				Ship: <%= r.due_date.to_s(:sales_date) %>
 			</td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
 			<td class="centered <%= sbl_shippable(r, 'top') %>">
@@ -52,7 +52,7 @@ $(function() {
 				<%= cm r.item.item.try(:quantity_on_hand), :sales_order_quantity, 0 %>
 				<% unless r.can_be_fully_shipped? %>
 				<span class="sbl_jobs_link">
-				<%= link_to image_tag('search.png'), item_jobs_url(r.item.item, :layout => 'popup'), :class => 'jobspopup' %>
+				<%= link_to image_tag(AppConfig.job_search_image), item_jobs_url(r.item.item, :layout => 'popup'), :class => 'jobspopup' %>
 				</span>
 				<% end %>
 				<% end %>

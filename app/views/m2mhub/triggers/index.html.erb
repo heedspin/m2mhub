@@ -1,0 +1,43 @@
+<%= render 'm2mhub/events/submenu' %>
+
+<% if @triggers.size == 0 %>
+<p>There are no triggers, yet.  Create one!</p>
+<% else %>
+<%= will_paginate @triggers %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Triggers On</th>
+			<th>Action</th>
+			<th>User</th>
+			<th>Status</th>
+			<th>Instructions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @triggers.each do |t| %>
+		<tr>
+			<td><%= link_to t.title, m2mhub_trigger_url(t) %></td>
+			<td><%= t.trigger_description %></td>
+			<td><%= t.notification_type.name %></td>
+			<td><%= t.target_user.try(:full_name) %></td>
+			<td><%= t.trigger_state.name %></td>
+			<td><%= limit_string(t.instructions, 32) %></td>
+			<% if permitted_to? :manage, :m2mhub_triggers %>
+			<td>
+				<%= link_to 'edit', edit_m2mhub_trigger_url(t) %> | 
+				<%= link_to 'delete', m2mhub_trigger_url(t), :method => :delete, :confirm => 'Are you sure?' %>
+			</td>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			
+<% end %>
+
+<% if permitted_to? :manage, :m2mhub_triggers %>
+	<ul>
+		<li><%= link_to 'New Trigger', new_m2mhub_trigger_path %></li>
+	</ul>
+<% end %>

@@ -1,0 +1,18 @@
+<%= render 'sales/submenu' %>
+<br />
+
+<div class="submenu">
+	<ul>
+		<% if permitted_to?(:read, :sales_reports) %>
+		<li class="<%= menu_selected(:controller => :sales_reports) %>">
+			<%= link_to 'Invoiced Sales', sales_reports_url %>
+		</li>
+		<% end %>
+
+		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
+		<li class="<%= menu_selected(:controller => :invoiced_sales_reports) %>">
+			<%= link_to 'Export', new_invoiced_sales_report_url %>
+		</li>
+		<% end %>
+	</ul>
+</div>

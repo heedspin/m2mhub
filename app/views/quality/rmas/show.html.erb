@@ -37,7 +37,7 @@ Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_ord
 	</tbody>
 </table>
 
-<% if CompanyConfig.lighthouse_account %>
+<% if AppConfig.lighthouse_account %>
 <% if @rma.lighthouse_ticket %>
 <%= render 'quality/rmas/lighthouse_ticket', :ticket => @rma.lighthouse_ticket %>
 <% else %>

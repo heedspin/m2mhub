@@ -1,4 +1,4 @@
-class PurchaseOrderItemsController < ApplicationController
+class PurchaseOrderItemsController < M2mhubController
   filter_access_to_defaults
 
   class SearchItem < M2m::PurchaseOrderItem

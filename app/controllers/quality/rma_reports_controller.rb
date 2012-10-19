@@ -1,4 +1,4 @@
-class Quality::RmaReportsController < ApplicationController
+class Quality::RmaReportsController < M2mhubController
   filter_access_to_defaults
 
   def new

@@ -29,6 +29,8 @@ authorization do
     has_permission_on :items_history, :to => :read
     has_permission_on :items_shippers, :to => :read
     has_permission_on :items_jobs, :to => :read
+    has_permission_on :m2mhub_triggers, :to => :manage
+    has_permission_on :m2mhub_events, :to => :manage
   end
 
   role :sales do
@@ -56,6 +58,13 @@ authorization do
     has_permission_on :quality_rma_lighthouse_tickets, :to => :create
     has_permission_on :invoiced_sales_reports, :to => :manage
     has_permission_on :pro_forma_sales_reports, :to => :manage
+    has_permission_on :sales_commission_rates, :to => :manage
+    has_permission_on :sales_commission_reports, :to => :manage
+    has_permission_on :sales_reports, :to => :read
+    has_permission_on :bookings_reports, :to => :read
+    has_permission_on :backlog_reports, :to => :read
+    has_permission_on :sales_opportunities, :to => :manage
+    has_permission_on :sales_opportunity_comments, :to => :manage
   end
   
   role :production do
@@ -64,6 +73,9 @@ authorization do
     has_permission_on :production_inventory_reports, :to => :read
     has_permission_on :production_inventory_reports_customer_reports, :to => :read
     has_permission_on :production_inventory_reports_obsolete_reports, :to => :read
+    has_permission_on :production_purchase_queue_summaries, :to => :read
+    has_permission_on :production_purchase_queue_details, :to => :read
+    has_permission_on :production_purchase_queue_notes, :to => :manage
   end
   
   role :manager do
@@ -75,9 +87,9 @@ authorization do
     includes :manager
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
-    has_permission_on :content_modules, :to => :manage
     has_permission_on :user_activities, :to => :manage
     has_permission_on :production_inventory_reports, :to => :manage
+    has_permission_on :sales_opportunities, :to => :delete_permanently
   end
 end
  

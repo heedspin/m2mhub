@@ -1,4 +1,4 @@
-class PasswordsController < ApplicationController
+class PasswordsController < M2mhubController
   filter_access_to :edit, :update, :attribute_check => true, :load_method => :current_object, :context => :users
 
   def edit

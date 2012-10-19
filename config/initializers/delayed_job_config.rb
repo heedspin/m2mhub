@@ -12,7 +12,3 @@ Delayed::Worker.logger.info "DelayedJobConfig: called from #{caller.last}.  dela
 if Rails.env.development?
   Delayed::Worker.destroy_failed_jobs = false
 end
-
-# We're in a fine mess now. This needs to be in LXD, but not SMT.  
-require 'doogle/web_synchronizer' rescue LoadError
-require 'lighthouse_wakeup' rescue LoadError
