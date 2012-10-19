@@ -64,8 +64,10 @@ class Sales::SalesReport < M2mhub::Base
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
     # self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount) + revenue_journal_entries
     
-    self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
-    # self.ytd_new_opportunities = Sales::Opportunity.start_dates(beginning_of_year, next_month).sum(:amount)
+    if AppConfig.enable_opportunities?
+      self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
+      # self.ytd_new_opportunities = Sales::Opportunity.start_dates(beginning_of_year, next_month).sum(:amount)
+    end
 
     self.save!
   end
