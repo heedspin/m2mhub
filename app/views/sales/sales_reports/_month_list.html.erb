@@ -39,6 +39,7 @@
 			</td>
 			<% end %>
 		</tr>
+		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
 		<tr>
 			<th>
 				<%= link_to Sales::SalesReport.human_attribute_name(:new_opportunities), opportunities_url %>
@@ -49,5 +50,6 @@
 			</td>
 			<% end %>
 		</tr>
+		<% end %>
 	</tbody>
 </table>
