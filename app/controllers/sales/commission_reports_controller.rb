@@ -12,7 +12,7 @@ class Sales::CommissionReportsController < M2mhubController
         render :text => 'not implemented'
       end
       f.xls do
-        headers['Content-Disposition'] = "attachment; filename=\"#{@commission_report.filename}.xls\""
+        headers['Content-Disposition'] = "attachment; filename=\"#{@commission_report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
         render :text => @commission_report.to_xls
       end

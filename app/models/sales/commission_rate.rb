@@ -23,6 +23,11 @@ class Sales::CommissionRate < M2mhub::Base
   validate :customer_or_item
 
   scope :by_salesperson_and_customer, :order => [:sales_person_name, :customer_name, :part_number]
+  
+  def revision
+    # TODO: Add revision column.
+    ''
+  end
 
   protected
 
