@@ -35,7 +35,7 @@
 				for <%= cm line_item.purchase_order_item.quantity, :sales_order_quantity, 0 %>
 				<% elsif line_item.receiver? %>
 				Receiver <%= line_item.receiver_item.receiver_number.to_i %>
-				on PO <%= line_item.receiver_item.receiver.purchase_order_number.to_i %>
+				on PO <%= line_item.receiver_item.receiver.try(:purchase_order_number).to_i %>
 				<% elsif line_item.shipper? %>
 				Shipper <%= line_item.shipper_item.shipper_number %> for SO <%= line_item.shipper_item.sales_order_number.to_i %>
 				<% else %>

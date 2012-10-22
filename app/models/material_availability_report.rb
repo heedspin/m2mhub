@@ -112,7 +112,7 @@ class MaterialAvailabilityReport
       @receiver_item = receiver_item
       self.type_weighting = 0
       self.supply = @receiver_item.quantity
-      self.actual_date = @receiver_item.receiver.date_received
+      self.actual_date = @receiver_item.receiver.try(:date_received)
       self.count_supply_and_demand = true
       self.number = "#{@receiver_item.purchase_order_item_number}-#{@receiver_item.release_number}"
     end
@@ -124,7 +124,7 @@ class MaterialAvailabilityReport
       @shipper_item = shipper_item
       self.type_weighting = 0
       self.demand = @shipper_item.quantity
-      self.actual_date = @shipper_item.shipper.ship_date
+      self.actual_date = @shipper_item.shipper.try(:ship_date)
       self.count_supply_and_demand = true
       # self.number = "#{@shipper_item.purchase_order_item_number}-#{@receiver_item.release_number}"
     end
