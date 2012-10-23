@@ -46,7 +46,7 @@ class Sales::CommissionReport
     xls_field('Group') { |cd| cd.invoice_item.item.try(:fgroup).try(:strip) }
     xls_field('Invoice Description') { |cd| cd.invoice_item.description }
     xls_field('Sales Rep') { |cd| cd.sales_person_name }
-    xls_field('Commission Ratex') { |cd|
+    xls_field('Commission Rate') { |cd|
       cd.commission_percentage.present? ? (cd.commission_percentage / 100).to_f.round(2) : 0.0
     }
     xls_field('Total Commission', dollar_format) { |cd|

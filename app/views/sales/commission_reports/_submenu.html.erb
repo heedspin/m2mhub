@@ -9,5 +9,8 @@
 		<li class="<%= menu_selected(:controller => :commission_rates) %>">
 			<%= link_to 'Commission Rates', commission_rates_url %>
 		</li>
+		<li class="<%= menu_selected(:controller => :commission_backlog_reports) %>">
+			<%= link_to 'Commission Backlog', new_commission_backlog_report_url %>
+		</li>
 	</ul>
 </div>

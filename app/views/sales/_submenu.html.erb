@@ -37,7 +37,7 @@
 		<% end %>
 
 		<% if AppConfig.enable_commission_report? and permitted_to?(:manage, :sales_commission_reports) %>
-		<li class="<%= menu_selected(:controller => [:commission_reports, :commission_rates]) %>">
+		<li class="<%= menu_selected(:controller => [:commission_reports, :commission_rates, :commission_backlog_reports]) %>">
 			<%= link_to 'Commission Reports', new_commission_report_url %>
 		</li>
 		<% end %>

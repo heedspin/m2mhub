@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
   resources :commission_rates, :controller => 'sales/commission_rates'
   resources :commission_reports, :controller => 'sales/commission_reports'
+  resources :commission_backlog_reports, :controller => 'sales/commission_backlog_reports'
   match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
