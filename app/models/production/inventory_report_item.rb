@@ -53,10 +53,6 @@ class Production::InventoryReportItem < ActiveRecord::Base
     @latest_activity ||= [self.last_outgoing_date, self.last_incoming_date, self.next_outgoing_date, self.next_incoming_date].compact.max
   end
   
-  def last_ship
-    self.last_sales_order_release.try(:last_ship_date)
-  end
-
   attr_accessor :next_outgoing_parent_item
   def next_outgoing_parent_item
     unless @_loaded_next_outgoing_parent_item
@@ -107,6 +103,7 @@ class Production::InventoryReportItem < ActiveRecord::Base
 
   def find_last_outgoing
     if self.last_sales_order_release = @past_releases[self.item.part_number_revision]
+      self.last_outgoing_date = self.last_sales_order_release.try(:last_ship_date)
       @last_customer = self.last_sales_order_release.sales_order.customer
     end
   end

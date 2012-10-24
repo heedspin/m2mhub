@@ -184,9 +184,9 @@ class Production::InventoryReport < ActiveRecord::Base
     xls_field('Quantity Available') { |r| r.quantity_available }
     xls_field('Total On Order') { |r| r.total_on_order_cost }
     xls_field('Quantity On Order') { |r| r.quantity_on_order }
-    xls_field('Unit Cost', dollar_format) { |r| r.cost.round(2) }
+    xls_field('Unit Cost', dollar_format) { |r| r.cost }
     xls_field('Last Receipt', xls_date_format) { |r| r.last_incoming_date }
-    xls_field('Last Ship', xls_date_format) { |r| r.last_ship }
+    xls_field('Last Ship', xls_date_format) { |r| r.last_outgoing_date }
     xls_field('Last Sales Order') { |r| r.last_sales_order_release.try(:sales_order_number) }
     xls_field('Next Receipt', xls_date_format) { |r| r.next_incoming_date }
     xls_field('Next Ship', xls_date_format) { |r| r.next_outgoing_date }

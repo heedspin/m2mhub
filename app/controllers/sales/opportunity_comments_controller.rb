@@ -17,7 +17,8 @@ class Sales::OpportunityCommentsController < M2mhubController
       flash[:notice] = "Created Comment #{@comment.id}"
       redirect_to opportunity_url(@opportunity)
     else
-      render :action => 'sales/opportunities/new'
+      @comments = @opportunity.comments.by_id
+      render :action => '../opportunities/show'
     end
   end
 
