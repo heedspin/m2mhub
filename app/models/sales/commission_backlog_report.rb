@@ -18,6 +18,8 @@ class Sales::CommissionBacklogReport
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Due Date') { |cd| cd.release.due_date }
     xls_field('Sales Order Number') { |cd| cd.release.sales_order_number }
+    xls_field('Order Date') { |cd| cd.release.sales_order.order_date }
+    xls_field('Due Date') { |cd| cd.release.due_date }
     xls_field("#{AppConfig.short_name} Part Number") { |cd| cd.release.part_number }
     xls_field('Part Description') { |cd| cd.release.item.try(:description) }
     xls_field('Order Quantity') { |cd| cd.release.quantity }
