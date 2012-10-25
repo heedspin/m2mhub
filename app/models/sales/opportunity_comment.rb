@@ -44,6 +44,8 @@ class Sales::OpportunityComment < M2mhub::Base
   belongs_to :quote, :class_name => 'M2m::Quote', :primary_key => 'fquoteno'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :primary_key => 'fsono'
 
+  validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
+
   scope :by_id, :order => :id
   scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
   scope :with_ticket, lambda { |ticket|
