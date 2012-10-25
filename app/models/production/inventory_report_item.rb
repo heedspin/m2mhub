@@ -106,7 +106,7 @@ class Production::InventoryReportItem < ActiveRecord::Base
       self.last_outgoing_date = self.last_sales_order_release.try(:last_ship_date)
       @last_customer = self.last_sales_order_release.sales_order.customer
     else
-      self.last_outgoing_date =  self.item.inventory_transactions.by_time_desc.outgoing.first
+      self.last_outgoing_date = self.item.inventory_transactions.by_time_desc.outgoing.first.try(:time)
     end
   end
 
