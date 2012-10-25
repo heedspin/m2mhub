@@ -105,12 +105,14 @@ class Production::InventoryReportItem < ActiveRecord::Base
     if self.last_sales_order_release = @past_releases[self.item.part_number_revision]
       self.last_outgoing_date = self.last_sales_order_release.try(:last_ship_date)
       @last_customer = self.last_sales_order_release.sales_order.customer
+    else
+      self.last_outgoing_date =  self.item.inventory_transactions.by_time_desc.outgoing.first
     end
   end
 
   def find_last_incoming_transaction
     # item.receiver_items.by_time_received_desc.scoped(:include => :receiver).first.try(:receiver).try(:time_received)
-    if self.last_incoming_inventory_transaction = item.inventory_transactions.by_time_desc.incoming.first
+    if self.last_incoming_inventory_transaction = self.item.inventory_transactions.by_time_desc.incoming.first
       self.last_incoming_date = self.last_incoming_inventory_transaction.time
     end
   end
