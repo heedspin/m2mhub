@@ -5,7 +5,7 @@ module ActiveHashMethods
     cmethod_values = {}
     base.data.each do |config|
       if (cname = config[:name]) and (cid = config[:id])
-        cmethod = (config[:cmethod] || cname.gsub(/[ -\/]/, '_')).to_s.downcase.to_sym
+        cmethod = (config[:cmethod] || cname.split(/[ -\/:]/).select(&:present?).join('_')).to_s.downcase.to_sym
         cmethod_values[cid] = cmethod
         next if [:all].include?(cmethod)
         firstchar = cmethod.to_s[0..0]
