@@ -22,7 +22,7 @@
 #  quantity_committed                     :decimal(12, 2)
 #  quantity_available                     :decimal(12, 2)
 #  quantity_on_order                      :decimal(12, 2)
-#  cost                                   :decimal(12, 2)
+#  cost                                   :decimal(14, 4)
 #
 
 require 'm2m/belongs_to_item'
