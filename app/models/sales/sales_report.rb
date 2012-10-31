@@ -51,7 +51,7 @@ class Sales::SalesReport < M2mhub::Base
     beginning_of_year = self.date.beginning_of_year
 
     # Adding the not_adjustments filter removes entries that may be LXD specific. If so I will need to refactor this out of the core.
-    revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account)
     self.gl_transaction_ids = revenue_journal_entries.map(&:id)
     ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
     self.ar_distribution_ids = ar_distributions.map(&:id)
@@ -59,7 +59,7 @@ class Sales::SalesReport < M2mhub::Base
     self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
     # self.net_invoiced_sales = M2m::ArDistribution.dates(self.date, next_month).non_zero.not_cash.receivables_and_credits.sum(:fnamount) + revenue_journal_entries.sum(&:value)
 
-    jsum = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account).sum(&:value)
+    jsum = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.all(:include => :gl_account).sum(&:value)
     ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').not_receivables_or_credits.all(:include => :gl_account)
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
