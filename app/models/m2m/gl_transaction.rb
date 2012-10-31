@@ -66,6 +66,12 @@ class M2m::GlTransaction < M2m::Base
                       [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
     }
   }
+  scope :not_adjustments, lambda {
+    {
+      :joins => :gl_account,
+      :conditions => ['gltran.fcacctnum != ?', M2m::AccountsReceivableSetup.adjustment]
+    }
+  }
   scope :ids, lambda { |ids|
     {
       :conditions => [ 'gltran.identity_column in (?)', ids ]

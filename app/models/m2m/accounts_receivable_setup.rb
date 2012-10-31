@@ -53,4 +53,7 @@ class M2m::AccountsReceivableSetup < M2m::Base
   def self.receivables
     @receivables ||= first.faraccno.strip
   end
+  def self.adjustment
+    @adjustment ||= first.fgladjust.strip
+  end
 end
