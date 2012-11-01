@@ -34,6 +34,7 @@ class Sales::SalesReportRunner
     self
   end
 
+  # Sales::SalesReportRunner.new.update_12_months
   def update_12_months
     end_date = Date.current.beginning_of_month.advance(:months => -2) # update_month handles recent months.
     [Sales::SalesReport, Sales::BookingsReport].each do |klass|
