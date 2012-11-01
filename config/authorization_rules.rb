@@ -18,7 +18,7 @@ authorization do
       has_permission_on :users, :to => :switch
     end
     has_permission_on :items, :to => :read
-    has_permission_on :user_activities, :to => :read
+    has_permission_on :m2mhub_user_activities, :to => :read
     has_permission_on :customers, :to => :read
     has_permission_on :shipping_shipping_dashboard, :to => :read
     has_permission_on :shipping_shippers, :to => :read
@@ -88,7 +88,7 @@ authorization do
     includes :manager
     has_permission_on :users_password, :to => [:manage, :update_without_current_password]
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
-    has_permission_on :user_activities, :to => :manage
+    has_permission_on :m2mhub_user_activities, :to => :manage
     has_permission_on :production_inventory_reports, :to => :manage
     has_permission_on :sales_opportunities, :to => :delete_permanently
   end

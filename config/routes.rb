@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :sales_order_items, :only => [:index, :show]
   resources :sales_order_releases, :only => [:index]
   resources :quotes
-  resources :user_activities, :as => 'history', :only => [:index]
+  resources :m2mhub_user_activities, :as => 'history', :only => [:index], :controller => 'm2mhub/user_activities'
   resources :items do
     resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
     resources :purchase_order_items, :only => [:index], :controller => 'items/purchase_order_items'

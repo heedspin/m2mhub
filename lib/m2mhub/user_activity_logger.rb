@@ -1,4 +1,4 @@
-module UserActivityLogger
+module M2mhub::UserActivityLogger
   # Log all requests unless one has been explicity logged.
   def log_user_activity
     @log_user_activity_start_time = Time.now.to_f
@@ -18,7 +18,7 @@ module UserActivityLogger
       options[:params] ||= params.try(:to_json)
       options[:report_name] ||= (controller_name || 'no controller') + ' / ' + (action_name || 'no action')
       options[:format] ||= params[:format]# || 'html'
-      @last_user_activity = UserActivity.create(options)
+      @last_user_activity = M2mhub::UserActivity.create(options)
     rescue
       logger.error "Ignoring UserActivity exception: #{$!}"
     end

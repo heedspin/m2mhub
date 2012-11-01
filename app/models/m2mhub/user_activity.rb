@@ -1,4 +1,4 @@
-class UserActivity < ActiveRecord::Base
+class M2mhub::UserActivity < ActiveRecord::Base
   belongs_to :user
   scope :year_in, lambda { |year|
     {
