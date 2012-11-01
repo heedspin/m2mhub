@@ -16,6 +16,8 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :invoice_item_type, :fctype
   alias_attribute :sales_gl_account_number, :fincacc
 
+  scope :part_number, lambda { |pn| where(:fpartno => pn) }
+  scope :revision, lambda { |r| where(:frev => r) }
   scope :for_rma_item, lambda { |rma_item|
     {
       :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
@@ -31,6 +33,13 @@ class M2m::InvoiceItem < M2m::Base
     {
       :joins => :invoice,
       :conditions => { :armast => {:fcustno => custno} }
+    }
+  }
+  scope :customers, lambda { |customer_numbers|
+    customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
+    {
+      :joins => :invoice,
+      :conditions => [ 'armast.fcustno in (?)', customer_numbers ]
     }
   }
   scope :invoice_dates, lambda { |start_date, end_date|
