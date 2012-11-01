@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th>Time</th>
-			<% if permitted_to?(:manage, :user_activities) %>
+			<% if permitted_to?(:manage, :m2mhub_user_activities) %>
 			<th>User</th>
 			<th>IP Address</th>
 			<% end %>
@@ -13,7 +13,7 @@
 		<% @user_activities.each do |ua| %>
 		<tr>
 			<td><%= ua.created_at.day == Date.current.day ? ua.created_at.to_s(:time) : ua.created_at.to_s(:event_date) %></td>
-			<% if permitted_to?(:manage, :user_activities) %>
+			<% if permitted_to?(:manage, :m2mhub_user_activities) %>
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
 			<% end %>
