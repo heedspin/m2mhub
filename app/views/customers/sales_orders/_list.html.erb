@@ -6,7 +6,6 @@
 			<th><%= AppConfig.short_name %> Part No.</th>
 			<th>Description</th>
 			<th>Cust Part No.</th>
-			<th>Cost</th>
 			<th>Unit Price</th>
 			<th>Quantity</th>
 			<th>Total Price</th>
@@ -30,7 +29,6 @@
 			<td><%= link_to_item(r.item, r.part_number) %></td>
 			<td><%= simple_format r.sales_order_item.description.strip %></td>
 			<td><%= r.sales_order_item.try(:customer_part_number) %></td>
-			<td class="monitary"><%= cm(r.item.total_cost, :dollars) if r.item %></td>
 			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 			<td class="centered"><%= cm(r.quantity, :sales_order_quantity) %></td>
 			<td class="monitary"><%= cm r.total_price, :dollars %></td>

@@ -9,6 +9,7 @@
 			<th>Group</th>
 			<th>Source</th>
 			<th>Bin</th>
+			<th><%= AppConfig.cost_method.titleize %></th>
 			<th>On Hand</th>
 			<th>Committed</th>
 			<th>Available</th>
@@ -26,6 +27,7 @@
 			<td><%= h i.fdescript %></td>
 			<td><%= i.group.try(:text) %></td>
 			<td><%= i.source.try(:name) %></td>
+			<td><%= cm i.total_cost, :dollars %></td>
 			<td><%= render 'items/locations', :item => i %></td>
 			<td class="right"><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
 			<td class="right"><%= cm i.quantity_committed, :item_quantity, 0 %></td>

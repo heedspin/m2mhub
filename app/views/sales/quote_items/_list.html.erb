@@ -15,7 +15,6 @@
 				<th>Description</th>
 				<th>Qty</th>
 				<th>Cust Part</th>
-				<th>Cost</th>
 				<th>Unit Price</th>
 				<th>Total<br />Price</th>
 				<th>Sales<br />Order</th>
@@ -24,7 +23,7 @@
 <% quote_items.each do |item| %>
 		<tr>
 			<% if show_quotes %>
-			<td><%= link_to item.quote.quote_number, quote_url(item.quote) %></td>
+			<td><%= link_to item.quote.quote_number, sales_quote_url(item.quote) %></td>
 			<td><%= link_to item.quote.customer_name, customer_number_url(item.quote.fcustno) %></td>
 			<% else %>
 			<td><%= item.fenumber %></td>
@@ -33,7 +32,6 @@
 			<td><%= simple_format item.description.strip %></td>
 			<td><%= cm item.quantity, :sales_order_quantity %></td>
 			<td><%= item.customer_part_number %></td>
-			<td><%= cm item.item.try(:total_cost), :dollars %></td>
 			<td class="monitary"><%= cm item.unit_price, :dollars %></td>
 			<td class="monitary"><%= cm item.total_price, :dollars %></td>
 			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>

@@ -25,7 +25,7 @@ authorization do
     has_permission_on :shipping_receivers, :to => :read
     has_permission_on :sales_backlog_reports, :to => :manage
     has_permission_on :sales_order_releases, :to => :read
-    has_permission_on :quote_items, :to => :read
+    has_permission_on :sales_quote_items, :to => :read
     has_permission_on :items_history, :to => :read
     has_permission_on :items_shippers, :to => :read
     has_permission_on :items_jobs, :to => :read
@@ -35,7 +35,7 @@ authorization do
 
   role :sales do
     includes :shipping
-    has_permission_on :quotes, :to => :manage
+    has_permission_on :sales_quotes, :to => :manage
     has_permission_on :sales_orders, :to => :read
     has_permission_on :sales_order_items, :to => :read
     has_permission_on :customers_sales_orders, :to => :read

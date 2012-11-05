@@ -1,5 +1,5 @@
-class SalesOrderItemsController < M2mhubController
-  filter_access_to_defaults
+class Sales::SalesOrderItemsController < M2mhubController
+  filter_access_to_defaults :context => :sales_order_items
 
   class SearchItem < M2m::SalesOrderItem
     attr_accessor :order_number

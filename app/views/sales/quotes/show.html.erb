@@ -1,8 +1,8 @@
 
 <div class="paging">
-	<%= link_to("&laquo; #{@previous_quote.quote_number} (#{@previous_quote.customer_name})".html_safe, quote_url(@previous_quote.quote_number)) if @previous_quote %>
-	<%= link_to "Quotes", quotes_url %>
-	<%= link_to("#{@next_quote.quote_number} (#{@next_quote.customer_name}) &raquo;".html_safe, quote_url(@next_quote.quote_number)) if @next_quote %>
+	<%= link_to("&laquo; #{@previous_quote.quote_number} (#{@previous_quote.customer_name})".html_safe, sales_quote_url(@previous_quote.quote_number)) if @previous_quote %>
+	<%= link_to "Quotes", sales_quotes_url %>
+	<%= link_to("#{@next_quote.quote_number} (#{@next_quote.customer_name}) &raquo;".html_safe, sales_quote_url(@next_quote.quote_number)) if @next_quote %>
 </div>
 
 <p>
@@ -15,7 +15,7 @@
 </p>
 
 <h2>Items</h2>
-<%= render 'quote_items/list', :quote_items => @quote.items %>
+<%= render 'sales/quote_items/list', :quote_items => @quote.items %>
 
 <p>
 	<strong>Memo:</strong>

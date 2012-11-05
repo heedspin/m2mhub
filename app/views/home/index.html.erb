@@ -14,10 +14,10 @@
 <%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
 <% end %>
 
-<h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
-<%= render 'sales_orders/list' %>
+<h3><%= link_to 'Sales Orders', sales_orders_url %></h3>
+<%= render 'sales/sales_orders/list' %>
 
 <% if @quotes.size > 0 %>
-<h3><%= link_to 'Recent Quotes', quotes_url %></h3>
-<%= render 'quotes/list' %>
+<h3><%= link_to 'Quotes', sales_quotes_url %></h3>
+<%= render 'sales/quotes/list' %>
 <% end %>

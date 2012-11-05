@@ -16,10 +16,10 @@ Rails.application.routes.draw do
     resource :password, :only => [ :edit, :update ]
   end
   resources :password_resets
-  resources :sales_orders, :only => [:index, :show]
-  resources :sales_order_items, :only => [:index, :show]
-  resources :sales_order_releases, :only => [:index]
-  resources :quotes
+  resources :sales_orders, :only => [:index, :show], :controller => 'sales/sales_orders'
+  resources :sales_order_items, :only => [:index, :show], :controller => 'sales/sales_order_items'
+  resources :sales_order_releases, :only => [:index], :controller => 'sales/sales_order_releases'
+  resources :sales_quotes, :controller => 'sales/quotes'
   resources :m2mhub_user_activities, :as => 'history', :only => [:index], :controller => 'm2mhub/user_activities'
   resources :items do
     resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'

@@ -15,6 +15,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   alias_date_attribute :last_promise_date, :flstpdate
   alias_date_attribute :original_promise_date, :forgpdate
   # alias_date_attribute :request_date, :freqdate
+  alias_attribute :unit_cost, :fucost
   
   def safe_promise_date
     self.last_promise_date || self.original_promise_date || Time.current.advance(:years => 1)

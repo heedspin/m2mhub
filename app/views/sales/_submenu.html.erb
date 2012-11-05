@@ -8,7 +8,7 @@
 
 		<% if permitted_to?(:read, :sales_orders) %>
 		<li class="<%= menu_selected(:controller => :sales_orders, :action => :index) %>">
-			<%= link_to 'Sales Orders', sales_orders_url %>
+			<%= link_to 'Browse', sales_orders_url %>
 		</li>
 		<% end %>
 
@@ -18,9 +18,9 @@
 		</li>
 		<% end %>
 		
-		<% if permitted_to?(:read, :quotes) %>
+		<% if permitted_to?(:read, :sales_quotes) %>
 		<li class="<%= menu_selected(:controller => :quotes) %>">
-			<%= link_to 'Quotes', quotes_url %>
+			<%= link_to 'Quotes', sales_quotes_url %>
 		</li>
 		<% end %>
 

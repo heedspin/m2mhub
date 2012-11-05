@@ -67,6 +67,13 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :somast => { :fcustno => customer.customer_number } }
     }
   }
+  scope :customers, lambda { |customer_numbers|
+    customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
+    }
+  }
   scope :for_sales_order, lambda { |sono|
     {
       :conditions => { :fsono => sono }

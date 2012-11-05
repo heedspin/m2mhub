@@ -20,6 +20,7 @@
 			<th>Received</th>
 			<th>Date Received</th>
 			<th>Vendor Part</th>
+			<th>Unit Cost</th>
 			<th>Description</th>
 		</tr>
 	</thead>
@@ -36,6 +37,7 @@
 			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
 			<td><%= @item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
+			<td><%= cm i.unit_cost, :dollars %></td>
 			<td><%= h @item.fdescript %></td>
 		</tr>
 	<% end %>

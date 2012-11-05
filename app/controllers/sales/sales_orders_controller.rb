@@ -1,5 +1,5 @@
-class SalesOrdersController < M2mhubController
-  filter_access_to_defaults
+class Sales::SalesOrdersController < M2mhubController
+  filter_access_to_defaults :context => :sales_orders
 
   def index
     @sales_orders = M2m::SalesOrder.includes(:releases, :items).paginate(:page => params[:page], :per_page => 50).order('somast.forderdate desc, somast.fsono desc')

@@ -23,11 +23,11 @@ class ItemsController < M2mhubController
 
   def show
     @item = current_object
-    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).status_open.by_due_date_desc.all#(:include => [:sales_order, :item])
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.limit(5)
     M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => {:purchase_order => :vendor})
+    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).includes(:purchase_order => :vendor).reverse_order.limit(5)
     @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
 
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
@@ -35,7 +35,6 @@ class ItemsController < M2mhubController
                                                                     :purchase_order_items => @purchase_order_items,
                                                                     :show_history => false )
 
-    @sales_order_releases = @sales_order_releases.select { |s| s.status.open? }
     @purchase_order_items = @purchase_order_items.sort_by { |i| i.safe_promise_date }
     @shippers_count = M2m::Shipper.for_item(@item).count
     @total_quote_items = M2m::QuoteItem.for_item(@item).count
