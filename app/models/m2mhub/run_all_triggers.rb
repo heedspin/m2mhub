@@ -4,14 +4,19 @@ class M2mhub::RunAllTriggers
   include Plutolib::StatelessDelayedReport
 
   # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_report
-  def run_report
-    log "Updating event status"
-    M2mhub::Event.open_or_recently_closed.each(&:update_status!)
-    log "Running all triggers"
+  def high_frequency
+    log "Running triggers"
     total_events_created = 0
     M2mhub::Trigger.enabled.each do |trigger|
       total_events_created += trigger.run
     end
+    true
+  end
+
+  # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_report
+  def low_frequency
+    log "Updating event status"
+    M2mhub::Event.open_or_recently_closed.each(&:update_status!)
     log "Updating opportunity comments"
     Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
     log "Finished.  Created #{total_events_created} events"
