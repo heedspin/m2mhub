@@ -54,14 +54,14 @@ class Sales::SalesReport < M2mhub::Base
     # Adding the not_adjustments filter removes entries that may be LXD specific. If so I will need to refactor this out of the core.
     revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
     self.gl_transaction_ids = revenue_journal_entries.map(&:id)
-    ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').not_accounts(self.not_revenue_accounts).all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').not_accounts(Sales::SalesReport.not_revenue_accounts(self.date)).all(:include => :gl_account)
     self.ar_distribution_ids = ar_distributions.map(&:id)
 
     self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
     # self.net_invoiced_sales = M2m::ArDistribution.dates(self.date, next_month).non_zero.not_cash.receivables_and_credits.sum(:fnamount) + revenue_journal_entries.sum(&:value)
 
     jsum = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account).sum(&:value)
-    ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').not_accounts(self.not_revenue_accounts).all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').not_accounts(Sales::SalesReport.not_revenue_accounts(self.date)).all(:include => :gl_account)
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + jsum
     # self.ytd_net_invoiced_sales = ar.receivables_and_credits.sum(:fnamount) + revenue_journal_entries
@@ -74,23 +74,26 @@ class Sales::SalesReport < M2mhub::Base
     self.save!
   end
   
-  def not_revenue_accounts
-    if @not_revenue_accounts.nil?
-      @not_revenue_accounts = []
-      if AppConfig.sales_report_not_revenue_accounts.nil?
-        @not_revenue_accounts = [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables]
-      else
-        AppConfig.sales_report_not_revenue_accounts.each do |account_number, config|
-          config ||= {}
-          start_date = config['start_date']
-          end_date = config['end_date']
-          if (start_date.nil? or (self.date >= start_date)) and (end_date.nil? or (self.date <= end_date))
-            @not_revenue_accounts.push account_number
+  class << self
+    def not_revenue_accounts(on_date)
+      if @not_revenue_accounts.nil?
+        on_date = Date.parse(on_date) if on_date.is_a?(String)
+        @not_revenue_accounts = []
+        if AppConfig.sales_report_not_revenue_accounts.nil?
+          @not_revenue_accounts = [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables]
+        else
+          AppConfig.sales_report_not_revenue_accounts.each do |account_number, config|
+            config ||= {}
+            start_date = config['start_date']
+            end_date = config['end_date']
+            if (start_date.nil? or (on_date >= start_date)) and (end_date.nil? or (on_date <= end_date))
+              @not_revenue_accounts.push account_number
+            end
           end
         end
       end
+      @not_revenue_accounts
     end
-    @not_revenue_accounts
   end
   
   # To use after adding new stat.
