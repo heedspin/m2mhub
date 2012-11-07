@@ -29,6 +29,7 @@ class M2m::ArDistribution < M2m::Base
   alias_attribute :amount, :fnamount
   alias_attribute :date, :fddate
   alias_attribute :ref_key, :fcrefname
+  alias_attribute :status, :fcstatus
 
   scope :dates, lambda { |start_date, end_date|
     start_date = Date.parse(start_date) if start_date.is_a?(String)
@@ -68,6 +69,10 @@ class M2m::ArDistribution < M2m::Base
     }
   }
   
+  def posted?
+    self.status == 'P'
+  end
+  
   def ref_id
     self.fccashid[7..17]
   end
@@ -85,6 +90,6 @@ class M2m::ArDistribution < M2m::Base
     @customer ||= M2m::Customer.with_customer_number(self.customer_id).first
   end
   def value
-    self.amount * self.gl_account.value_multiplier
+    self.posted? ? (self.amount * self.gl_account.value_multiplier) : 0
   end
 end
