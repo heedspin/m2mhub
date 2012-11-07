@@ -16,8 +16,14 @@ class M2mhubController < ApplicationController
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   before_filter :require_login
+  before_filter :record_feature_user
   
   protected
+  
+    def record_feature_user
+      M2mhub::Feature.current_user = current_user
+      true
+    end
   
     def value_to_bool(val)
       ActiveRecord::ConnectionAdapters::Column.value_to_boolean(val)

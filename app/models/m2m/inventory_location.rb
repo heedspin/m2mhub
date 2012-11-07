@@ -1,6 +1,7 @@
 class M2m::InventoryLocation < M2m::Base
   set_table_name 'inonhd'
   belongs_to_item :fpartno, :fpartrev
+  belongs_to :location, :class_name => 'M2m::Location', :foreign_key => :flocation, :primary_key => :flocation
 
   alias_attribute :quantity_on_hand, :fonhand
   alias_attribute :bin, :fbinno
@@ -17,15 +18,11 @@ class M2m::InventoryLocation < M2m::Base
   }
   scope :with_quantity_on_hand, :conditions => 'inonhd.fonhand > 0'
   
-  def location
-    self.flocation.titleize
-  end
-  
   def location_description
     if self.bin.present?
       self.bin
     else
-      self.location
+      self.flocation.titleize
     end
   end
 
@@ -36,6 +33,12 @@ class M2m::InventoryLocation < M2m::Base
       end
     end
   end
+  
+  # M2m::Location.inspection.first.inventory_locations.first.inventory_transactions
+  def inbound_inventory_transactions
+    M2m::InventoryTransaction.to_location(self.flocation).part_number(self.part_number)
+  end
+  
 end
 
 

@@ -28,6 +28,21 @@ class M2m::InventoryTransaction < M2m::Base
       :conditions => [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
     }
   }
+  scope :part_number, lambda { |part_number|
+    {
+      :conditions => { :fpartno => part_number }
+    }
+  }
+  scope :revision, lambda { |revision|
+    {
+      :conditions => { :fcpartrev => revision }
+    }
+  }
+  scope :to_location, lambda { |location|
+    {
+      :conditions => { :ftoloc => location }
+    }
+  }
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 
