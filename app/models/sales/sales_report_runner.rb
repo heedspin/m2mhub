@@ -75,7 +75,7 @@ class Sales::SalesReportRunner
       unless report = @klass.month(month).first
         report = @klass.new(:report_time_period => ReportTimePeriod.month, :date => month)
       end
-      log "Running #{month}"
+      log "Running #{@klass.name} #{month}"
       report.run!
     end
 
