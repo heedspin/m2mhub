@@ -10,6 +10,7 @@ class M2mhub::RunAllTriggers
     M2mhub::Trigger.enabled.each do |trigger|
       total_events_created += trigger.run
     end
+    log "Created #{total_events_created} events"
     true
   end
 
@@ -19,7 +20,7 @@ class M2mhub::RunAllTriggers
     M2mhub::Event.open_or_recently_closed.each(&:update_status!)
     log "Updating opportunity comments"
     Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
-    log "Finished.  Created #{total_events_created} events"
+    log "Finished"
     true
   end
 end
