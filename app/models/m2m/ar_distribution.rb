@@ -46,23 +46,6 @@ class M2m::ArDistribution < M2m::Base
   }
   scope :not_cash, :conditions => 'ardist.fcrefname <> \'CSH\''
   scope :non_zero, :conditions => 'ardist.fnamount != 0'
-  # scope :receivables_and_credits, lambda {
-  #   {
-  #     :conditions => ['ardist.fcacctnum in (?)', 
-  #                     [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
-  #   }
-  # }
-  # scope :not_receivables_or_credits, lambda {
-  #   {
-  #     :conditions => ['ardist.fcacctnum not in (?)', 
-  #                     [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
-  #   }
-  # }
-  scope :not_accounts, lambda { |account_numbers|
-    {
-      :conditions => ['ardist.fcacctnum not in (?)', account_numbers]
-    }
-  }
   scope :ids, lambda { |ids|
     {
       :conditions => [ 'ardist.identity_column in (?)', ids ]
