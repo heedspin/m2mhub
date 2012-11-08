@@ -8,6 +8,16 @@ class M2m::InventoryVendor < M2m::Base
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
+  scope :part_number, lambda { |part_number|
+    {
+      :conditions => { :fpartno => part_number }
+    }
+  }
+  scope :revision, lambda { |revision|
+    {
+      :conditions => { :fpartrev => revision }
+    }
+  }
 end
 
 

@@ -24,29 +24,31 @@ class M2m::PurchaseOrderItem < M2m::Base
   scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::Status.cancelled.name} }
-  
   scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :frev => item.revision }
     }
   }
-  
   scope :for_itemno, lambda { |itemno|
     {
       :conditions => { :fitemno => itemno }
     }
-  }
-    
+  } 
   scope :with_status, lambda { |status|
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     {
       :conditions => { :pomast => { :fstatus => status_name.upcase } }
     }
   }
-  
   scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
-
   scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
+  scope :vendor, lambda { |vendor|
+    vendor_number = vendor.is_a?(M2m::Vendor) ? vendor.vendor_number : vendor
+    {
+      :joins => :purchase_order,
+      :conditions => { :pomast => { :fvendno => vendor_number } }
+    }
+  }
 
   def master_release?
     (self.fmultirls.strip == 'Y') && (self.frelsno.to_i == 0)

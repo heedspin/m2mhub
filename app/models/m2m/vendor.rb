@@ -1,18 +1,20 @@
 class M2m::Vendor < M2m::Base
   set_table_name 'apvend'
   alias_attribute :vendor_number, :fvendno
-  # alias_attribute :name, :fcompany
   has_many :inventory_vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fvendno, :primary_key => :fvendno
+  belongs_to :gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fcacctnum', :primary_key => 'fcacctnum'
   
   scope :with_vendor_numbers, lambda { |vendor_numbers|
     {
       :conditions => [ 'apvend.fvendno in (?)', vendor_numbers ]
     }
   }
+  scope :by_name, :order => :fcompany
   
   def name
     self.fcompany.titleize
   end
+  
 end
 
 

@@ -78,11 +78,15 @@ authorization do
     has_permission_on :production_purchase_queue_details, :to => :read
     has_permission_on :production_purchase_queue_notes, :to => :manage
     has_permission_on :production_inspection_items, :to => :read
+    has_permission_on :production_vendors, :to => :read
+    has_permission_on :production_vendors_purchase_order_items, :to => :read
+    has_permission_on :production_vendor_approvals, :to => :read
   end
   
   role :manager do
     includes :shipping, :sales, :production
     has_permission_on :production_labor_reports, :to => :read
+    has_permission_on :production_vendor_approvals, :to => :manage
   end
 
   role :admin do

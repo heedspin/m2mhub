@@ -73,6 +73,10 @@ Rails.application.routes.draw do
   resources :purchase_queue_summaries, :only => [:index, :show], :controller => 'production/purchase_queue_summaries'
   resources :purchase_queue_notes, :controller => 'production/purchase_queue_notes'
   resources :inspection_item, :only => [:index, :show], :controller => 'production/inspection_items'
+  resources :vendors, :only => [:index, :show], :controller => 'production/vendors' do
+    resources :purchase_order_items, :only => [:index], :controller => 'production/vendors/purchase_order_items'
+  end
+  resources :vendor_approvals, :controller => 'production/vendor_approvals'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'

@@ -27,8 +27,9 @@ class ItemsController < M2mhubController
     M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).includes(:purchase_order => :vendor).reverse_order.limit(5)
-    @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
+    @purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item)
+    @total_purchase_order_items = @purchase_order_items.count
+    @purchase_order_items = @purchase_order_items.includes(:purchase_order => :vendor).reverse_order.limit(5)
 
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
                                                                     :sales_order_releases => @sales_order_releases,

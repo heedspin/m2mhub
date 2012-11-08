@@ -20,5 +20,10 @@
 			<%= link_to 'Purchase Queue', purchase_queue_summaries_url %>
 		</li>
 		<% end %>
+		<% if permitted_to?(:read, :production_vendors) %>
+		<li class="<%= menu_selected(:controller => :vendors) %>">
+			<%= link_to 'Vendors', vendors_url %>
+		</li>
+		<% end %>
 	</ul>
 </div>

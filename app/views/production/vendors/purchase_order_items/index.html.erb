@@ -1,0 +1,8 @@
+<%= render 'production/vendors/summary' %>
+
+<h2>Purchase Orders Items</h2>
+<%= will_paginate @purchase_order_items %>
+
+<%= render 'list', :include_browse_all => false %>
+
+<%= will_paginate @purchase_order_items %>

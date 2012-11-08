@@ -1,0 +1,16 @@
+<%= render 'production/submenu' %>
+<br />
+
+<h1><%= @vendor.name %></h1>
+
+<div class="submenu">
+	<ul>
+		<li class="<%= menu_selected(:controller => :vendors, :action => :show) %>">
+			<%= link_to 'Summary', vendor_url(@vendor) %>
+		</li>
+
+		<li class="<%= menu_selected(:parent => :vendors, :controller => :purchase_order_items) %>">
+			<%= link_to 'Purchase Orders', vendor_purchase_order_items_url(@vendor) %>
+		</li>
+	</ul>
+</div>
