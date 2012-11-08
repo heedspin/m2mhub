@@ -72,6 +72,12 @@ class M2m::ArDistribution < M2m::Base
   def posted?
     self.status == 'P'
   end
+  def unposted?
+    self.status == 'U'
+  end
+  def never_posted?
+    self.status == 'N'
+  end
   
   def ref_id
     self.fccashid[7..17]
@@ -90,6 +96,6 @@ class M2m::ArDistribution < M2m::Base
     @customer ||= M2m::Customer.with_customer_number(self.customer_id).first
   end
   def value
-    self.posted? ? (self.amount * self.gl_account.value_multiplier) : 0
+    self.never_posted? ? 0 : (self.amount * self.gl_account.value_multiplier)
   end
 end
