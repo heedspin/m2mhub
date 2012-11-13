@@ -4,13 +4,11 @@ require 'menu_selected'
 require 'pdf_generation'
 require 'declarative_authorization'
 require 'active_hash'
-require 'm2mhub/user_activity_logger'
 
 class M2mhubController < ApplicationController
   include MenuSelected
   # include Userstamp
   include PdfGeneration
-  include M2mhub::UserActivityLogger
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
