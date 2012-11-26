@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'
   resources :receivers, :only => [:index, :show], :controller => 'shipping/receivers'
+  resources :shipping_backlog_reports, :only => [:index, :show], :controller => 'shipping/backlog_reports'
   
   resources :rmas, :only => [:show], :controller => 'quality/rmas' do
     resource :lighthouse_ticket, :only => :create, :controller => 'quality/lighthouse_tickets'

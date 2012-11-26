@@ -26,9 +26,11 @@ en:
         # fduedate: To Ship
       m2m/shipper:
         ship_date: Shipped
-      sales_backlog_report:
-        fob_group: FOB Group
-        customer_status: Customer Status
+      shipping/backlog_report:
+        fob_group_id: FOB Group
+        customer_status_id: Customer Status
+        sales_order_numbers: Sales Order Numbers
+        backlog_group_id: Backlog Group
       m2m/customer:
         fcompany: Company Name
       m2m/contact:

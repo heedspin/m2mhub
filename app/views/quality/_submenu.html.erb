@@ -1,22 +1,22 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:read, :quality_quality_dashboard) %>
-		<li class="<%= menu_selected(:controller => :quality_dashboard) %>">
+		<li class="<%= menu_selected 'quality/quality_dashboard' %>">
 			<%= link_to 'Quality Home', quality_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_rma_reports) %>
-		<li class="<%= menu_selected(:controller => :rma_reports) %>">
+		<li class="<%= menu_selected 'quality/rma_reports' %>">
 			<%= link_to 'RMA Report', new_rma_report_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_customer_otd_reports) %>
-		<li class="<%= menu_selected(:controller => :customer_otd_reports) %>">
+		<li class="<%= menu_selected 'quality/customer_otd_reports' %>">
 			<%= link_to 'OTD Report', new_customer_otd_report_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_credit_memo_reports) %>
-		<li class="<%= menu_selected(:controller => :credit_memo_reports) %>">
+		<li class="<%= menu_selected 'quality/credit_memo_reports' %>">
 			<%= link_to 'Credit Memo Report', new_credit_memo_report_url %>
 		</li>
 		<% end %>

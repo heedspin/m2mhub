@@ -1,13 +1,13 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:read, :m2mhub_events) %>
-		<li class="<%= menu_selected(:controller => :events) %>">
+		<li class="<%= menu_selected 'm2mhub/events' %>">
 			<%= link_to 'Events', m2mhub_events_url %>
 		</li>
 		<% end %>
 
 		<% if permitted_to?(:read, :m2mhub_triggers) %>
-		<li class="<%= menu_selected(:controller => :triggers) %>">
+		<li class="<%= menu_selected 'm2mhub/triggers' %>">
 			<%= link_to 'Triggers', m2mhub_triggers_url %>
 		</li>
 		<% end %>

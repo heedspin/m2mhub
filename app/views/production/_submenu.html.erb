@@ -1,27 +1,27 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:make, :production_work_center_load_reports) %>
-		<li class="<%= menu_selected(:controller => :work_center_load_reports) %>">
+		<li class="<%= menu_selected 'production/work_center_load_reports' %>">
 			<%= link_to 'Work Center Load', new_work_center_load_report_url %>
 		</li>
 		<% end %>
 		<% if AppConfig.enable_inventory_report? and permitted_to?(:read, :production_inventory_reports) %>
-		<li class="<%= menu_selected(:controller => :inventory_reports) %>">
+		<li class="<%= menu_selected 'production/inventory_reports' %>">
 			<%= link_to 'Inventory Reports', inventory_reports_url %>
 		</li>
 		<% end %>
 		<% if AppConfig.enable_labor_reports? and permitted_to?(:read, :production_labor_reports) %>
-		<li class="<%= menu_selected(:controller => :labor_reports) %>">
+		<li class="<%= menu_selected 'production/labor_reports' %>">
 			<%= link_to 'Labor', labor_reports_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :production_purchase_queue_summaries) %>
-		<li class="<%= menu_selected(:controller => :purchase_queue_summaries) %>">
+		<li class="<%= menu_selected 'production/purchase_queue_summaries' %>">
 			<%= link_to 'Purchase Queue', purchase_queue_summaries_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :production_vendors) %>
-		<li class="<%= menu_selected(:controller => :vendors) %>">
+		<li class="<%= menu_selected :vendors %>">
 			<%= link_to 'Vendors', vendors_url %>
 		</li>
 		<% end %>

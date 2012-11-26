@@ -5,11 +5,11 @@
 
 <div class="submenu">
 	<ul>
-		<li class="<%= menu_selected(:controller => :vendors, :action => :show) %>">
+		<li class="<%= menu_selected 'production/vendors' %>">
 			<%= link_to 'Summary', vendor_url(@vendor) %>
 		</li>
 
-		<li class="<%= menu_selected(:parent => :vendors, :controller => :purchase_order_items) %>">
+		<li class="<%= menu_selected 'production/vendors/purchase_order_items' %>">
 			<%= link_to 'Purchase Orders', vendor_purchase_order_items_url(@vendor) %>
 		</li>
 	</ul>

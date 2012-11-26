@@ -40,3 +40,58 @@ m2mhub_config: &m2mhub_config
   enable_commission_report: true
   enable_events: true
   enable_opportunities: true
+  m2mhub_menu_selected:
+    quality:
+      children: quality/rmas quality/quality_dashboard quality/rma_reports quality/customer_otd_reports quality/credit_memo_reports
+    sales:
+      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes sales/commission_reports sales/commission_rates sales/commission_backlog_reports sales/sales_reports sales/bookings_reports sales/opportunities sales/opportunity_comments sales/sales_backlog_reports
+    items:
+      path_starts_with: /items
+    shipping:
+      children: shipping/backlog_reports shipping/shipping_dashboard shipping/shippers shipping/receivers
+    production:
+      children: production/production_dashboard production/work_center_load_reports production/obsolete_reports production/customer_reports production/inventory_reports production/labor_reports production/purchase_queue_summaries production/vendors production/vendors/purchase_order_items
+    vendors:
+      children: production/vendors production/vendors/purchase_order_items
+    customers:
+      controllers: customers
+      children: customer_summary customer_quotes customer_sales_orders customer_contacts customer_invoiced_sales_reports customer_sales_orders
+    customer_summary:
+      controllers: customers
+      action: show
+    customer_quotes:
+      controllers: customers/quotes
+    customer_sales_orders:
+      controllers: customers/sales_orders
+    customer_contacts:
+      controllers: customers/contacts
+    customer_invoiced_sales_reports:
+      controllers: customers/invoiced_sales_reports
+    customers_sales_backlog_reports:
+      controllers: customers-sales_backlog_reports
+    item_summary:
+      controllers: items
+      action: show
+    item_history:
+      controllers: items/history
+    item_jobs:
+      controllers: items/jobs
+    item_shippers:
+      controllers: items/shippers
+    item_sales_order_releases:
+      controllers: items/sales_order_releases
+    item_quote_items:
+      controllers: items/quote_items
+    item_purchase_order_items:
+      controllers: items/purchase_order_items
+    item_boms:
+      controllers: items/boms
+    vendor_summary:
+      controllers: vendors
+      action: show
+    vendor_purchase_order_items:
+      controllers: vendors/purchase_order_items
+    sales_reports:
+      controllers: sales_reports bookings_reports backlog_reports
+    commission_reports:
+      controllers: commission_reports commission_rates commission_backlog_reports
