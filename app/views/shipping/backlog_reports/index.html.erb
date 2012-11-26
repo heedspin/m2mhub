@@ -1,6 +1,12 @@
-<%= semantic_form_for @search, :as => 'search', :url => sales_backlog_reports_path, :html => {:method => :get} do |f| %>
+<%= render 'shipping/submenu' %>
+<br />
+
+<%= semantic_form_for @report, :as => 'search', :url => shipping_backlog_reports_path, :html => {:method => :get} do |f| %>
+	<%= f.inputs do %>
+		<%= f.input :sales_order_numbers %>
+	<% end %>
 	<%= f.inputs :class => 'floatyfields' do %>
-	 	<%= f.input :due_after, :as => :calendar, :label => 'Due After', :value => @search.due_after %>
+	 	<%= f.input :due_after, :as => :calendar, :label => 'Due After', :value => @report.due_after %>
 	  <%= f.input :due_date, :as => :calendar, :label => 'Due By' %>
 	<% end %>
 	<%= f.inputs :class => 'floatyfields' do %>
@@ -9,7 +15,7 @@
 	<% end %>
 	<%= f.inputs :class => 'floatyfields' do %>
 		<%= f.input :backlog_group_id, :as => :select, :collection => BacklogGroup.all %>
-		<%= f.input :page_per_customer %>
+		<%= f.input :page_per_customer, :as => :boolean %>
 	<% end %>
 	<%= f.buttons :class => 'floatyfields buttons' do %>
 	  <%= f.commit_button 'View' %>
@@ -19,8 +25,8 @@
 
 <%= set_focus('#search_due_date') %>
 
-<% if @search_performed %>
-<%= render 'sales_backlog_reports/list' %>
+<% if @report.releases.size > 0 %>
+<%= render 'shipping/backlog_reports/list' %>
 <% end %>
 
 <% content_for :javascripts do %>

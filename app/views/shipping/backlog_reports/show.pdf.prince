@@ -14,6 +14,6 @@
     </style>
   </head>
   <body>
-    <%= render :template => 'sales_backlog_reports/_list.html.erb' %>
+    <%= render :template => 'shipping/backlog_reports/_list.html.erb' %>
   </body>
 </html>

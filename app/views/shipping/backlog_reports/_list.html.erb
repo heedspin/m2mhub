@@ -13,7 +13,7 @@
 		</tr>
 	</thead>
 <% last_customer = nil %>
-<% @releases.each do |r| %>
+<% @report.releases.each do |r| %>
 	<% current_customer = r.sales_order.customer_number %>
 	<% pagebreak = "page-break-before" if (@page_per_customer and last_customer and (last_customer != current_customer)) %>
 	<%# if last_customer and (last_customer != current_customer) %>

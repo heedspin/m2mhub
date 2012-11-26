@@ -79,6 +79,12 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :fsono => sono }
     }
   }
+  scope :sales_order_numbers, lambda { |so_numbers|
+    so_numbers = so_numbers.map { |n| M2m::SalesOrder.pad_sales_order_number(n) }
+    {
+      :conditions => [ 'sorels.fsono in (?)', so_numbers ]
+    }
+  }
   scope :with_number, lambda { |num|
     {
       :conditions => { :finumber => num }

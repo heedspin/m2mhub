@@ -23,7 +23,7 @@ authorization do
     has_permission_on :shipping_shipping_dashboard, :to => :read
     has_permission_on :shipping_shippers, :to => :read
     has_permission_on :shipping_receivers, :to => :read
-    has_permission_on :sales_backlog_reports, :to => :manage
+    has_permission_on :shipping_backlog_reports, :to => :manage
     has_permission_on :sales_order_releases, :to => :read
     has_permission_on :sales_quote_items, :to => :read
     has_permission_on :items_history, :to => :read
