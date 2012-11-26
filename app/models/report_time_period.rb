@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class ReportTimePeriod < ActiveHash::Base
   self.data = [
     {:id => 1, :name => 'Day'},
@@ -6,5 +6,5 @@ class ReportTimePeriod < ActiveHash::Base
     {:id => 3, :name => 'Month'},
     {:id => 4, :name => 'Year'}
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

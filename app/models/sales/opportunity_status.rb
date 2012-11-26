@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class Sales::OpportunityStatus < ActiveHash::Base
   self.data = [
     {:id => 1, :open => true,  :name => 'Active'},
@@ -13,5 +13,5 @@ class Sales::OpportunityStatus < ActiveHash::Base
   def self.open
     all.select(&:open?)
   end
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

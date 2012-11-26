@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class M2mhub::ExternalEventStatus < ActiveHash::Base
   self.data = [
     {:id => 1, :name => 'Queued'},
@@ -6,5 +6,5 @@ class M2mhub::ExternalEventStatus < ActiveHash::Base
     {:id => 3, :name => 'Error'},
     {:id => 4, :name => 'Rejected'}
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class UserRole < ActiveHash::Base
   self.data = [
     { :id => 1, :name => 'Admin' },
@@ -8,7 +8,7 @@ class UserRole < ActiveHash::Base
     { :id => 5, :name => 'Doogle Admin'},
     { :id => 6, :name => 'Engineer'}
   ]
-  include ActiveHashMethods  
+  include Plutolib::ActiveHashMethods  
   
   def self.default
     UserRole.find(2)

@@ -15,8 +15,6 @@
 #  updated_at            :datetime
 #
 
-require 'active_hash_methods'
-
 class M2mhub::Trigger < M2mhub::Base
   set_table_name 'm2mhub_triggers'
   belongs_to_active_hash :trigger_state, :class_name => 'M2mhub::TriggerState'

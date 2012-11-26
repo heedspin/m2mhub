@@ -21,7 +21,6 @@
 
 require 'plutolib/stateful_delayed_report'
 require 'plutolib/to_xls'
-require 'active_hash_methods'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'

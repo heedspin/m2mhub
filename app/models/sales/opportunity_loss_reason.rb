@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class Sales::OpportunityLossReason < ActiveHash::Base
   self.data = [
     {:id => 1,  :name => 'Customer Stopped Responding', :cmethod => :dark },
@@ -12,5 +12,5 @@ class Sales::OpportunityLossReason < ActiveHash::Base
     {:id => 9,  :name => 'No Bid: Business Too Small'},
     {:id => 10, :name => 'No Bid: Wrong Product'}
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

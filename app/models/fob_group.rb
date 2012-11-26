@@ -1,7 +1,7 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class FobGroup < ActiveHash::Base
   self.data = AppConfig.fob_groups
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
   
   def self.find_by_fob(fob)
     fob = fob.strip.downcase

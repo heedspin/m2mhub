@@ -1,9 +1,9 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class M2m::JobType < ActiveHash::Base
   self.data = [
     {:key => 'C', :name => 'Customer'},
     {:key => 'I', :name => 'Internal'},
     {:key => 'T', :name => 'Template'},
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

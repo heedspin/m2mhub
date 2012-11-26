@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class Sales::OpportunitySource < ActiveHash::Base
   self.data = [
     {:id => 1, :position => 1, :name => 'Web'},
@@ -10,5 +10,5 @@ class Sales::OpportunitySource < ActiveHash::Base
     {:id => 8, :position => 7, :name => 'Advertisement'},
     {:id => 6, :position => 8, :name => 'Other'},
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

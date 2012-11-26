@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class M2m::Status < ActiveHash::Base
   self.data = [
     {:id => 1,  :name => 'Open'},
@@ -14,7 +14,7 @@ class M2m::Status < ActiveHash::Base
     {:id => 11, :name => 'Completed'},
     {:id => 12, :name => 'Void'}
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
   
   def self.find_by_name(txt)
     return nil unless txt.present?
