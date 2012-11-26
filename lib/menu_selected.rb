@@ -70,44 +70,38 @@ module MenuSelected
   def menu_active?(menu_key)
     menu_config = MenuConfigurations.instance.key(menu_key)
     result = false
-    dbgtxt = [ "menu_active? #{menu_key}", menu_config ]
+    # dbgtxt = [ "menu_active? #{menu_key}", menu_config ]
     route_info = Rails.application.routes.recognize_path(request.path)
     if menu_config.path
       result = menu_config.path.match(request.path).present?
-      dbgtxt.push "request.path = #{request.path}"
+      # dbgtxt.push "request.path = #{request.path}"
     elsif menu_config.path_starts_with
       result = request.path.starts_with?(menu_config.path_starts_with)
-      dbgtxt.push "request.path = #{request.path}"
+      # dbgtxt.push "request.path = #{request.path}"
     elsif menu_config.controllers
       controller_name = route_info[:controller]
       result = menu_config.controllers.include?(controller_name)
-      dbgtxt.push "controller_name=#{controller_name}"
-      # if result and menu_config.parent
-      #   parent_id_key = menu_config.parent.to_s.singularize + '_id'
-      #   if result = params[parent_id_key].present?
-      #     dbgtxt.push "#{parent_id_key} = #{params[parent_id_key]}"
-      #   end
-      # end
+      # dbgtxt.push "controller_name=#{controller_name}"
       if result and menu_config.action
         action_name = route_info[:action]
         result = menu_config.action == action_name
-        dbgtxt.push "#{action_name}=#{action_name}"
+        # dbgtxt.push "#{action_name}=#{action_name}"
       end
     end
     if !result and menu_config.children
       menu_config.children.each do |child|
         if result = menu_active?(child)
-          dbgtxt.push "#{child} child active"
+          # dbgtxt.push "#{child} child active"
           break
         end
       end
     end
-    if result
-      dbgtxt.push route_info.inspect
-      Rails.logger.info "menu_active? #{menu_key} = #{result}\n\t" + dbgtxt.join("\n\t")
-    else
-      Rails.logger.info "menu_active? #{menu_key} = #{result} #{route_info.inspect}"
-    end
+    # if result
+    #   dbgtxt.push route_info.inspect
+    #   Rails.logger.info "menu_active? #{menu_key} = #{result}\n\t" + dbgtxt.join("\n\t")
+    # else
+    #   Rails.logger.info "menu_active? #{menu_key} = #{result} #{route_info.inspect}"
+    # end
     result
   end
 
