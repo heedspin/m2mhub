@@ -17,6 +17,10 @@ class Shipping::BacklogReport
     attr_accessor att
   end
   
+  def page_per_customer=(val)
+    @page_per_customer = val.is_a?(String) ? (val.to_i != 0) : val
+  end
+  
   # active_hash_transient_belongs_to :report_status, :class_name => 'ReportStatus'
   active_hash_transient_belongs_to :fob_group
   active_hash_transient_belongs_to :customer_status, :class_name => 'M2m::CustomerStatus'
@@ -57,19 +61,3 @@ class Shipping::BacklogReport
   end
   
 end
-
-# == Schema Information
-#
-# Table name: sales_backlog_reports
-#
-#  id                 :integer(4)      not null, primary key
-#  due_date           :date
-#  report_status_id   :integer(4)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  fob_group_id       :integer(4)
-#  customer_status_id :integer(4)
-#  due_after          :date
-#  page_per_customer  :boolean(1)
-#  backlog_group_id   :integer(4)
-#
