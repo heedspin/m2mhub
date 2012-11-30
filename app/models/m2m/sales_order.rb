@@ -166,7 +166,7 @@ class M2m::SalesOrder < M2m::Base
   end
   
   def closed?
-    self.status.closed?
+    self.status.try(:closed?)
   end
   
   # Default to customer sales master
