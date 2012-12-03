@@ -4,13 +4,13 @@
 <div class="submenu">
 	<ul>
 		<% if permitted_to?(:read, :sales_reports) %>
-		<li class="<%= menu_selected :sales_reports %>">
-			<%= link_to 'Invoiced Sales', sales_reports_url %>
+		<li class="<%= menu_selected :browse_sales_reports %>">
+			<%= link_to 'Browse Sales Reports', sales_reports_url %>
 		</li>
 		<% end %>
 
 		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
-		<li class="<%= menu_selected :invoiced_sales_reports %>">
+		<li class="<%= menu_selected :export_invoiced_sales %>">
 			<%= link_to 'Export', new_invoiced_sales_report_url %>
 		</li>
 		<% end %>

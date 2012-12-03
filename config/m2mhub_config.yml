@@ -44,7 +44,18 @@ m2mhub_config: &m2mhub_config
     quality:
       children: quality/rmas quality/quality_dashboard quality/rma_reports quality/customer_otd_reports quality/credit_memo_reports
     sales:
-      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes sales/commission_reports sales/commission_rates sales/commission_backlog_reports sales/sales_reports sales/bookings_reports sales/opportunities sales/opportunity_comments sales/sales_backlog_reports
+      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes sales/commission_reports sales/commission_rates sales/commission_backlog_reports sales_reports sales/opportunities sales/opportunity_comments
+    sales_reports:
+      children: browse_sales_reports sales_backlog_reports sales_bookings_reports export_invoiced_sales
+    browse_sales_reports: 
+      controllers: sales/sales_reports
+    export_invoiced_sales:
+      controller: sales/invoiced_sales_reports
+      action: new
+    sales_backlog_reports:
+      controllers: sales/backlog_reports
+    sales_bookings_reports:
+      controller: sales/booking_s_reports
     items:
       path_starts_with: /items
     shipping:
@@ -68,7 +79,7 @@ m2mhub_config: &m2mhub_config
     customer_invoiced_sales_reports:
       controllers: customers/invoiced_sales_reports
     customers_sales_backlog_reports:
-      controllers: customers-sales_backlog_reports
+      controllers: customers/sales_backlog_reports
     item_summary:
       controllers: items
       action: show
@@ -91,7 +102,5 @@ m2mhub_config: &m2mhub_config
       action: show
     vendor_purchase_order_items:
       controllers: vendors/purchase_order_items
-    sales_reports:
-      controllers: sales_reports bookings_reports backlog_reports
     commission_reports:
       controllers: commission_reports commission_rates commission_backlog_reports

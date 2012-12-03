@@ -25,7 +25,7 @@
 		<% end %>
 
 		<% if permitted_to?(:read, :sales_reports) %>
-		<li class="<%= menu_selected 'sales/sales_reports' %>">
+		<li class="<%= menu_selected :sales_reports %>">
 			<%= link_to 'Sales Reports', sales_reports_url %>
 		</li>
 		<% end %>

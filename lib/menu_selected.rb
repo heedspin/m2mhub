@@ -2,6 +2,7 @@ module MenuSelected
   def self.included(base)
     base.class_eval <<-EOS
     helper_method :menu_selected
+    helper_method :request_route_info
     EOS
   end
 
@@ -19,7 +20,7 @@ module MenuSelected
         %w(path_starts_with parent action).each do |k|
           self.send("#{k}=", config[k])
         end
-        if txt = config['controllers']
+        if txt = config['controllers'] || config['controller']
           self.controllers = txt.split(/[ ,]/).map(&:strip)
         end
         if txt = config['children']
@@ -66,12 +67,16 @@ module MenuSelected
   def menu_selected(menu_key)
     menu_active?(menu_key) ? SELECTED_CSS_CLASS : ''
   end
+  
+  def request_route_info
+    Rails.application.routes.recognize_path(request.path)
+  end
 
   def menu_active?(menu_key)
     menu_config = MenuConfigurations.instance.key(menu_key)
     result = false
     # dbgtxt = [ "menu_active? #{menu_key}", menu_config ]
-    route_info = Rails.application.routes.recognize_path(request.path)
+    route_info = request_route_info
     if menu_config.path
       result = menu_config.path.match(request.path).present?
       # dbgtxt.push "request.path = #{request.path}"
