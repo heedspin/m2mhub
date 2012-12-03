@@ -3,6 +3,10 @@
 
 <h2>Backlog Report For <%= @backlog_report.date.to_s(:sales_date) %></h2>
 
+<p>
+	<%= link_to 'Export Backlog Report', sales_backlog_report_url(@backlog_report, :format => 'xls') %>
+</p>
+
 <table class="data">
 	<thead>
 		<tr>

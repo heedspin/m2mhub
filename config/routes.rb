@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     resources :invoiced_sales_reports, :controller => 'customers/invoiced_sales_reports'
     resources :sales_backlog_reports, :controller => 'customers/sales_backlog_reports'
   end
-  resources :sales_backlog_reports, :only => [:index, :show]  
+  resources :sales_backlog_reports, :only => [:index, :show], :controller => 'sales/backlog_reports'
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
@@ -51,7 +51,6 @@ Rails.application.routes.draw do
   match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
-  resources :backlog_report, :only => [:index, :show], :controller => 'sales/backlog_reports'
   resources :opportunities, :controller => 'sales/opportunities'
   resources :opportunity_comments, :controller => 'sales/opportunity_comments'
   

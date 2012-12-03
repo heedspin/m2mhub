@@ -15,7 +15,7 @@
 <% end %>
 
 <% if @backlog_report %>
-<h3><%= link_to 'Backlog', backlog_report_url(@backlog_report) %></h3>
+<h3><%= link_to 'Backlog', sales_backlog_report_url(@backlog_report) %></h3>
 <%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
 <% end %>
 

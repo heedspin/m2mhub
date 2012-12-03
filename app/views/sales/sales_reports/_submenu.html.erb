@@ -11,7 +11,7 @@
 
 		<% if permitted_to?(:manage, :invoiced_sales_reports) %>
 		<li class="<%= menu_selected :export_invoiced_sales %>">
-			<%= link_to 'Export', new_invoiced_sales_report_url %>
+			<%= link_to 'Export Invoiced Sales', new_invoiced_sales_report_url %>
 		</li>
 		<% end %>
 	</ul>
