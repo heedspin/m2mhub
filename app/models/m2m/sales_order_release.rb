@@ -27,13 +27,13 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :due_by, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
+      :conditions => [ 'sorels.fduedate <= ?', date ]
     }
   }
   scope :due_after, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate >= ?', date.to_s(:database) ]
+      :conditions => [ 'sorels.fduedate >= ?', date ]
     }
   }
   scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]

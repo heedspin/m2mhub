@@ -47,6 +47,21 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
+  scope :customers, lambda { |customer_numbers|
+    customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
+    }
+  }
+  scope :order_dates, lambda { |start_date, end_date|
+    start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    }
+  }
 
   def self.attach_to_releases(sales_order_releases)
     sales_order_releases = sales_order_releases.to_a

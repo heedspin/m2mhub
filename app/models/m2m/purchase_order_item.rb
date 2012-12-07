@@ -49,6 +49,12 @@ class M2m::PurchaseOrderItem < M2m::Base
       :conditions => { :pomast => { :fvendno => vendor_number } }
     }
   }
+  scope :last_promised_after, lambda { |date|
+    date = date.is_a?(String) ? Date.parse(date) : date
+    {
+      :conditions => [ 'poitem.flstpdate >= ?', date ]
+    }
+  }
 
   def master_release?
     (self.fmultirls.strip == 'Y') && (self.frelsno.to_i == 0)

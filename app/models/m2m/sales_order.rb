@@ -110,6 +110,8 @@ class M2m::SalesOrder < M2m::Base
   #   }
   # }
   scope :order_dates, lambda { |start_date, end_date|
+    start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
     {
       :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
     }
