@@ -1,3 +1,3 @@
 module M2mhub
-  VERSION = '4.12.1'
+  VERSION = '4.13.0'
 end
