@@ -25,13 +25,13 @@
 	<tbody>
 	<% @purchase_order_items.each do |i| %>
 		<tr>
-			<td><%= i.purchase_order.vendor.try(:name) %></td>
+			<td><%= link_to i.purchase_order.vendor.try(:name), vendor_url(i.purchase_order.vendor) %></td>
 			<td><%= i.purchase_order_number %></td>
 			<td><%= i.item_number %></td>
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
 			<td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
-			<td><%= i.finspect %></td>
+			<td><%= i.inspection_required %></td>
 			<td><%= i.purchase_order.status %></td>
 			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>

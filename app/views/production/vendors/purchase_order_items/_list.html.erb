@@ -13,9 +13,10 @@
 			<th>Rel</th>
 			<th>Quantity</th>
 			<th>Promise<br />Date</th>
+			<th>Inspection<br />Required</th>
 			<th>Status</th>
 			<th>Received</th>
-			<th>Date Received</th>
+			<th>Date<br />Received</th>
 			<th>Unit Cost</th>
 		</tr>
 	</thead>
@@ -28,6 +29,7 @@
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
 			<td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
+			<td><%= i.inspection_required %></td>
 			<td><%= i.purchase_order.status %></td>
 			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
