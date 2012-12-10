@@ -39,7 +39,7 @@ class Sales::CommissionRateFinder
       return sales_order.sales_person, sales_order.commission_percentage, "Sales Order #{sales_order.order_number}"
     end
     if customer and customer.sales_person_key.present?
-      return customer.sales_person_key, customer.commission_percentage, "Customer #{customer.customer_number}"
+      return customer.sales_person_key, customer.sales_person.try(:commission_percentage), "Customer #{customer.customer_number}"
     end
     nil
   end

@@ -23,7 +23,7 @@ class M2m::Customer < M2m::Base
   alias_attribute :work_postal_code, :fzip
   alias_attribute :work_country_name, :fcountry
   alias_attribute :sales_person_key, :fsalespn
-  alias_attribute :commission_percentage, :fsalcompct
+  # alias_attribute :commission_percentage, :fsalcompct
   alias_attribute :created_date, :fcreated
 
   after_initialize :set_defaults
