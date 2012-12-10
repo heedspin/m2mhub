@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     resources :purchase_order_items, :only => [:index], :controller => 'production/vendors/purchase_order_items'
   end
   resources :vendor_approvals, :controller => 'production/vendor_approvals'
+  resources :purchase_order_items, :controller => 'production/purchase_order_items'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'

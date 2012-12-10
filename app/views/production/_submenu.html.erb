@@ -15,6 +15,11 @@
 			<%= link_to 'Labor', labor_reports_url %>
 		</li>
 		<% end %>
+		<% if permitted_to?(:read, :production_purchase_order_items) %>
+		<li class="<%= menu_selected 'production/purchase_order_items' %>">
+			<%= link_to 'Purchase Orders', purchase_order_items_url %>
+		</li>
+		<% end %>
 		<% if permitted_to?(:read, :production_purchase_queue_summaries) %>
 		<li class="<%= menu_selected 'production/purchase_queue_summaries' %>">
 			<%= link_to 'Purchase Queue', purchase_queue_summaries_url %>

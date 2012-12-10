@@ -53,7 +53,7 @@
 		<% end %>
 		<div id="footer">
 			<p><%= raw AppConfig.long_name %> <%= link_to AppConfig.website, "http://#{AppConfig.website}"%></p>
-			<%#= request_route_info.inspect %>
+			<%= request_route_info.inspect if Rails.env.development? %>
 		</div><!-- footer -->
 	</div><!-- end wrapper -->
 </body>

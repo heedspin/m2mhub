@@ -61,7 +61,7 @@ m2mhub_config: &m2mhub_config
     shipping:
       children: shipping/backlog_reports shipping/shipping_dashboard shipping/shippers shipping/receivers
     production:
-      children: production/production_dashboard production/work_center_load_reports production/obsolete_reports production/customer_reports production/inventory_reports production/labor_reports production/purchase_queue_summaries production/vendors production/vendors/purchase_order_items
+      children: production/production_dashboard production/work_center_load_reports production/obsolete_reports production/customer_reports production/inventory_reports production/labor_reports production/purchase_queue_summaries production/vendors production/vendors/purchase_order_items production/purchase_order_items
     vendors:
       children: production/vendors production/vendors/purchase_order_items
     customers:

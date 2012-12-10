@@ -5,18 +5,19 @@ class M2m::PurchaseOrder < M2m::Base
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
 
-  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  scope :status_open,      :conditions => { :fstatus => M2m::PurchaseOrderStatus.open.name }
+  scope :status_closed,    :conditions => { :fstatus => M2m::PurchaseOrderStatus.closed.name }
+  scope :status_cancelled, :conditions => { :fstatus => M2m::PurchaseOrderStatus.cancelled.name }
   
   alias_attribute :vendor_name, :fcompany
+  alias_attribute :change_date, :fcngdate
 
   def status
-    M2m::Status.find_by_name(self.fstatus)
+    M2m::PurchaseOrderStatus.find_by_m2mname(self.fstatus.strip)
   end
   
   def closed?
-    self.fstatus.downcase.strip == 'closed'
+    self.status.try(:closed?)
   end
   
 end
