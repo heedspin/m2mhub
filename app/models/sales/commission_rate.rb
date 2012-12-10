@@ -26,7 +26,7 @@ class Sales::CommissionRate < M2mhub::Base
   
   def revision
     # TODO: Add revision column.
-    ''
+    '000'
   end
 
   protected
