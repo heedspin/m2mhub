@@ -4,12 +4,11 @@ module BelongsToLighthouse
   module ClassMethods
     def belongs_to_lighthouse_ticket
       self.class_eval <<-RUBY
-      include Plutolib::WithRetries
       attr_accessor :lighthouse_ticket
       def lighthouse_ticket
         if @lighthouse_ticket.nil? and self.lighthouse_ticket_id and self.lighthouse_project_id
           begin
-            with_retries do
+            Plutolib::WithRetries.with_retries do
               if @lighthouse_ticket = Lighthouse::Ticket.find(self.lighthouse_ticket_id, :params => { :project_id => self.lighthouse_project_id })
                 # Convert to time objects.
                 @lighthouse_ticket.created_at = Time.parse(@lighthouse_ticket.created_at)
@@ -31,7 +30,7 @@ module BelongsToLighthouse
       attr_accessor :lighthouse_project
       def lighthouse_project
         if @lighthouse_project.nil? and self.lighthouse_project_id
-          with_retries do
+          Plutolib::WithRetries.with_retries do
             @lighthouse_project = Lighthouse::Project.find(self.lighthouse_project_id)
           end
         end
