@@ -8,6 +8,7 @@ class M2m::ReceiverItem < M2m::Base
   alias_attribute :purchase_order_item_number, :fpoitemno
   alias_attribute :release_number, :frelsno
   alias_attribute :purchase_order_item_number, :fpoitemno
+  alias_attribute :item_number, :fitemno
 
   def purchase_order_item
     if self.receiver.purchase_order

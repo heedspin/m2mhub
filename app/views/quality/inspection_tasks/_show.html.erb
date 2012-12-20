@@ -1,0 +1,37 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Part Number</th>
+			<th>Quantity</th>
+			<% if task.task_type.rma_inspection? %>
+			<th>RMA</th>
+			<% else %>
+			<th>PO</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= task.status %></td>
+			<td><%= task.task_type %></td>
+			<td><%= link_to_item task.item %></td>
+			<td><%= cm task.quantity, :item_quantity %></td>
+			<% if task.task_type.rma_inspection? %>
+			<td><%= link_to task.rma_number, rma_url(task.rma_number) %></td>
+			<% else %>
+			<td><%= link_to task.purchase_order_number, purchase_order_url(task.purchase_order_number) %></td>
+			<% end %>
+		</tr>
+		<% if task.body.present? %>
+		<tr>
+			<td colspan="5"><%= simple_format task.body %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			
+
+<% if task.lighthouse_ticket %>
+<%= render 'quality/inspection_tasks/lighthouse_ticket', :ticket => task.lighthouse_ticket %>
+<% end %>

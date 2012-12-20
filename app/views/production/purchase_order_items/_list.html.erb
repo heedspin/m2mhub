@@ -1,11 +1,13 @@
-<% if @purchase_order_items.size == 0 %>
+<% if purchase_order_items.size == 0 %>
 	<p>No purchase orders</p>
 <% else %>
 <table class="data">
 	<thead>
 		<tr>
-			<th>Item</th>
+			<% if include_po_link %>
 			<th>PO No</th>
+			<% end %>
+			<th>Item</th>
 			<th>Item No</th>
 			<th>Rel</th>
 			<th>Quantity</th>
@@ -18,10 +20,12 @@
 		</tr>
 	</thead>
 	<tbody>
-	<% @purchase_order_items.each do |i| %>
+	<% purchase_order_items.each do |i| %>
 		<tr>
+			<% if include_po_link %>
+			<td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
+			<% end %>
 			<td><%= link_to_item(i.item, i.part_number) %></td>
-			<td><%= i.purchase_order_number %></td>
 			<td><%= i.item_number %></td>
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>

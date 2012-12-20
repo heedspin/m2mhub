@@ -16,8 +16,5 @@ class HomeController < M2mhubController
                                                 :bookings_reports => Sales::BookingsReport.by_date_desc.limit(8) )
       @backlog_report = Sales::BacklogReport.by_date_desc.first
     end
-    if M2mhub::Feature.enabled?(:inspection_queue)
-      @inspection_items = Production::InspectionItem.all.sort_by { |ip| ip.last_inbound_transaction.time }.reverse
-    end
   end
 end

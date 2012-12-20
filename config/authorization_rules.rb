@@ -55,7 +55,7 @@ authorization do
     has_permission_on :quality_rma_reports, :to => :make
     has_permission_on :quality_credit_memo_reports, :to => :make
     has_permission_on :quality_rmas, :to => :read
-    has_permission_on :quality_rma_lighthouse_tickets, :to => :create
+    has_permission_on :quality_inspection_tasks, :to => :manage
     has_permission_on :invoiced_sales_reports, :to => :manage
     has_permission_on :pro_forma_sales_reports, :to => :manage
     has_permission_on :sales_commission_rates, :to => :manage
@@ -81,6 +81,8 @@ authorization do
     has_permission_on :production_vendors, :to => :read
     has_permission_on :production_vendors_purchase_order_items, :to => :read
     has_permission_on :production_vendor_approvals, :to => :read
+    has_permission_on :production_purchase_order_items, :to => :read
+    has_permission_on :production_purchase_orders, :to => :read
   end
   
   role :manager do

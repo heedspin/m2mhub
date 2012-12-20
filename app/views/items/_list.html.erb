@@ -2,14 +2,17 @@
 	<thead>
 		<tr>
 			<th><%= AppConfig.short_name %> Part</th>
+			<% if AppConfig.use_item_revisions? %>
 			<th>Rev</th>
 			<th>Cur</th>
+			<% end %>
 			<th>Vendor Part</th>
 			<th>Description</th>
 			<th>Group</th>
 			<th>Source</th>
 			<th>Bin</th>
 			<th><%= AppConfig.cost_method.titleize %></th>
+			<th>Selling Price</th>
 			<th>On Hand</th>
 			<th>Committed</th>
 			<th>Available</th>
@@ -21,13 +24,16 @@
 		<tr>
 			<% pn = @search.present? ? search_excerpt(i.part_number, @search.try(:fpartno)) : i.part_number %>
 			<td><%= link_to_item i, pn %></td>
+			<% if AppConfig.use_item_revisions? %>
 			<td><%= i.revision %></td>
 			<td><%= i.is_current? ? 'X' : '' %></td>
+			<% end %>
 			<td><%= i.vendors.map { |v| search_excerpt(v.fvpartno.strip, @search.try(:fpartno)) }.join(', ').html_safe %></td>
 			<td><%= h i.fdescript %></td>
 			<td><%= i.group.try(:text) %></td>
 			<td><%= i.source.try(:name) %></td>
 			<td><%= cm i.total_cost, :dollars %></td>
+			<td><%= cm i.price, :dollars %></td>
 			<td><%= render 'items/locations', :item => i %></td>
 			<td class="right"><%= cm i.quantity_on_hand, :item_quantity, 0 %></td>
 			<td class="right"><%= cm i.quantity_committed, :item_quantity, 0 %></td>

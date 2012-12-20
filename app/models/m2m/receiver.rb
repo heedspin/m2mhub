@@ -8,6 +8,10 @@ class M2m::Receiver < M2m::Base
   alias_attribute :time_received, :fdaterecv  
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :received_by, :faccptby
+  alias_attribute :receiver_number, :freceiver
+  def rma_number
+    self.frmano.strip
+  end
   
   def date_received
     self.time_received.to_date
@@ -34,6 +38,28 @@ class M2m::Receiver < M2m::Base
     }
   }
   scope :by_id_desc, :order => 'rcmast.freceiver desc'
+  scope :rma_number, lambda { |rma_number|
+    if rma_number.is_a?(Enumerable)
+      {
+        :conditions => ['rcmast.frmano in (?)', rma_number.map { |n| M2m::Rma.pad_rma_number(n) } ]
+      }
+    else
+      {
+        :conditions => { :frmano => M2m::Rma.pad_rma_number(rma_number) }
+      }
+    end
+  }
+  scope :purchase_order_number, lambda { |pono|
+    if pono.is_a?(Enumerable)
+      {
+        :conditions => ['rcmast.fpono in (?)', pono.map { |n| M2m::PurchaseOrder.pad_purchase_order_number(n) } ]
+      }
+    else
+      {
+        :conditions => { :fpono => M2m::PurchaseOrder.pad_purchase_order_number(pono) }
+      }
+    end
+  }
     
   def status
     # fcstatus are 'C' and 'I' but always show up received.

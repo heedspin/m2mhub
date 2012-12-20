@@ -20,12 +20,17 @@ module BelongsToItem
         end
         RUBY
       end
+      load_item = if AppConfig.use_item_revisions?
+        "M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first"
+      else
+        "M2m::Item.part_number(self.#{part_number_method}).first"
+      end
       self.class_eval <<-RUBY
       #{x.join("\n")}
       attr_accessor :#{item_method}
       def #{item_method}
         unless @_loaded_#{item_method}
-          @#{item_method} = M2m::Item.part_number(self.#{part_number_method}).revision(self.#{revision_method}).first
+          @#{item_method} = #{load_item}
           @_loaded_#{item_method} = true
         end
         @#{item_method}

@@ -1,0 +1,42 @@
+<%= render 'production/submenu' %>
+
+<h2>Purchase Order <%= @purchase_order.purchase_order_number %></h2>
+
+<p>
+	Status: <%= @purchase_order.status.name %><br />
+	Vendor: <%= @purchase_order.vendor_name %><br />
+	Ordered: <%= @purchase_order.forddate.to_s(:short_human_date_time) %><br />
+	FOB: <%= @purchase_order.fob %></br />
+</p>
+
+<%= render 'production/purchase_order_items/list', :purchase_order_items => @purchase_order.items, :include_po_link => false %>
+
+<h3>Receivers</h3>
+<% if @purchase_order.receivers.count == 0 %>
+<p>No receivers</p>
+<% else %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Receiver</th>
+			<th>Receiver Line No</th>
+			<th>Part Number</th>
+			<th>Quantity</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @purchase_order.receivers.includes(:items).each do |receiver| %>
+<% receiver.items.each do |item| %>
+		<tr>
+			<td><%= receiver.date_received.to_s(:short_human_date) %></td>
+			<td><%= receiver.receiver_number %></td>
+			<td><%= item.item_number %></td>
+			<td><%= link_to_item item %></td>
+			<td><%= cm item.quantity, :item_quantity %></td>
+		</tr>
+<% end %>
+<% end %>
+	</tbody>
+</table>
+<% end %>

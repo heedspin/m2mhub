@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
+  resources :inspection_tasks, :controller => 'quality/inspection_tasks'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
   resources :commission_rates, :controller => 'sales/commission_rates'
@@ -59,9 +60,7 @@ Rails.application.routes.draw do
   resources :receivers, :only => [:index, :show], :controller => 'shipping/receivers'
   resources :shipping_backlog_reports, :only => [:index, :show], :controller => 'shipping/backlog_reports'
   
-  resources :rmas, :only => [:show], :controller => 'quality/rmas' do
-    resource :lighthouse_ticket, :only => :create, :controller => 'quality/lighthouse_tickets'
-  end
+  resources :rmas, :only => [:show], :controller => 'quality/rmas'
 
   match 'production' => 'production/production_dashboard#index'
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
@@ -77,7 +76,8 @@ Rails.application.routes.draw do
     resources :purchase_order_items, :only => [:index], :controller => 'production/vendors/purchase_order_items'
   end
   resources :vendor_approvals, :controller => 'production/vendor_approvals'
-  resources :purchase_order_items, :controller => 'production/purchase_order_items'
+  resources :purchase_order_items, :only => [:index], :controller => 'production/purchase_order_items'
+  resources :purchase_orders, :only => [:show], :controller => 'production/purchase_orders'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'

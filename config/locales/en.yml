@@ -63,3 +63,11 @@ en:
         lighthouse_body: Ticket Body
         lighthouse_assigned_user_id: Assigned To
         lighthouse_project_id: Project
+      quality/inspection_task:
+        lighthouse_title: Ticket Title
+        lighthouse_body: Ticket Body
+        lighthouse_assigned_user_id: Assigned To
+        lighthouse_project_id: Lighthouse Project
+        task_type: Type
+        last_receiver_id: Last Receiver
+        rma_number: RMA Number

@@ -26,6 +26,6 @@
 
 <%= will_paginate @purchase_order_items %>
 
-<%= render 'list' %>
+<%= render 'list', :purchase_order_items => @purchase_order_items, :include_po_link => true %>
 
 <%= will_paginate @purchase_order_items %>

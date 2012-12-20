@@ -197,6 +197,7 @@ class M2m::Item < M2m::Base
   alias_attribute :abc_code, :fabccode
   alias_attribute :user_memo, :fmusrmemo1
   alias_attribute :standard_memo, :fstdmemo
+  alias_attribute :price, :fprice
   
   # Uses same calculation that m2m uses.
   def quantity_available
@@ -339,6 +340,10 @@ class M2m::Item < M2m::Base
   
   def bom_parents
     M2m::BomItem.with_child_item(self).map(&:parent_item)
+  end
+  
+  def same_item?(other_item)
+    (other_item.part_number == self.part_number) and (!AppConfig.use_item_revisions? or (other_item.revision == self.revision))
   end
   
   # def customers

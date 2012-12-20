@@ -59,6 +59,11 @@ class M2m::PurchaseOrderItem < M2m::Base
   scope :by_last_promised, :order => :flstpdate
   scope :by_date_received_desc, :order => 'poitem.frcpdate desc'
   scope :inspection_required, lambda { |ch|
+    if ch.is_a?(TrueClass)
+      ch = 'Y'
+    elsif ch.is_a?(FalseClass)
+      ch = 'N'
+    end
     {
       :conditions => { :finspect => ch }
     }
@@ -213,3 +218,4 @@ end
 #  AvailDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
 #
+

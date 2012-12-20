@@ -18,7 +18,7 @@
 		<tr>
 			<td>
 				<%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
-				<% if rma.lighthouse_ticket_reference %>
+				<% if M2mhub::Feature.enabled?(:inspection_tasks) and rma.inspection_task %>
 				<%= link_to image_tag(AppConfig.lighthouse_image, :width => 16), rma_url(rma.rma_number) %>
 				<% end %>
 			</td>

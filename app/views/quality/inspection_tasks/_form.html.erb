@@ -1,0 +1,52 @@
+<%= f.semantic_errors :base %>
+
+<%= f.inputs do %>
+	<%= f.input :status, :collection => Quality::InspectionTaskStatus.options %>
+	<%= f.input :task_type, :collection => Quality::InspectionTaskType.all, :include_blank => false %>
+	<%= f.input :part_number %>
+	<%= f.input :purchase_order_number, :wrapper_html => { :class => 'incoming_inspection' } %>
+	<%#= f.input :purchase_order_item_number, :wrapper_html => { :class => 'incoming_inspection' } %>
+	<%= f.input :rma_number, :wrapper_html => { :class => 'rma_inspection' } %>
+	<%#= f.input :rma_item_number, :wrapper_html => { :class => 'rma_inspection' } %>
+	<%= f.input :quantity %>
+	<% if permitted_to? :edit_last_receiver_id %>
+	<%= f.input :last_receiver_id %>
+	<% end %>
+	<%= f.input :title %>
+	<%= f.input :body %>
+	<%= f.input :create_lighthouse_ticket, :as => :boolean, :label => (@task.new_record? ? 'Create' : 'Edit') + ' Lighthouse Ticket' %>
+	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
+	<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
+	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field' }%>
+	<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field' } %>
+<% end %>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("#quality_inspection_task_create_lighthouse_ticket").change(function() {
+		if ($(this).is(":checked")) {
+			turn_on_fields(".ticket_field");
+			turn_off_fields(".not_ticket_field");
+		} else {
+			turn_on_fields(".not_ticket_field");
+			turn_off_fields(".ticket_field");
+		}
+	}).trigger('change');
+
+	var all_fields = <%= raw Quality::InspectionTaskType.all.map(&:cmethod).to_json %>;
+	var show_map = <%= raw Hash[*Quality::InspectionTaskType.all.map { |s| [s.id, s.cmethod] }.flatten].to_json %>
+	$("#quality_inspection_task_task_type_id").change(function() {
+		var to_show = show_map[$(this).val()];
+		for (var i = 0; i < all_fields.length; i++) {
+			field = all_fields[i];
+			if (to_show == field) {
+				turn_on_fields("." + field);
+			} else {
+				turn_off_fields("." + field);
+			}
+		}
+	}).trigger('change');
+});
+</script>
+<% end %>

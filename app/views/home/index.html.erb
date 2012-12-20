@@ -1,9 +1,4 @@
 
-<% if @inspection_items %>
-<h3>Awaiting Inspection</h3>
-<%= render 'production/inspection_items/list' %>
-<% end %>
-
 <% if @events and (@events.size > 0) %>
 <h3><%= link_to 'Events', m2mhub_events_url %></h3>
 <%= render 'm2mhub/events/list' %>

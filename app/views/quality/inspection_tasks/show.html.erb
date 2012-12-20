@@ -1,0 +1,11 @@
+<%= render 'quality/submenu' %>
+<br />
+
+<% if permitted_to? :manage, :quality_inspection_tasks %>
+<ul class="submenu">
+	<li><%= link_to 'edit', edit_inspection_task_url(@task) %></li>
+</ul>
+<% end %>
+
+<h2>Inspection Task: <%= @task.title %></h2>
+<%= render 'show', :task => @task %>

@@ -12,14 +12,14 @@ class M2mhub::Feature
     end
     
     def enabled?(user)
-      (@config == 'all') || @config.member?(user.email)
+      (@config == 'all') || (user and @config.member?(user.email))
     end
   end
   
   class << self
     attr_accessor :current_user
     def enabled?(feature)
-      current_user.present? && self.feature_config(feature).try(:enabled?, current_user)
+      self.feature_config(feature.to_s).try(:enabled?, current_user)
     end
     
     def feature_config(feature)

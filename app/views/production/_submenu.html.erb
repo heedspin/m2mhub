@@ -16,7 +16,7 @@
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :production_purchase_order_items) %>
-		<li class="<%= menu_selected 'production/purchase_order_items' %>">
+		<li class="<%= menu_selected 'purchase_orders' %>">
 			<%= link_to 'Purchase Orders', purchase_order_items_url %>
 		</li>
 		<% end %>

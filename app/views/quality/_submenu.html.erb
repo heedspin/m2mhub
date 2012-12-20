@@ -6,7 +6,7 @@
 		</li>
 		<% end %>
 		<% if permitted_to?(:make, :quality_rma_reports) %>
-		<li class="<%= menu_selected 'quality/rma_reports' %>">
+		<li class="<%= menu_selected 'rma_reports' %>">
 			<%= link_to 'RMA Report', new_rma_report_url %>
 		</li>
 		<% end %>
@@ -18,6 +18,11 @@
 		<% if permitted_to?(:make, :quality_credit_memo_reports) %>
 		<li class="<%= menu_selected 'quality/credit_memo_reports' %>">
 			<%= link_to 'Credit Memo Report', new_credit_memo_report_url %>
+		</li>
+		<% end %>
+		<% if permitted_to?(:read, :quality_inspection_tasks) %>
+		<li class="<%= menu_selected 'quality/inspection_tasks' %>">
+			<%= link_to 'Inspection Tasks', inspection_tasks_url %>
 		</li>
 		<% end %>
 	</ul>

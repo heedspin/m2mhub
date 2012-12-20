@@ -30,15 +30,16 @@
 #  creator_id                         :integer(4)
 #
 
+require 'm2mhub/lighthouse_watcher'
+
 class Sales::OpportunityComment < M2mhub::Base
   set_table_name 'sales_opportunity_comments'
+  include M2mhub::LighthouseWatcher
   
   belongs_to :opportunity, :class_name => 'Sales::Opportunity'
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus', :foreign_key => :status_id
   belongs_to_active_hash :previous_status, :class_name => 'Sales::OpportunityStatus', :foreign_key => :previous_status_id
   belongs_to :creator, :class_name => 'User'
-  belongs_to_lighthouse_ticket
-  belongs_to_lighthouse_project
   belongs_to_active_hash :comment_type, :class_name => 'Sales::OpportunityCommentType', :foreign_key => :comment_type_id
   belongs_to_active_hash :loss_reason, :class_name => 'Sales::OpportunityLossReason', :foreign_key => :loss_reason_id
   belongs_to :quote, :class_name => 'M2m::Quote', :primary_key => 'fquoteno'
@@ -82,6 +83,47 @@ class Sales::OpportunityComment < M2mhub::Base
     self.comment_type.try(:ticket?)
   end
   
+  before_create :handle_lighthouse
+  def handle_lighthouse
+    if self.create_lighthouse_ticket and self.lighthouse_ticket_id.nil? and self.lighthouse_project_id.present?
+      self.lighthouse_watcher_create(self.lighthouse_title, self.lighthouse_body, self.lighthouse_assigned_user_id)
+    elsif self.comment =~ /lighthouseapp.com\/projects\/(\d+)[^\/]*\/tickets\/(\d+)/
+      # Import the ticket and change our comment type.
+      project_id = $1
+      ticket_id = $2
+      if self.lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => project_id })
+        self.lighthouse_ticket_id = ticket_id
+        self.lighthouse_project_id = project_id
+        self.lighthouse_watcher_update
+        self.comment_type = Sales::OpportunityCommentType.ticket
+        # Ignore any status settings.
+        self.status_id = self.opportunity.status_id
+      end
+    else
+      true
+    end
+  end  
+  
+  before_save :pad_quote_and_sales_numbers
+  def pad_quote_and_sales_numbers
+    if self.status.active?
+      self.quote_id = M2m::Quote.pad_quote_number(self.quote_id) if self.quote_id.present?
+    elsif self.status.won?
+      self.sales_order_id = M2m::SalesOrder.pad_sales_order_number(self.sales_order_id) if self.sales_order_id.present?
+    end
+    true
+  end
+  
+  # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
+  def update_status!
+    self.lighthouse_watcher_update
+    if self.changed?
+      self.save_without_timestamping!
+    else
+      true
+    end
+  end
+  
   before_create :update_opportunity
   def update_opportunity
     if self.status_id != self.opportunity.status_id
@@ -97,83 +139,9 @@ class Sales::OpportunityComment < M2mhub::Base
     self.opportunity.save! if self.opportunity.changed?
     true
   end
-
-  before_create :handle_lighthouse
-  def handle_lighthouse
-    if self.create_lighthouse_ticket and self.lighthouse_ticket_id.nil? and self.lighthouse_project_id.present?
-      self.lighthouse_ticket = Lighthouse::Ticket.new(:project_id => self.lighthouse_project_id)
-      self.lighthouse_ticket.title = self.lighthouse_title
-      self.lighthouse_ticket.body = self.lighthouse_body
-      self.lighthouse_ticket.assigned_user_id = self.lighthouse_assigned_user_id if self.lighthouse_assigned_user_id
-      if self.lighthouse_ticket.save
-        self.lighthouse_ticket_id = self.lighthouse_ticket.id
-        self.update_ticket_state
-      else
-        false
-      end
-    elsif self.comment =~ /lighthouseapp.com\/projects\/(\d+)[^\/]*\/tickets\/(\d+)/
-      # Import the ticket and change our comment type.
-      project_id = $1
-      ticket_id = $2
-      if self.lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => project_id })
-        self.lighthouse_ticket_id = ticket_id
-        self.lighthouse_project_id = project_id
-        self.update_ticket_state
-        self.comment_type = Sales::OpportunityCommentType.ticket
-        # Ignore any status settings.
-        self.status_id = self.opportunity.status_id
-      end
-    else
-      true
-    end
-  end
   
-  before_save :pad_quote_and_sales_numbers
-  def pad_quote_and_sales_numbers
-    if self.status.active?
-      self.quote_id = M2m::Quote.pad_quote_number(self.quote_id) if self.quote_id.present?
-    elsif self.status.won?
-      self.sales_order_id = M2m::SalesOrder.pad_sales_order_number(self.sales_order_id) if self.sales_order_id.present?
-    end
-    true
-  end
-  
-  def update_ticket_state
-    if self.lighthouse_ticket
-      self.lighthouse_closed       = self.lighthouse_ticket.closed?
-      self.lighthouse_status       = self.lighthouse_ticket.state
-      self.lighthouse_url          = self.lighthouse_ticket.url
-      self.lighthouse_milestone    = self.lighthouse_ticket.milestone_title
-      self.lighthouse_title        = self.lighthouse_ticket.title
-      self.lighthouse_project_name = self.lighthouse_project.try(:name)
-      if last_comment = self.lighthouse_ticket.versions.last
-        self.lighthouse_last_assigned_user_name = last_comment.assigned_user_name
-        self.lighthouse_last_comment            = last_comment.body_html
-        self.lighthouse_last_updated_at         = last_comment.created_at
-        self.lighthouse_last_updater            = last_comment.user_name
-        self.updated_at                         = self.lighthouse_last_updated_at
-      else
-        self.lighthouse_last_assigned_user_name = self.lighthouse_ticket.assigned_user_name
-        self.lighthouse_last_comment            = self.lighthouse_ticket.body_html
-      end
-    else
-      self.lighthouse_closed = self.lighthouse_status = self.lighthouse_url = nil
-    end
-  end
-
-  # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
-  def update_status!
-    # Bypass readonly exception.
-    self.update_ticket_state
-    if self.changed?
-      self.save_without_timestamping!
-    else
-      true
-    end
-  end
-  
-  after_save :update_opportunity
-  def update_opportunity
+  after_save :update_opportunity_updated_at
+  def update_opportunity_updated_at
     if self.updated_at and (self.opportunity.updated_at < self.updated_at)
       self.opportunity.updated_at = self.updated_at
     end

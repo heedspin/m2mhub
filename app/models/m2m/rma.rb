@@ -14,24 +14,35 @@ class M2m::Rma < M2m::Base
   alias_attribute :customer_name, :fcompany
   alias_attribute :severity_code, :fcseverty
   alias_attribute :sales_order_number, :fcsono
+  alias_attribute :padded_rma_number, :fcrmano
 
   scope :between, lambda { |start_date, end_date|
-    { 
+    {
       :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
     }
   }
-  
+
   scope :with_rma_numbers, lambda { |rma_numbers|
     {
       :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
     }
   }
-  
+
+  attr_accessor :inspection_task
+  def inspection_task
+    if @inspection_task.nil?
+      @inspection_task = Quality::InspectionTask.rma_number(self.rma_number).first
+      @inspection_task = false if @inspection_task.nil?
+    end
+    # This trickery allows us to set the inspection_task to false and keep it from trying to load.
+    @inspection_task.is_a?(FalseClass) ? nil : @inspection_task
+  end
+
   # This works:
   # select * from syrmama where fcrmano = 85
   #
   # This does not:
-  # select * from syrmama where fcrmano = N'85'  
+  # select * from syrmama where fcrmano = N'85'
   def self.find(*args)
     if (args.size == 1) and (id = args.first) and (id.is_a?(Fixnum) or id.is_a?(String))
       self.find(:first, :conditions => { :fcrmano => id.to_i })
@@ -39,14 +50,14 @@ class M2m::Rma < M2m::Base
       super
     end
   end
-  
-  # def self.zero_pad(id)
-  #   # 000000000000005    
-  #   "%010d" % id
-  # end
+
+  def self.pad_rma_number(number)
+    # 000000000000005
+    "%015d" % number.to_i
+  end
 
   def rma_number
-    self.fcrmano.to_i
+    @rma_number ||= self.fcrmano.to_i
   end
 
   def company_rma_number
@@ -55,7 +66,7 @@ class M2m::Rma < M2m::Base
     else
       self.send(AppConfig.rma_company_rma_number_field)
     end
-  end  
+  end
 
   def status
     M2m::Status.find_by_name(self.fcstatus)
@@ -64,116 +75,18 @@ class M2m::Rma < M2m::Base
     self.status.try(:open?)
   end
 
-  def company_codes
-    self.send(AppConfig.rma_custom_codes_field)
-  end
-  def company_codes=(val)
-    self.send(AppConfig.rma_custom_codes_field + '=', val)
-  end
-
   def severity
     M2m::CsPopup.cached_lookup('SYRMAMA.FCSEVERTY', self.fcseverty)
   end
   def severity_name
     self.severity.try(:text).try(:strip)
   end
-  
-  # def self.import_company_codes
-  #   self.all.each do |rma|
-  #     codes = []
-  #     if rma.user_defined1.present?
-  #       old_cm = rma.user_defined1.strip
-  #       if old_cm.downcase.starts_with?('cm-')
-  #         codes.push old_cm
-  #       elsif old_cm =~ /\w*^N\/?A$\w*/
-  #         codes.push 'CM-None'     
-  #       end
-  #     end
-  #     if codes.size > 0
-  #       rma.company_codes = codes.join(', ')
-  #     end
-  #     unless %w(Q S O C).include?(rma.severity_code)
-  #       rma.severity_code = rma.inquiry.try(:category_code)
-  #     end
-  #     if rma.changed?
-  #       puts "Updating rma #{rma.rma_number}: #{rma.changes.inspect}"
-  #       # rma.save
-  #     end
-  #   end
-  #   puts "Done"
-  # end
-  
-  def self.import_credit_memo_references
-    self.all.each do |rma|
-      if rma.credit_memo_reference.present?
-        if rma.credit_memo_reference.no_credit_memo?
-          puts "Rma #{rma.rma_number} has disabled credit memo reference"
-        else
-          if rma.items.all.size != 1
-            puts "**** Too many rma items #{rma.items.all.size}"
-          else
-            rma_item = rma.items.first
-            puts "Updating rma #{rma.rma_number} for #{rma_item.part_number} with credit memo reference: #{rma.credit_memo_reference}"
-            invoice = M2m::Invoice.find(rma.credit_memo_reference.db_invoice_number)
-            invoice_items = invoice.items.all.select { |ii| ii.part_number == rma_item.part_number }
-            invoice_items.each do |invoice_item|
-              if invoice_item.rma_key.present?
-                puts "**** Invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} has an existing rma_key #{invoice_item.rma_key}"
-              else
-                invoice_item.rma_item = rma_item
-                if invoice_item.changes.size != 1
-                  puts "**** Too many changes.  Not setting invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} rma_key to #{invoice_item.rma_key}"              
-                  puts "**** Too many changes.  Not saving."
-                else
-                  puts "     Setting invoice #{invoice_item.invoice_number} item #{invoice_item.item_number} rma_key to #{invoice_item.rma_key}"              
-                  # invoice_item.save
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    puts "Done"
-  end
-  
-  # **********************************************************************
 
-  class CreditMemoReference
-    def self.from(company_codes)
-      return nil unless company_codes.present?
-      # TODO: Allow for CM-NONE or something.
-      if company_codes =~ /(credit|credit ?memo|cm)\W+(\w+)/i
-        self.new($2)
-      end
-    end
-    attr_accessor :invoice_number
-    def initialize(thing)
-      if thing.to_i.to_s == thing
-        @invoice_number = thing
-      else
-        @invoice_number = 'None'
-      end
-    end
-    def encode
-      "CM-#{self.invoice_number}"
-    end
-    def no_credit_memo?
-      self.invoice_number == 'None'
-    end
-    def to_s
-      self.encode
-    end
-    def db_invoice_number
-      M2m::Invoice.format_invoice_number(M2m::InvoiceType.credit_memo, self.invoice_number[/\d+/])
-    end
+  # Deprecated ------------------------------------------------
+
+  def company_codes
+    self.send(AppConfig.rma_custom_codes_field)
   end
-  
-  def credit_memo_reference
-    @credit_memo_reference ||= CreditMemoReference.from(self.company_codes)
-  end
-  
-  # **********************************************************************
 
   class LighthouseTicketReference
     def self.from(company_codes)
@@ -210,26 +123,33 @@ class M2m::Rma < M2m::Base
   def lighthouse_ticket_reference
     @lighthouse_ticket_reference ||= LighthouseTicketReference.from(self.company_codes)
   end
-  
+
   def lighthouse_ticket
     self.lighthouse_ticket_reference.try(:ticket)
   end
-  
-  # Console hint:
-  # rma = M2m::Rma.find(119) ; rma.set_lighthouse_ticket_id(78) ; rma.save
-  def set_lighthouse_ticket_id(ticket_id)
-    @lighthouse_ticket_reference = LighthouseTicketReference.new(ticket_id)
-  end
-  
-  # **********************************************************************
 
-  protected
-
-    before_save :encode_company_codes
-    def encode_company_codes
-      self.company_codes = [ self.credit_memo_reference, self.lighthouse_ticket_reference ].compact.map(&:encode).join(', ')      
+  def self.create_inspection_tasks
+    self.includes(:items).all.each do |rma|
+      rma_item = rma.items.first
+      if ticket = rma.lighthouse_ticket
+        if exists = Quality::InspectionTask.task_type(Quality::InspectionTaskType.rma_inspection).not_deleted.where(:lighthouse_ticket_id => ticket.id).first
+          puts "Found task #{exists.id} for rma #{rma.rma_number}"
+        else
+          task = Quality::InspectionTask.new(:status => rma.open? ? Quality::InspectionTaskStatus.in_inspection : Quality::InspectionTaskStatus.closed,
+                                             :task_type => Quality::InspectionTaskType.rma_inspection,
+                                             :rma_number => rma.rma_number,
+                                             :part_number => rma_item.try(:part_number),
+                                             :quantity => rma_item.quantity,
+                                             :title => ticket.title,
+                                             :create_lighthouse_ticket => true,
+                                             :lighthouse_body => ticket.url)
+          task.save!
+          puts "Created task #{task.id} for rma #{rma.rma_number}"
+        end
+      end
     end
-    
+  end
+
 end
 
 # == Schema Information

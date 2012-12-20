@@ -4,6 +4,7 @@ class M2m::PurchaseOrder < M2m::Base
   
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
+  has_many :receivers, :class_name => 'M2m::Receiver', :foreign_key => :fpono, :primary_key => :fpono
 
   scope :status_open,      :conditions => { :fstatus => M2m::PurchaseOrderStatus.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::PurchaseOrderStatus.closed.name }
@@ -11,6 +12,9 @@ class M2m::PurchaseOrder < M2m::Base
   
   alias_attribute :vendor_name, :fcompany
   alias_attribute :change_date, :fcngdate
+  alias_attribute :purchase_order_number, :fpono
+  alias_attribute :order_date, :forddate
+  alias_attribute :fob, :ffob
 
   def status
     M2m::PurchaseOrderStatus.find_by_m2mname(self.fstatus.strip)
@@ -18,6 +22,10 @@ class M2m::PurchaseOrder < M2m::Base
   
   def closed?
     self.status.try(:closed?)
+  end
+  
+  def self.pad_purchase_order_number(number)
+    "%06d" % number.to_i
   end
   
 end
