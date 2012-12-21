@@ -10,6 +10,9 @@ class Quality::InspectionTaskStatus < ActiveHash::Base
   def children
     @children ||= self.children_ids.nil? ? [] : self.children_ids.map { |i| Quality::InspectionTaskStatus.find(i) }
   end
+  def open?
+    Quality::InspectionTaskStatus.all_open.children_ids.include?(self.id)
+  end
   class << self
     def options
       @options ||= all.select { |s| s.children_ids.nil? and !s.deleted? }

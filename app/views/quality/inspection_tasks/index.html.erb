@@ -39,7 +39,7 @@
 			<th>Created</th>
 			<th>Title</th>
 			<th>Type</th>
-			<th>RMA Customer</th>
+			<th>Customer / Due Date</th>
 			<th>Status</th>
 			<th>Ticket Status</th>
 			<th>Assigned</th>
@@ -52,7 +52,13 @@
 			<td><%= t.created_at.to_s(:short_human_date) %></td>
 			<td><%= link_to t.title, inspection_task_url(t) %></td>
 			<td><%= t.task_type %></td>
-			<td><%= t.rma_customer_name if t.task_type.rma_inspection? %></td>
+			<td>
+				<% if t.task_type.rma_inspection? %>
+				<%= t.rma_customer_name %>
+				<% else %>
+				<%= t.date_expected.try(:to_s, :short_human_date) %>
+				<% end %>
+			</td>
 			<td><%= t.status %></td>
 			<td><%= t.lighthouse_status %></td>
 			<td><%= t.lighthouse_last_assigned_user_name %></td>

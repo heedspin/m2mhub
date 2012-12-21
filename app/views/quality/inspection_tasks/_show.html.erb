@@ -7,9 +7,14 @@
 			<th>Quantity</th>
 			<% if task.task_type.rma_inspection? %>
 			<th>RMA</th>
+			<th>Customer</th>
 			<% else %>
 			<th>PO</th>
+			<th>Due Date</th>
 			<% end %>
+			<th>Ticket Status</th>
+			<th>Assigned</th>
+			<th>Modified</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -20,18 +25,31 @@
 			<td><%= cm task.quantity, :item_quantity %></td>
 			<% if task.task_type.rma_inspection? %>
 			<td><%= link_to task.rma_number, rma_url(task.rma_number) %></td>
+			<td><%= task.rma_customer_name %></td>
 			<% else %>
 			<td><%= link_to task.purchase_order_number, purchase_order_url(task.purchase_order_number) %></td>
+			<td><%= task.date_expected.try(:to_s, :short_human_date) %></td>
 			<% end %>
+			<td><%= task.lighthouse_status %></td>
+			<td><%= task.lighthouse_last_assigned_user_name %></td>
+			<td><%= task.updated_at.to_s(:short_human_date) %></td>
 		</tr>
 		<% if task.body.present? %>
 		<tr>
-			<td colspan="5"><%= simple_format task.body %></td>
+			<td colspan="9"><%= simple_format task.body %></td>
 		</tr>
 		<% end %>
 	</tbody>
 </table>			
 
 <% if task.lighthouse_ticket %>
-<%= render 'quality/inspection_tasks/lighthouse_ticket', :ticket => task.lighthouse_ticket %>
+	<% if task.lighthouse_ticket.closed? and task.status.open? %>
+		<%= semantic_form_for task, :url => inspection_task_path(task) do |f| %>
+			<%= f.hidden_field :status_id, :value => Quality::InspectionTaskStatus.closed.id %>
+			<%= f.buttons do %>
+		  	<%= f.commit_button :label => 'Close Task' %>
+			<% end %>
+		<% end %>
+	<% end %>
+	<%= render 'quality/inspection_tasks/lighthouse_ticket', :ticket => task.lighthouse_ticket %>
 <% end %>
