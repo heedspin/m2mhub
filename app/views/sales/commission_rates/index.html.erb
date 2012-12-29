@@ -1,10 +1,31 @@
 <%= render 'sales/commission_reports/submenu' %>
 <br />
 
-<% if permitted_to? :manage, :sales_commission_rates %>
-	<ul>
-		<li><%= link_to 'New Rate', new_commission_rate_path %></li>
-	</ul>
+<%= semantic_form_for @search, :as => :search, :url => commission_rates_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+					<%= f.input :sales_person_id, :as => :select, :collection => @sales_person_options, :prompt => 'All Sales', :label => 'Sales Rep' %> 
+					<%= f.input :customer_id, :as => :select, :collection => @customer_options, :prompt => 'All Customers' %>
+					<%= f.input :item_id, :as => :select, :collection => @item_options, :prompt => 'All Parts' %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.buttons do %>
+				  <%= f.commit_button 'Search' %>
+					<li><%= link_to 'Clear', commission_rates_url %></li>
+					<% if permitted_to? :manage, :sales_commission_rates %>
+					<li><%= link_to 'New Rate', new_commission_rate_url %></li>
+					<% end %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
 <% end %>
 
 <% if @commission_rates.size > 0 %>

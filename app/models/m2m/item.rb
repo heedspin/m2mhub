@@ -174,6 +174,10 @@ class M2m::Item < M2m::Base
   def part_number_and_revision
     @part_number_and_revision ||= AppConfig.use_item_revisions? ? "#{self.part_number} Rev #{self.revision}" : self.part_number
   end
+  
+  def to_s
+    self.part_number_and_revision
+  end
 
   # alias_attribute :total_cost, :fdisptcost
   alias_attribute :description, :fdescript

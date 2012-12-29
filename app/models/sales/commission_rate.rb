@@ -23,6 +23,21 @@ class Sales::CommissionRate < M2mhub::Base
   validate :customer_or_item
 
   scope :by_salesperson_and_customer, :order => [:sales_person_name, :customer_name, :part_number]
+  scope :sales_person, lambda { |sales_person_id|
+    {
+      :conditions => { :sales_person_id => sales_person_id }
+    }
+  }
+  scope :customer, lambda { |customer_id|
+    {
+      :conditions => { :customer_id => customer_id }
+    }
+  }
+  scope :item, lambda { |item_id|
+    {
+      :conditions => { :item_id => item_id }
+    }
+  }
   
   def revision
     # TODO: Add revision column.
