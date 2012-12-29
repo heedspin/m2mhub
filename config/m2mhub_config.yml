@@ -47,7 +47,7 @@ m2mhub_config: &m2mhub_config
     rma_reports:
       controllers: quality/rmas quality/rma_reports 
     sales:
-      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes sales/commission_reports sales/commission_rates sales/commission_backlog_reports sales_reports sales/opportunities sales/opportunity_comments
+      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes commission_reports sales_reports sales/opportunities sales/opportunity_comments
     sales_reports:
       children: browse_sales_reports sales_backlog_reports sales_bookings_reports export_invoiced_sales
     browse_sales_reports: 
@@ -106,6 +106,6 @@ m2mhub_config: &m2mhub_config
     vendor_purchase_order_items:
       controllers: vendors/purchase_order_items
     commission_reports:
-      controllers: commission_reports commission_rates commission_backlog_reports
+      controllers: sales/commission_reports sales/commission_rates sales/commission_backlog_reports
     purchase_orders:
       controllers: production/purchase_order_items production/purchase_orders

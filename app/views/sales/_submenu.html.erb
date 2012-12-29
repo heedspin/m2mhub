@@ -37,7 +37,7 @@
 		<% end %>
 
 		<% if AppConfig.enable_commission_report? and permitted_to?(:manage, :sales_commission_reports) %>
-		<li class="<%= menu_selected 'sales/commission_reports' %>">
+		<li class="<%= menu_selected 'commission_reports' %>">
 			<%= link_to 'Commission Reports', new_commission_report_url %>
 		</li>
 		<% end %>

@@ -3,13 +3,13 @@
 
 <div class="submenu">
 	<ul>
-		<li class="<%= menu_selected :commission_reports %>">
+		<li class="<%= menu_selected 'sales/commission_reports' %>">
 			<%= link_to 'Commission Reports', new_commission_report_url %>
 		</li>
-		<li class="<%= menu_selected :commission_rates %>">
+		<li class="<%= menu_selected 'sales/commission_rates' %>">
 			<%= link_to 'Commission Rates', commission_rates_url %>
 		</li>
-		<li class="<%= menu_selected :commission_backlog_reports %>">
+		<li class="<%= menu_selected 'sales/commission_backlog_reports' %>">
 			<%= link_to 'Commission Backlog', new_commission_backlog_report_url %>
 		</li>
 	</ul>
