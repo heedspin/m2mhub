@@ -14,7 +14,7 @@
 	<% end %>
 	<%= f.input :title %>
 	<%= f.input :body %>
-	<%= f.input :create_lighthouse_ticket, :as => :boolean, :label => (@task.new_record? ? 'Create' : 'Edit') + ' Lighthouse Ticket' %>
+	<%= f.input :create_lighthouse_ticket, :as => :boolean, :label => 'Create Lighthouse Ticket' %>
 	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field' }%>

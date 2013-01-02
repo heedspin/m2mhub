@@ -7,4 +7,15 @@ class M2mhub::Base < ActiveRecord::Base
   self.abstract_class = true
   extend ActiveHash::Associations::ActiveRecordExtensions
   include ::BelongsToItem
+  
+  def attribute_to_boolean(thing)
+    case thing
+    when FalseClass
+      false
+    when TrueClass
+      true
+    else
+      !thing.to_i.zero?
+    end
+  end
 end

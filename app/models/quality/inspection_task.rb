@@ -106,7 +106,7 @@ class Quality::InspectionTask < M2mhub::Base
   end
   
   def destroy
-    if self.lighthouse_ticket and self.delete_lighthouse_ticket
+    if self.lighthouse_ticket and attribute_to_boolean(self.delete_lighthouse_ticket)
       self.lighthouse_ticket.destroy
     end
     self.status = Quality::InspectionTaskStatus.deleted
@@ -124,7 +124,7 @@ class Quality::InspectionTask < M2mhub::Base
   
   before_save :handle_lighthouse
   def handle_lighthouse
-    if self.create_lighthouse_ticket
+    if attribute_to_boolean(self.create_lighthouse_ticket)
       if self.lighthouse_body =~ /lighthouseapp.com\/projects\/(\d+)[^\/]*\/tickets\/(\d+)/
         # Import the ticket and change our comment type.
         project_id = $1
