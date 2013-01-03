@@ -7,11 +7,16 @@ class Sales::OpportunityStatus < ActiveHash::Base
     {:id => 4, :open => false, :name => 'Lost'},
     {:id => 5, :open => false, :name => 'Deleted'}
   ]
-  def self.not_deleted
-    all.select { |s| !s.deleted? }
-  end
-  def self.open
-    all.select(&:open?)
+  class << self
+    def not_deleted
+      @not_deleted ||= all.select { |s| !s.deleted? }
+    end
+    def open
+      @open ||= all.select(&:open?)
+    end
+    def closed
+      @closed ||= all.select { |s| !s.open? }
+    end
   end
   include Plutolib::ActiveHashMethods
 end

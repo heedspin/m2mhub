@@ -51,7 +51,13 @@
 		<tr>
 			<td><%= t.created_at.to_s(:short_human_date) %></td>
 			<td><%= link_to t.title, inspection_task_url(t) %></td>
-			<td><%= t.task_type %></td>
+			<td>
+				<% if t.task_type.rma_inspection? %>
+				RMA <%= t.rma_number %>
+				<% else %>
+				PO <%= t.purchase_order_number %>
+				<% end %>
+			</td>
 			<td>
 				<% if t.task_type.rma_inspection? %>
 				<%= t.rma_customer_name %>

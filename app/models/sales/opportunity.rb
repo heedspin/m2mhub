@@ -49,6 +49,7 @@ class Sales::Opportunity < M2mhub::Base
       :conditions => { :status_id => s }
     }
   }
+  scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.closed.map(&:id) ]
   scope :by_customer_name, :order => :customer_name
   scope :by_last_update_desc, :order => 'sales_opportunities.updated_at desc'
   scope :customer_name_like, lambda { |text|
