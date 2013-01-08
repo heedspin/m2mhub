@@ -6,12 +6,13 @@ class M2m::CsPopup < M2m::Base
     }
   }
   scope :with_code, lambda { |code|
-    {
-      :conditions => { :fcpopval => code }
-    }
+    where(:fcpopval => code)
   }
+  def code
+    self.fcpopval.strip
+  end
   def text
-    self.fcpoptext.titleize
+    self.fcpoptext.strip.titleize
   end
   
   @@cache = {}

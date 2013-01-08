@@ -1,0 +1,6 @@
+<% title @customer.name + ' Opportunities' %>
+<%= render 'sales/customers/summary' %>
+
+<%= render 'sales/opportunities/list', 
+	:show_won => true,
+	:show_hold => true %>

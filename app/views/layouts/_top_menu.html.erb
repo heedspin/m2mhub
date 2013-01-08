@@ -15,7 +15,7 @@
 		<% end %>
 		<% if permitted_to?(:read, :customers) %>
 		<li class="<%= menu_selected :customers %>">
-			<%= link_to 'Customers', customers_url %>
+			<%= link_to 'Customers', m2m_customers_url %>
 		</li>
 		<% end %>
 		<% if permitted_to?(:read, :items) %>
@@ -33,5 +33,10 @@
 			<%= link_to 'Production', inventory_reports_url %>
 		</li>
 		<% end %>
+		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
+		<li class="<%= menu_selected :sales_opportunities %>">
+			<%= link_to 'Opportunities', opportunities_url %>
+		</li>
+		<% end %>		
 	</ul>        
 </div><!-- nav -->

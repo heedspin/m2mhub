@@ -20,6 +20,7 @@
 #  updated_at              :datetime
 #  creator_id              :integer(4)
 #  last_comment_updated_id :integer(4)
+#  sales_customer_id       :integer(4)
 #
 
 class Sales::Opportunity < M2mhub::Base
@@ -28,7 +29,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to_active_hash :source, :class_name => 'Sales::OpportunitySource', :foreign_key => :opportunity_source_id
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :primary_key => 'fsalespn'
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus'
-  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :customer_id, :primary_key => :identity_column
+  belongs_to :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'sales_customer_id'
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
   
   # validates_presence_of :customer_name
@@ -49,7 +50,8 @@ class Sales::Opportunity < M2mhub::Base
       :conditions => { :status_id => s }
     }
   }
-  scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.closed.map(&:id) ]
+  scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]
+  scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
   scope :by_customer_name, :order => :customer_name
   scope :by_last_update_desc, :order => 'sales_opportunities.updated_at desc'
   scope :customer_name_like, lambda { |text|
@@ -65,13 +67,19 @@ class Sales::Opportunity < M2mhub::Base
       :conditions => [ 'sales_opportunities.start_date >= ? and sales_opportunities.start_date < ?', start_date, end_date ]
     }
   }
+  scope :sales_territory, lambda { |sales_territory_id|
+    {
+      :joins => :sales_customer,
+      :conditions => { :sales_customers => { :sales_territory_id => sales_territory_id } }
+    }
+  }
 
   before_save :set_customer
   def set_customer
-    if self.customer_name.present? and (self.customer_id.nil? or self.customer.nil? or (self.customer.name != self.customer_name))
-      if (found = M2m::Customer.name_like(self.customer_name)) and (found.size == 1)
-        self.customer_id = found.first.id
-        self.customer_name = self.customer.name
+    if self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
+      if (found = Sales::Customer.with_name(self.customer_name)) and (found.size == 1)
+        self.sales_customer = found.first
+        self.customer_name = self.sales_customer.name
       end
     end
     true

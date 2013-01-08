@@ -1,0 +1,83 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	// http://jsfiddle.net/hQkFH/3/
+	$(".expand_on_hover").hover(function() {
+		var height = $(this).height();
+		var pad = height + 5;
+		var height2 = $(this)[0].scrollHeight;
+		if (height2 > 35) {
+			$(this).animate({	height: height2	}, 300);
+		}
+	}, function() {
+		$(this).stop(true, false).animate({ height: 35 }, 150);
+	});
+	})
+</script>
+<% end %>
+
+<% 
+	lighthouse_comment_columns = 4 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) + (show_territory ? 1 : 0)
+	show_territory = false unless defined?('show_territory')
+%>
+<% if @opportunities.size > 0 %>
+<%= will_paginate @opportunities %>
+<table class="data">
+	<thead>
+		<tr>
+			<th class="fixname">Title</th>
+			<th class="fixshortname">Customer</th>
+			<% if show_territory %>
+			<th>Territory</th>
+			<% end %>
+			<th>Product</th>
+			<th>Status</th>
+			<% if show_won %>
+			<th>Amount</th>
+			<% end %>
+			<% if show_hold %>
+			<th>Wakeup</th>
+			<% end %>
+			<th>Updated</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @opportunities.each do |o| %>
+		<tr>
+			<td><%= link_to o.number_and_title, opportunity_url(o) %></td>
+			<td><%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer)) : o.customer_name %></td>
+			<% if show_territory %>
+			<td><%= o.sales_customer.try(:sales_territory).try(:name) %></td>
+			<% end %>
+			<td><%= o.product %></td>
+			<td><%= o.status.name %></td>
+			<% if show_won %>
+			<td><%= cm o.amount, :rounded_dollars %></td>
+			<% end %>
+			<% if show_hold %>
+			<td>
+ 				<%= o.wakeup.try(:to_s,:short_human_date) %>
+			</td>
+			<% end %>
+			<td><%= o.updated_at.to_s(:short_human_date_time) %></td>
+		</tr>
+		<% if o.last_comment.try(:ticket?) %>
+		<tr class="<%= o.last_comment.lighthouse_closed ? 'lighthouse_ticket_closed' : '' %>">
+			<td>
+				Status: <%= o.last_comment.lighthouse_status %><br />
+				Assigned: <%= o.last_comment.lighthouse_last_assigned_user_name %>
+			</td>
+			<td colspan="<%= lighthouse_comment_columns %>">
+				<div class="expand_on_hover"><%= raw o.last_comment.lighthouse_last_comment %></div>
+			</td>
+		</tr>
+		<% elsif o.last_comment %>
+		<% end %>
+		<tr class="opportunity_spacer">
+			<td colspan="<%= lighthouse_comment_columns + 1 %>"></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>			
+<%= will_paginate @opportunities %>
+<% end %>

@@ -7,6 +7,7 @@ class M2m::Customer < M2m::Base
   has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
   has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
+  has_one :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'erp_customer_id', :primary_key => 'identity_column'
 
   alias_attribute :notes, :fmnotes
   alias_attribute :last_name, :fcontact
@@ -25,6 +26,7 @@ class M2m::Customer < M2m::Base
   alias_attribute :sales_person_key, :fsalespn
   # alias_attribute :commission_percentage, :fsalcompct
   alias_attribute :created_date, :fcreated
+  alias_attribute :territory_code, :fterr
 
   after_initialize :set_defaults
   def set_defaults
@@ -47,6 +49,11 @@ class M2m::Customer < M2m::Base
   scope :with_names, lambda { |names|
     {
       :conditions => [ 'slcdpmx.fcompany in (?)', names ]
+    }
+  }
+  scope :with_name, lambda { |txt|
+    {
+      :conditions => [ 'slcdpmx.name = ?', txt ]
     }
   }
   scope :by_name, :order => 'fcompany'
@@ -85,10 +92,6 @@ class M2m::Customer < M2m::Base
     @name ||= M2m::Customer.customer_name(self.fcompany)
   end
 
-  def self.all_names
-    self.all(:select => 'slcdpmx.fcompany', :order => 'slcdpmx.fcompany').map(&:name)
-  end
-
   def fob
     self.ffob.strip
   end
@@ -109,6 +112,10 @@ class M2m::Customer < M2m::Base
   m2m_id_setter :fcshipto, 4
   m2m_id_setter :fcsoldto, 4
   m2m_id_setter :ContactNum, 6, :contact_number
+  
+  def sales_territory
+    @sales_territory ||= M2m::SalesTerritory.cached_lookup(self.territory_code)
+  end
 
   after_save :after_save_madness
   def after_save_madness

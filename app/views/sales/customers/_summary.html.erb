@@ -1,0 +1,34 @@
+<%= render 'sales/opportunities/submenu' %>
+
+<h2><%= @customer.name %></h2>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>M2M Record</th>
+			<th>Location</th>
+			<th>Territory</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<% if @customer.erp_customer %>
+				<%= link_to @customer.erp_customer.customer_number, m2m_customer_url(@customer.erp_customer) %>
+				<% else %>
+				None
+				<% end %>
+			</td>
+			<td>
+				<%= simple_format @customer.location %>
+			</td>
+			<td>
+				<%= @customer.sales_territory.try(:name) || 'None' %>
+			</td>
+			<td>
+				<%= link_to 'Edit', edit_sales_customer_url(@customer) %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

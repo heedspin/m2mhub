@@ -34,7 +34,7 @@
 			</td>
 			<td class="centered"><%= r.status %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
-			<td><%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %></td>
+			<td><%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %></td>
 			<td><%= link_to_item r.item.item, r.item.part_number %></td>
 			<td><%= r.revision %></td>
 			<td><%= r.item.customer_part_number %></td>

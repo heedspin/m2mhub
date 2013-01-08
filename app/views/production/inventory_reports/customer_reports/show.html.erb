@@ -9,7 +9,7 @@
 </div>
 
 
-<h2><%= @customer_report.customer_name %> <%= link_to '*', customer_url(@customer_report.m2m_identity_column) %></h2>
+<h2><%= @customer_report.customer_name %> <%= link_to '*', m2m_customer_url(@customer_report.m2m_identity_column) %></h2>
 
 <%= will_paginate @item_reports %>
 

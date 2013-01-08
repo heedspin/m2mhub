@@ -12,12 +12,6 @@
 		</li>
 		<% end %>
 
-		<% if AppConfig.enable_opportunities and permitted_to?(:read, :sales_opportunities) %>
-		<li class="<%= menu_selected 'sales/opportunities' %>">
-			<%= link_to 'Opportunities', opportunities_url %>
-		</li>
-		<% end %>
-		
 		<% if permitted_to?(:read, :sales_quotes) %>
 		<li class="<%= menu_selected 'sales/quotes' %>">
 			<%= link_to 'Quotes', sales_quotes_url %>

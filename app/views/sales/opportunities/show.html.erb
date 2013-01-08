@@ -13,7 +13,7 @@ $(function() {
 </script>
 <% end %>
 
-<%= render 'sales/submenu' %>
+<%= render 'sales/opportunities/submenu' %>
 <br />
 
 <div class="opportunity">
@@ -26,7 +26,11 @@ $(function() {
 	
 	<p>
 		<strong><%= Sales::Opportunity.human_attribute_name(:customer) %>:</strong>
-		<%= @opportunity.customer.present? ? link_to(@opportunity.customer_name, customer_url(@opportunity.customer)) : @opportunity.customer_name %>
+		<% if @opportunity.sales_customer.present? %>
+			<%= link_to(@opportunity.customer_name, sales_customer_url(@opportunity.sales_customer)) %>
+		<% else %> 
+			<%= @opportunity.customer_name %> <%= link_to 'Create Customer', new_sales_customer_url(:sales_customer => { :name => @opportunity.customer_name, :opportunity_id => @opportunity.id }) %>
+		<% end %>
 
 		<br />
 		<strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>

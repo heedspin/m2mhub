@@ -1,0 +1,72 @@
+<%= render 'sales/opportunities/submenu' %>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	new_company_matcher = /^Create New: (.+)$/;
+	$("input#search_name").autocomplete({
+		source: "<%= sales_customers_url(:new_prompt => 1) %>",
+		search: function(event, ui) {
+			$("input#search_name").autocomplete("close");
+			$("#inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#inprogress").hide();
+		},
+		select: function(event, ui) { 
+			$("#inprogress").show();
+			var matches = ui.item.value.match(new_company_matcher);
+			if (matches && (matches.length > 1)) {
+				window.location.href = "<%= new_sales_customer_url %>?sales_customer[name]=" + matches[1];
+			}	else {
+				$(this).val( ui.item.value ); 
+				$("form.search").submit(); 				
+			}
+			return false; 
+		}
+	});
+})
+</script>
+<% end %>
+
+<%= semantic_form_for @search, :as => :search, :url => sales_customers_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+				  <%= f.input :name, :label => 'Name' %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All' %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			  <%= f.buttons do %>
+				  <%= f.commit_button 'Search' %>
+				<% end %>
+				<div id="inprogress" class="hide">
+				<%= image_tag AppConfig.in_progress_image %>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>			
+<% end %>
+
+<%= set_focus('#search_name') %>
+
+<% if @customers %>
+<% if @customers.size > 0 %>
+<%= will_paginate @customers %>
+<div class="searchresults">
+	<ul>
+	<% @customers.each do |c| %>
+		<li><%= link_to c.name, sales_customer_url(c) %></li>
+	<% end %>
+	</ul>
+</div>
+<% else %>
+<h3>No matches</h3>
+<% end %>
+<% end %>

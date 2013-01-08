@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(function() {
 	$("input#sales_opportunity_customer_name").autocomplete({
-		source: "<%= customers_url %>",
+		source: "<%= sales_customers_url %>",
 		search: function(event, ui) { 
 			$("input#sales_opportunity_customer_name").autocomplete("close");
 			$("#customer_inprogress").show();

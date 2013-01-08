@@ -1,0 +1,18 @@
+<% title @customer.name %>
+<%= render 'sales/customers/summary' %>
+
+<% if @opportunities.size > 0 %>
+<h3><%= link_to 'Opportunities', opportunities_url(:search => { :customer_name => @customer.name }) %></h3>
+<%= render 'sales/opportunities/list', 
+	:show_won => true,
+	:show_hold => true %>
+<% else %>
+<h3><%= link_to 'Opportunities', opportunities_url(:search => { :customer_name => @customer.name }) %></h3>
+<p>No open opportunities</p>
+<% if @customer.opportunities.count == 0%>
+<br />
+<p>
+	<%= link_to 'Delete Customer', sales_customer_url(@customer), :method => :delete, :confirm => 'This is permanent! Are you sure?' %>
+</p>
+<% end %>
+<% end %>

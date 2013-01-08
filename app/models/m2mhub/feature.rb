@@ -4,15 +4,17 @@ class M2mhub::Feature
     def initialize(name)
       @name = name
       config_string = AppConfig.get("feature_#{@name}")
-      @config = if(config_string == 'all')
-        'all'
+      @config = if config_string.nil? or config_string.is_a?(FalseClass)
+        false
+      elsif (config_string == 'all') or (config_string.is_a?(TrueClass))
+        true
       else
         Set.new config_string.split(',').map(&:strip).compact
       end
     end
     
     def enabled?(user)
-      (@config == 'all') || (user and @config.member?(user.email))
+      @config.is_a?(Set) ? @config.member?(user.email) : @config
     end
   end
   

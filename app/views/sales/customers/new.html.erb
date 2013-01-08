@@ -1,0 +1,16 @@
+<% title 'New Customer' %>
+
+<%= render 'sales/opportunities/submenu' %>
+
+<h2>New Customer</h2>
+
+<%= semantic_form_for @customer, :url => sales_customers_url do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+	<%= f.inputs do %>
+	<%= f.input :opportunity_id, :as => :hidden %>
+	<% end %>
+	<%= f.buttons do %>
+	  <%= f.commit_button %>
+	  <%= f.cancel_link %>
+	<% end %>
+<% end %>

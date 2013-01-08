@@ -34,7 +34,7 @@
 			<% unless total_object %>
 			<td>
 				<% if item_report.customer_report.try(:m2m_identity_column) %>
-				<%= link_to item_report.customer_report.customer_name, customer_url(item_report.customer_report.m2m_identity_column) %>
+				<%= link_to item_report.customer_report.customer_name, m2m_customer_url(item_report.customer_report.m2m_identity_column) %>
 				<% end %>
 			</td>
 			<% end %>

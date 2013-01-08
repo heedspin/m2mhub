@@ -45,7 +45,7 @@
 		<tr>
 			<td><%= cr.id %></td>
 			<td><%= cr.sales_person.name %></td>
-			<td><%= link_to(cr.customer.name, customer_url(cr.customer)) if cr.customer %></td>
+			<td><%= link_to(cr.customer.name, m2m_customer_url(cr.customer)) if cr.customer %></td>
 			<td><%= link_to(cr.item.part_number, item_url(cr.item)) if cr.item %></td>
 			<td><%= cr.commission_percentage.nil? ? '' : sprintf("%.1f",cr.commission_percentage) + '%' %></td>
 			<% if permitted_to? :manage, :sales_commission_rates %>

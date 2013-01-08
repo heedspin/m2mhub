@@ -32,13 +32,18 @@ Rails.application.routes.draw do
     resources :bom_parents, :only => [:index], :controller => 'items/bom_parents'
     resources :bom_children, :only => [:index], :controller => 'items/bom_children'
   end
-  resources :customers do
-    resources :sales_orders, :only => [:index], :controller => 'customers/sales_orders'
-    resources :quotes, :only => [:index], :controller => 'customers/quotes'
-    resources :contacts, :controller => 'customers/contacts'
-    resources :invoiced_sales_reports, :controller => 'customers/invoiced_sales_reports'
-    resources :sales_backlog_reports, :controller => 'customers/sales_backlog_reports'
+  resources :m2m_customers do
+    resources :sales_orders, :only => [:index], :controller => 'm2m_customers/sales_orders'
+    resources :quotes, :only => [:index], :controller => 'm2m_customers/quotes'
+    resources :contacts, :controller => 'm2m_customers/contacts'
+    resources :invoiced_sales_reports, :controller => 'm2m_customers/invoiced_sales_reports'
+    resources :sales_backlog_reports, :controller => 'm2m_customers/sales_backlog_reports'
   end
+  resources :sales_customers, :controller => 'sales/customers' do
+    resources :opportunities, :controller => 'sales/customers/opportunities'
+  end
+  resources :sales_territories, :controller => 'sales/territories'
+  resources :parent_companies, :controller => 'sales/parent_companies'
   resources :sales_backlog_reports, :only => [:index, :show], :controller => 'sales/backlog_reports'
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'

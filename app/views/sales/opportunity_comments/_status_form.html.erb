@@ -1,5 +1,5 @@
 <%= f.inputs :class => 'inputs not_ticket_field horizontal' do %>
-	<%= f.input :status, :collection => Sales::OpportunityStatus.not_deleted, :include_blank => false %>
+	<%= f.input :status, :collection => Sales::OpportunityStatus.all_not_deleted, :include_blank => false %>
 	<%= f.input :sales_order_id, :wrapper_html => { :class => 'won_field number' } %>
 	<%= f.input :quote_id, :wrapper_html => { :class => 'active_field number' } %>
 	<%= f.input :loss_reason, :collection => Sales::OpportunityLossReason.all, :include_blank => false, :wrapper_html => { :class => 'lost_field' } %>

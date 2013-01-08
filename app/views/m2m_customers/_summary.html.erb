@@ -1,0 +1,38 @@
+<% title @customer.name %>
+<h2><%= @customer.name %></h2>
+
+<% if primary = @customer.contacts.primary.first %>
+<p>
+	Primary Contact: <%= primary.name %> <%= primary.email %> <%= primary.phone_number_array.join(', ') %><br />
+	Customer Number: <%= @customer.customer_number %>
+	<% if @customer.sales_customer %>
+	<br />
+	<%= link_to 'Opportunities', sales_customer_opportunities_url(@customer.sales_customer) %>
+	<% end %>
+</p>
+<% end %>
+
+<div class="submenu">
+	<ul>
+		<li class="<%= menu_selected :m2m_customer_summary %>">
+			<%= link_to 'Summary', m2m_customer_url(@customer) %>
+		</li>
+		<li class="<%= menu_selected :m2m_customer_quotes %>">
+			<%= link_to 'Quotes', m2m_customer_quotes_url(@customer) %>
+		</li>
+		<li class="<%= menu_selected :m2m_customer_sales_orders %>">
+			<%= link_to 'Sales Orders', m2m_customer_sales_orders_url(@customer) %>
+		</li>
+		<li class="<%= menu_selected :m2m_customer_contacts %>">
+			<%= link_to 'Contacts', m2m_customer_contacts_url(@customer) %>
+		</li>
+		<li class="<%= menu_selected :m2m_customer_invoiced_sales_reports %>">
+			<%= link_to 'Invoiced Sales', new_m2m_customer_invoiced_sales_report_url(@customer) %>
+		</li>
+		<li class="<%= menu_selected :m2m_customer_sales_backlog_reports %>">
+			<%= link_to 'Backlog', m2m_customer_sales_backlog_reports_url(@customer) %>
+		</li>
+	</ul>
+</div>
+
+

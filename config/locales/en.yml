@@ -33,6 +33,9 @@ en:
         backlog_group_id: Backlog Group
       m2m/customer:
         fcompany: Company Name
+      sales/customer:
+        erp_customer_name: M2M Customer
+        sales_territory: Sales Territory
       m2m/contact:
         fcfname: First Name
         fcontact: Last Name
@@ -58,6 +61,8 @@ en:
         ytd_bookings: YTD Bookings
       sales/opportunity:
         amount: Potential Revenue
+        customer_name: Customer
+        sales_territory_id: Sales Territory
       sales/opportunity_comment:
         lighthouse_title: Ticket Title
         lighthouse_body: Ticket Body
@@ -71,3 +76,6 @@ en:
         task_type: Type
         last_receiver_id: Last Receiver
         rma_number: RMA Number
+      sales/territory:
+        sales_rep_name: Sales Rep
+        

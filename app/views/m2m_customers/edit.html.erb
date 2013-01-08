@@ -1,0 +1,4 @@
+<% title 'Edit Customer' %>
+<%= semantic_form_for @customer, :url => m2m_customer_url(@customer) do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>

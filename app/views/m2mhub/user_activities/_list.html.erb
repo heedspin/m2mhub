@@ -17,7 +17,8 @@
 			<td><%= ua.user.try(:full_name) %></td>
 			<td><%= ua.remote_ip %></td>
 			<% end %>
-			<td><%= link_to_unless ua.password_related?, ua.report_name, user_activity_url(ua), :title => ua.params %></td>
+			<td><%= link_to_unless ua.password_related?, ua.report_name, url_for_user_activity(ua), :title => ua.params %></td>
+			<td><%= ua.params_to_url_hash.inspect unless ua.password_related? %></td>
 		</tr>
 		<% end %>
 	</tbody>

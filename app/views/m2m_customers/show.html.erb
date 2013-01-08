@@ -1,0 +1,22 @@
+
+<% if @previous_customer or @next_customer %>
+<div class="paging">
+	<%= link_to('&laquo; ' +  @previous_customer.name, m2m_customer_url(@previous_customer)) if @previous_customer %>
+	<%= link_to 'Customers', m2m_customers_url %>
+	<%= link_to(@next_customer.name + ' &raquo;', m2m_customer_url(@next_customer)) if @next_customer %>
+</div>
+<% end %>
+
+<%= render 'm2m_customers/summary' %>
+
+<% if @sales_orders.size > 0 %>
+<div id="sales_orders">
+	<%= render 'm2m_customers/sales_orders/list' %>
+</div>
+<% end %>
+
+<% if @quotes.size > 0 %>
+<div id="quotes">
+	<%= render 'm2m_customers/quotes/list' %>
+</div>
+<% end %>

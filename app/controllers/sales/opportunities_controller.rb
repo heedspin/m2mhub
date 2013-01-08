@@ -1,8 +1,12 @@
 class Sales::OpportunitiesController < M2mhubController
   filter_access_to_defaults
+  
+  class Search < Sales::Opportunity
+    attr_accessor :sales_territory_id
+  end
 
   def index
-    @search = Sales::Opportunity.new(params[:search])
+    @search = Search.new(params[:search])
     unless params.member?(:search)
       @search.status = Sales::OpportunityStatus.active
     end
@@ -12,9 +16,8 @@ class Sales::OpportunitiesController < M2mhubController
     else
       s = s.not_deleted
     end
-    if @search.customer_name.present?
-      s = s.customer_name_like(@search.customer_name)
-    end
+    s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
+    s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
     @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
   end
 

@@ -1215,3 +1215,21 @@ div.expand_on_hover {
 form.formtastic fieldset ol li.deletastic_param {
 	display: none;
 }
+/*************************************************
+ Sales Customers
+*/
+li#sales_customer_location_input textarea {
+	height: 2.5em;
+	width: 30%;
+}
+li#sales_customer_name_input input { 
+	font-size: 1.5em;
+	padding:4px;
+}
+/**************************************************
+	Sales Territories
+*/
+li#sales_territory_description_input textarea {
+	height: 2.5em;
+	width: 40%;
+}

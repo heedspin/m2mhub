@@ -16,19 +16,27 @@ class M2mhub::UserActivity < ActiveRecord::Base
     }
   }
   scope :by_date_desc, :order => 'user_activities.created_at desc'
-  
+
   scope :with_name, lambda { |report_name|
     {:conditions => {:report_name => report_name}}
   }
-  
+
   def password_related?
     ['user_sessions / create', 'password_resets / update'].include?(self.report_name)
   end
-  
-  def params_hash
-    ActiveSupport::JSON.decode(read_attribute(:params))
+
+  def params_to_url_hash
+    hash = ActiveSupport::JSON.decode(read_attribute(:params))
+    if hash.is_a?(Hash)
+      hash.keys.each { |string_key| hash[string_key.to_sym] = hash.delete(string_key) }
+    end
+    result = { :controller => hash.delete(:controller), :action => hash.delete(:action), :params =>hash }
+    if id = hash.delete(:id)
+      result[:id] = id
+    end
+    result
   end
- 
+
 end
 # == Schema Information
 #
@@ -43,4 +51,3 @@ end
 #  elapsed_time :float
 #  created_at   :datetime
 #
-

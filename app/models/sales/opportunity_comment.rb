@@ -55,7 +55,7 @@ class Sales::OpportunityComment < M2mhub::Base
       :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
     }
   }
-  scope :to_monitor, :joins => :opportunity, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.open.map(&:id)]
+  scope :to_monitor, :joins => :opportunity, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.all_open.map(&:id)]
   
   attr_accessor :create_lighthouse_ticket
   attr_accessor :lighthouse_assigned_user_id

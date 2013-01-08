@@ -16,12 +16,12 @@
 		<% if comment.status.active? and comment.quote.present? %>
 		<p>
 			<%= link_to 'Quote ' + comment.quote.fquoteno, sales_quote_url(comment.quote) %>
-			for <%= link_to comment.quote.customer_name, customer_number_url(comment.quote.fcustno) %>
+			for <%= link_to comment.quote.customer_name, m2m_customer_number_url(comment.quote.fcustno) %>
 		</p>
 		<% elsif comment.status.won? and comment.sales_order.present? %>
 		<p>
 			<%= link_to 'Sales Order ' + comment.sales_order_id, sales_order_url(comment.sales_order_id) %>
-			for <%= link_to comment.sales_order.customer_name, customer_number_url(comment.sales_order.fcustno) %>
+			for <%= link_to comment.sales_order.customer_name, m2m_customer_number_url(comment.sales_order.fcustno) %>
 		</p>
 		<% elsif comment.status.lost? %>
 		<p>

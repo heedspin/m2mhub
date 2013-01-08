@@ -21,7 +21,7 @@
 		<% @sales_report.ar_distributions.sort_by { |ard| ard.customer.try(:company_name) || '' }.each do |ard| %>
 		<tr>
 			<td><%= ard.date.to_s(:invoice_date) %></td>
-			<td><%= link_to(ard.customer.company_name, customer_url(ard.customer)) if ard.customer %></td>
+			<td><%= link_to(ard.customer.company_name, m2m_customer_url(ard.customer)) if ard.customer %></td>
 			<td><%= ard.gl_account_number %> <%= ard.gl_account.description %></td>
 			<td>
 				<% if ard.ref_invoice? %>

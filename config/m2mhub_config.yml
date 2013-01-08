@@ -47,7 +47,15 @@ m2mhub_config: &m2mhub_config
     rma_reports:
       controllers: quality/rmas quality/rma_reports 
     sales:
-      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes commission_reports sales_reports sales/opportunities sales/opportunity_comments
+      children: sales/sales_order_items sales/sales_orders sales/quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports sales/quotes commission_reports sales_reports
+    sales_opportunities:
+      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories
+    sales_customers:
+      children: sales_customer_summary sales_customer_opportunities
+    sales_customer_summary:
+      controllers: sales/customers
+    sales_customer_opportunities:
+      controllers: sales/customers/opportunities
     sales_reports:
       children: browse_sales_reports sales_backlog_reports sales_bookings_reports export_invoiced_sales
     browse_sales_reports: 
@@ -67,22 +75,22 @@ m2mhub_config: &m2mhub_config
       children: production/production_dashboard production/work_center_load_reports production/obsolete_reports production/customer_reports production/inventory_reports production/labor_reports production/purchase_queue_summaries production/vendors production/vendors/purchase_order_items purchase_orders
     vendors:
       children: production/vendors production/vendors/purchase_order_items
-    customers:
-      controllers: customers
-      children: customer_summary customer_quotes customer_sales_orders customer_contacts customer_invoiced_sales_reports customer_sales_orders
-    customer_summary:
-      controllers: customers
+    m2m_customers:
+      controllers: m2m_customers
+      children: m2m_customer_summary m2m_customer_quotes m2m_customer_sales_orders m2m_customer_contacts m2m_customer_invoiced_sales_reports m2m_customer_sales_orders m2m_customer_sales_backlog_reports
+    m2m_customer_summary:
+      controllers: m2m_customers
       action: show
-    customer_quotes:
-      controllers: customers/quotes
-    customer_sales_orders:
-      controllers: customers/sales_orders
-    customer_contacts:
-      controllers: customers/contacts
-    customer_invoiced_sales_reports:
-      controllers: customers/invoiced_sales_reports
-    customers_sales_backlog_reports:
-      controllers: customers/sales_backlog_reports
+    m2m_customer_quotes:
+      controllers: m2m_customers/quotes
+    m2m_customer_sales_orders:
+      controllers: m2m_customers/sales_orders
+    m2m_customer_contacts:
+      controllers: m2m_customers/contacts
+    m2m_customer_invoiced_sales_reports:
+      controllers: m2m_customers/invoiced_sales_reports
+    m2m_customer_sales_backlog_reports:
+      controllers: m2m_customers/sales_backlog_reports
     item_summary:
       controllers: items
       action: show

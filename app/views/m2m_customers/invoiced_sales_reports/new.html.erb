@@ -1,0 +1,11 @@
+<%= render 'm2m_customers/summary' %>
+
+<%= semantic_form_for @report, :as => 'report', :url => m2m_customer_invoiced_sales_reports_url(@customer, :format => 'xls') do |f| %>
+	<%= f.inputs do %>
+  	<%= f.input :start_date, :as => :calendar %>
+  	<%= f.input :end_date, :as => :calendar %>
+	<% end %>
+	<%= f.buttons do %>
+	  <%= f.commit_button 'Export XLS' %>
+	<% end %>
+<% end %>
