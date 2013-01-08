@@ -15,7 +15,7 @@ $(function() {
 			$("#inprogress").show();
 			var matches = ui.item.value.match(new_company_matcher);
 			if (matches && (matches.length > 1)) {
-				window.location.href = "<%= new_customer_url %>?m2m_customer[fcompany]=" + matches[1];
+				window.location.href = "<%= new_m2m_customer_url %>?m2m_customer[fcompany]=" + matches[1];
 			}	else {
 				$(this).val( ui.item.value ); 
 				$("form.search").submit(); 				
@@ -27,7 +27,7 @@ $(function() {
 </script>
 <% end %>
 
-<%= semantic_form_for @search, :as => :search, :url => customers_path, :html => {:method => :get} do |f| %>
+<%= semantic_form_for @search, :as => :search, :url => m2m_customers_path, :html => {:method => :get} do |f| %>
 <table class="flatform">
 	<tbody>
 		<tr>
