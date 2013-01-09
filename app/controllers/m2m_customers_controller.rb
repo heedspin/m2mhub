@@ -33,7 +33,7 @@ class M2mCustomersController < M2mhubController
     @customer = M2m::Customer.new(params[:m2m_customer])
     if @customer.save
       # @customer.after_save_madness!
-      redirect_to customer_contacts_url(@customer)
+      redirect_to m2m_customer_contacts_url(@customer)
     else
       render :action => 'new'
     end
@@ -42,7 +42,7 @@ class M2mCustomersController < M2mhubController
   def update
     @customer = current_object
     if @customer.update_attributes(params[:m2m_customer])
-      redirect_to customer_contacts_url(@customer)
+      redirect_to m2m_customer_contacts_url(@customer)
     else
       render :action => 'edit'
     end

@@ -35,7 +35,7 @@ $(function() {
 		</span>
 	</li>
 	<%= f.input :location %>
-	<%= f.input :sales_territory, :label_method => :name_and_description %>
+	<%= f.input :sales_territory, :label_method => :name_and_description, :collection => Sales::Territory.by_name %>
 	<%= f.input :business_type, :collection => Sales::BusinessType.by_name %>
 	<%= f.input :website, :as => :string %>
 	<%= f.input :notes, :wrapper_html => { :class => 'medium_textarea' } %>
