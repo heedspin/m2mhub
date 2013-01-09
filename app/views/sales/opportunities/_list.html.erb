@@ -44,10 +44,10 @@ $(function() {
 	<tbody>
 		<% @opportunities.each do |o| %>
 		<tr>
-			<td><%= link_to o.number_and_title, opportunity_url(o) %></td>
-			<td><%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer)) : o.customer_name %></td>
+			<td><%= link_to o.number_and_title, opportunity_url(o), {:target=>'_blank'} %></td>
+			<td><%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) : o.customer_name %></td>
 			<% if show_territory %>
-			<td><%= o.sales_customer.try(:sales_territory).try(:name) %></td>
+			<td><%= o.sales_customer.try(:sales_territory).try(:name_and_sales_rep) %></td>
 			<% end %>
 			<td><%= o.product %></td>
 			<td><%= o.status.name %></td>

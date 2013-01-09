@@ -17,6 +17,10 @@ class Sales::Territory < M2mhub::Base
   def name_and_description
     @name_and_description ||= [name, description].select(&:present?).join( ' - ')
   end
+
+  def name_and_sales_rep
+    @name_and_sales_rep ||= [name, sales_rep_name].select(&:present?).join( ' - ')
+  end
   
   def self.import
     # http://en.wikipedia.org/wiki/List_of_regions_of_the_United_States#Official_U.S._regions
