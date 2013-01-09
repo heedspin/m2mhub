@@ -17,8 +17,8 @@ $(function() {
 <% end %>
 
 <% 
+	show_territory = false unless defined?(show_territory)
 	lighthouse_comment_columns = 4 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) + (show_territory ? 1 : 0)
-	show_territory = false unless defined?('show_territory')
 %>
 <% if @opportunities.size > 0 %>
 <%= will_paginate @opportunities %>

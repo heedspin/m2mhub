@@ -27,7 +27,11 @@
 			<td><%= link_to task.rma_number, rma_url(task.rma_number) %></td>
 			<td><%= task.rma_customer_name %></td>
 			<% else %>
-			<td><%= link_to task.purchase_order_number, purchase_order_url(task.purchase_order_number) %></td>
+			<td>
+				<% if task.purchase_order_number.present? %>
+				<%= link_to task.purchase_order_number, purchase_order_url(task.purchase_order_number) %>
+				<% end %>
+			</td>
 			<td><%= task.date_expected.try(:to_s, :short_human_date) %></td>
 			<% end %>
 			<td><%= task.lighthouse_status %></td>

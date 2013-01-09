@@ -36,6 +36,7 @@ en:
       sales/customer:
         erp_customer_name: M2M Customer
         sales_territory: Sales Territory
+        business_type: Business Type
       m2m/contact:
         fcfname: First Name
         fcontact: Last Name

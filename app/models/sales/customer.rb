@@ -12,6 +12,9 @@
 #  sales_person_name  :string(255)
 #  created_at         :datetime
 #  updated_at         :datetime
+#  business_type_id   :integer(4)
+#  notes              :text
+#  website            :string(255)
 #
 
 class Sales::Customer < M2mhub::Base
@@ -21,6 +24,7 @@ class Sales::Customer < M2mhub::Base
   belongs_to :sales_territory, :class_name => 'Sales::Territory'
   validates_uniqueness_of :erp_customer_id, :allow_nil => true
   has_many :opportunities, :class_name => 'Sales::Opportunity', :foreign_key => 'sales_customer_id'
+  belongs_to_active_hash :business_type, :class_name => 'Sales::BusinessType'
   
   attr_accessor :opportunity_id
   attr_accessor :parent_company_name
@@ -64,6 +68,14 @@ class Sales::Customer < M2mhub::Base
   def destroy
     Sales::Opportunity.update_all({:sales_customer_id => nil}, {:sales_customer_id => self.id})
     super
+  end
+  
+  def website_url
+    @website_url ||= if self.website.present? and !self.website.starts_with?('http')
+      'http://' + self.website
+    else
+      self.website
+    end
   end
   
   def self.import

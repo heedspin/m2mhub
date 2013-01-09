@@ -1233,3 +1233,15 @@ li#sales_territory_description_input textarea {
 	height: 2.5em;
 	width: 40%;
 }
+
+/*****************************************
+  Text Areas
+*/
+li.small_textarea textarea {
+	height: 2.5em;
+	width: 40%;	
+}
+li.medium_textarea textarea {
+	height: 4.5em;
+	width: 40%;	
+}

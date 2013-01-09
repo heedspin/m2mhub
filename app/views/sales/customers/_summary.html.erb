@@ -6,8 +6,10 @@
 	<thead>
 		<tr>
 			<th>M2M Record</th>
+			<th>Website</th>
 			<th>Location</th>
 			<th>Territory</th>
+			<th>Business</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -20,15 +22,28 @@
 				<% end %>
 			</td>
 			<td>
+				<%= link_to(@customer.website, @customer.website_url, :target => '_blank') if @customer.website.present? %>
+			</td>
+			<td>
 				<%= simple_format @customer.location %>
 			</td>
 			<td>
 				<%= @customer.sales_territory.try(:name) || 'None' %>
 			</td>
 			<td>
+				<%= @customer.business_type.try(:name) %>
+			</td>
+			<td>
 				<%= link_to 'Edit', edit_sales_customer_url(@customer) %>
 			</td>
 		</tr>
+		<% if @customer.notes.present? %>
+		<tr>
+			<td colspan="4">
+				<%= simple_format @customer.notes %>
+			</td>
+		</tr>
+		<% end %>
 	</tbody>
 </table>
 

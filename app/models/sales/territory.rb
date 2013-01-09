@@ -14,6 +14,10 @@ class Sales::Territory < M2mhub::Base
   set_table_name 'sales_territories'
   scope :by_name, :order => 'name'
   
+  def name_and_description
+    @name_and_description ||= [name, description].select(&:present?).join( ' - ')
+  end
+  
   def self.import
     # http://en.wikipedia.org/wiki/List_of_regions_of_the_United_States#Official_U.S._regions
     [ 
