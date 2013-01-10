@@ -3,14 +3,7 @@ authorization do
   role :guest do
   end
   
-  role :doogle_admin do
-    # TODO: factor this out or make configurable.
-    has_permission_on :doogle_displays, :to => [:manage, :next_model_number]
-    has_permission_on :doogle_display_logs, :to => :read
-  end
-
   role :shipping do
-    includes :doogle_admin
     has_permission_on [:users, :passwords], :to => [:show,:update,:destroy] do
       if_attribute :id => is {user.id}
     end

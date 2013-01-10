@@ -28,7 +28,7 @@
 				<%= simple_format @customer.location %>
 			</td>
 			<td>
-				<%= @customer.sales_territory.try(:name) || 'None' %>
+				<%= @customer.sales_territory.try(:name_and_sales_rep) || 'None' %>
 			</td>
 			<td>
 				<%= @customer.business_type.try(:name) %>

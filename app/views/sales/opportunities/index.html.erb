@@ -66,6 +66,5 @@ $(function() {
 
 <%= render 'sales/opportunities/list', 
 	:show_won => @search.status.try(:won?), 
-	:show_hold => @search.status.try(:hold?),
-	:show_territory => @search.status.try(:sales_rep?) %>
+	:show_hold => @search.status.try(:hold?) %>
 
