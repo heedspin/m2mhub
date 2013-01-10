@@ -82,6 +82,8 @@ class Sales::Opportunity < M2mhub::Base
       if (found = Sales::Customer.with_name(self.customer_name)) and (found.size == 1)
         self.sales_customer = found.first
         self.customer_name = self.sales_customer.name
+      else
+        self.sales_customer_id = nil
       end
     end
     true

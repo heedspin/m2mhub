@@ -1,7 +1,7 @@
 <% title 'Edit Opportunity' %>
 <% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
 
-<%= render 'sales/submenu' %>
+<%= render 'sales/opportunities/submenu' %>
 <br />
 
 <%= semantic_form_for @opportunity, :url => opportunity_url(@opportunity) do |f| %>
