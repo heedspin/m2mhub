@@ -60,10 +60,10 @@ module FormatHelper
     text[0..(max-1)] + (text.size > max ? '...' : '')
   end
   
-  def format_variable_time(time, long_format=:number_date_time, short_format=:number_date)
+  def format_variable_time(time, today_format=:just_time, past_format=:number_date_time)
     return nil unless time
     now = Time.current
     today = (time.day == now.day) && (time.year == now.year)
-    time.to_s(today ? long_format : short_format)
+    time.to_s(today ? today_format : past_format)
   end
 end

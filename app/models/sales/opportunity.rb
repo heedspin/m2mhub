@@ -23,6 +23,8 @@
 #  sales_customer_id       :integer(4)
 #
 
+require 'plutolib/to_xls'
+
 class Sales::Opportunity < M2mhub::Base
   set_table_name 'sales_opportunities'
   has_many :comments, :class_name => 'Sales::OpportunityComment', :foreign_key => :opportunity_id, :dependent => :destroy
@@ -42,6 +44,9 @@ class Sales::Opportunity < M2mhub::Base
   end
   def full_sales_person
     @full_sales_person ||= [self.sales_person.try(:name), self.sales_person_name].compact.join(', ')
+  end
+  def sales_customer_name
+    self.sales_customer.try(:name) || self.customer_name
   end
 
   scope :status, lambda { |s|
@@ -121,23 +126,28 @@ class Sales::Opportunity < M2mhub::Base
     comment
   end
 
-  # Sales::Opportunity.import_from_lighthouse
-  def self.import_from_lighthouse(project_id=nil)
-    project_id ||= AppConfig.opportunities_default_lighthouse_project_id
-    page = 0
-    while true
-      tickets = Lighthouse::Ticket.find(:all, :params => { :q => 'all', :page => page, :project_id => project_id })
-      tickets.each do |ticket|
-        if Sales::OpportunityComment.with_ticket(ticket).count > 0
-          puts "Skipping #{ticket.id}"
-        else
-          # Reload ticket to load versions.
-          Sales::OpportunityFromTicket.create_opportunity(ticket.reload)
-        end
-      end
-      break if tickets.size == 0
-      page += 1
+  class Export
+    include Plutolib::ToXls
+    def initialize(opportunities)
+      @opportunities = opportunities
     end
-    true
+    
+    def xls_initialize
+      xls_field("Start Date") { |o| o.start_date }
+      xls_field('Customer') { |o| o.sales_customer_name }
+      xls_field('Source') { |o| o.source.try(:name) }
+      xls_field('Product') { |o| o.product }
+      xls_field('Title') { |o| o.title }
+      xls_field('Territory') { |o| o.sales_customer.try(:sales_territory).try(:name_and_description) }
+      xls_field('Sales Rep') { |o| o.sales_customer.try(:sales_territory).try(:sales_rep_name) }
+      xls_field('Location') { |o| o.sales_customer.try(:location) }
+      xls_field('Business') { |o| o.sales_customer.try(:business_type).try(:name) }
+      xls_field('Website') { |o| o.sales_customer.try(:website_url) }
+      xls_field('Customer Notes') { |o| o.sales_customer.try(:notes) }
+    end
+
+    def all_data
+      @opportunities
+    end
   end
 end

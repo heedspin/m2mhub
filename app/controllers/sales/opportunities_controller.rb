@@ -19,6 +19,14 @@ class Sales::OpportunitiesController < M2mhubController
     s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
     s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
     @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
+    respond_to do |format|
+      format.html
+      format.xls do
+        headers['Content-Disposition'] = "attachment; filename=\"LXD_Opportunities.xls\""
+        headers['Content-type'] = 'application/vnd.ms-excel'
+        render :text => Sales::Opportunity::Export.new(@opportunities).to_xls
+      end
+    end
   end
 
   def new
