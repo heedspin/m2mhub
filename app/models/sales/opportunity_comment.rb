@@ -69,7 +69,7 @@ class Sales::OpportunityComment < M2mhub::Base
     if next_last_comment = self.opportunity.comments.where(['sales_opportunity_comments.id != ?', self.id]).order('sales_opportunity_comments.id desc').first
       next_last_comment.update_opportunity
     else
-      self.opportunity.status_id = self.previous_status_id
+      self.opportunity.status_id = self.previous_status_id || Sales::OpportunityStatus.active
       self.opportunity.save!
     end
     super
