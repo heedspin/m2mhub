@@ -69,7 +69,7 @@ class Sales::Customer < M2mhub::Base
   after_create :attach_to_opportunity
   def attach_to_opportunity
     if self.opportunity_id.present? and (opportunity = Sales::Opportunity.find_by_id(self.opportunity_id.to_i))
-      opportunity.update_attributes(:sales_customer_id => self.id)
+      opportunity.update_attributes(:sales_customer_id => self.id, :customer_name => self.name)
     end
   end
   
