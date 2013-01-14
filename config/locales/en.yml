@@ -37,6 +37,8 @@ en:
         erp_customer_name: M2M Customer
         sales_territory: Sales Territory
         business_type: Business Type
+        lead_level: Lead Level
+        rep_status: Sales Rep Status
       m2m/contact:
         fcfname: First Name
         fcontact: Last Name

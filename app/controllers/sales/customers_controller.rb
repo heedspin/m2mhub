@@ -53,6 +53,7 @@ class Sales::CustomersController < M2mhubController
       s = Sales::Customer      
       s = s.name_like(@search.name.strip) if @search.name.present?
       s = s.sales_territory(@search.sales_territory) if @search.sales_territory
+      s = s.rep_status(@search.rep_status) if @search.rep_status
       @customers = s.by_name.paginate(:page => params[:page], :per_page => 50)
     end
     if @customers and (@customers.size == 1)

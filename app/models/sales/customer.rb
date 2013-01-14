@@ -15,6 +15,8 @@
 #  business_type_id   :integer(4)
 #  notes              :text
 #  website            :string(255)
+#  lead_level_id      :integer(4)
+#  rep_status_id      :integer(4)
 #
 
 class Sales::Customer < M2mhub::Base
@@ -23,8 +25,11 @@ class Sales::Customer < M2mhub::Base
   belongs_to :erp_customer, :class_name => 'M2m::Customer', :foreign_key => 'erp_customer_id'
   belongs_to :sales_territory, :class_name => 'Sales::Territory'
   validates_uniqueness_of :erp_customer_id, :allow_nil => true
+  validates_uniqueness_of :website, :allow_nil => true
   has_many :opportunities, :class_name => 'Sales::Opportunity', :foreign_key => 'sales_customer_id'
   belongs_to_active_hash :business_type, :class_name => 'Sales::BusinessType'
+  belongs_to_active_hash :lead_level, :class_name => 'Sales::LeadLevel'
+  belongs_to_active_hash :rep_status, :class_name => 'Sales::RepStatus'
   
   attr_accessor :opportunity_id
   attr_accessor :parent_company_name
@@ -46,6 +51,9 @@ class Sales::Customer < M2mhub::Base
   scope :by_name, :order => :name
   scope :sales_territory, lambda { |sales_territory|
     where(:sales_territory_id => sales_territory.is_a?(Sales::Territory) ? sales_territory.id : sales_territory)
+  }
+  scope :rep_status, lambda { |rep_status|
+    where(:rep_status_id => rep_status.is_a?(Sales::RepStatus) ? rep_status.id : rep_status)
   }
   
   before_save :set_erp_customer

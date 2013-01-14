@@ -125,6 +125,19 @@ class Sales::Opportunity < M2mhub::Base
     comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
     comment
   end
+  
+  def guess_website
+    if self.body =~ /From: [^@\n]+@([^@\n]+)/m
+      domain = $1.strip
+      if domain.starts_with?('www')
+        domain
+      else
+        'www.' + domain
+      end
+    else
+      nil
+    end
+  end
 
   class Export
     include Plutolib::ToXls

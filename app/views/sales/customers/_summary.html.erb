@@ -10,6 +10,8 @@
 			<th>Location</th>
 			<th>Territory</th>
 			<th>Business</th>
+			<th><%= Sales::Customer.human_attribute_name(:lead_level) %></th>
+			<th><%= Sales::Customer.human_attribute_name(:rep_status) %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -32,6 +34,12 @@
 			</td>
 			<td>
 				<%= @customer.business_type.try(:name) %>
+			</td>
+			<td>
+				<%= @customer.lead_level.try(:name) %>
+			</td>
+			<td>
+				<%= @customer.rep_status.try(:name) %>
 			</td>
 			<td>
 				<%= link_to 'Edit', edit_sales_customer_url(@customer) %>

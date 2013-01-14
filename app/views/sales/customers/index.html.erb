@@ -36,7 +36,14 @@ $(function() {
 			<td>
 				<%= f.inputs do %>
 				  <%= f.input :name, :label => 'Name' %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.inputs do %>
 					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All' %>
+					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
 				<% end %>
 			</td>
 		</tr>
