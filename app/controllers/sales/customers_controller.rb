@@ -63,7 +63,7 @@ class Sales::CustomersController < M2mhubController
 
   def show
     @customer = current_object
-    @opportunities = @customer.opportunities.status_open.by_last_update_desc.paginate(:page => params[:page], :per_page => 20)
+    @opportunities = @customer.opportunities.not_deleted.by_last_update_desc.paginate(:page => params[:page], :per_page => 20)
   end
 
   def destroy

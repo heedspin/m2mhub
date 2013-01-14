@@ -7,7 +7,8 @@ class Sales::BusinessType < ActiveHash::Base
     {:id => 4,  :name => 'Design House'},
     {:id => 5,  :name => 'Industrial Electronics'},
     {:id => 6,  :name => 'Consumer Electronics'},
-    {:id => 7,  :name => 'Other'},
+    {:id => 8,  :name => 'Military'},
+    {:id => 7,  :name => 'Other'}
   ]
   include Plutolib::ActiveHashMethods
   
