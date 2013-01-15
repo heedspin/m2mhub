@@ -55,6 +55,10 @@ class Sales::Customer < M2mhub::Base
   scope :rep_status, lambda { |rep_status|
     where(:rep_status_id => rep_status.is_a?(Sales::RepStatus) ? rep_status.id : rep_status)
   }
+  scope :lead_level, lambda { |lead_level|
+    lead_level = Sales::LeadLevel::Search.find(lead_level) if (lead_level.is_a?(Fixnum) || lead_level.is_a?(String))
+    where(['lead_level_id in (?)', lead_level.lead_level_ids])
+  }
   
   before_save :set_erp_customer
   def set_erp_customer

@@ -329,6 +329,9 @@ form.formtastic li.number input:focus, form.formtastic li.string input:focus, fo
 form.formtastic li.string input, form.formtastic li.text textarea {
 	padding:4px;
 	font-size:1.1em;
+	max-width: 399px;
+}
+form.formtastic li.widestring input, form.formtastic li.widetext textarea {
 	width: 399px;
 }
 form.formtastic li.number input {

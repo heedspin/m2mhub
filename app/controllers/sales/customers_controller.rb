@@ -49,14 +49,15 @@ class Sales::CustomersController < M2mhubController
 
   def search_index
     @search = Sales::Customer.new(params[:search])
+    @search.lead_level_id ||= Sales::LeadLevel::Search.open_lead.id
     if params.member?(:search)
-      s = Sales::Customer      
+      s = Sales::Customer.lead_level(@search.lead_level_id)
       s = s.name_like(@search.name.strip) if @search.name.present?
       s = s.sales_territory(@search.sales_territory) if @search.sales_territory
       s = s.rep_status(@search.rep_status) if @search.rep_status
       @customers = s.by_name.paginate(:page => params[:page], :per_page => 50)
     end
-    if @customers and (@customers.size == 1)
+    if @search.name.present? and @customers and (@customers.size == 1)
       redirect_to sales_customer_url(@customers.first)
     end
   end

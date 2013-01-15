@@ -33,9 +33,15 @@ $(function() {
 <table class="flatform">
 	<tbody>
 		<tr>
-			<td>
+			<td>				
 				<%= f.inputs do %>
-				  <%= f.input :name, :label => 'Name' %>
+			  	<%= f.input :name, :label => 'Name', :wrapper_html => { :class => 'widestring' } %>
+					<li>
+						<span id="inprogress" class="hide">
+						<%= image_tag AppConfig.in_progress_image %>
+						</span>
+					</li>
+					<%= f.input :lead_level, :collection => Sales::LeadLevel::Search.all, :include_blank => false %>
 				<% end %>
 			</td>
 		</tr>
@@ -52,9 +58,6 @@ $(function() {
 			  <%= f.buttons do %>
 				  <%= f.commit_button 'Search' %>
 				<% end %>
-				<div id="inprogress" class="hide">
-				<%= image_tag AppConfig.in_progress_image %>
-				</div>
 			</td>
 		</tr>
 	</tbody>
@@ -65,7 +68,7 @@ $(function() {
 
 <% if @customers %>
 <% if @customers.size > 0 %>
-<h3><%= comma @customers.size %> Customers</h3>
+<h3><%= comma @customers.total_entries %> Customers</h3>
 <%= will_paginate @customers %>
 <table class="data">
 	<thead>
