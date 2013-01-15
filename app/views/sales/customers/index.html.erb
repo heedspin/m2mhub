@@ -42,7 +42,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All' %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All', :label_method => :name_and_sales_rep %>
 					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
 				<% end %>
 			</td>
@@ -65,14 +65,32 @@ $(function() {
 
 <% if @customers %>
 <% if @customers.size > 0 %>
+<h3><%= comma @customers.size %> Customers</h3>
 <%= will_paginate @customers %>
-<div class="searchresults">
-	<ul>
-	<% @customers.each do |c| %>
-		<li><%= link_to c.name, sales_customer_url(c) %></li>
-	<% end %>
-	</ul>
-</div>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<th>Territory</th>
+			<th>Type</th>
+			<th>Lead</th>
+			<th>Rep Status</th>
+			<th>Location</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @customers.each do |c| %>
+		<tr>
+			<td><%= link_to c.name, sales_customer_url(c), {:target=>'_blank'} %></td>
+			<td><%= c.sales_territory.try(:name_and_sales_rep) %></td>
+			<td><%= c.business_type %></td>
+			<td><%= c.lead_level %></td>
+			<td><%= c.rep_status %></td>
+			<td><%= c.location %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
 <% else %>
 <h3>No matches</h3>
 <% end %>

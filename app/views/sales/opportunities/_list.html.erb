@@ -17,9 +17,11 @@ $(function() {
 <% end %>
 
 <% 
+	title 'Opportunities'
 	lighthouse_comment_columns = 5 + (show_won ? 1 : 0) + (show_hold ? 1 : 0)
 %>
 <% if @opportunities.size > 0 %>
+<h3><%= comma @opportunities.size %> Opportunities</h3>
 <%= will_paginate @opportunities %>
 <table class="data">
 	<thead>
