@@ -48,7 +48,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All', :label_method => :name_and_sales_rep %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.all, :prompt => 'All', :member_label => :name_and_sales_rep %>
 					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
 				<% end %>
 			</td>
@@ -57,6 +57,9 @@ $(function() {
 			<td>
 			  <%= f.buttons do %>
 				  <%= f.commit_button 'Search' %>
+					<li>
+						<%= link_to 'New Customer', new_sales_customer_url %>
+					</li>
 				<% end %>
 			</td>
 		</tr>

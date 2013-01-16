@@ -20,7 +20,7 @@ class Sales::LeadLevel < ActiveHash::Base
        {:id => 2,  :name => 'Existing Customer' },
        {:id => 3,  :name => 'Past Customer'},
        {:id => 4,  :name => 'Poor Prospect'},
-       {:id => 6,  :name => 'All', :_lead_level_ids => [ 1, 2, 3, 4 ]}
+       {:id => 6,  :name => 'All', :_lead_level_ids => [1, 2, 3, 4]}
      ]
      include Plutolib::ActiveHashMethods
      

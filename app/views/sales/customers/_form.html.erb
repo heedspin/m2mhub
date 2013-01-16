@@ -35,10 +35,10 @@ $(function() {
 		</span>
 	</li>
 	<%= f.input :location %>
-	<%= f.input :sales_territory, :label_method => :name_and_description, :collection => Sales::Territory.by_name %>
+	<%= f.input :sales_territory, :member_label => :name_and_description, :collection => Sales::Territory.by_name %>
 	<%= f.input :business_type, :collection => Sales::BusinessType.by_name %>
 	<%= f.input :website, :as => :string %>
-	<%= f.input :lead_level, :collection => Sales::LeadLevel.all %>
+	<%= f.input :lead_level, :collection => Sales::LeadLevel.all, :include_blank => false %>
 	<%= f.input :rep_status, :collection => Sales::RepStatus.all, :include_blank => false %>
 	<%= f.input :notes, :wrapper_html => { :class => 'medium_textarea' } %>
 <% end %>
