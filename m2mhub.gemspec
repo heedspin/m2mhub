@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'declarative_authorization', '0.5.5'
   s.add_dependency 'will_paginate', '~> 3.0.3'
   s.add_dependency 'delayed_job_active_record', '~> 0.3.2'
-  s.add_dependency "airbrake", '3.0.9'
+  s.add_dependency "airbrake"
   s.add_dependency 'active_hash', '~> 0.9.9'
   s.add_dependency 'spreadsheet', '0.7.4'
   s.add_dependency 'lighthouse-api', '2.0'
