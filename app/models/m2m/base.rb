@@ -45,6 +45,12 @@ class M2m::Base < ActiveRecord::Base
   def self.time_zone_aware_attributes
     false
   end
+  
+  # String#titleize will remove hashes.
+  def self.safe_titleize(txt)
+    return nil if txt.nil?
+    txt.strip.gsub(/(\w+)/) { |m| $1.capitalize }
+  end
 
   m2m_key = "#{Rails.env}_m2m"
   msg = if config = M2m::Base.configurations[m2m_key]

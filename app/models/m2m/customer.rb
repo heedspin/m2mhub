@@ -84,7 +84,7 @@ class M2m::Customer < M2m::Base
     if (txt =~ /[a-z]/)
       txt
     else
-      txt.split(' ').map { |p| p.downcase.capitalize }.join(' ')
+      safe_titleize txt
     end
   end
 

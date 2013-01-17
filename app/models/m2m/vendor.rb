@@ -10,9 +10,19 @@ class M2m::Vendor < M2m::Base
     }
   }
   scope :by_name, :order => :fcompany
+  scope :name_like, lambda { |txt|
+    {
+      :conditions => [ 'apvend.fcompany like ?', '%' + (txt || '') + '%' ]
+    }
+  }
+  scope :with_name, lambda { |txt|
+    {
+      :conditions => [ 'apvend.fcompany = ?', txt.ljust(35) ]
+    }
+  }
   
   def name
-    self.fcompany.titleize
+    @name ||= self.class.safe_titleize(self.fcompany)
   end
   
 end

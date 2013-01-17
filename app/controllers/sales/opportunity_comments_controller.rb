@@ -37,12 +37,11 @@ class Sales::OpportunityCommentsController < M2mhubController
     if comment_params = params[model_name]
       @comment.delete_lighthouse_ticket = value_to_bool(comment_params[:delete_lighthouse_ticket])
     end
-    flash[:notice] = "Comment Deleted"
     @comment.destroy
     respond_to do |format|
       destination = opportunity_url(@comment.opportunity)
       format.html {
-        flash[:notice] = "Opportunity Deleted"
+        flash[:notice] = "Comment Deleted"
         redirect_to destination
       }
       format.js {
