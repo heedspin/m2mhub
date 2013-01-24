@@ -53,7 +53,7 @@
 		<tr>
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
 				<% if @report.include_open_jobs %>
-					<% if (jobs = M2m::Job.for_item(r.item.item).open.by_date_desc.limit(5).all) and (jobs.size > 0) %>
+					<% if (jobs = M2m::Job.for_item(r.item.item).open.by_date_desc.all) and (jobs.size > 0) %>
 						<%= render 'items/jobs/list.html.erb', :jobs => jobs %>
 					<% end %>
 				<% else %>
