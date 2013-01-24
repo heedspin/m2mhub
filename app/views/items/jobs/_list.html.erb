@@ -1,24 +1,26 @@
-<% @jobs.each do |j| %>
-	<div class="job">
-		<table class="data">
-			<thead>
-				<tr>
-					<th colspan="4">
-						Rev: <%= j.revision %>&nbsp;
-						Job: <%= j.job_number %>
-						<span class="jobstatus"><%= j.status %>: <%= j.status_date.try(:to_s, :job_date) %></span>
-					</th>
-			</thead>
-			<tbody>
+<table class="data">
+	<tbody>
+		<% jobs.each do |j| %>
+		<tr>
+			<th rowspan="2">
+				Job: <%= j.job_number %><br />
+				<%= j.status %>: <%= j.status_date.try(:to_s, :job_date) %><br />
+				Quantity: <%= cm j.quantity, :job_quantity %>
+			</th>
+			<% j.detail_routings.each do |dr| %>
+			<th>
+				<%= dr.cached_work_center.short_name %>
+			</th>
+			<% end %>
+		</tr>
+		<tr>
 		<% j.detail_routings.each do |dr| %>
-			<tr>
-				<td><%= dr.work_center.name %></td>
-				<td><%= dr.work_center_id %></td>
-				<td><%= dr.percentage_complete %>%</td>
-				<td><%= cm dr.quantity_complete, :job_quantity, 0 %> / <%= cm dr.quantity, :job_quantity %></td>
-			</tr>
+			<td>
+				<%= dr.percentage_complete %>%<br />
+				<%= cm dr.quantity_complete, :job_quantity, 0 %>
+			</td>
 		<% end %>
-			</tbody>
-		</table>
-	</div>
-<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

@@ -3,7 +3,7 @@
 <h2>Jobs for <%= item_part_number(@item) %></h2>
 <%= will_paginate @jobs %>
 
-<%= render 'list' %>
+<%= render 'list', :jobs => @jobs %>
 
 <%= will_paginate @jobs %>
 

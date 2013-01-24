@@ -3,7 +3,7 @@ require 'plutolib/active_hash_transient_belongs_to'
 class Shipping::BacklogReport
   include Plutolib::ActiveHashTransientBelongsTo
 
-  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id)  
+  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id include_open_jobs)  
   
   def initialize(args)
     args ||= {}
@@ -19,6 +19,9 @@ class Shipping::BacklogReport
   
   def page_per_customer=(val)
     @page_per_customer = val.is_a?(String) ? (val.to_i != 0) : val
+  end
+  def include_open_jobs=(val)
+    @include_open_jobs = val.is_a?(String) ? (val.to_i != 0) : val
   end
   
   # active_hash_transient_belongs_to :report_status, :class_name => 'ReportStatus'

@@ -20,6 +20,18 @@ class M2m::WorkCenter < M2m::Base
   def name
     fcpro_name.titleize.strip
   end
+  
+  def short_name
+    @short_name ||= self.name[0..2] + '-' + self.work_center_id
+  end
+  
+  @@cache = {}  
+  def self.cached_lookup(id)
+    return nil unless id.present?
+    @@cache[id] ||= M2m::WorkCenter.find(id)
+  end
+  
+  
 end
 
 # == Schema Information

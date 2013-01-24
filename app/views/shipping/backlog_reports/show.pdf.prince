@@ -2,7 +2,9 @@
   <head>
     <style>
 			@page {
+				<% unless @report.include_open_jobs %>
 			  size: US-Letter landscape;
+				<% end %>
 				margin: .7in .5in .7in .7in;
 				@top-center { 
 					content: '<%= @title %>';

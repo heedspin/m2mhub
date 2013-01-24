@@ -5,7 +5,8 @@ class Shipping::BacklogReportsController < M2mhubController
     @report = Shipping::BacklogReport.new(params[:search])
     @report.due_date ||= Date.current.next_week
     @report.run if params.member?(:search)
-    if params[:commit] == 'Print'
+    @printing = (params[:commit] == 'Print')
+    if @printing
       due_date = Date.parse(@report.due_date)
       @title = "#{AppConfig.short_name} Backlog #{due_date.to_s(:sales_date)}"
       @filename = [AppConfig.short_name.downcase, 'backlog', due_date.strftime("%m_%d_%y")].join('_') + '.pdf'

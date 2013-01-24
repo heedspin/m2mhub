@@ -16,6 +16,7 @@ class M2m::Job < M2m::Base
     }
   }
   scope :released, :conditions => { :fstatus => M2m::Status.released.name }
+  scope :open, :conditions => [ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name] ] 
   scope :by_date_desc, :order => 'jomast.fhold_dt desc'
   scope :customers, lambda { |customers|
     customer_numbers = customers.map(&:customer_number)
@@ -67,6 +68,7 @@ class M2m::Job < M2m::Base
   alias_attribute :customer_name, :fcompany
   alias_attribute :internal_type_code, :fitype
   alias_attribute :type_code, :ftype
+  alias_attribute :quantity, :fquantity
   
   def customer
     @customer ||= M2m::Customer.with_customer_number(self.customer_number).first

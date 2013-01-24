@@ -13,6 +13,7 @@
 	<%= f.inputs :class => 'floatyfields' do %>
 		<%= f.input :backlog_group_id, :as => :select, :collection => BacklogGroup.all %>
 		<%= f.input :page_per_customer, :as => :boolean %>
+		<%= f.input :include_open_jobs, :as => :boolean %>
 	<% end %>
 	<%= f.buttons :class => 'floatyfields buttons' do %>
 	  <%= f.commit_button 'View' %>

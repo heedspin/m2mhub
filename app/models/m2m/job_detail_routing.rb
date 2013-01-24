@@ -16,6 +16,12 @@ class M2m::JobDetailRouting < M2m::Base
     M2m::Constants.sanitize_date(self.fstrtdate)
   end
   
+  def cached_work_center
+    # self.work_center = will cause double loading of wc. 
+    result = M2m::WorkCenter.cached_lookup(self.work_center_id)
+    self.work_center_id = result.id
+    result
+  end
 end
 
 # == Schema Information
