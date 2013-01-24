@@ -1,15 +1,18 @@
+<% unless defined?(mini_format) %>
+<% mini_format = false %>
+<% end %>
 <table class="data">
 	<tbody>
 		<% jobs.each do |j| %>
 		<tr>
 			<th rowspan="2">
-				Job: <%= j.job_number %><br />
-				<%= j.status %>: <%= j.status_date.try(:to_s, :job_date) %><br />
-				Quantity: <%= cm j.quantity, :job_quantity %>
+				<%= mini_format ? 'J' : 'Job' %>: <%= j.job_number %><br />
+				<%= mini_format ? j.status.name[0..2] : j.status %>: <%= j.status_date.try(:to_s, :job_date) %><br />
+				Qty: <%= cm j.quantity, :job_quantity %>
 			</th>
 			<% j.detail_routings.each do |dr| %>
 			<th>
-				<%= dr.cached_work_center.short_name %>
+				<%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %>
 			</th>
 			<% end %>
 		</tr>
