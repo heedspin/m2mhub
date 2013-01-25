@@ -124,7 +124,7 @@ class Sales::OpportunityComment < M2mhub::Base
     end
   end
   
-  before_create :update_opportunity
+  before_save :update_opportunity
   def update_opportunity
     if self.status_id != self.opportunity.status_id
       self.previous_status_id = self.opportunity.status_id
