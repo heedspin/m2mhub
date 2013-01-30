@@ -63,7 +63,7 @@ class Sales::Opportunity < M2mhub::Base
     text = '%' + (text || '') + '%'
     {
       :include => :sales_customer,
-      :conditions => [ 'sales_opportunities.customer_name like ? or (sales_customers.name like ?)', text, text ]
+      :conditions => [ 'sales_opportunities.customer_name like ? or sales_customers.name like ?', text, text ]
     }
   }
   scope :not_deleted, :conditions => [ 'sales_opportunities.status_id != ?', Sales::OpportunityStatus.deleted.id ]

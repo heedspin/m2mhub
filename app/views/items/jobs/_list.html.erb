@@ -3,27 +3,13 @@
 <% end %>
 <table class="data">
 	<tbody>
-		<% jobs.each do |j| %>
-		<tr>
-			<th rowspan="2">
-				<%= mini_format ? 'J' : 'Job' %>: <%= j.job_number %><br />
-				<%= mini_format ? j.status.name[0..2] : j.status %>: <%= j.status_date.try(:to_s, :job_date) %><br />
-				Qty: <%= cm j.quantity, :job_quantity %>
-			</th>
-			<% j.detail_routings.each do |dr| %>
-			<th>
-				<%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %>
-			</th>
-			<% end %>
+		<% jobs.each do |job| %>
+		<%= render 'items/jobs/job', :job => job, :mini_format => mini_format, :subjob => false %>
+		<% unless job == jobs.last %>
+		<tr class="spacer">
+			<td></td>
 		</tr>
-		<tr>
-		<% j.detail_routings.each do |dr| %>
-			<td>
-				<%= dr.percentage_complete %>%<br />
-				<%= cm dr.quantity_complete, :job_quantity, 0 %>
-			</td>
 		<% end %>
-		</tr>
 		<% end %>
 	</tbody>
 </table>

@@ -4,6 +4,8 @@ class M2m::Job < M2m::Base
   has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
   has_many :items, :class_name => 'M2m::JobItem', :foreign_key => 'fjobno', :primary_key => 'fjobno'
   belongs_to_item :fpartno, :fpartrev
+  belongs_to :parent_job, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
+  has_many :sub_jobs, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
 
   scope :for_item, lambda { |item|
     {
@@ -30,6 +32,7 @@ class M2m::Job < M2m::Base
       :conditions => [ 'jomast.fact_rel >= ?', date ]
     }
   }
+  scope :by_part_number, :order => 'jobmast.fpartno'
   
   def status
     M2m::Status.find_by_name(self.fstatus)
@@ -69,6 +72,7 @@ class M2m::Job < M2m::Base
   alias_attribute :internal_type_code, :fitype
   alias_attribute :type_code, :ftype
   alias_attribute :quantity, :fquantity
+  alias_attribute :parent_job_number, :fschbefjob
   
   def customer
     @customer ||= M2m::Customer.with_customer_number(self.customer_number).first

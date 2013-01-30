@@ -668,39 +668,31 @@ table.data p {
 	font-size: 1em;
 	padding-bottom: .5em;
 }
-
 table.data td.monitary {
 	text-align: right;
 }
-
 table.data td.centered, table.data th.centered {
 	text-align: center;
 }
-
 table.data td.right, table.data th.right {
 	text-align: right;
 }
-
 table.data td.ninjaborders {
 	border: none;
 }
-
 table.data td.current_on_hand {
 	background-color: #afa;
 	text-align: center;
 	font-weight:bold;	
 }
-
 table.data td.current_on_hand_error {
 	background-color: #faa;
 	text-align: center;
 	font-weight:bold;	
 }
-
 table.data tr.not_counted {
 	background-color: #eee;	
 }
-
 table.data td.fixnum, table.data th.fixnum {
 	width: 5em;
 }
@@ -719,11 +711,9 @@ table.data td.fixdouble, table.data th.fixdouble {
 table.data td.fixtriple, table.data th.fixtriple {
 	width: 15em;
 }
-
 table.fullsize {
 	width: 100%;
 }
-
 .hoverinfo a:link, .hoverinfo a:visited, .hoverinfo a:hover {
 	text-decoration:none;
 	color: #666;
@@ -731,7 +721,6 @@ table.fullsize {
 table.data tr.primary-contact {
 	background-color: #efe;
 }
-
 table.data table.data td {
   border: 1px dotted #ccc;
   }
@@ -744,6 +733,10 @@ table.data tr.master-release {
 }
 table.data th.date {
 	width:5em;
+}
+table.data tbody tr.spacer td {
+	padding: 0 0 2px;
+	border: none;
 }
 
 /* NEWS

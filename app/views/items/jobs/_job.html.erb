@@ -1,0 +1,26 @@
+<tr>
+	<th rowspan="2">
+		<%= mini_format ? (subjob ? 'SJ' : 'J') : (subjob ? 'Subjob' : 'Job') %>: <%= job.job_number %><br />
+		<% if subjob %>
+		<%= job.part_number %><br />
+		<% end %>
+		<%= mini_format ? job.status.name[0..2] : job.status %>: <%= job.status_date.try(:to_s, :job_date) %><br />
+		Qty: <%= cm job.quantity, :job_quantity %>
+	</th>
+	<% job.detail_routings.each do |dr| %>
+	<th>
+		<%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %>
+	</th>
+	<% end %>
+</tr>
+<tr>
+<% job.detail_routings.each do |dr| %>
+	<td>
+		<%= dr.percentage_complete %>%<br />
+		<%= cm dr.quantity_complete, :job_quantity, 0 %>
+	</td>
+<% end %>
+</tr>
+<% job.sub_jobs.by_part_number.each do |sub_job| %>
+<%= render 'items/jobs/job', :job => sub_job, :mini_format => mini_format, :subjob => true %>
+<% end %>
