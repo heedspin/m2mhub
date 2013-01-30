@@ -15,6 +15,7 @@ class M2m::PurchaseOrder < M2m::Base
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :order_date, :forddate
   alias_attribute :fob, :ffob
+  alias_attribute :vendor_number, :fvendno
 
   def status
     M2m::PurchaseOrderStatus.find_by_m2mname(self.fstatus.strip)

@@ -1,9 +1,24 @@
+<% unless defined?(include_vendor) %>
+<% include_vendor = false %>
+<% end %>
+<% unless defined?(include_po_link) %>
+<% include_po_link = true %>
+<% end %>
+<% unless defined?(include_browse_all) %>
+<% include_browse_all = false %>
+<% end %>
+<% if include_browse_all and (@total_purchase_order_items > @purchase_order_items.size) %>
+<% browse_all_link = link_to("Browse all #{@total_purchase_order_items} Purchase Order Items", vendor_purchase_order_items_url(@vendor)) %>
+<% end %>
 <% if purchase_order_items.size == 0 %>
 	<p>No purchase orders</p>
 <% else %>
 <table class="data">
 	<thead>
 		<tr>
+			<% if include_vendor %>
+			<th>Vendor</th>
+			<% end %>
 			<% if include_po_link %>
 			<th>PO No</th>
 			<% end %>
@@ -22,6 +37,9 @@
 	<tbody>
 	<% purchase_order_items.each do |i| %>
 		<tr>
+			<% if include_vendor %>
+			<td><%= link_to limit_string(i.purchase_order.vendor_name, 16), vendor_url(i.purchase_order.vendor_number) %></td>
+			<% end %>
 			<% if include_po_link %>
 			<td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
 			<% end %>
@@ -36,6 +54,9 @@
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
 			<td><%= cm i.unit_cost, :dollars %></td>
 		</tr>
+	<% end %>
+	<% if include_browse_all %>
+		<tr><td class="ninjaborders" colspan="8"><%= browse_all_link %></td></tr>
 	<% end %>
 	</tbody>
 </table>

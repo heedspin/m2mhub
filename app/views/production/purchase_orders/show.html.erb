@@ -4,7 +4,7 @@
 
 <p>
 	Status: <%= @purchase_order.status.name %><br />
-	Vendor: <%= @purchase_order.vendor_name %><br />
+	Vendor: <%= link_to @purchase_order.vendor_name, vendor_url(@purchase_order.vendor_number) %><br />
 	Ordered: <%= @purchase_order.forddate.to_s(:short_human_date_time) %><br />
 	FOB: <%= @purchase_order.fob %></br />
 </p>

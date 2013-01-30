@@ -3,6 +3,6 @@
 <h2>Purchase Order Items</h2>
 <%= will_paginate @purchase_order_items %>
 
-<%= render 'list', :include_browse_all => false %>
+<%= render 'production/purchase_order_items/list', :purchase_order_items => @purchase_order_items %>
 
 <%= will_paginate @purchase_order_items %>

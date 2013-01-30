@@ -2,4 +2,4 @@
 <br />
 
 <h2>Purchase Orders</h2>
-<%= render 'production/vendors/purchase_order_items/list', :include_browse_all => true %>
+<%= render 'production/purchase_order_items/list', :include_browse_all => true, :purchase_order_items => @purchase_order_items %>
