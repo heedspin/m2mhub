@@ -55,7 +55,7 @@ class MaterialAvailabilityReport
       self.status = @sales_order.status
       self.target_date = @sales_order.due_date
       self.actual_date = @sales_order.last_ship_date
-      self.count_supply_and_demand = !self.status.on_hold?
+      self.count_supply_and_demand = !self.status.try(:on_hold?)
     end
     def closed?
       @status.closed?
