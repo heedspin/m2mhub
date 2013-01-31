@@ -58,7 +58,7 @@ class MaterialAvailabilityReport
       self.count_supply_and_demand = !self.status.try(:on_hold?)
     end
     def closed?
-      @status.closed?
+      @status.try(:closed?)
     end
   end
 
