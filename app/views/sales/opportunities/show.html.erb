@@ -31,10 +31,18 @@ $(function() {
 		<% if @opportunity.sales_customer.present? %>
 			<%= link_to(@opportunity.customer_name, sales_customer_url(@opportunity.sales_customer)) %>
 		<% else %> 
-			<%= @opportunity.customer_name %> <%= link_to 'Create Customer', new_sales_customer_url(:sales_customer => { :name => @opportunity.customer_name, :opportunity_id => @opportunity.id, :website => @opportunity.guess_website }) %>
+			<%= @opportunity.customer_name %>
+			<ul>
+			<% @similar_customers.each do |sc| %>
+				<li>Link to: <%= link_to sc.object.name, opportunity_url(@opportunity, :sales_opportunity => {:customer_name => sc.object.name}), :method => :put %></li>
+			<% end %>
+				<li><%= link_to 'Create Customer', new_sales_customer_url(:sales_customer => { :name => @opportunity.customer_name, :opportunity_id => @opportunity.id, :website => @opportunity.guess_website }) %></li>
+	 			
+			</ul>
 		<% end %>
-
-		<br />
+	</p>
+	
+	<p>
 		<strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
 		<%= @opportunity.status.try(:name) %>
 		<% if @opportunity.status.try(:hold?) and @opportunity.wakeup %>

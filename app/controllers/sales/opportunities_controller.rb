@@ -1,6 +1,7 @@
+require 'amatcher'
 class Sales::OpportunitiesController < M2mhubController
   filter_access_to_defaults
-  
+
   class Search < Sales::Opportunity
     attr_accessor :sales_territory_id
   end
@@ -66,6 +67,11 @@ class Sales::OpportunitiesController < M2mhubController
     @comment = @opportunity.build_ticket_comment(current_user.full_name,
                                                  current_user.lighthouse_user_id)
     @comments = @opportunity.comments.by_id
+    if @opportunity.sales_customer.nil?
+      @similar_customers = Amatcher.find_similar( :match => @opportunity.customer_name, :method => :name,
+                                                  :objects => Sales::Customer.scoped(:select => 'id, name'),
+                                                  :limit => 10, :threshold => 0.7 )
+    end
   end
 
   def destroy

@@ -24,6 +24,7 @@ class Sales::Customer < M2mhub::Base
   belongs_to :parent_company, :class_name => 'Sales::ParentCompany'
   belongs_to :erp_customer, :class_name => 'M2m::Customer', :foreign_key => 'erp_customer_id'
   belongs_to :sales_territory, :class_name => 'Sales::Territory'
+  validates_uniqueness_of :name
   validates_uniqueness_of :erp_customer_id, :allow_blank => true
   validates_uniqueness_of :website, :allow_blank => true
   has_many :opportunities, :class_name => 'Sales::Opportunity', :foreign_key => 'sales_customer_id'

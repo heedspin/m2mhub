@@ -53,7 +53,7 @@ class M2m::Customer < M2m::Base
   }
   scope :with_name, lambda { |txt|
     {
-      :conditions => [ 'slcdpmx.name = ?', txt ]
+      :conditions => [ 'slcdpmx.fcompany = ?', txt ]
     }
   }
   scope :by_name, :order => 'fcompany'
