@@ -68,9 +68,13 @@ class Sales::OpportunitiesController < M2mhubController
                                                  current_user.lighthouse_user_id)
     @comments = @opportunity.comments.by_id
     if @opportunity.sales_customer.nil?
-      @similar_customers = Amatcher.find_similar( :match => @opportunity.customer_name, :method => :name,
-                                                  :objects => Sales::Customer.scoped(:select => 'id, name'),
-                                                  :limit => 10, :threshold => 0.7 )
+      @similar_customers = if @opportunity.customer_name.present?
+        Amatcher.find_similar( :match => @opportunity.customer_name, :method => :name,
+                               :objects => Sales::Customer.scoped(:select => 'id, name'),
+                               :limit => 10, :threshold => 0.7 )
+      else
+        []
+      end
     end
   end
 

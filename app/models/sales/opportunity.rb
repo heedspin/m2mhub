@@ -34,6 +34,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'sales_customer_id'
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
   
+  # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
 
   attr_accessor :delete_permanently
