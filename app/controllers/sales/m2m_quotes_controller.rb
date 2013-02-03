@@ -1,5 +1,5 @@
-class Sales::QuotesController < M2mhubController
-  filter_access_to_defaults
+class Sales::M2mQuotesController < M2mhubController
+  filter_access_to_defaults :context => :m2m_quotes
 
   def index
     @quotes = M2m::Quote.status_open.order('fquotedate desc, fquoteno desc').paginate(:page => params[:page], :per_page => 50)

@@ -28,7 +28,9 @@ authorization do
 
   role :sales do
     includes :shipping
+    has_permission_on :m2m_quotes, :to => :manage
     has_permission_on :sales_quotes, :to => :manage
+    has_permission_on :sales_quote_items, :to => :manage
     has_permission_on :sales_orders, :to => :read
     has_permission_on :sales_order_items, :to => :read
     has_permission_on :customers_sales_orders, :to => :read
@@ -42,7 +44,7 @@ authorization do
     has_permission_on :sales_territories, :to => :manage
     has_permission_on :parent_companies, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read
-    has_permission_on :items_quote_items, :to => :read
+    has_permission_on :items_m2m_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
     has_permission_on :items_boms, :to => :read
     has_permission_on :items_bom_parents, :to => :read

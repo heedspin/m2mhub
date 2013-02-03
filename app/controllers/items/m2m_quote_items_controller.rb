@@ -1,5 +1,5 @@
-class Items::QuoteItemsController < M2mhubController
-  filter_access_to_defaults
+class Items::M2mQuoteItemsController < M2mhubController
+  filter_access_to_defaults :context => :items_m2m_quote_items
 
   def index
     @item = parent_object

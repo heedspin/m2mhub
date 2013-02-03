@@ -12,9 +12,9 @@
 		</li>
 		<% end %>
 
-		<% if permitted_to?(:read, :sales_quotes) %>
-		<li class="<%= menu_selected 'sales/quotes' %>">
-			<%= link_to 'Quotes', sales_quotes_url %>
+		<% if permitted_to?(:read, :m2m_quotes) %>
+		<li class="<%= menu_selected 'sales/m2m_quotes' %>">
+			<%= link_to 'Quotes', m2m_quotes_url %>
 		</li>
 		<% end %>
 

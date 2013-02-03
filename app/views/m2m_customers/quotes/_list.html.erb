@@ -17,7 +17,7 @@
 		<tr class="<%= so_style %>">
 			<td rowspan="<%= q.items.size %>">
 				<%= q.fquotedate.to_s(:sales_date) %><br />
-				<%= link_to q.fquoteno, sales_quote_url(q) %><br />
+				<%= link_to q.fquoteno, m2m_quote_url(q) %><br />
 				Terms: <%= q.terms.try(:name) %><br />
 				Estimator: <%= q.festimator %><br />
 				Discount: <%= percent0 q.discount_rate %>%<br />
