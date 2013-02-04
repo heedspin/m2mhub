@@ -13,9 +13,13 @@
 class Sales::Territory < M2mhub::Base
   set_table_name 'sales_territories'
   scope :by_name, :order => 'name'
-  
+
   def name_and_description
     @name_and_description ||= [name, description].select(&:present?).join( ' - ')
+  end
+  
+  def rep_and_description
+    @rep_and_description ||= [sales_rep_name.present? ? sales_rep_name : name, description.present? ? description : (sales_rep_name.present? ? name : nil)].select(&:present?).join( ' - ')
   end
 
   def name_and_sales_rep

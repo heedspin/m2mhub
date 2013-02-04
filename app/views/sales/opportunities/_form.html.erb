@@ -42,7 +42,7 @@ $(function() {
 	</li>
 	<%= f.input :amount %>
 	<%= f.input :source, :collection => Sales::OpportunitySource.all %>
-  <%= f.input :sales_person, :collection => M2m::SalesPerson.by_name.all %> 
+  <%#= f.input :sales_person, :collection => M2m::SalesPerson.by_name.all %> 
 	<%= f.input :sales_person_name %>
 	<%= f.input :product %>
 	<%= f.input :title %>
