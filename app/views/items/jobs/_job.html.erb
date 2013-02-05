@@ -22,5 +22,5 @@
 <% end %>
 </tr>
 <% job.sub_jobs.status_open.by_part_number.each do |sub_job| %>
-<%= render 'items/jobs/job', :job => sub_job, :mini_format => mini_format, :subjob => true %>
+<%= render 'items/jobs/job.html.erb', :job => sub_job, :mini_format => mini_format, :subjob => true %>
 <% end %>

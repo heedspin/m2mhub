@@ -4,7 +4,7 @@
 <table class="data">
 	<tbody>
 		<% jobs.each do |job| %>
-		<%= render 'items/jobs/job', :job => job, :mini_format => mini_format, :subjob => false %>
+		<%= render 'items/jobs/job.html.erb', :job => job, :mini_format => mini_format, :subjob => false %>
 		<% unless job == jobs.last %>
 		<tr class="spacer">
 			<td></td>
