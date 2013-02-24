@@ -81,4 +81,10 @@ en:
         rma_number: RMA Number
       sales/territory:
         sales_rep_name: Sales Rep
+      sales/quote:
+        quote_number: Quote Number
+      sales/quote_item:
+        customer_part_number: Customer P/N
+        part_number: Part Number
+        expected_cost: Expected Cost
         

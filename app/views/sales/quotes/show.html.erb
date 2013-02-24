@@ -1,0 +1,58 @@
+<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% title "Quote #{@quote.quote_number}" %>
+
+<%= render 'sales/opportunities/submenu' %>
+<br />
+
+<h2>Quote <%= @quote.quote_number %></h2>
+
+<div class="submenu">
+	<ul>
+		<li>
+			<%= link_to 'Print', sales_quote_url(@quote, :print => true), :class => 'printpop' %>
+		</li>
+		<% if permitted_to? :edit, :sales_quotes %>
+		<li>
+			<%= link_to 'Edit', edit_sales_quote_url(@quote) %>
+		</li>
+		<% end %>
+	</ul>
+</div>
+
+<p>
+	<strong>Customer:</strong> <%= link_to @quote.customer_name, sales_customer_url(@quote.customer) %><br />
+	<strong>Status:</strong> <%= @quote.status %><br />
+	<strong>Terms:</strong> <%= @quote.terms %> <%= @quote.other_terms %><br />
+</p>
+
+<% if @quote.recipient.present? %>
+<h3>Recipient:</h3> 
+<%= simple_format @quote.recipient %>
+<% end %>
+
+<% if @quote.foreword.present? %>
+<h3>Foreword</h3>
+<%= simple_format @quote.foreword %>
+<% end %>
+
+<% if @quote.postfix.present? %>
+<h3>Postfix</h3>
+<%= simple_format @quote.postfix %>
+<% end %>
+
+<hr />
+
+<%= render 'sales/quote_items/list', :quote_items => @quote.items %>
+
+<% content_for :javascripts do %>
+	<%= javascript_include_tag 'm2mhub/jquery.popupWindow.js' %>
+<script type="text/javascript">
+$(function() {
+	$('.printpop').popupWindow({ 
+		centerScreen:1,
+		height:700, 
+		width: 1000
+	}); 
+});
+</script>
+<% end %>

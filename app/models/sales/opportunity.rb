@@ -82,6 +82,7 @@ class Sales::Opportunity < M2mhub::Base
     }
   }
 
+  # This logic is mostly duplicated in quote.
   before_save :set_customer
   def set_customer
     if self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
@@ -108,7 +109,7 @@ class Sales::Opportunity < M2mhub::Base
   def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    comment.lighthouse_title = [self.product.try(:strip), self.title.try(:strip)].select(&:present?).join(' - ')
+    comment.lighthouse_title = [self.product, self.customer_name, self.title].select(&:present?).map(&:strip).join(' - ')
     lighthouse_body = [ ]
     
     # Filter out lines starting with M2MHub:

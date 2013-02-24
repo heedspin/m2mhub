@@ -31,6 +31,7 @@ class Sales::Customer < M2mhub::Base
   belongs_to_active_hash :business_type, :class_name => 'Sales::BusinessType'
   belongs_to_active_hash :lead_level, :class_name => 'Sales::LeadLevel'
   belongs_to_active_hash :rep_status, :class_name => 'Sales::RepStatus'
+  has_many :quotes, :class_name => 'Sales::Quote'
   
   attr_accessor :opportunity_id
   attr_accessor :parent_company_name

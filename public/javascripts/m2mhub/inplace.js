@@ -1,6 +1,6 @@
 jQuery.fn.setupInPlaceActions = function() {
 	this.find(".inplace_show").click(function() {
-	  $(this).hide().siblings(".inplace_form").show().find("input[type=text]").focus();
+	  $(this).hide().siblings(".inplace_form").show().find("input[type=text]:first").focus();
 	  return false;
 	});
 	this.find(".inplace_cancel_link").click(function() {
@@ -69,7 +69,7 @@ jQuery.fn.setupDeletasticActions = function() {
 	})
 }
 $(document).ready(function(){	
-	$(".inplace_container").setupInPlaceActions();
+	// $(".inplace_container").pluto_inplace();
 	$(".deletastic_container").setupDeletasticActions();
 })
 

@@ -41,6 +41,7 @@ authorization do
     has_permission_on :customers_sales_backlog_reports, :to => :manage
     has_permission_on :sales_customers, :to => :manage
     has_permission_on :sales_customers_opportunities, :to => :manage
+    has_permission_on :sales_customers_quotes, :to => :manage
     has_permission_on :sales_territories, :to => :manage
     has_permission_on :parent_companies, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read

@@ -48,7 +48,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :sales_territory, :collection => Sales::Territory.by_name, :prompt => 'All', :member_label => :name_and_sales_rep %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.by_name, :prompt => 'All', :member_label => :rep_and_description %>
 					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
 				<% end %>
 			</td>

@@ -1,0 +1,25 @@
+<% title 'Edit Quote' %>
+<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+
+<%= render 'sales/opportunities/submenu' %>
+<br />
+
+<h2>Editing Quote <%= @quote.quote_number %></h2>
+
+<%= semantic_form_for @quote, :url => sales_quote_url(@quote) do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+	<%= f.buttons do %>
+	  <%= f.commit_button 'Save' %>
+	  <%= f.cancel_link %>
+		<li class="deletastic_container">
+			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>
+			<div class="deletastic_confirmation">
+				Are you sure?
+				<%= link_to 'Delete', '#', :class => 'deletastic_boom' %>
+				<br />
+				<%= link_to 'Cancel', '#', :class => 'deletastic_delete_cancel_link' %>
+			</div>
+		</li>
+	<% end %>
+<% end %>
+

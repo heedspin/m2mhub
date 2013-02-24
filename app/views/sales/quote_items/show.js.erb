@@ -1,0 +1,5 @@
+var id_input = $("input[name='quote_item[id]'][value=<%= @quote_item.id %>]");
+<% if @quote_item.margin %>
+	var row = id_input.closest("tr");
+	row.find("td.margin").html("<%= percent0 @quote_item.margin %>%")
+<% end %>

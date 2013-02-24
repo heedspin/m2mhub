@@ -1,0 +1,15 @@
+<% title 'Quotes' %>
+
+<%= render 'sales/opportunities/submenu' %>
+
+<% if @quotes.size > 0 %>
+<%= will_paginate @quotes %>
+<%= render 'sales/quotes/list', :quotes => @quotes %>
+<%= will_paginate @quotes %>
+<% else %>
+<h3>No Quotes!?  How can this be?  You know what to do...</h3>
+<% end %>
+
+<p>
+	<%= link_to 'New Quote', new_sales_quote_url %>
+</p>

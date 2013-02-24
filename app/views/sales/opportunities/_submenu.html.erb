@@ -4,6 +4,10 @@
 			<%= link_to 'Opportunities', opportunities_url %>
 		</li>
 
+		<li class="<%= menu_selected 'sales/quotes' %>">
+			<%= link_to 'Quotes', sales_quotes_url %>
+		</li>
+
 		<% if M2mhub::Feature.enabled?(:customers) and permitted_to?(:read, :sales_customers) %>
 		<li class="<%= menu_selected 'sales_customers' %>">
 			<%= link_to 'Customers', sales_customers_url %>

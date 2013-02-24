@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title><%= AppConfig.short_name %> Quote <%= @quote.quote_number %></title>
+		<%= stylesheet_link_tag 'm2mhub/quote' %>
+		<link rel="license" href="http://www.opensource.org/licenses/mit-license/">
+	  <%#= javascript_include_tag :defaults %>
+	  <%= javascript_include_tag 'm2mhub/jquery-1.6.4.min.js' %>
+		<script type="text/javascript">
+		$(function() {
+			window.print();
+		});
+		</script>
+	</head>
+	<body>
+		<header>
+			<h1>Quote</h1>
+			<address>
+				<%= simple_format @quote.foreword %>
+			</address>
+			<span><%= image_tag(AppConfig.quote_logo_image) %></span>
+		</header>
+		<article>
+			<h1>Recipient</h1>
+			<address>
+				<%= simple_format @quote.recipient %>
+			</address>
+			<table class="meta">
+				<tr>
+					<th><span><%= Sales::Quote.human_attribute_name(:quote_number) %></span></th>
+					<td><span><%= @quote.quote_number %></span></td>
+				</tr>
+				<tr>
+					<th><span><%= Sales::Quote.human_attribute_name(:date) %></span></th>
+					<td><span><%= @quote.date.to_s(:human_date) %></span></td>
+				</tr>
+				<% if @quote.terms_string.present? %>
+				<tr>
+					<th><span><%= Sales::Quote.human_attribute_name(:terms) %></span></th>
+					<td><span><%= @quote.terms_string %></span></td>
+				</tr>
+				<% end %>
+			</table>
+			<table class="inventory">
+				<thead>
+					<tr>
+						<th><span>Item / Description</span></th>
+						<th><span>Unit Price</span></th>
+						<th><span>Quantity</span></th>
+						<th><span>Total Price</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @quote.items.each do |item| %>
+					<tr>
+						<td>
+							<span><%= item.part_number %></span>
+							<div class="description"><%= simple_format item.description %></div>
+						</td>
+						<td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
+						<td><span><%= cm item.quantity, :item_quantity %></span></td>
+						<td><span data-prefix>$</span><span><%= cm item.total_price, :two_decimals %></span></td>
+					</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<% if false %>
+			<table class="balance">
+				<tr>
+					<th><span>Total</span></th>
+					<td><span data-prefix>$</span><span>Total Here</span></td>
+				</tr>
+			</table>
+			<% end %>
+		</article>
+		<aside>
+			<h1><span>Additional Notes</span></h1>
+			<div>
+				<%= simple_format @quote.postfix %>
+			</div>
+		</aside>
+	</body>
+</html>
+

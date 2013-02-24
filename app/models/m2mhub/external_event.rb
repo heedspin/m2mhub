@@ -169,6 +169,10 @@ class M2mhub::ExternalEvent < M2mhub::Base
   #   super(mid) # || M2mhub::ExternalEvent::Config.instance.alias_keys_for(self.source_type, mid).present? || self.data_hash.member?(mid)
   # end
   def method_missing(mid, *args)
-    value(mid)
+    if has_attribute?(mid)
+      super
+    else
+      value(mid)
+    end
   end
 end

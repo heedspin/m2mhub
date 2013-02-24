@@ -1,6 +1,13 @@
 <% include_toggle_javascript('toggle_details', image_tag(AppConfig.arrow_collapse_image),image_tag(AppConfig.arrow_expand_image)) %>
 <% include_toggle_javascript('toggle_form', 'edit', 'cancel') %>
-<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% content_for :javascripts do %>
+	<%= javascript_include_tag('m2mhub/inplace.js') %>
+	<script type="text/javascript">
+	$(function() {
+		$(".inplace_container").pluto_inplace();
+	});
+	</script>
+<% end %>
 
 <table class="data">
 	<tbody>

@@ -1,0 +1,79 @@
+<table class="quote">
+	<thead>
+		<tr>
+			<th class="part_number_description">
+				<%= Sales::QuoteItem.human_attribute_name(:part_number) %> /
+				<%= Sales::QuoteItem.human_attribute_name(:description) %>
+			</th>
+			<th class="customer_part_number">
+				<%= Sales::QuoteItem.human_attribute_name(:customer_part_number) %> 
+			</th>
+			<th class="expected_cost">
+				<%= Sales::QuoteItem.human_attribute_name(:expected_cost) %> 
+			</th>
+			<th class="quantity">
+				<%= Sales::QuoteItem.human_attribute_name(:quantity) %> 
+			</th>
+			<th class="price">
+				<%= Sales::QuoteItem.human_attribute_name(:price) %> 
+			</th>
+			<th class="margin">
+				Margin
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% quote_items.each do |quote_item| %>
+			<%= render 'sales/quote_items/row', :quote_item => quote_item %>
+		<% end %>
+		<%= render 'sales/quote_items/add_row' %>
+	</tbody>
+</table>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+jQuery.fn.quotes = function() {
+  $(this).find("#add_quote_item").click(function(){
+		var new_row = $("<%= escape_javascript render('sales/quote_items/row', :quote_item => @quote.items.build) %>");
+    var tr = $(this).closest("tr").replaceWith(new_row);
+		new_row.quotes().find("input[type=text]:first").focus();
+  });
+	$(this).find(":input").change(function() {
+		var row = $(this).closest("tr");
+		var row_values = row.find(":input").serialize();
+		var quote_item_id = row.find("input[name='quote_item[id]']").val();
+		var quote_items_url = "<%= sales_quote_items_url(@quote) %>"
+		if (quote_item_id) {
+			$.ajax({
+			  type: 'PUT',
+			  url: quote_items_url + "/" + quote_item_id,
+				async: true,
+				dataType: 'script',
+			  data: row_values
+			});
+		} else {
+			$.post(quote_items_url, row_values, null, "script");
+		}
+	});
+	$(this).find("a.delete_row").click(function() {
+		var row = $(this).closest("tr")
+		var quote_item_id = row.find("input[name='quote_item[id]']").val();
+		var quote_items_url = "<%= sales_quote_items_url(@quote) %>"
+		if (quote_item_id) {
+			$.ajax({
+			  type: 'DELETE',
+			  url: quote_items_url + "/" + quote_item_id,
+				async: true
+			});
+		}
+		row.remove();
+		return false;
+	})
+	return $(this);
+}
+
+$(function() {
+	$("table.quote tr").quotes();
+});
+</script>
+<% end %>

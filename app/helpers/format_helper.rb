@@ -1,4 +1,5 @@
 require 'plutolib/comma'
+
 module FormatHelper
   include Plutolib::Comma
   
@@ -66,4 +67,4 @@ module FormatHelper
     today = (time.day == now.day) && (time.year == now.year)
     time.to_s(today ? today_format : past_format)
   end
-end
+  end

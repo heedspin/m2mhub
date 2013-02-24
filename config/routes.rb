@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   resources :sales_order_items, :only => [:index, :show], :controller => 'sales/sales_order_items'
   resources :sales_order_releases, :only => [:index], :controller => 'sales/sales_order_releases'
   resources :m2m_quotes, :controller => 'sales/m2m_quotes'
-  resources :sales_quotes, :controller => 'sales/quotes'
+  resources :sales_quotes, :controller => 'sales/quotes' do
+    resources :items, :controller => 'sales/quote_items'
+  end
   resources :m2mhub_user_activities, :as => 'history', :only => [:index], :controller => 'm2mhub/user_activities'
   resources :items do
     resources :sales_order_releases, :only => [:index], :controller => 'items/sales_order_releases'
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
   end
   resources :sales_customers, :controller => 'sales/customers' do
     resources :opportunities, :controller => 'sales/customers/opportunities'
+    resources :quotes, :controller => 'sales/customers/quotes'
   end
   resources :sales_territories, :controller => 'sales/territories'
   resources :parent_companies, :controller => 'sales/parent_companies'
