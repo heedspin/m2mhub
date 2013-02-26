@@ -2,12 +2,12 @@
 #
 # Table name: m2mhub_triggers
 #
-#  id                    :integer(4)      not null, primary key
-#  trigger_type_id       :integer(4)
-#  trigger_state_id      :integer(4)
+#  id                    :integer          not null, primary key
+#  trigger_type_id       :integer
+#  trigger_state_id      :integer
 #  part_number           :string(255)
-#  notification_type_id  :integer(4)
-#  target_user_id        :integer(4)
+#  notification_type_id  :integer
+#  target_user_id        :integer
 #  lighthouse_project_id :string(255)
 #  title                 :string(255)
 #  instructions          :text

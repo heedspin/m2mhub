@@ -2,142 +2,142 @@
 #
 # Table name: inmastx
 #
-#  fpartno          :string(25)      default(""), not null
-#  frev             :string(3)       default(""), not null
-#  fcstscode        :string(1)       default(""), not null
-#  fdescript        :string(35)      default(""), not null
-#  flchgpnd         :boolean         default(FALSE), not null
-#  fmeasure         :string(3)       default(""), not null
-#  fsource          :string(1)       default(""), not null
-#  fleadtime        :decimal(7, 1)   default(0.0), not null
-#  fprice           :decimal(17, 5)  default(0.0), not null
-#  fstdcost         :decimal(17, 5)  default(0.0), not null
-#  f2totcost        :decimal(17, 5)  default(0.0), not null
-#  flastcost        :decimal(17, 5)  default(0.0), not null
-#  flocate1         :string(14)      default(""), not null
-#  fbin1            :string(14)      default(""), not null
-#  f2costcode       :string(1)       default(""), not null
-#  f2displcst       :decimal(17, 5)  default(0.0), not null
-#  f2dispmcst       :decimal(17, 5)  default(0.0), not null
-#  f2dispocst       :decimal(17, 5)  default(0.0), not null
-#  f2disptcst       :decimal(17, 5)  default(0.0), not null
-#  f2labcost        :decimal(17, 5)  default(0.0), not null
-#  f2matlcost       :decimal(17, 5)  default(0.0), not null
-#  f2ovhdcost       :decimal(17, 5)  default(0.0), not null
-#  favgcost         :decimal(17, 5)  default(0.0), not null
-#  fbulkissue       :string(1)       default(""), not null
-#  fbuyer           :string(3)       default(""), not null
-#  fcalc_lead       :string(1)       default(""), not null
-#  fcbackflsh       :string(1)       default(""), not null
-#  fcnts            :integer(4)      default(0), not null
-#  fcopymemo        :string(1)       default(""), not null
-#  fcostcode        :string(1)       default(""), not null
-#  fcpurchase       :string(1)       default(""), not null
-#  fcstperinv       :decimal(13, 9)  default(0.0), not null
-#  fdisplcost       :decimal(17, 5)  default(0.0), not null
-#  fdispmcost       :decimal(17, 5)  default(0.0), not null
-#  fdispocost       :decimal(17, 5)  default(0.0), not null
-#  fdispprice       :decimal(17, 5)  default(0.0), not null
-#  fdisptcost       :decimal(17, 5)  default(0.0), not null
-#  fdrawno          :string(25)      default(""), not null
-#  fdrawsize        :string(2)       default(""), not null
-#  fendqty1         :decimal(15, 5)  default(0.0), not null
-#  fendqty10        :decimal(17, 5)  default(0.0), not null
-#  fendqty11        :decimal(17, 5)  default(0.0), not null
-#  fendqty12        :decimal(17, 5)  default(0.0), not null
-#  fendqty2         :decimal(17, 5)  default(0.0), not null
-#  fendqty3         :decimal(17, 5)  default(0.0), not null
-#  fendqty4         :decimal(17, 5)  default(0.0), not null
-#  fendqty5         :decimal(17, 5)  default(0.0), not null
-#  fendqty6         :decimal(17, 5)  default(0.0), not null
-#  fendqty7         :decimal(17, 5)  default(0.0), not null
-#  fendqty8         :decimal(17, 5)  default(0.0), not null
-#  fendqty9         :decimal(17, 5)  default(0.0), not null
-#  fgroup           :string(6)       default(""), not null
-#  finspect         :string(1)       default(""), not null
-#  flabcost         :decimal(17, 5)  default(0.0), not null
-#  flasteoc         :string(25)      default(""), not null
-#  flct             :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fllotreqd        :boolean         default(FALSE), not null
-#  fmatlcost        :decimal(17, 5)  default(0.0), not null
-#  fmeasure2        :string(3)       default(""), not null
-#  fnweight         :decimal(10, 3)  default(0.0), not null
-#  fovhdcost        :decimal(17, 5)  default(0.0), not null
-#  fprodcl          :string(2)       default(""), not null
-#  freordqty        :decimal(15, 5)  default(0.0), not null
-#  frevdt           :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  frolledup        :string(1)       default(""), not null
-#  fsafety          :decimal(15, 5)  default(0.0), not null
-#  fschecode        :string(6)       default(""), not null
-#  fuprodtime       :decimal(9, 3)   default(0.0), not null
-#  fyield           :decimal(8, 3)   default(0.0), not null
-#  fabccode         :string(1)       default(""), not null
-#  ftaxable         :boolean         default(FALSE), not null
-#  fcusrchr1        :string(20)      default(""), not null
-#  fcusrchr2        :string(40)      default(""), not null
-#  fcusrchr3        :string(40)      default(""), not null
-#  fnusrqty1        :decimal(15, 5)  default(0.0), not null
-#  fnusrcur1        :decimal(17, 5)  default(0.0), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fcdncfile        :string(80)      default(""), not null
-#  fccadfile1       :string(250)     default(""), not null
-#  fccadfile2       :string(250)     default(""), not null
-#  fccadfile3       :string(250)     default(""), not null
-#  fclotext         :string(1)       default(""), not null
-#  flexpreqd        :boolean         default(FALSE), not null
-#  fdlastpc         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fschedtype       :string(1)       default(""), not null
-#  fldctracke       :boolean         default(FALSE), not null
-#  fddcrefdat       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fndctax          :decimal(17, 5)  default(0.0), not null
-#  fndcduty         :decimal(17, 5)  default(0.0), not null
-#  fndcfreigh       :decimal(17, 5)  default(0.0), not null
-#  fndcmisc         :decimal(17, 5)  default(0.0), not null
-#  fcratedisc       :string(1)       default(""), not null
-#  flconstrnt       :boolean         default(FALSE), not null
-#  flistaxabl       :boolean         default(FALSE), not null
-#  fcjrdict         :string(10)      default(""), not null
-#  flaplpart        :boolean         default(FALSE), not null
-#  flfanpart        :boolean         default(FALSE), not null
-#  fnfanaglvl       :integer(4)      default(0), not null
-#  fcplnclass       :string(1)       default(""), not null
-#  fcclass          :string(12)      default(""), not null
-#  fidims           :integer(4)      default(0), not null
+#  fpartno          :string(25)       default(""), not null
+#  frev             :string(3)        default(""), not null
+#  fcstscode        :string(1)        default(""), not null
+#  fdescript        :string(35)       default(""), not null
+#  flchgpnd         :boolean          default(FALSE), not null
+#  fmeasure         :string(3)        default(""), not null
+#  fsource          :string(1)        default(""), not null
+#  fleadtime        :decimal(7, 1)    default(0.0), not null
+#  fprice           :decimal(17, 5)   default(0.0), not null
+#  fstdcost         :decimal(17, 5)   default(0.0), not null
+#  f2totcost        :decimal(17, 5)   default(0.0), not null
+#  flastcost        :decimal(17, 5)   default(0.0), not null
+#  flocate1         :string(14)       default(""), not null
+#  fbin1            :string(14)       default(""), not null
+#  f2costcode       :string(1)        default(""), not null
+#  f2displcst       :decimal(17, 5)   default(0.0), not null
+#  f2dispmcst       :decimal(17, 5)   default(0.0), not null
+#  f2dispocst       :decimal(17, 5)   default(0.0), not null
+#  f2disptcst       :decimal(17, 5)   default(0.0), not null
+#  f2labcost        :decimal(17, 5)   default(0.0), not null
+#  f2matlcost       :decimal(17, 5)   default(0.0), not null
+#  f2ovhdcost       :decimal(17, 5)   default(0.0), not null
+#  favgcost         :decimal(17, 5)   default(0.0), not null
+#  fbulkissue       :string(1)        default(""), not null
+#  fbuyer           :string(3)        default(""), not null
+#  fcalc_lead       :string(1)        default(""), not null
+#  fcbackflsh       :string(1)        default(""), not null
+#  fcnts            :integer          default(0), not null
+#  fcopymemo        :string(1)        default(""), not null
+#  fcostcode        :string(1)        default(""), not null
+#  fcpurchase       :string(1)        default(""), not null
+#  fcstperinv       :decimal(13, 9)   default(0.0), not null
+#  fdisplcost       :decimal(17, 5)   default(0.0), not null
+#  fdispmcost       :decimal(17, 5)   default(0.0), not null
+#  fdispocost       :decimal(17, 5)   default(0.0), not null
+#  fdispprice       :decimal(17, 5)   default(0.0), not null
+#  fdisptcost       :decimal(17, 5)   default(0.0), not null
+#  fdrawno          :string(25)       default(""), not null
+#  fdrawsize        :string(2)        default(""), not null
+#  fendqty1         :decimal(15, 5)   default(0.0), not null
+#  fendqty10        :decimal(17, 5)   default(0.0), not null
+#  fendqty11        :decimal(17, 5)   default(0.0), not null
+#  fendqty12        :decimal(17, 5)   default(0.0), not null
+#  fendqty2         :decimal(17, 5)   default(0.0), not null
+#  fendqty3         :decimal(17, 5)   default(0.0), not null
+#  fendqty4         :decimal(17, 5)   default(0.0), not null
+#  fendqty5         :decimal(17, 5)   default(0.0), not null
+#  fendqty6         :decimal(17, 5)   default(0.0), not null
+#  fendqty7         :decimal(17, 5)   default(0.0), not null
+#  fendqty8         :decimal(17, 5)   default(0.0), not null
+#  fendqty9         :decimal(17, 5)   default(0.0), not null
+#  fgroup           :string(6)        default(""), not null
+#  finspect         :string(1)        default(""), not null
+#  flabcost         :decimal(17, 5)   default(0.0), not null
+#  flasteoc         :string(25)       default(""), not null
+#  flct             :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fllotreqd        :boolean          default(FALSE), not null
+#  fmatlcost        :decimal(17, 5)   default(0.0), not null
+#  fmeasure2        :string(3)        default(""), not null
+#  fnweight         :decimal(10, 3)   default(0.0), not null
+#  fovhdcost        :decimal(17, 5)   default(0.0), not null
+#  fprodcl          :string(2)        default(""), not null
+#  freordqty        :decimal(15, 5)   default(0.0), not null
+#  frevdt           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frolledup        :string(1)        default(""), not null
+#  fsafety          :decimal(15, 5)   default(0.0), not null
+#  fschecode        :string(6)        default(""), not null
+#  fuprodtime       :decimal(9, 3)    default(0.0), not null
+#  fyield           :decimal(8, 3)    default(0.0), not null
+#  fabccode         :string(1)        default(""), not null
+#  ftaxable         :boolean          default(FALSE), not null
+#  fcusrchr1        :string(20)       default(""), not null
+#  fcusrchr2        :string(40)       default(""), not null
+#  fcusrchr3        :string(40)       default(""), not null
+#  fnusrqty1        :decimal(15, 5)   default(0.0), not null
+#  fnusrcur1        :decimal(17, 5)   default(0.0), not null
+#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcdncfile        :string(80)       default(""), not null
+#  fccadfile1       :string(250)      default(""), not null
+#  fccadfile2       :string(250)      default(""), not null
+#  fccadfile3       :string(250)      default(""), not null
+#  fclotext         :string(1)        default(""), not null
+#  flexpreqd        :boolean          default(FALSE), not null
+#  fdlastpc         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fschedtype       :string(1)        default(""), not null
+#  fldctracke       :boolean          default(FALSE), not null
+#  fddcrefdat       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fndctax          :decimal(17, 5)   default(0.0), not null
+#  fndcduty         :decimal(17, 5)   default(0.0), not null
+#  fndcfreigh       :decimal(17, 5)   default(0.0), not null
+#  fndcmisc         :decimal(17, 5)   default(0.0), not null
+#  fcratedisc       :string(1)        default(""), not null
+#  flconstrnt       :boolean          default(FALSE), not null
+#  flistaxabl       :boolean          default(FALSE), not null
+#  fcjrdict         :string(10)       default(""), not null
+#  flaplpart        :boolean          default(FALSE), not null
+#  flfanpart        :boolean          default(FALSE), not null
+#  fnfanaglvl       :integer          default(0), not null
+#  fcplnclass       :string(1)        default(""), not null
+#  fcclass          :string(12)       default(""), not null
+#  fidims           :integer          default(0), not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fcomment         :text            default(""), not null
-#  fmusrmemo1       :text            default(""), not null
-#  fstdmemo         :text            default(""), not null
-#  fac              :string(20)      default("")
-#  sfac             :string(20)      default("")
-#  itcfixed         :decimal(17, 5)  default(0.0)
-#  itcunit          :decimal(17, 5)  default(0.0)
-#  fnPOnHand        :decimal(16, 5)  default(0.0), not null
-#  fnLndToMfg       :decimal(16, 5)  default(0.0), not null
-#  fcudrev          :string(3)       default(""), not null
-#  fluseudrev       :boolean         default(FALSE), not null
-#  fndbrmod         :integer(4)      default(0), not null
-#  fiPcsOnHd        :integer(4)      default(0), not null
-#  flSendSLX        :boolean         default(FALSE), not null
-#  fcSLXProd        :string(12)      default(""), not null
-#  flFSRtn          :boolean         default(FALSE), not null
-#  fnlatefact       :decimal(4, 2)   default(0.0), not null
-#  fnsobuf          :integer(4)      default(0), not null
-#  fnpurbuf         :integer(4)      default(0), not null
-#  flcnstrpur       :boolean         default(FALSE), not null
-#  fdvenfence       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flLatefact       :boolean         default(FALSE), not null
-#  flSOBuf          :boolean         default(FALSE), not null
-#  flPurBuf         :boolean         default(FALSE), not null
-#  flHoldStoc       :boolean         default(FALSE), not null
-#  fnHoldStoc       :decimal(4, 2)   default(0.0), not null
-#  ManualPlan       :boolean         default(FALSE), not null
-#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flocbfdef        :string(14)      default(""), not null
-#  fbinbfdef        :string(14)      default(""), not null
-#  DockTime         :integer(4)      default(0), not null
-#  fnifttime        :decimal(7, 1)   default(0.0), not null
-#  flSynchOn        :boolean         default(FALSE), not null
+#  identity_column  :integer          not null, primary key
+#  fcomment         :text             default(""), not null
+#  fmusrmemo1       :text             default(""), not null
+#  fstdmemo         :text             default(""), not null
+#  fac              :string(20)       default("")
+#  sfac             :string(20)       default("")
+#  itcfixed         :decimal(17, 5)   default(0.0)
+#  itcunit          :decimal(17, 5)   default(0.0)
+#  fnPOnHand        :decimal(16, 5)   default(0.0), not null
+#  fnLndToMfg       :decimal(16, 5)   default(0.0), not null
+#  fcudrev          :string(3)        default(""), not null
+#  fluseudrev       :boolean          default(FALSE), not null
+#  fndbrmod         :integer          default(0), not null
+#  fiPcsOnHd        :integer          default(0), not null
+#  flSendSLX        :boolean          default(FALSE), not null
+#  fcSLXProd        :string(12)       default(""), not null
+#  flFSRtn          :boolean          default(FALSE), not null
+#  fnlatefact       :decimal(4, 2)    default(0.0), not null
+#  fnsobuf          :integer          default(0), not null
+#  fnpurbuf         :integer          default(0), not null
+#  flcnstrpur       :boolean          default(FALSE), not null
+#  fdvenfence       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flLatefact       :boolean          default(FALSE), not null
+#  flSOBuf          :boolean          default(FALSE), not null
+#  flPurBuf         :boolean          default(FALSE), not null
+#  flHoldStoc       :boolean          default(FALSE), not null
+#  fnHoldStoc       :decimal(4, 2)    default(0.0), not null
+#  ManualPlan       :boolean          default(FALSE), not null
+#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flocbfdef        :string(14)       default(""), not null
+#  fbinbfdef        :string(14)       default(""), not null
+#  DockTime         :integer          default(0), not null
+#  fnifttime        :decimal(7, 1)    default(0.0), not null
+#  flSynchOn        :boolean          default(FALSE), not null
 #
 
 require 'm2m/belongs_to_item_group'

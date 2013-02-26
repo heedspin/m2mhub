@@ -2,15 +2,15 @@
 #
 # Table name: sales_quote_items
 #
-#  id                   :integer(4)      not null, primary key
-#  quote_id             :integer(4)
-#  position             :integer(4)
+#  id                   :integer          not null, primary key
+#  quote_id             :integer
+#  position             :integer
 #  part_number          :string(255)
 #  revision             :string(255)
-#  display_id           :integer(4)
+#  display_id           :integer
 #  description          :text
 #  customer_part_number :string(255)
-#  price_method_id      :integer(4)
+#  price_method_id      :integer
 #  quantity             :decimal(12, 2)
 #  expected_cost        :decimal(14, 2)
 #  price                :decimal(14, 2)

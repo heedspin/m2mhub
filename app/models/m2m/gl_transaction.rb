@@ -2,24 +2,24 @@
 #
 # Table name: gltran
 #
-#  fcacctnum        :string(25)      default(""), not null
-#  fcrefclass       :string(2)       default(""), not null
-#  fctime_ts        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fcuserid         :string(4)       default(""), not null
-#  fddate           :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ftrsamt          :decimal(, )     default(0.0), not null
-#  ftrsdes          :string(30)      default(""), not null
-#  ftrsref          :string(10)      default(""), not null
-#  ftrsdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fccurid          :string(3)       default(""), not null
-#  fcfactor         :decimal(17, 5)  default(0.0), not null
-#  feurofctr        :decimal(17, 5)  default(0.0), not null
-#  feurotrsamt      :decimal(, )     default(0.0), not null
-#  ftxntrsamt       :decimal(, )     default(0.0), not null
-#  flreverse        :boolean         default(FALSE), not null
+#  fcacctnum        :string(25)       default(""), not null
+#  fcrefclass       :string(2)        default(""), not null
+#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcuserid         :string(4)        default(""), not null
+#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftrsamt          :decimal(, )      default(0.0), not null
+#  ftrsdes          :string(30)       default(""), not null
+#  ftrsref          :string(10)       default(""), not null
+#  ftrsdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fccurid          :string(3)        default(""), not null
+#  fcfactor         :decimal(17, 5)   default(0.0), not null
+#  feurofctr        :decimal(17, 5)   default(0.0), not null
+#  feurotrsamt      :decimal(, )      default(0.0), not null
+#  ftxntrsamt       :decimal(, )      default(0.0), not null
+#  flreverse        :boolean          default(FALSE), not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fmcocons         :text            default(""), not null
+#  identity_column  :integer          not null, primary key
+#  fmcocons         :text             default(""), not null
 #
 
 class M2m::GlTransaction < M2m::Base

@@ -2,7 +2,7 @@
 #
 # Table name: sales_territories
 #
-#  id             :integer(4)      not null, primary key
+#  id             :integer          not null, primary key
 #  name           :string(255)
 #  sales_rep_name :string(255)
 #  description    :text

@@ -2,25 +2,25 @@
 #
 # Table name: sales_opportunities
 #
-#  id                      :integer(4)      not null, primary key
+#  id                      :integer          not null, primary key
 #  start_date              :date
 #  end_date                :date
 #  customer_id             :string(255)
 #  customer_name           :string(255)
-#  amount                  :integer(4)
-#  opportunity_source_id   :integer(4)
+#  amount                  :integer
+#  opportunity_source_id   :integer
 #  product                 :string(255)
 #  title                   :string(255)
 #  body                    :text
 #  sales_person_id         :string(255)
 #  sales_person_name       :string(255)
-#  status_id               :integer(4)
+#  status_id               :integer
 #  wakeup                  :date
 #  created_at              :datetime
 #  updated_at              :datetime
-#  creator_id              :integer(4)
-#  last_comment_updated_id :integer(4)
-#  sales_customer_id       :integer(4)
+#  creator_id              :integer
+#  last_comment_updated_id :integer
+#  sales_customer_id       :integer
 #
 
 require 'plutolib/to_xls'
@@ -33,6 +33,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus'
   belongs_to :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'sales_customer_id'
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
+  # belongs_to :territory
   
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name

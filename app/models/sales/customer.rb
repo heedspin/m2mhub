@@ -2,21 +2,21 @@
 #
 # Table name: sales_customers
 #
-#  id                 :integer(4)      not null, primary key
-#  parent_company_id  :integer(4)
+#  id                 :integer          not null, primary key
+#  parent_company_id  :integer
 #  erp_customer_id    :string(255)
 #  name               :string(255)
 #  location           :text
-#  sales_territory_id :integer(4)
+#  sales_territory_id :integer
 #  sales_person_id    :string(255)
 #  sales_person_name  :string(255)
 #  created_at         :datetime
 #  updated_at         :datetime
-#  business_type_id   :integer(4)
+#  business_type_id   :integer
 #  notes              :text
 #  website            :string(255)
-#  lead_level_id      :integer(4)
-#  rep_status_id      :integer(4)
+#  lead_level_id      :integer
+#  rep_status_id      :integer
 #
 
 class Sales::Customer < M2mhub::Base

@@ -2,22 +2,22 @@
 #
 # Table name: ardist
 #
-#  fcacctnum        :string(25)      default(""), not null
-#  fccashid         :string(35)      default(""), not null
-#  fcstatus         :string(1)       default(""), not null
-#  fcrefclass       :string(1)       default(""), not null
-#  fcrefname        :string(4)       default(""), not null
-#  fctime_ts        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fcuserid         :string(4)       default(""), not null
-#  fddate           :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fnamount         :decimal(, )     default(0.0), not null
-#  fccashnum        :string(20)      default(""), not null
-#  fccurid          :string(3)       default(""), not null
-#  fcfactor         :decimal(17, 5)  default(0.0), not null
-#  feurofctr        :decimal(17, 5)  default(0.0), not null
-#  fneuroamt        :decimal(, )     default(0.0), not null
-#  fntxnamt         :decimal(, )     default(0.0), not null
-#  identity_column  :integer(4)      not null, primary key
+#  fcacctnum        :string(25)       default(""), not null
+#  fccashid         :string(35)       default(""), not null
+#  fcstatus         :string(1)        default(""), not null
+#  fcrefclass       :string(1)        default(""), not null
+#  fcrefname        :string(4)        default(""), not null
+#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcuserid         :string(4)        default(""), not null
+#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fnamount         :decimal(, )      default(0.0), not null
+#  fccashnum        :string(20)       default(""), not null
+#  fccurid          :string(3)        default(""), not null
+#  fcfactor         :decimal(17, 5)   default(0.0), not null
+#  feurofctr        :decimal(17, 5)   default(0.0), not null
+#  fneuroamt        :decimal(, )      default(0.0), not null
+#  fntxnamt         :decimal(, )      default(0.0), not null
+#  identity_column  :integer          not null, primary key
 #  timestamp_column :binary
 #
 

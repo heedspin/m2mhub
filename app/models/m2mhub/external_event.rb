@@ -2,13 +2,13 @@
 #
 # Table name: m2mhub_external_events
 #
-#  id                    :integer(4)      not null, primary key
-#  status_id             :integer(4)
+#  id                    :integer          not null, primary key
+#  status_id             :integer
 #  source                :string(255)
 #  json_data             :text
 #  request_header        :text
-#  delayed_job_id        :integer(4)
-#  delayed_job_status_id :integer(4)
+#  delayed_job_id        :integer
+#  delayed_job_status_id :integer
 #  delayed_job_log       :text
 #  delayed_job_method    :string(255)
 #  created_at            :datetime

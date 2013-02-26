@@ -1,3 +1,39 @@
+# == Schema Information
+#
+# Table name: syrmama
+#
+#  fcrmano          :string(25)       default(""), not null, primary key
+#  fcsono           :string(6)        default(""), not null
+#  fccustno         :string(6)        default(""), not null
+#  fcstatus         :string(20)       default(""), not null
+#  fcenterby        :string(3)        default(""), not null
+#  fcauthby         :string(3)        default(""), not null
+#  fcseverty        :string(1)        default(""), not null
+#  fccustpo         :string(20)       default(""), not null
+#  fcsalecode       :string(7)        default(""), not null
+#  fdincidate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdenterdate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  finqno           :string(6)        default(""), not null
+#  fcompany         :string(35)       default(""), not null
+#  identity_column  :integer          not null
+#  timestamp_column :binary
+#  fnextenum        :string(3)        default(""), not null
+#  fnextinum        :string(3)        default(""), not null
+#  fcfname          :string(20)       default(""), not null
+#  fcusrchr1        :string(40)       default(""), not null
+#  fcusrchr2        :string(40)       default(""), not null
+#  fcusrchr3        :string(40)       default(""), not null
+#  fnusrqty1        :decimal(15, 5)   default(0.0), not null
+#  fnusrcur1        :decimal(17, 5)   default(0.0), not null
+#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fmusrmemo1       :text             default(""), not null
+#  fnotes           :string(500)      default(""), not null
+#  flfsflag         :boolean          default(FALSE), not null
+#  fcontact         :string(30)       default(""), not null
+#  fdisrate         :decimal(8, 3)    default(0.0), not null
+#  fcusrchr4        :string(40)       default(""), not null
+#
+
 class M2m::Rma < M2m::Base
   set_table_name 'syrmama'
   set_primary_key 'fcrmano'
@@ -151,40 +187,3 @@ class M2m::Rma < M2m::Base
   end
 
 end
-
-# == Schema Information
-#
-# Table name: syrmama
-#
-#  fcrmano          :string(25)      default(""), not null, primary key
-#  fcsono           :string(6)       default(""), not null
-#  fccustno         :string(6)       default(""), not null
-#  fcstatus         :string(20)      default(""), not null
-#  fcenterby        :string(3)       default(""), not null
-#  fcauthby         :string(3)       default(""), not null
-#  fcseverty        :string(1)       default(""), not null
-#  fccustpo         :string(20)      default(""), not null
-#  fcsalecode       :string(7)       default(""), not null
-#  fdincidate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdenterdate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  finqno           :string(6)       default(""), not null
-#  fcompany         :string(35)      default(""), not null
-#  identity_column  :integer(4)      not null
-#  timestamp_column :binary
-#  fnextenum        :string(3)       default(""), not null
-#  fnextinum        :string(3)       default(""), not null
-#  fcfname          :string(20)      default(""), not null
-#  fcusrchr1        :string(40)      default(""), not null
-#  fcusrchr2        :string(40)      default(""), not null
-#  fcusrchr3        :string(40)      default(""), not null
-#  fnusrqty1        :decimal(15, 5)  default(0.0), not null
-#  fnusrcur1        :decimal(17, 5)  default(0.0), not null
-#  fdusrdate1       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fmusrmemo1       :text            default(""), not null
-#  fnotes           :string(500)     default(""), not null
-#  flfsflag         :boolean         default(FALSE), not null
-#  fcontact         :string(30)      default(""), not null
-#  fdisrate         :decimal(8, 3)   default(0.0), not null
-#  fcusrchr4        :string(40)      default(""), not null
-#
-

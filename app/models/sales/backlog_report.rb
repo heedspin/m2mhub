@@ -2,7 +2,7 @@
 #
 # Table name: backlog_reports
 #
-#  id            :integer(4)      not null, primary key
+#  id            :integer          not null, primary key
 #  date          :date
 #  total_backlog :decimal(12, 2)
 #  created_at    :datetime

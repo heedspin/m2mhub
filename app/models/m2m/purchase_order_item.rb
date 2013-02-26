@@ -1,3 +1,96 @@
+# == Schema Information
+#
+# Table name: poitem
+#
+#  fpono            :string(6)        default(""), not null
+#  fpartno          :string(25)       default(""), not null
+#  frev             :string(3)        default(""), not null
+#  fmeasure         :string(3)        default(""), not null
+#  fitemno          :string(3)        default(""), not null
+#  frelsno          :string(3)        default(""), not null
+#  fcategory        :string(8)        default(""), not null
+#  fsokey           :string(6)        default(""), not null
+#  fsoitm           :string(3)        default(""), not null
+#  fsorls           :string(3)        default(""), not null
+#  fjokey           :string(10)       default(""), not null
+#  fjoitm           :string(6)        default(""), not null
+#  fjoopno          :integer          default(0), not null
+#  flstcost         :decimal(17, 5)   default(0.0), not null
+#  fstdcost         :decimal(17, 5)   default(0.0), not null
+#  fleadtime        :decimal(5, 1)    default(0.0), not null
+#  forgpdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flstpdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fmultirls        :string(1)        default(""), not null
+#  fnextrels        :integer          default(0), not null
+#  fnqtydm          :decimal(15, 5)   default(0.0), not null
+#  freqdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fretqty          :decimal(15, 5)   default(0.0), not null
+#  fordqty          :decimal(15, 5)   default(0.0), not null
+#  fqtyutol         :decimal(6, 2)    default(0.0), not null
+#  fqtyltol         :decimal(6, 2)    default(0.0), not null
+#  fbkordqty        :decimal(15, 5)   default(0.0), not null
+#  flstsdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frcpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frcpqty          :decimal(15, 5)   default(0.0), not null
+#  fshpqty          :decimal(15, 5)   default(0.0), not null
+#  finvqty          :decimal(15, 5)   default(0.0), not null
+#  fdiscount        :decimal(5, 1)    default(0.0), not null
+#  frework          :string(1)        default(""), not null
+#  fstandard        :boolean          default(FALSE), not null
+#  ftax             :string(1)        default(""), not null
+#  fsalestax        :decimal(7, 3)    default(0.0), not null
+#  finspect         :string(1)        default(""), not null
+#  flcost           :decimal(17, 5)   default(0.0), not null
+#  fucost           :decimal(17, 5)   default(0.0), not null
+#  fprintmemo       :string(1)        default(""), not null
+#  fvlstcost        :decimal(17, 5)   default(0.0), not null
+#  fvleadtime       :decimal(5, 1)    default(0.0), not null
+#  fvmeasure        :string(5)        default(""), not null
+#  fvpartno         :string(25)       default(""), not null
+#  fvptdes          :string(35)       default(""), not null
+#  fvordqty         :decimal(15, 5)   default(0.0), not null
+#  fvconvfact       :decimal(13, 9)   default(0.0), not null
+#  fvucost          :decimal(17, 5)   default(0.0), not null
+#  fqtyshipr        :decimal(15, 5)   default(0.0), not null
+#  fdateship        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fparentpo        :string(6)        default(""), not null
+#  frmano           :string(25)       default(""), not null
+#  fdebitmemo       :string(1)        default(""), not null
+#  finspcode        :string(4)        default(""), not null
+#  freceiver        :string(6)        default(""), not null
+#  fnorgucost       :decimal(17, 5)   default(0.0), not null
+#  fcorgcateg       :string(19)       default(""), not null
+#  fparentitm       :string(3)        default(""), not null
+#  fparentrls       :string(3)        default(""), not null
+#  frecvitm         :string(3)        default(""), not null
+#  fnorgeurcost     :decimal(17, 5)   default(0.0), not null
+#  fnorgtxncost     :decimal(17, 5)   default(0.0), not null
+#  fueurocost       :decimal(17, 5)   default(0.0), not null
+#  futxncost        :decimal(17, 5)   default(0.0), not null
+#  fvueurocost      :decimal(17, 5)   default(0.0), not null
+#  fvutxncost       :decimal(17, 5)   default(0.0), not null
+#  fljrdif          :boolean          default(FALSE), not null
+#  fucostonly       :decimal(17, 5)   default(0.0), not null
+#  futxncston       :decimal(17, 5)   default(0.0), not null
+#  fueurcston       :decimal(17, 5)   default(0.0), not null
+#  fcbin            :string(14)       default(""), not null
+#  fcloc            :string(14)       default(""), not null
+#  timestamp_column :binary
+#  identity_column  :integer          not null, primary key
+#  fcomments        :text             default(""), not null
+#  fdescript        :text             default(""), not null
+#  Fac              :string(20)       default(""), not null
+#  fcudrev          :string(3)        default(""), not null
+#  fndbrmod         :integer          default(0), not null
+#  blanketPO        :boolean          default(FALSE), not null
+#  PlaceDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  DockTime         :integer          default(0), not null
+#  PurchBuf         :integer          default(0), not null
+#  Final            :boolean          default(FALSE), not null
+#  AvailDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#
+
 class M2m::PurchaseOrderItem < M2m::Base
   set_table_name 'poitem'
 
@@ -124,98 +217,4 @@ class M2m::PurchaseOrderItem < M2m::Base
     self.fvpartno.strip
   end
 end
-
-
-# == Schema Information
-#
-# Table name: poitem
-#
-#  fpono            :string(6)       default(""), not null
-#  fpartno          :string(25)      default(""), not null
-#  frev             :string(3)       default(""), not null
-#  fmeasure         :string(3)       default(""), not null
-#  fitemno          :string(3)       default(""), not null
-#  frelsno          :string(3)       default(""), not null
-#  fcategory        :string(8)       default(""), not null
-#  fsokey           :string(6)       default(""), not null
-#  fsoitm           :string(3)       default(""), not null
-#  fsorls           :string(3)       default(""), not null
-#  fjokey           :string(10)      default(""), not null
-#  fjoitm           :string(6)       default(""), not null
-#  fjoopno          :integer(4)      default(0), not null
-#  flstcost         :decimal(17, 5)  default(0.0), not null
-#  fstdcost         :decimal(17, 5)  default(0.0), not null
-#  fleadtime        :decimal(5, 1)   default(0.0), not null
-#  forgpdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flstpdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fmultirls        :string(1)       default(""), not null
-#  fnextrels        :integer(4)      default(0), not null
-#  fnqtydm          :decimal(15, 5)  default(0.0), not null
-#  freqdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fretqty          :decimal(15, 5)  default(0.0), not null
-#  fordqty          :decimal(15, 5)  default(0.0), not null
-#  fqtyutol         :decimal(6, 2)   default(0.0), not null
-#  fqtyltol         :decimal(6, 2)   default(0.0), not null
-#  fbkordqty        :decimal(15, 5)  default(0.0), not null
-#  flstsdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  frcpdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  frcpqty          :decimal(15, 5)  default(0.0), not null
-#  fshpqty          :decimal(15, 5)  default(0.0), not null
-#  finvqty          :decimal(15, 5)  default(0.0), not null
-#  fdiscount        :decimal(5, 1)   default(0.0), not null
-#  frework          :string(1)       default(""), not null
-#  fstandard        :boolean         default(FALSE), not null
-#  ftax             :string(1)       default(""), not null
-#  fsalestax        :decimal(7, 3)   default(0.0), not null
-#  finspect         :string(1)       default(""), not null
-#  flcost           :decimal(17, 5)  default(0.0), not null
-#  fucost           :decimal(17, 5)  default(0.0), not null
-#  fprintmemo       :string(1)       default(""), not null
-#  fvlstcost        :decimal(17, 5)  default(0.0), not null
-#  fvleadtime       :decimal(5, 1)   default(0.0), not null
-#  fvmeasure        :string(5)       default(""), not null
-#  fvpartno         :string(25)      default(""), not null
-#  fvptdes          :string(35)      default(""), not null
-#  fvordqty         :decimal(15, 5)  default(0.0), not null
-#  fvconvfact       :decimal(13, 9)  default(0.0), not null
-#  fvucost          :decimal(17, 5)  default(0.0), not null
-#  fqtyshipr        :decimal(15, 5)  default(0.0), not null
-#  fdateship        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fparentpo        :string(6)       default(""), not null
-#  frmano           :string(25)      default(""), not null
-#  fdebitmemo       :string(1)       default(""), not null
-#  finspcode        :string(4)       default(""), not null
-#  freceiver        :string(6)       default(""), not null
-#  fnorgucost       :decimal(17, 5)  default(0.0), not null
-#  fcorgcateg       :string(19)      default(""), not null
-#  fparentitm       :string(3)       default(""), not null
-#  fparentrls       :string(3)       default(""), not null
-#  frecvitm         :string(3)       default(""), not null
-#  fnorgeurcost     :decimal(17, 5)  default(0.0), not null
-#  fnorgtxncost     :decimal(17, 5)  default(0.0), not null
-#  fueurocost       :decimal(17, 5)  default(0.0), not null
-#  futxncost        :decimal(17, 5)  default(0.0), not null
-#  fvueurocost      :decimal(17, 5)  default(0.0), not null
-#  fvutxncost       :decimal(17, 5)  default(0.0), not null
-#  fljrdif          :boolean         default(FALSE), not null
-#  fucostonly       :decimal(17, 5)  default(0.0), not null
-#  futxncston       :decimal(17, 5)  default(0.0), not null
-#  fueurcston       :decimal(17, 5)  default(0.0), not null
-#  fcbin            :string(14)      default(""), not null
-#  fcloc            :string(14)      default(""), not null
-#  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fcomments        :text            default(""), not null
-#  fdescript        :text            default(""), not null
-#  Fac              :string(20)      default(""), not null
-#  fcudrev          :string(3)       default(""), not null
-#  fndbrmod         :integer(4)      default(0), not null
-#  blanketPO        :boolean         default(FALSE), not null
-#  PlaceDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  DockTime         :integer(4)      default(0), not null
-#  PurchBuf         :integer(4)      default(0), not null
-#  Final            :boolean         default(FALSE), not null
-#  AvailDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#
 

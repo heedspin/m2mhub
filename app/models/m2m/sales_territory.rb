@@ -2,12 +2,12 @@
 #
 # Table name: cspopup
 #
-#  fcpopkey         :string(20)      default(""), not null
-#  fcpoptext        :string(80)      default(""), not null
-#  fcpopval         :string(10)      default(""), not null
-#  fnorder          :integer(4)      default(0), not null
-#  fcpopacces       :string(1)       default(""), not null
-#  identity_column  :integer(4)      not null, primary key
+#  fcpopkey         :string(20)       default(""), not null
+#  fcpoptext        :string(80)       default(""), not null
+#  fcpopval         :string(10)       default(""), not null
+#  fnorder          :integer          default(0), not null
+#  fcpopacces       :string(1)        default(""), not null
+#  identity_column  :integer          not null, primary key
 #  timestamp_column :binary
 #
 

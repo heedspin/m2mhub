@@ -2,9 +2,9 @@
 #
 # Table name: m2mhub_trigger_users
 #
-#  id         :integer(4)      not null, primary key
-#  trigger_id :integer(4)
-#  user_id    :integer(4)
+#  id         :integer          not null, primary key
+#  trigger_id :integer
+#  user_id    :integer
 #
 
 class M2mhub::TriggerUser < M2mhub::Base

@@ -2,7 +2,7 @@
 #
 # Table name: customer_reports
 #
-#  id                 :integer(4)      not null, primary key
+#  id                 :integer          not null, primary key
 #  customer_number    :string(255)
 #  total_quote_amount :decimal(12, 2)
 #  total_sales_amount :decimal(12, 2)

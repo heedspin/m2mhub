@@ -2,36 +2,36 @@
 #
 # Table name: syaddr
 #
-#  fllongdist       :boolean         default(FALSE), not null
-#  fcaddrkey        :string(4)       default(""), not null
-#  fcaddrtype       :string(1)       default(""), not null
-#  fcaliaskey       :string(6)       default(""), not null
-#  fcalias          :string(10)      default(""), not null
-#  fcfname          :string(15)      default(""), not null
-#  fclname          :string(20)      default(""), not null
-#  fccounty         :string(20)      default(""), not null
-#  fccompany        :string(35)      default(""), not null
-#  fccity           :string(20)      default(""), not null
-#  fccountry        :string(25)      default(""), not null
-#  fcfax            :string(20)      default(""), not null
-#  fcphone          :string(20)      default(""), not null
-#  fcstate          :string(20)      default(""), not null
-#  fczip            :string(10)      default(""), not null
-#  fcjrdict         :string(10)      default(""), not null
-#  fcemail          :string(60)      default(""), not null
-#  fcloc            :string(14)      default(""), not null
+#  fllongdist       :boolean          default(FALSE), not null
+#  fcaddrkey        :string(4)        default(""), not null
+#  fcaddrtype       :string(1)        default(""), not null
+#  fcaliaskey       :string(6)        default(""), not null
+#  fcalias          :string(10)       default(""), not null
+#  fcfname          :string(15)       default(""), not null
+#  fclname          :string(20)       default(""), not null
+#  fccounty         :string(20)       default(""), not null
+#  fccompany        :string(35)       default(""), not null
+#  fccity           :string(20)       default(""), not null
+#  fccountry        :string(25)       default(""), not null
+#  fcfax            :string(20)       default(""), not null
+#  fcphone          :string(20)       default(""), not null
+#  fcstate          :string(20)       default(""), not null
+#  fczip            :string(10)       default(""), not null
+#  fcjrdict         :string(10)       default(""), not null
+#  fcemail          :string(60)       default(""), not null
+#  fcloc            :string(14)       default(""), not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fmnotes          :text            default(""), not null
-#  fmstreet         :text            default(""), not null
-#  fncrmmod         :integer(4)      default(0), not null
-#  fccrmaddrs       :string(12)      default(""), not null
-#  fac              :string(20)      default(""), not null
-#  PhoneHome        :string(20)      default(""), not null
-#  PhoneMoblie      :string(20)      default(""), not null
-#  ContactNum       :string(6)       default(""), not null
-#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  identity_column  :integer          not null, primary key
+#  fmnotes          :text             default(""), not null
+#  fmstreet         :text             default(""), not null
+#  fncrmmod         :integer          default(0), not null
+#  fccrmaddrs       :string(12)       default(""), not null
+#  fac              :string(20)       default(""), not null
+#  PhoneHome        :string(20)       default(""), not null
+#  PhoneMoblie      :string(20)       default(""), not null
+#  ContactNum       :string(6)        default(""), not null
+#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
 #
 
 class M2m::Address < M2m::Base

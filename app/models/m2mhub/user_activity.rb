@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: user_activities
+#
+#  id           :integer          not null, primary key
+#  user_id      :integer
+#  remote_ip    :string(255)
+#  report_name  :string(255)
+#  format       :string(255)
+#  params       :text
+#  elapsed_time :float
+#  created_at   :datetime
+#
+
 class M2mhub::UserActivity < ActiveRecord::Base
   belongs_to :user
   scope :year_in, lambda { |year|
@@ -38,17 +52,3 @@ class M2mhub::UserActivity < ActiveRecord::Base
   end
 
 end
-# == Schema Information
-#
-# Table name: user_activities
-#
-#  id           :integer(4)      not null, primary key
-#  user_id      :integer(4)
-#  remote_ip    :string(255)
-#  report_name  :string(255)
-#  format       :string(255)
-#  params       :text
-#  elapsed_time :float
-#  created_at   :datetime
-#
-

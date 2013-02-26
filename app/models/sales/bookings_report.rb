@@ -2,8 +2,8 @@
 #
 # Table name: bookings_reports
 #
-#  id                    :integer(4)      not null, primary key
-#  report_time_period_id :integer(4)
+#  id                    :integer          not null, primary key
+#  report_time_period_id :integer
 #  date                  :date
 #  data                  :text
 #  bookings              :decimal(12, 2)

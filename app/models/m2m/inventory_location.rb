@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: inonhd
+#
+#  fpartno          :string(25)       default(""), not null
+#  fpartrev         :string(3)        default(""), not null
+#  fbinno           :string(14)       default(""), not null
+#  flocation        :string(14)       default(""), not null
+#  fexpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flot             :string(20)       default(""), not null
+#  fonhand          :decimal(15, 5)   default(0.0), not null
+#  identity_column  :integer          not null, primary key
+#  timestamp_column :binary
+#  fac              :string(20)       default(""), not null
+#  fcudrev          :string(3)        default(""), not null
+#
+
 class M2m::InventoryLocation < M2m::Base
   set_table_name 'inonhd'
   belongs_to_item :fpartno, :fpartrev
@@ -40,22 +57,4 @@ class M2m::InventoryLocation < M2m::Base
   end
   
 end
-
-
-# == Schema Information
-#
-# Table name: inonhd
-#
-#  fpartno          :string(25)      default(""), not null
-#  fpartrev         :string(3)       default(""), not null
-#  fbinno           :string(14)      default(""), not null
-#  flocation        :string(14)      default(""), not null
-#  fexpdate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flot             :string(20)      default(""), not null
-#  fonhand          :decimal(15, 5)  default(0.0), not null
-#  identity_column  :integer(4)      not null, primary key
-#  timestamp_column :binary
-#  fac              :string(20)      default(""), not null
-#  fcudrev          :string(3)       default(""), not null
-#
 

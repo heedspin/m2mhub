@@ -2,17 +2,17 @@
 #
 # Table name: sales_opportunity_comments
 #
-#  id                                 :integer(4)      not null, primary key
-#  opportunity_id                     :integer(4)
-#  comment_type_id                    :integer(4)
-#  status_id                          :integer(4)
-#  previous_status_id                 :integer(4)
+#  id                                 :integer          not null, primary key
+#  opportunity_id                     :integer
+#  comment_type_id                    :integer
+#  status_id                          :integer
+#  previous_status_id                 :integer
 #  lighthouse_ticket_id               :string(255)
 #  lighthouse_project_id              :string(255)
 #  lighthouse_project_name            :string(255)
 #  lighthouse_milestone               :string(255)
 #  lighthouse_status                  :string(255)
-#  lighthouse_closed                  :boolean(1)
+#  lighthouse_closed                  :boolean
 #  lighthouse_url                     :string(255)
 #  lighthouse_title                   :string(255)
 #  lighthouse_last_comment            :text
@@ -22,12 +22,12 @@
 #  sales_order_id                     :string(255)
 #  quote_id                           :string(255)
 #  date                               :date
-#  loss_reason_id                     :integer(4)
+#  loss_reason_id                     :integer
 #  wakeup                             :date
 #  comment                            :text
 #  created_at                         :datetime
 #  updated_at                         :datetime
-#  creator_id                         :integer(4)
+#  creator_id                         :integer
 #
 
 require 'm2mhub/lighthouse_watcher'

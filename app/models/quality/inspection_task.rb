@@ -2,29 +2,29 @@
 #
 # Table name: inspection_tasks
 #
-#  id                                 :integer(4)      not null, primary key
+#  id                                 :integer          not null, primary key
 #  part_number                        :string(255)
 #  revision                           :string(255)
 #  quantity                           :decimal(14, 4)
 #  title                              :string(255)
 #  body                               :text
-#  task_type_id                       :integer(4)
+#  task_type_id                       :integer
 #  purchase_order_number              :string(255)
 #  purchase_order_item_number         :string(255)
 #  purchase_order_item_id             :string(255)
-#  rma_number                         :integer(4)
+#  rma_number                         :integer
 #  rma_item_number                    :string(255)
 #  rma_item_id                        :string(255)
 #  rma_customer_name                  :string(255)
 #  date_expected                      :datetime
 #  last_receiver_id                   :string(255)
-#  status_id                          :integer(4)
+#  status_id                          :integer
 #  lighthouse_ticket_id               :string(255)
 #  lighthouse_project_id              :string(255)
 #  lighthouse_project_name            :string(255)
 #  lighthouse_milestone               :string(255)
 #  lighthouse_status                  :string(255)
-#  lighthouse_closed                  :boolean(1)
+#  lighthouse_closed                  :boolean
 #  lighthouse_url                     :string(255)
 #  lighthouse_title                   :string(255)
 #  lighthouse_last_comment            :text

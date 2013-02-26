@@ -2,18 +2,19 @@
 #
 # Table name: sales_quotes
 #
-#  id              :integer(4)      not null, primary key
-#  quote_number    :integer(4)
+#  id              :integer          not null, primary key
+#  quote_number    :integer
+#  date            :date
 #  customer_name   :string(255)
-#  customer_id     :integer(4)
+#  customer_id     :integer
 #  recipient       :text
-#  terms_id        :integer(4)
+#  terms_id        :integer
 #  other_terms     :string(255)
 #  foreword        :text
 #  postfix         :text
-#  quote_status_id :integer(4)
-#  creator_id      :integer(4)
-#  approver_id     :integer(4)
+#  quote_status_id :integer
+#  creator_id      :integer
+#  approver_id     :integer
 #  min_quote_price :decimal(12, 2)
 #  max_quote_price :decimal(12, 2)
 #  private_notes   :text

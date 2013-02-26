@@ -2,21 +2,21 @@
 #
 # Table name: inventory_report_items
 #
-#  id                                     :integer(4)      not null, primary key
-#  inventory_report_id                    :integer(4)
-#  inventory_report_customer_id           :integer(4)
+#  id                                     :integer          not null, primary key
+#  inventory_report_id                    :integer
+#  inventory_report_customer_id           :integer
 #  part_number                            :string(255)
 #  revision                               :string(255)
-#  m2m_identity_column                    :integer(4)
-#  inventory_report_cost_method_id        :integer(4)
+#  m2m_identity_column                    :integer
+#  inventory_report_cost_method_id        :integer
 #  last_incoming_date                     :datetime
 #  last_outgoing_date                     :datetime
 #  next_outgoing_date                     :datetime
 #  next_incoming_date                     :datetime
 #  item_group_code_key                    :string(255)
-#  last_incoming_inventory_transaction_id :integer(4)
-#  next_sales_order_release_id            :integer(4)
-#  last_sales_order_release_id            :integer(4)
+#  last_incoming_inventory_transaction_id :integer
+#  next_sales_order_release_id            :integer
+#  last_sales_order_release_id            :integer
 #  movement_data                          :text
 #  quantity_on_hand                       :decimal(12, 2)
 #  quantity_committed                     :decimal(12, 2)

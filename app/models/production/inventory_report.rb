@@ -2,14 +2,14 @@
 #
 # Table name: inventory_reports
 #
-#  id                              :integer(4)      not null, primary key
-#  delayed_job_id                  :integer(4)
-#  delayed_job_status_id           :integer(4)
+#  id                              :integer          not null, primary key
+#  delayed_job_id                  :integer
+#  delayed_job_status_id           :integer
 #  delayed_job_log                 :text
 #  created_at                      :datetime
 #  updated_at                      :datetime
-#  inventory_report_cost_method_id :integer(4)
-#  total_run_time_seconds          :integer(4)
+#  inventory_report_cost_method_id :integer
+#  total_run_time_seconds          :integer
 #  earliest_release_date           :datetime
 #  movement_data                   :text
 #  report_date                     :date

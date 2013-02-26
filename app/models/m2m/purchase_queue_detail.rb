@@ -2,42 +2,42 @@
 #
 # Table name: pqdetl
 #
-#  fcavendno        :string(6)       default(""), not null
-#  fccomment        :string(20)      default(""), not null
-#  fcdocno          :string(25)      default(""), not null
-#  fcjono           :string(10)      default(""), not null
-#  fclineno         :string(3)       default(""), not null
-#  fcpartno         :string(25)      default(""), not null
-#  fcpartrev        :string(3)       default(""), not null
-#  fcpoitm          :string(3)       default(""), not null
-#  fcpono           :string(6)       default(""), not null
-#  fcporls          :string(3)       default(""), not null
-#  fcrecsrc         :string(1)       default(""), not null
-#  fcsoitm          :string(3)       default(""), not null
-#  fcsono           :string(6)       default(""), not null
-#  fcsorls          :string(3)       default(""), not null
-#  fcsource         :string(5)       default(""), not null
-#  fcstatus         :string(10)      default(""), not null
-#  fcsupdem         :string(1)       default(""), not null
-#  fctype           :string(2)       default(""), not null
-#  fcwcid           :string(7)       default(""), not null
-#  fdactdate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdduedate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flactreqd        :boolean         default(FALSE), not null
-#  flactsel         :boolean         default(FALSE), not null
-#  flvendsel        :boolean         default(FALSE), not null
-#  fnextcost        :decimal(17, 5)  default(0.0), not null
-#  fnjoopno         :integer(4)      default(0), not null
-#  fnordqty         :decimal(17, 5)  default(0.0), not null
-#  fnqtyavail       :decimal(17, 5)  default(0.0), not null
-#  fntxnqty         :decimal(17, 5)  default(0.0), not null
-#  fnunitcost       :decimal(17, 5)  default(0.0), not null
-#  fnnetavail       :decimal(17, 5)  default(0.0), not null
-#  fcjodbomno       :string(4)       default(""), not null
-#  identity_column  :integer(4)      not null, primary key
+#  fcavendno        :string(6)        default(""), not null
+#  fccomment        :string(20)       default(""), not null
+#  fcdocno          :string(25)       default(""), not null
+#  fcjono           :string(10)       default(""), not null
+#  fclineno         :string(3)        default(""), not null
+#  fcpartno         :string(25)       default(""), not null
+#  fcpartrev        :string(3)        default(""), not null
+#  fcpoitm          :string(3)        default(""), not null
+#  fcpono           :string(6)        default(""), not null
+#  fcporls          :string(3)        default(""), not null
+#  fcrecsrc         :string(1)        default(""), not null
+#  fcsoitm          :string(3)        default(""), not null
+#  fcsono           :string(6)        default(""), not null
+#  fcsorls          :string(3)        default(""), not null
+#  fcsource         :string(5)        default(""), not null
+#  fcstatus         :string(10)       default(""), not null
+#  fcsupdem         :string(1)        default(""), not null
+#  fctype           :string(2)        default(""), not null
+#  fcwcid           :string(7)        default(""), not null
+#  fdactdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdduedate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flactreqd        :boolean          default(FALSE), not null
+#  flactsel         :boolean          default(FALSE), not null
+#  flvendsel        :boolean          default(FALSE), not null
+#  fnextcost        :decimal(17, 5)   default(0.0), not null
+#  fnjoopno         :integer          default(0), not null
+#  fnordqty         :decimal(17, 5)   default(0.0), not null
+#  fnqtyavail       :decimal(17, 5)   default(0.0), not null
+#  fntxnqty         :decimal(17, 5)   default(0.0), not null
+#  fnunitcost       :decimal(17, 5)   default(0.0), not null
+#  fnnetavail       :decimal(17, 5)   default(0.0), not null
+#  fcjodbomno       :string(4)        default(""), not null
+#  identity_column  :integer          not null, primary key
 #  timestamp_column :binary
-#  fac              :string(20)      default(""), not null
-#  fcudrev          :string(3)       default(""), not null
+#  fac              :string(20)       default(""), not null
+#  fcudrev          :string(3)        default(""), not null
 #
 
 class M2m::PurchaseQueueDetail < M2m::Base
