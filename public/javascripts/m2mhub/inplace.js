@@ -39,7 +39,7 @@ jQuery.fn.setupDeletasticActions = function() {
 		var params={};
 		var handle_delete = function(data, textStatus) {
 			if (data.location) {
-				window.location.href = data.location;				
+				window.location.replace(data.location);
 			}
 	  }
 		var handle_error = function(data, textStatus) {

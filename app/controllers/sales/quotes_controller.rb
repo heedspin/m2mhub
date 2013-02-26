@@ -43,9 +43,12 @@ class Sales::QuotesController < M2mhubController
     @quote = current_object
     @quote.destroy
     respond_to do |format|
+      flash[:notice] = "Quote #{@quote.quote_number} Deleted"
+      format.js {
+        render :json => { :location => sales_quotes_url }.to_json
+      }
       format.html {
-        flash[:notice] = "Quote #{@quote.quote_number} Deleted"
-        redirect_back_or_default sales_quotes_url
+        redirect_to sales_quotes_url
       }
     end
   end
