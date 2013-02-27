@@ -326,13 +326,25 @@ form.formtastic li.number input:focus, form.formtastic li.string input:focus, fo
 	border:1px solid #666;
 	background:#F2F9FF;
 }
-form.formtastic li.string input, form.formtastic li.text textarea {
+form.formtastic fieldset > ol > li.string input, form.formtastic fieldset > ol > li.text textarea {
 	padding:4px;
 	font-size:1.1em;
+/*	width: auto;*/
 	max-width: 399px;
+}
+form.formtastic li.small_string input {
+	width: 100px;
 }
 form.formtastic li.widestring input, form.formtastic li.widetext textarea {
 	width: 399px;
+}
+li.small_textarea textarea {
+	height: 2.5em;
+	width: 40%;	
+}
+li.medium_textarea textarea {
+	height: 4.5em;
+	width: 40%;	
 }
 form.formtastic li.number input {
 	padding:4px;
@@ -396,7 +408,7 @@ form.formtastic fieldset.services2 {
 /* buttons
 ---------------------------------------------*/
 
-form.formtastic fieldset.buttons li.commit input {
+form.formtastic fieldset li.commit input {
 	display: inline-block;
 	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
 	*display: inline;
@@ -416,14 +428,14 @@ form.formtastic fieldset.buttons li.commit input {
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }
-form.formtastic fieldset.buttons li.commit input:hover {
+form.formtastic fieldset li.commit input:hover {
 	text-decoration: none;
 }
-form.formtastic fieldset.buttons li.commit input:active {
+form.formtastic fieldset li.commit input:active {
 	position: relative;
 	top: 1px;
 }
-form.formtastic fieldset.buttons li.commit input {
+form.formtastic fieldset li.commit input {
 	color: #fff;
 	border: solid 1px #13428E;
 	background: #0066cc;
@@ -431,13 +443,13 @@ form.formtastic fieldset.buttons li.commit input {
 	background: -moz-linear-gradient(top,  #3F7AC9,  #13428E);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3F7AC9', endColorstr='#13428E');
 }
-form.formtastic fieldset.buttons li.commit input:hover {
+form.formtastic fieldset li.commit input:hover {
 	background: #184196;
 	background: -webkit-gradient(linear, left top, left bottom, from(#31599C), to(#122C62));
 	background: -moz-linear-gradient(top,  #31599C,  #122C62);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#31599C', endColorstr='#122C62');
 }
-form.formtastic fieldset.buttons li.commit input:active {
+form.formtastic fieldset li.commit input:active {
 	color: #fff;
 	background: -webkit-gradient(linear, left top, left bottom, from(#254077), to(#3F7AC9));
 	background: -moz-linear-gradient(top,  #254077,  #3F7AC9);
@@ -447,6 +459,10 @@ form.formtastic fieldset.buttons li.commit input:active {
 fieldset.inputs li.boolean label, ol.choices-group li.choice label {
 	display: inline;
 /*	max-width: 20%;*/
+}
+
+form.formtastic fieldset.horizontal li.commit input {
+	margin: 15px 0 0 0;
 }
 
 	
@@ -482,7 +498,7 @@ fieldset.inputs li.boolean label, ol.choices-group li.choice label {
 .errorExplanation  { 
 	outline:1px solid #f7941d;
 	border:1px solid red; 
-	margin: 0 0 15px;
+	margin: 10px 0 15px;
 	padding: 10px;
 }
 .errorExplanation ul { list-style-type:decimal;list-style-position:inside;}
@@ -540,26 +556,26 @@ fieldset.inputs li.boolean label, ol.choices-group li.choice label {
 }
 
 
-#maincopy form.formtastic fieldset.buttons {
+#maincopy form.formtastic fieldset {
 	display:block;
 	padding-left:0;
 }
 	
-#maincopy form.formtastic fieldset.buttons li {
+#maincopy form.formtastic fieldset li {
 	list-style:none;
 	margin-left:0;
 	padding-left:0;
 }
 
-#maincopy form.formtastic fieldset.buttons ol {
+#maincopy form.formtastic fieldset ol {
 	margin-left:0;
 	padding-left:0;
 }
 form.formtastic fieldset {
     display: block;
 }
-form.formtastic fieldset.buttons {
-    padding: 10px 10px 10px 0;
+form.formtastic fieldset {
+    padding: 0px 10px 0px 0;
 }
 form.formtastic fieldset > ol > li {
 	display: block;	
@@ -668,31 +684,39 @@ table.data p {
 	font-size: 1em;
 	padding-bottom: .5em;
 }
+
 table.data td.monitary {
 	text-align: right;
 }
+
 table.data td.centered, table.data th.centered {
 	text-align: center;
 }
+
 table.data td.right, table.data th.right {
 	text-align: right;
 }
+
 table.data td.ninjaborders {
 	border: none;
 }
+
 table.data td.current_on_hand {
 	background-color: #afa;
 	text-align: center;
 	font-weight:bold;	
 }
+
 table.data td.current_on_hand_error {
 	background-color: #faa;
 	text-align: center;
 	font-weight:bold;	
 }
+
 table.data tr.not_counted {
 	background-color: #eee;	
 }
+
 table.data td.fixnum, table.data th.fixnum {
 	width: 5em;
 }
@@ -711,9 +735,11 @@ table.data td.fixdouble, table.data th.fixdouble {
 table.data td.fixtriple, table.data th.fixtriple {
 	width: 15em;
 }
+
 table.fullsize {
 	width: 100%;
 }
+
 .hoverinfo a:link, .hoverinfo a:visited, .hoverinfo a:hover {
 	text-decoration:none;
 	color: #666;
@@ -721,6 +747,7 @@ table.fullsize {
 table.data tr.primary-contact {
 	background-color: #efe;
 }
+
 table.data table.data td {
   border: 1px dotted #ccc;
   }
@@ -733,10 +760,6 @@ table.data tr.master-release {
 }
 table.data th.date {
 	width:5em;
-}
-table.data tbody tr.spacer td {
-	padding: 0 0 2px;
-	border: none;
 }
 
 /* NEWS
@@ -1206,6 +1229,13 @@ div.expand_on_hover {
 	overflow: hidden;
 }
 
+/*******************************************************
+ Inspection Tasks
+*/
+li#quality_inspection_task_body_input textarea, li#quality_inspection_task_lighthouse_body_input textarea {
+	height: 6.5em;
+}
+
 /* Deletastic
 --------------------------------------- */
 form.formtastic fieldset ol li.deletastic_param {
@@ -1229,15 +1259,51 @@ li#sales_territory_description_input textarea {
 	height: 2.5em;
 	width: 40%;
 }
+/******************************************************
+	Quotes
+	*/
 
-/*****************************************
-  Text Areas
-*/
-li.small_textarea textarea {
-	height: 2.5em;
-	width: 40%;	
+table.quote textarea:hover, table.quote textarea:focus, table.quote input:hover, table.quote input:focus, .delete:hover { 
+	background-color:#bbffbb; 
 }
-li.medium_textarea textarea {
-	height: 4.5em;
-	width: 40%;	
+
+table.quote tr th.part_number_description {
+	width: 40%;
+	
+}
+table.quote textarea {
+	width: 90%;
+	margin: 2px 0 0 5px;
+}
+table.quote th {
+  font-size: 12px;
+  color: #646870;
+  background: #dcdcdc;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #c5c5c5;
+  padding: 5px;
+  }
+table.quote td {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #c5c5c5;
+  padding: 5px;
+  }
+table.quote input, table.quote textarea {
+	border: 0;
+ 	font-size: 1.2em;
+}
+table.quote a.delete_row {
+	opacity: 0;
+	position: absolute;
+	left: -2px;
+	-webkit-transition: opacity 100ms ease-in;
+}
+table.quote tr:hover .delete_row { opacity: 1; }
+
+form.formtastic fieldset.opportunity_customer {
+	padding: 0 0 0 15px;
+	border: 1px solid #c5c5c5;
 }
