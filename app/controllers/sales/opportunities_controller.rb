@@ -32,6 +32,7 @@ class Sales::OpportunitiesController < M2mhubController
 
   def new
     @opportunity = build_object
+    @opportunity.build_sales_customer
   end
 
   def edit
@@ -41,6 +42,9 @@ class Sales::OpportunitiesController < M2mhubController
   def create
     @opportunity = build_object
     @opportunity.status = Sales::OpportunityStatus.active
+    if params[:create_customer] and @opportunity.sales_customer
+      @opportunity.sales_customer.name = @opportunity.customer_name
+    end
     if @opportunity.save
       flash[:notice] = "Created Opportunity #{@opportunity.id}"
       if params[:commit] == 'Create & New'

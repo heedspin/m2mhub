@@ -5,7 +5,6 @@ class Sales::OpportunityStatus < ActiveHash::Base
     {:id => 2, :open => false, :name => 'Won'},
     {:id => 3, :open => true,  :name => 'On Hold', :cmethod => :hold},
     {:id => 4, :open => false, :name => 'Lost'},
-    {:id => 6, :open => false, :name => 'Sales Rep', :cmethod => :sales_rep},
     {:id => 7, :open => false, :name => 'Closed'},
     {:id => 5, :open => false, :name => 'Deleted'}
   ]

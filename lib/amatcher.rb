@@ -61,7 +61,9 @@ class Amatcher
     threshold = args[:threshold] || 0.0
     @results = Amatcher::SortedArray.new(nil, limit)
     objects.find_each do |object|
-      @results << Amatcher::ReverseWeightedObject.new(object, object.send(method).jarowinkler_similar(match_string))
+      if value = object.send(method)
+        @results << Amatcher::ReverseWeightedObject.new(object, value.jarowinkler_similar(match_string))
+      end
     end
     @results.select { |r| r.weight >= threshold }
   end

@@ -33,12 +33,13 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus'
   belongs_to :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'sales_customer_id'
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
-  # belongs_to :territory
+  accepts_nested_attributes_for :sales_customer
   
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
 
   attr_accessor :delete_permanently
+  attr_accessor :create_customer
 
   def number_and_title
     txt = self.title.present? ? self.title : self.customer_name
@@ -86,7 +87,7 @@ class Sales::Opportunity < M2mhub::Base
   # This logic is mostly duplicated in quote.
   before_save :set_customer
   def set_customer
-    if self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
+    if !self.create_customer and self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
       if self.customer_name_changed? 
         self.sales_customer = Sales::Customer.with_name(self.customer_name).first
       elsif self.sales_customer.present? # Customer record name changed.
