@@ -86,5 +86,5 @@ en:
       sales/quote_item:
         customer_part_number: Customer P/N
         part_number: Part Number
-        expected_cost: Expected Cost
+        expected_cost: Cost
         

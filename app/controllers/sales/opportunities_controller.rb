@@ -47,7 +47,7 @@ class Sales::OpportunitiesController < M2mhubController
   def create
     @opportunity = build_object
     @opportunity.status = Sales::OpportunityStatus.active
-    if params[:sales_opportunity][:create_customer] and @opportunity.sales_customer
+    if @opportunity.create_customer and @opportunity.sales_customer
       @opportunity.sales_customer.name = @opportunity.customer_name
     end
     if @opportunity.save

@@ -42,6 +42,9 @@ class Sales::Opportunity < M2mhub::Base
 
   attr_accessor :delete_permanently
   attr_accessor :create_customer
+  def create_customer=(val)
+    @create_customer = (val == '1')
+  end
 
   def safe_title
     @safe_title ||= self.title.present? ? self.title : self.customer_name
