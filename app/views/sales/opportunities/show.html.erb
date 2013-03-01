@@ -43,6 +43,7 @@ $(function() {
 	</p>
 	
 	<p>
+		<strong><%= Sales::Opportunity.human_attribute_name(:owner) %>:</strong> <%= @opportunity.owner.try(:full_name) %><br />
 		<strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
 		<%= @opportunity.status.try(:name) %>
 		<% if @opportunity.status.try(:hold?) and @opportunity.wakeup %>

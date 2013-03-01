@@ -19,6 +19,7 @@ class Sales::OpportunitiesController < M2mhubController
     end
     s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
     s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
+    s = s.owner(@search.owner_id) if @search.owner_id
     @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
     respond_to do |format|
       format.html
@@ -32,7 +33,11 @@ class Sales::OpportunitiesController < M2mhubController
 
   def new
     @opportunity = build_object
-    @opportunity.build_sales_customer
+    if @opportunity.sales_customer
+      @opportunity.customer_name = @opportunity.sales_customer.name
+    else
+      @opportunity.build_sales_customer
+    end
   end
 
   def edit
@@ -42,7 +47,7 @@ class Sales::OpportunitiesController < M2mhubController
   def create
     @opportunity = build_object
     @opportunity.status = Sales::OpportunityStatus.active
-    if params[:create_customer] and @opportunity.sales_customer
+    if params[:sales_opportunity][:create_customer] and @opportunity.sales_customer
       @opportunity.sales_customer.name = @opportunity.customer_name
     end
     if @opportunity.save

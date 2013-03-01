@@ -1,3 +1,6 @@
+<% unless defined?(view_all_for_customer) %>
+<% view_all_for_customer = nil %>
+<% end %>
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
@@ -18,7 +21,12 @@ $(function() {
 
 <% lighthouse_comment_columns = 5 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) %>
 <% if @opportunities.size > 0 %>
-<h3><%= comma @opportunities.total_entries %> Opportunities</h3>
+<h3>
+	<%= comma @opportunities.total_entries %> Opportunities
+	<% if view_all_for_customer %>
+	(<%= link_to 'View All', opportunities_url(:search => { :customer_name => view_all_for_customer }) %>)
+	<% end %>
+</h3>
 <%= will_paginate @opportunities %>
 <table class="data">
 	<thead>

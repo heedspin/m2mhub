@@ -29,6 +29,10 @@
 		</p>
 		<% end %>
 	</div>
+	<% elsif comment.comment_type.try(:quote?) %>
+	<div class="opportunity_quote">
+		<%= render 'sales/quotes/summary', :quote => comment.quote %>
+	</div>
 	<% else %>
 	<div class="opportunity_ticket <%= comment.lighthouse_ticket.try(:closed) ? 'lighthouse_ticket_closed' : '' %>">
 		<div class="hiddenedit">

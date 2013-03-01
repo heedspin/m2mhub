@@ -20,7 +20,7 @@
 #  lighthouse_last_updater            :string(255)
 #  lighthouse_last_assigned_user_name :string(255)
 #  sales_order_id                     :string(255)
-#  quote_id                           :string(255)
+#  quote_id                           :integer
 #  date                               :date
 #  loss_reason_id                     :integer
 #  wakeup                             :date
@@ -42,7 +42,7 @@ class Sales::OpportunityComment < M2mhub::Base
   belongs_to :creator, :class_name => 'User'
   belongs_to_active_hash :comment_type, :class_name => 'Sales::OpportunityCommentType', :foreign_key => :comment_type_id
   belongs_to_active_hash :loss_reason, :class_name => 'Sales::OpportunityLossReason', :foreign_key => :loss_reason_id
-  belongs_to :quote, :class_name => 'M2m::Quote', :primary_key => 'fquoteno'
+  belongs_to :quote, :class_name => 'Sales::Quote'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :primary_key => 'fsono'
 
   validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }

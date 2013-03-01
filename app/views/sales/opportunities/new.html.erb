@@ -3,7 +3,12 @@
 <%= render 'sales/opportunities/submenu' %>
 <br />
 
-<h2>Create New Opportunity</h2>
+<h2>
+	Create New Opportunity
+	<% if @opportunity.sales_customer %>
+	For <%= @opportunity.sales_customer.name %>
+	<% end %>
+</h2>
 
 <%= semantic_form_for @opportunity, :url => opportunities_url do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>

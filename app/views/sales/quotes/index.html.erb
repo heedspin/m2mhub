@@ -7,9 +7,9 @@
 <%= render 'sales/quotes/list', :quotes => @quotes %>
 <%= will_paginate @quotes %>
 <% else %>
-<h3>No Quotes!?  How can this be?  You know what to do...</h3>
+<h3>No Quotes!?  The horror.</h3>
 <% end %>
 
 <p>
-	<%= link_to 'New Quote', new_sales_quote_url %>
+	Quotes can only be created from Opportunities.
 </p>

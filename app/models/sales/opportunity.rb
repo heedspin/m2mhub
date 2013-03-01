@@ -21,6 +21,7 @@
 #  creator_id              :integer
 #  last_comment_updated_id :integer
 #  sales_customer_id       :integer
+#  owner_id                :integer
 #
 
 require 'plutolib/to_xls'
@@ -34,6 +35,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'sales_customer_id'
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
   accepts_nested_attributes_for :sales_customer
+  belongs_to :owner, :class_name => 'User'
   
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
@@ -41,9 +43,11 @@ class Sales::Opportunity < M2mhub::Base
   attr_accessor :delete_permanently
   attr_accessor :create_customer
 
+  def safe_title
+    @safe_title ||= self.title.present? ? self.title : self.customer_name
+  end
   def number_and_title
-    txt = self.title.present? ? self.title : self.customer_name
-    "##{id} - #{txt}"
+    "##{id} - #{self.safe_title}"
   end
   def full_sales_person
     @full_sales_person ||= [self.sales_person.try(:name), self.sales_person_name].compact.join(', ')
@@ -82,6 +86,10 @@ class Sales::Opportunity < M2mhub::Base
       :joins => :sales_customer,
       :conditions => { :sales_customers => { :sales_territory_id => sales_territory_id } }
     }
+  }
+  scope :owner, lambda { |owner|
+    owner = owner.id if owner.is_a?(User)
+    where(:owner_id => owner)
   }
 
   # This logic is mostly duplicated in quote.

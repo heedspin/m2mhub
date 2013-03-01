@@ -54,6 +54,7 @@ $(function() {
 						<%= image_tag AppConfig.in_progress_image %>
 						</span>
 					</li>
+					<%= f.input :owner, :collection => User.active.by_name %>
 				<% end %>
 			</td>
 		</tr>

@@ -7,6 +7,11 @@ class Sales::QuotesController < M2mhubController
 
   def new
     @quote = build_object
+    if @quote.link_opportunity_id
+      opportunity = Sales::Opportunity.find(@quote.link_opportunity_id)
+      @quote.sales_customer = opportunity.sales_customer
+      @quote.customer_name = opportunity.customer_name
+    end
   end
 
   def edit
@@ -15,7 +20,24 @@ class Sales::QuotesController < M2mhubController
 
   def create
     @quote = build_object
-    if @quote.save
+    success = false
+    Sales::Quote.transaction do
+      if @quote.save
+        if @quote.link_opportunity_id
+          opportunity = Sales::Opportunity.find(@quote.link_opportunity_id)
+          comment = opportunity.comments.build
+          comment.quote_id = @quote.id
+          comment.comment_type = Sales::OpportunityCommentType.quote
+          comment.status = Sales::OpportunityStatus.active
+          unless success = comment.save
+            logger.error 'Failed to create opportunity comment: ' + comment.errors.full_messages.join("\n")
+          end
+        else
+          success = true
+        end
+      end
+    end
+    if success
       flash[:notice] = "Created Quote #{@quote.id}"
       redirect_to sales_quote_url(@quote)
     else
@@ -75,7 +97,7 @@ class Sales::QuotesController < M2mhubController
       if @current_object.nil?
         @current_object = Sales::Quote.new(params[model_name])
         if @current_object.customer_name.blank?
-          @current_object.customer_name = @current_object.customer.try(:name)
+          @current_object.customer_name = @current_object.sales_customer.try(:name)
         end
         @current_object.current_user = current_user
       end

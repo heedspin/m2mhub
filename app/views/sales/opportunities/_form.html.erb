@@ -35,15 +35,20 @@ $(function() {
 <%= f.semantic_errors :base %>
 
 <%= f.inputs do %>
-	<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
-		<label class=" label" for="sales_opportunity_customer_name"><%= Sales::CommissionRate.human_attribute_name(:customer_name) %></label>
-		<%= f.text_field :customer_name %>
-		<span id="customer_inprogress" class="hide">
-		<%= image_tag AppConfig.in_progress_image %>
-		</span>
-	</li>
+	<% if @opportunity.new_record? and !@opportunity.sales_customer.new_record? %>
+		<%= f.input :customer_name, :input_html => { :disabled => 'disabled' } %>
+	<% else %>
+		<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
+			<label class=" label" for="sales_opportunity_customer_name"><%= Sales::CommissionRate.human_attribute_name(:customer_name) %></label>
+			<%= f.text_field :customer_name %>
+			<span id="customer_inprogress" class="hide">
+			<%= image_tag AppConfig.in_progress_image %>
+			</span>
+		</li>
+	<% end %>
+	<%= f.input :owner, :collection => User.active.by_name %>
 <% end %>
-<% if @opportunity.new_record? %>
+<% if @opportunity.new_record? and @opportunity.sales_customer.new_record? %>
 	<%= f.inputs :class => 'opportunity_customer' do %>
 		<%= f.input :create_customer, :as => :boolean %>
 		<%= f.fields_for :sales_customer do |c| %>

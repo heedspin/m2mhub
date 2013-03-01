@@ -1,4 +1,4 @@
-<% content_for :javascripts do %>
+<% if false #content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
 	$("input#sales_quote_customer_name").autocomplete({
@@ -27,7 +27,7 @@ $(function() {
 <%= f.semantic_errors :base %>
 
 <%= f.inputs :class => 'horizontal' do %>
-	<%= f.input :customer_name %>
+	<%= f.input :customer_name, :input_html => { :readonly => 'readonly' } %>
 	<li>
 		<div id="customer_inprogress" class="hide">
 			<%= image_tag AppConfig.in_progress_image %>
@@ -46,6 +46,7 @@ $(function() {
 <% end %>
 <%= f.inputs do %>
 	<%= f.input :private_notes, :wrapper_html => { :class => 'medium_textarea' } %>
+	<%= f.input :link_opportunity_id, :as => :hidden %>
 <% end %>
 
 <%= set_focus('#sales_quote_customer_name') %>

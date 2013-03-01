@@ -16,6 +16,13 @@
 	<div class="clear"></div>
 	<%= f.buttons do %>
 	  <%= f.commit_button 'Add Comment' %>
+		<li>
+			<% if @opportunity.sales_customer %>
+				<%= link_to 'Create Quote', new_sales_quote_url(:sales_quote => { :link_opportunity_id => @opportunity.id }) %>
+			<% else %>
+				Create Quote<br />(Must create customer record first)
+			<% end %>
+		</li>
 	<% end %>
 <% end %>
 

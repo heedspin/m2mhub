@@ -20,7 +20,10 @@
 </div>
 
 <p>
-	<strong>Customer:</strong> <%= link_to @quote.customer_name, sales_customer_url(@quote.customer) %><br />
+	<% if @quote.opportunity %>
+	<strong>Opportunity:</strong> <%= link_to @quote.opportunity.number_and_title, opportunity_url(@quote.opportunity) %><br />
+	<% end %>
+	<strong>Customer:</strong> <%= link_to @quote.customer_name, sales_customer_url(@quote.sales_customer) %><br />
 	<strong>Status:</strong> <%= @quote.status %><br />
 	<strong>Terms:</strong> <%= @quote.terms %> <%= @quote.other_terms %><br />
 </p>
