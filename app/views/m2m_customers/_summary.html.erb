@@ -5,7 +5,7 @@
 <p>
 	Primary Contact: <%= primary.name %> <%= primary.email %> <%= primary.phone_number_array.join(', ') %><br />
 	Customer Number: <%= @customer.customer_number %>
-	<% if M2mhub::Feature.enabled?(:enable_opportunities) and @customer.sales_customer %>
+	<% if M2mhub::Feature.enabled?(:opportunities) and @customer.sales_customer %>
 	<br />
 	<%= link_to 'Opportunities', opportunities_url(:search => { :customer_name => @customer.sales_customer.name }) %>
 	<% end %>

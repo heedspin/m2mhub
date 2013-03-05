@@ -63,6 +63,8 @@ Rails.application.routes.draw do
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
   resources :opportunities, :controller => 'sales/opportunities'
   resources :opportunity_comments, :controller => 'sales/opportunity_comments'
+  resources :opportunity_reports, :controller => 'sales/opportunity_reports'
+  match 'sales_scoreboard' => 'sales/opportunity_reports#new'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'

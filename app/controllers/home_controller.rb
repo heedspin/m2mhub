@@ -1,6 +1,6 @@
 class HomeController < M2mhubController
   def index
-    @sales_orders = M2m::SalesOrder.by_order_number_desc.limit(20).includes(:releases, :items)
+    @sales_orders = M2m::SalesOrder.by_order_number_desc.limit(10).includes(:releases, :items)
     # Optimization:
     @sales_orders.each do |so|
       so.releases.each { |r| r.attach_items_from_sales_order(so) }
@@ -15,6 +15,10 @@ class HomeController < M2mhubController
       @date_reports = Sales::DateReport.create( :sales_reports => Sales::SalesReport.by_date_desc.limit(8),
                                                 :bookings_reports => Sales::BookingsReport.by_date_desc.limit(8) )
       @backlog_report = Sales::BacklogReport.by_date_desc.first
+    end
+    if M2mhub::Feature.enabled?(:opportunities)
+      @opportunity_report = Sales::OpportunityReport.new
+      @opportunity_report.run
     end
   end
 end

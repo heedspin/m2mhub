@@ -84,6 +84,7 @@ class M2m::PurchaseOrder < M2m::Base
   scope :status_open,      :conditions => { :fstatus => M2m::PurchaseOrderStatus.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::PurchaseOrderStatus.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::PurchaseOrderStatus.cancelled.name }
+  scope :inventory, :include => :items, :conditions => { :poitem => { :fcategory => 'INV     '} }
   
   alias_attribute :vendor_name, :fcompany
   alias_attribute :change_date, :fcngdate
@@ -103,6 +104,6 @@ class M2m::PurchaseOrder < M2m::Base
   def self.pad_purchase_order_number(number)
     "%06d" % number.to_i
   end
-  
+    
 end
 
