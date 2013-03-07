@@ -53,7 +53,7 @@ $(function() {
 		<% if @opportunity.amount %>
 		<br />	
 		<strong><%= Sales::Opportunity.human_attribute_name(:amount) %>:</strong>
-		<%= cm @opportunity.amount, :dollars %>
+		<%= cm @opportunity.amount, :rounded_dollars %>
 		<% end %>
 
 		<% if @opportunity.source %>

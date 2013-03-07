@@ -87,7 +87,7 @@ class Sales::Quote < M2mhub::Base
     if self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
       if self.customer_name_changed? 
         self.sales_customer = Sales::Customer.with_name(self.customer_name).first
-      elsif self.customer.present? # Customer record name changed.
+      elsif self.sales_customer.present? # Customer record name changed.
         self.customer_name = self.sales_customer.name          
       else
         self.sales_customer_id = nil
