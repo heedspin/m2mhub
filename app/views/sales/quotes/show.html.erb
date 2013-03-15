@@ -43,6 +43,11 @@
 <%= simple_format @quote.postfix %>
 <% end %>
 
+<% if @quote.private_notes.present? %>
+<h3>Private Notes</h3>
+<%= simple_format @quote.private_notes %>
+<% end %>
+
 <hr />
 
 <%= render 'sales/quote_items/list', :quote_items => @quote.items %>
