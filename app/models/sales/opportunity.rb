@@ -36,6 +36,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :last_comment, :class_name => 'Sales::OpportunityComment', :foreign_key => :last_comment_updated_id
   accepts_nested_attributes_for :sales_customer
   belongs_to :owner, :class_name => 'User'
+  has_many :quotes, :through => :comments, :class_name => 'Sales::Quote'
   
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
@@ -162,17 +163,18 @@ class Sales::Opportunity < M2mhub::Base
     end
     
     def xls_initialize
-      xls_field("Start Date") { |o| o.start_date }
+      xls_field("Opportunity ID") { |o| o.id }
+      xls_field("Status") { |o| o.status.name }
+      xls_field("Date") { |o| o.start_date }
       xls_field('Customer') { |o| o.sales_customer_name }
       xls_field('Source') { |o| o.source.try(:name) }
-      xls_field('Product') { |o| o.product }
       xls_field('Title') { |o| o.title }
-      xls_field('Territory') { |o| o.sales_customer.try(:sales_territory).try(:name_and_description) }
-      xls_field('Sales Rep') { |o| o.sales_customer.try(:sales_territory).try(:sales_rep_name) }
+      xls_field('Product') { |o| o.product }
       xls_field('Location') { |o| o.sales_customer.try(:location) }
-      xls_field('Business') { |o| o.sales_customer.try(:business_type).try(:name) }
-      xls_field('Website') { |o| o.sales_customer.try(:website_url) }
-      xls_field('Customer Notes') { |o| o.sales_customer.try(:notes) }
+      xls_field('Sales Territory') { |o| o.sales_customer.try(:sales_territory).try(:name) }
+      xls_field('Sales Company') { |o| o.sales_customer.try(:sales_territory).try(:sales_rep_name) }
+      xls_field('Sales Person') { |o| o.sales_person_name }
+      xls_field('Quotes') { |o| o.quotes.map(&:quote_number).join(', ') }
     end
 
     def all_data
