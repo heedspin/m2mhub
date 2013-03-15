@@ -28,6 +28,26 @@ class Sales::QuoteItem < M2mhub::Base
     @margin
   end
   
+  def expected_cost=(val)
+    val = val.gsub('$','') if val.is_a?(String)
+    super(val)
+  end
+
+  attr_accessor :price_set_by_margin
+  def price=(val)
+    @price_set_by_margin = false
+    if val.is_a?(String)
+      if val.include?('%') and self.expected_cost.present?
+        val = val.gsub('%', '').to_f
+        val = (self.expected_cost.to_f / ((100 - val) / 100)).round(2)
+        @price_set_by_margin = true
+      else
+        val = val.gsub('$','')
+      end
+    end
+    super(val)
+  end
+  
   def total_price
     (self.quantity || 0) * (self.price || 0)
   end

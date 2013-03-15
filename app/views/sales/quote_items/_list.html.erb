@@ -33,10 +33,26 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 jQuery.fn.quotes = function() {
+	$(this).find("input[type=text]").focus(function(){
+	    this.select();
+	});
+	$(this).find("textarea").focus(function(){
+      this.select();
+	});
   $(this).find("#add_quote_item").click(function(){
 		var new_row = $("<%= escape_javascript render('sales/quote_items/row', :quote_item => @quote.items.build) %>");
-    var tr = $(this).closest("tr").replaceWith(new_row);
+    var add_quote_tr = $(this).closest("tr");
+		var prev = add_quote_tr.prev();
+		new_row.find("#quote_item_part_number").val(prev.find("#quote_item_part_number").val());
+		new_row.find("#quote_item_description").val(prev.find("#quote_item_description").val());
+		new_row.find("#quote_item_customer_part_number").val(prev.find("#quote_item_customer_part_number").val());
+		add_quote_tr.replaceWith(new_row);
 		new_row.quotes().find("input[type=text]:first").focus();
+				
+		var add_row_content = $("<%= escape_javascript render('sales/quote_items/add_row.html.erb') %>");
+		new_row.after(add_row_content);
+		// row.removeClass("add_row");
+		add_row_content.quotes();
   });
 	$(this).find(":input").change(function() {
 		var row = $(this).closest("tr");
