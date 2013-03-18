@@ -1,0 +1,37 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Type</th>
+			<th>Customer</th>
+			<th>Opportunity</th>
+			<th>Event Link</th>
+			<th>Source</th>
+			<th>Territory</th>
+			<th>Owner</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @sales_events.each do |event| %>
+		<tr>
+			<td><%= event.date.to_s(:short_human_date) %></td>
+			<td><%= event.type_name %></td>
+			<td><%= link_to limit_string(event.opportunity.sales_customer.name,24), sales_customer_url(event.opportunity.sales_customer) %></td>
+			<td><%= link_to limit_string(event.opportunity.number_and_title, 32), opportunity_url(event.opportunity) %></td>
+			<td>
+				<% if event.event_text %>
+				<%= link_to event.event_text, event.event_url %>
+				<% end %>
+			</td>
+			<td><%= limit_string(event.opportunity.source.try(:name), 12) %></td>
+			<td>
+				<%= rep_text = [limit_string(event.opportunity.sales_customer.sales_territory.try(:sales_rep_name), 12), limit_string(event.opportunity.sales_person_name, 12)].select(&:present?).join(': ') %>
+				<% if rep_text.present? and event.opportunity.sales_customer.rep_status.try(:connected?) %>
+				<br />Connected
+				<% end %>
+			</td>
+			<td><%= event.opportunity.owner.try(:first_name) %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

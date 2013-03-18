@@ -35,17 +35,13 @@ $(function() {
 <%= f.semantic_errors :base %>
 
 <%= f.inputs do %>
-	<% if @opportunity.new_record? and !@opportunity.sales_customer.new_record? %>
-		<%= f.input :customer_name, :input_html => { :disabled => 'disabled' } %>
-	<% else %>
-		<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
-			<label class=" label" for="sales_opportunity_customer_name"><%= Sales::CommissionRate.human_attribute_name(:customer_name) %></label>
-			<%= f.text_field :customer_name %>
-			<span id="customer_inprogress" class="hide">
-			<%= image_tag AppConfig.in_progress_image %>
-			</span>
-		</li>
-	<% end %>
+	<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
+		<label class=" label" for="sales_opportunity_customer_name"><%= Sales::CommissionRate.human_attribute_name(:customer_name) %></label>
+		<%= f.text_field :customer_name %>
+		<span id="customer_inprogress" class="hide">
+		<%= image_tag AppConfig.in_progress_image %>
+		</span>
+	</li>
 	<%= f.input :owner, :collection => User.active.by_name %>
 <% end %>
 <% if @opportunity.new_record? and @opportunity.sales_customer.new_record? %>

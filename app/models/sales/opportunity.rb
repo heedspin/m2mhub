@@ -59,13 +59,14 @@ class Sales::Opportunity < M2mhub::Base
   def sales_customer_name
     self.sales_customer.try(:name) || self.customer_name
   end
+  def sales_rep_ane_name
+    @sales_rep_ane_name ||= [self.sales_customer.sales_territory.try(:sales_rep_name), self.sales_person_name].join(': ')
+  end
 
-  scope :status, lambda { |s|
+  def self.status(s)
     s = s.id if s.is_a?(Sales::OpportunityStatus)
-    {
-      :conditions => { :status_id => s }
-    }
-  }
+    where(:status_id => s)
+  end
   scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]
   scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
   scope :by_customer_name, :order => :customer_name
@@ -85,16 +86,23 @@ class Sales::Opportunity < M2mhub::Base
       :conditions => [ 'sales_opportunities.start_date >= ? and sales_opportunities.start_date < ?', start_date, end_date ]
     }
   }
-  scope :sales_territory, lambda { |sales_territory_id|
-    {
-      :joins => :sales_customer,
-      :conditions => { :sales_customers => { :sales_territory_id => sales_territory_id } }
-    }
-  }
-  scope :owner, lambda { |owner|
+  def self.sales_territory(sales_territory_id)
+    where(:sales_customers => { :sales_territory_id => sales_territory_id }).joins(:sales_customer)
+  end
+  def self.owner(owner)
     owner = owner.id if owner.is_a?(User)
     where(:owner_id => owner)
-  }
+  end
+  def self.rep_status(rep_status)
+    where(:sales_customers => { :rep_status_id => rep_status.is_a?(Sales::RepStatus) ? rep_status.id : rep_status}).joins(:sales_customer)
+  end
+  def self.lead_level(lead_level)
+    lead_level = Sales::LeadLevel::Search.find(lead_level) if (lead_level.is_a?(Fixnum) || lead_level.is_a?(String))
+    where('sales_customers.lead_level_id in (?)', lead_level.lead_level_ids).joins(:sales_customer)
+  end
+  def self.source(source)
+    where :opportunity_source_id => source.is_a?(Sales::OpportunitySource) ? source.id : source
+  end
 
   # This logic is mostly duplicated in quote.
   before_save :set_customer
@@ -109,6 +117,13 @@ class Sales::Opportunity < M2mhub::Base
       end
     end
     true
+  end
+  
+  before_update :set_customer_rep_status
+  def set_customer_rep_status
+    if self.opportunity_source_id_changed? and self.source.try(:sales_rep?) and self.sales_customer and self.sales_customer.rep_status.try(:unknown?)
+      self.sales_customer.update_attributes(:rep_status => Sales::RepStatus.connected)
+    end
   end
 
   def destroy(dp=nil)

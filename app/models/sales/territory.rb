@@ -13,6 +13,10 @@
 class Sales::Territory < M2mhub::Base
   set_table_name 'sales_territories'
   scope :by_name, :order => 'name'
+  
+  def self.by_sales_rep_or_name
+    all.sort_by { |t| [t.sales_rep_name.present? ? t.sales_rep_name : 'ZZZZZZZZZZZZZZZZZZ', t.name ] }
+  end
 
   def name_and_description
     @name_and_description ||= [name, description].select(&:present?).join( ' - ')
@@ -24,6 +28,10 @@ class Sales::Territory < M2mhub::Base
 
   def name_and_sales_rep
     @name_and_sales_rep ||= [name, sales_rep_name].select(&:present?).join( ' - ')
+  end
+  
+  def sales_rep_or_name
+    @sales_rep_or_name ||= self.sales_rep_name.present? ? self.sales_rep_name : "No Rep: #{self.name}"
   end
   
   def self.import

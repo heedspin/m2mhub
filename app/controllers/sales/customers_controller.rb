@@ -11,6 +11,9 @@ class Sales::CustomersController < M2mhubController
 
   def new
     @customer = build_object
+    if @customer.attached_opportunity.source.sales_rep?
+      @customer.rep_status = Sales::RepStatus.connected
+    end
   end
 
   def edit

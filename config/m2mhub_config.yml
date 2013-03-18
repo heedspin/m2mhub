@@ -50,7 +50,7 @@ m2mhub_config: &m2mhub_config
     sales:
       children: sales/sales_order_items sales/sales_orders sales/m2m_quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports commission_reports sales_reports
     sales_opportunities:
-      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories sales/quotes sales/opportunity_reports
+      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories sales/quotes sales/opportunity_reports sales/sales_events
     sales_customers:
       children: sales_customer_summary sales_customer_opportunities sales/customers/quotes
     sales_customer_summary:

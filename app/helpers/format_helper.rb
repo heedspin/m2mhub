@@ -58,7 +58,8 @@ module FormatHelper
   
   # Shorten, truncate, add ellipse...
   def limit_string(text, max)
-    text[0..(max-1)] + (text.size > max ? '...' : '')
+    return nil unless text.present?
+    text[0..(max-1)].strip + (text.size > max ? '...' : '')
   end
   
   def format_variable_time(time, today_format=:just_time, past_format=:number_date)

@@ -1,5 +1,12 @@
 <div class="opportunity_comment_container">
-	<% if comment.comment_type.try(:comment?) %>
+	<% if comment.comment_type.try(:ticket?) %>
+	<div class="opportunity_ticket <%= comment.lighthouse_ticket.try(:closed) ? 'lighthouse_ticket_closed' : '' %>">
+		<div class="hiddenedit">
+			<%= link_to 'Edit', edit_opportunity_comment_url(comment) %>
+		</div>
+		<%= render 'sales/opportunity_comments/show_ticket', :comment => comment %>
+	</div>
+	<% elsif comment.comment_type.comment? or comment.comment_type.lost? or comment.comment_type.sales_order? %>
 	<div class="opportunity_comment">
 		<div class="hiddenedit">
 			<%= link_to 'Edit', edit_opportunity_comment_url(comment) %>
@@ -32,13 +39,6 @@
 	<% elsif comment.comment_type.try(:quote?) %>
 	<div class="opportunity_quote">
 		<%= render 'sales/quotes/summary', :quote => comment.quote %>
-	</div>
-	<% else %>
-	<div class="opportunity_ticket <%= comment.lighthouse_ticket.try(:closed) ? 'lighthouse_ticket_closed' : '' %>">
-		<div class="hiddenedit">
-			<%= link_to 'Edit', edit_opportunity_comment_url(comment) %>
-		</div>
-		<%= render 'sales/opportunity_comments/show_ticket', :comment => comment %>
 	</div>
 	<% end %>
 </div>

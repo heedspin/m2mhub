@@ -24,10 +24,14 @@ $(function() {
 			return false; 
 		}		
 	});
+	$("#search").find('input').click(function(){
+		$("#format_xls").attr("disabled", true)
+		return true
+	});
 	$("#export").find('input').click(function(){
 		$("#format_xls").attr("disabled", false)
 		return true
-	})
+	});
 })
 </script>
 <% end %>
@@ -61,7 +65,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.buttons do %>
-				  <%= f.commit_button 'Search' %>
+				  <%= f.commit_button 'Search', :wrapper_html => {:id => 'search'} %>
 				  <%= f.commit_button 'Export', :wrapper_html => {:id => 'export'} %>
 					<li><%= link_to 'New Opportunity', new_opportunity_path %></li>
 				<% end %>

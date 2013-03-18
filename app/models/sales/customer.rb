@@ -72,10 +72,14 @@ class Sales::Customer < M2mhub::Base
     true
   end
   
+  def attached_opportunity
+    @attached_opportunity ||= self.opportunity_id.present? && Sales::Opportunity.find_by_id(self.opportunity_id.to_i)
+  end
+  
   after_create :attach_to_opportunity
   def attach_to_opportunity
-    if self.opportunity_id.present? and (opportunity = Sales::Opportunity.find_by_id(self.opportunity_id.to_i))
-      opportunity.update_attributes(:sales_customer_id => self.id, :customer_name => self.name)
+    if self.attached_opportunity
+      self.attached_opportunity.update_attributes(:sales_customer_id => self.id, :customer_name => self.name)
     end
   end
   
@@ -92,18 +96,6 @@ class Sales::Customer < M2mhub::Base
     end
   end
   
-  def self.import
-    Sales::Opportunity.where('sales_opportunities.customer_id is not null').each do |opportunity|
-      if erp_customer = M2m::Customer.find(opportunity.customer_id)
-        if sales_customer = self.import_from_erp_customer(erp_customer)
-          opportunity.update_attributes(:sales_customer_id => sales_customer.id)
-        end
-      end
-    end
-    M2m::Customer.all.each { |c| import_from_erp_customer c }
-    true
-  end
-
   ::M2m::Address
   class ::M2m::Address < M2m::Base
     def city_state_country
@@ -123,5 +115,16 @@ class Sales::Customer < M2mhub::Base
       puts "Updated company: #{sales_customer.name}"
     end
     sales_customer
+  end
+  
+  def self.set_rep_status
+    total_set = 0
+    Sales::Opportunity.source(Sales::OpportunitySource.sales_rep).where('sales_opportunities.sales_customer_id is not null').each do |opportunity|
+      if opportunity.sales_customer.rep_status.unknown?
+        opportunity.sales_customer.update_attributes(:rep_status => Sales::RepStatus.connected)
+        total_set += 1
+      end
+    end
+    total_set
   end
 end

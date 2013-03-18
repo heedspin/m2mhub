@@ -2,8 +2,8 @@
   <%= f.semantic_errors :base %>
 	<%= f.inputs do %>
 		<%= f.input :opportunity_id, :as => :hidden %>
-		<%= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'not_ticket_field' }, :value => Sales::OpportunityCommentType.comment.id %>
-		<%= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'ticket_field' }, :value => Sales::OpportunityCommentType.ticket.id %>
+		<%#= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'not_ticket_field' }, :value => Sales::OpportunityCommentType.comment.id %>
+		<%#= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'ticket_field' }, :value => Sales::OpportunityCommentType.ticket.id %>
 
 		<%= f.input :create_lighthouse_ticket, :as => :boolean %>
 		<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>

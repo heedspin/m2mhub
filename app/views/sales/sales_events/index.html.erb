@@ -1,0 +1,40 @@
+<% title 'Sales Events' %>
+
+<%= render 'sales/opportunities/submenu' %>
+<br />
+
+<h2>Sales Events</h2>
+
+<%= semantic_form_for @search, :as => :search, :url => sales_events_url, :html => {:method => :get} do |f| %>
+	<input id="format_xls" value="xls" name="format" type="hidden" disabled="true">
+		<%= f.inputs :class => 'horizontal' do %>
+			<%= f.input :sales_territory_id, :collection => Sales::Territory.by_sales_rep_or_name, :prompt => 'All', :member_label => :sales_rep_or_name %>
+			<%= f.input :owner, :collection => User.active.by_name %>
+		<% end %>
+		<%= f.inputs :class => 'horizontal' do %>
+			<%= f.input :start_date, :as => :calendar %>
+			<%= f.input :end_date, :as => :calendar %>
+			<%= f.input :for_sales_rep, :as => :boolean %>
+		<% end %>
+		<%= f.buttons do %>
+		  <%= f.commit_button 'Search', :wrapper_html => {:id => 'search'} %>
+		  <%= f.commit_button 'Export', :wrapper_html => {:id => 'export'} %>
+		<% end %>
+<% end %>
+
+<%= render 'index' %>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("#search").find('input').click(function(){
+		$("#format_xls").attr("disabled", true)
+		return true
+	});
+	$("#export").find('input').click(function(){
+		$("#format_xls").attr("disabled", false)
+		return true
+	});
+})
+</script>
+<% end %>
