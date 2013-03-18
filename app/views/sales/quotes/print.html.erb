@@ -56,7 +56,12 @@
 					<tr>
 						<td>
 							<span><%= item.part_number %></span>
-							<div class="description"><%= simple_format item.description %></div>
+							<div class="description">
+								<%= simple_format item.description %>
+								<% if item.customer_part_number.present? %>
+								Customer P/N: <%= item.customer_part_number %>
+								<% end %>
+							</div>
 						</td>
 						<td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
 						<td><span><%= cm item.quantity, :item_quantity %></span></td>
