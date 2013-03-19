@@ -33,11 +33,11 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 jQuery.fn.quotes = function() {
-	$(this).find("input[type=text]").focus(function(){
-	    this.select();
+	$(this).find("input[type=text]").click(function(){
+		this.select();
 	});
-	$(this).find("textarea").focus(function(){
-      this.select();
+	$(this).find("textarea").click(function(){
+  	this.select();
 	});
   $(this).find("#add_quote_item").click(function(){
 		var new_row = $("<%= escape_javascript render('sales/quote_items/row', :quote_item => @quote.items.build) %>");
