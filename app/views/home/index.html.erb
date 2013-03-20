@@ -14,9 +14,9 @@
 <%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
 <% end %>
 
-<% if @opportunity_report %>
-<h3><%= link_to 'Sales Scoreboard', sales_scoreboard_url %></h3>
-<%= render 'sales/opportunity_reports/index' %>
+<% if @sales_events %>
+<h3><%= link_to 'Sales Events', sales_events_url %></h3>
+<%= render 'sales/sales_events/index' %>
 <% end %>
 
 <h3><%= link_to 'Sales Orders', sales_orders_url %></h3>

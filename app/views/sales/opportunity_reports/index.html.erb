@@ -1,8 +1,28 @@
-<% title 'Opportunity Reports' %>
+<% title 'Sales Scoreboard' %>
 
 <%= render 'sales/opportunities/submenu' %>
 <br />
 
-<h2>Sales Scoreboard</h2>
+<h2>Scoreboard</h2>
+<div class="sales_scoreboard">
+	<%= render 'scoreboard', :reports => @opportunity_report.year_report %>
+</div>
+<div class="sales_scoreboard">
+	<%= render 'scoreboard', :reports => @opportunity_report.month_report %>
+</div>
+<div class="sales_scoreboard">
+	<%= render 'scoreboard', :reports => @opportunity_report.week_report %>
+</div>
 
-<%= render 'index' %>
+<div class="clear"></div>
+
+<h2>Weekly History</h2>
+<%= render 'history', :reports => @opportunity_report.week_report %>
+
+<hr />
+<h2>Monthly History</h2>
+<%= render 'history', :reports => @opportunity_report.month_report %>
+
+<hr />
+<h2>Year History</h2>
+<%= render 'history', :reports => @opportunity_report.year_report %>

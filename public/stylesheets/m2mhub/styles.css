@@ -1229,6 +1229,14 @@ div.expand_on_hover {
 	overflow: hidden;
 }
 
+div.sales_scoreboard {
+	float: left;
+	margin: 0 20px 0 0;
+}
+.split_results span:nth-child(2) {
+	float: right;
+}
+
 /*******************************************************
  Inspection Tasks
 */

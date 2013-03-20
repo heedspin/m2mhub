@@ -1,0 +1,67 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th></th>
+			<% time_period = reports.time_periods.last %>
+			<th>
+				<% if reports.period == :month %>
+				<%= time_period.to_s(:month_year) %>
+				<% elsif reports.period == :year %>
+				<%= time_period.year %>
+				<% else %>
+				Week of <%= time_period.strftime('%b %d') %>
+				<% end %>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% reports.territory_reports.sort_by { |r| r.opportunity_buckets.last.total_quoted_opportunities }.reverse.each do |territory_report| %>
+		<% opportunity_bucket = territory_report.opportunity_buckets.last %>
+		<% next unless opportunity_bucket.total_quoted_opportunities > 0 %>
+		<tr>
+			<td><%= territory_report.name %></td>
+			<td class="split_results">
+				<% if opportunity_bucket.total_quoted_opportunities > 0 %>
+					<span><%= cm opportunity_bucket.total_quoted_opportunities %></span>
+					<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>
+		<tr>
+			<th>Totals</th>
+			<% opportunity_bucket = reports.total_report.opportunity_buckets.last %>
+			<th class="split_results">
+				<span><%= opportunity_bucket.total_quoted_opportunities %></span>
+				<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+			</th>
+		</tr>			
+		
+		<tr class="opportunity_spacer">
+			<td colspan="<%= reports.territory_reports.size + 1 %>">
+			</td>
+		</tr>
+		
+		<% reports.owner_reports.sort_by { |r| r.opportunity_buckets.last.total_quoted_opportunities }.reverse.each do |owner_report| %>
+		<% opportunity_bucket = owner_report.opportunity_buckets.last %>
+		<% next unless opportunity_bucket.total_quoted_opportunities > 0 %>
+		<tr>
+			<td><%= owner_report.name %></td>
+			<td class="split_results">
+				<% if opportunity_bucket.total_quoted_opportunities > 0 %>
+					<span><%= cm opportunity_bucket.total_quoted_opportunities %></span>
+					<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>
+		<tr>
+			<th>Totals</th>
+			<% opportunity_bucket = reports.total_report.opportunity_buckets.last %>
+			<th class="split_results">
+				<span><%= opportunity_bucket.total_quoted_opportunities %></span>
+				<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+			</th>
+		</tr>			
+	</tbody>
+</table>

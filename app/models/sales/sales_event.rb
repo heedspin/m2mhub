@@ -1,5 +1,19 @@
 class Sales::SalesEvent
 
+  class Search < Sales::Opportunity
+    attr_accessor :sales_territory_id
+    attr_accessor :for_sales_rep
+    def for_sales_rep=(val)
+      @for_sales_rep = val.is_a?(TrueClass) || (val == '1')
+    end
+    
+    def initialize(args)
+      super(args)
+      self.end_date ||= Date.current
+      self.start_date ||= self.end_date.beginning_of_month
+    end
+  end
+
   def self.search(search)
     os = Sales::Opportunity.not_deleted.lead_level(Sales::LeadLevel::Search.open_lead).start_dates(search.start_date, search.end_date.advance(:days => 1))
     os = os.sales_territory(search.sales_territory_id) if search.sales_territory_id.present?
