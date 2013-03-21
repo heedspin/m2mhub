@@ -38,7 +38,7 @@ class Sales::Quote < M2mhub::Base
   scope :by_created_at_desc, :order => 'sales_quotes.created_at desc'
   scope :date_between, lambda { |start_date, end_date|
     {
-      :conditions => [ 'sales_quotes.date >= ? and sales_quotes.date < ?', start_date, end_date ]
+      :conditions => [ 'sales_quotes.date >= ? and sales_quotes.date <= ?', start_date, end_date ]
     }
   }
   
