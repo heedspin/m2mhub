@@ -28,7 +28,11 @@ class Sales::OpportunityReport
     end
     def add_opportunity(date, opportunity)
       @has_opportunities = true
-      @opportunity_buckets[date].add_opportunity(opportunity)
+      if bucket = @opportunity_buckets[date]
+        bucket.add_opportunity(opportunity)
+      else
+        # Outside our time window.
+      end
     end
     def has_opportunities?
       @has_opportunities
