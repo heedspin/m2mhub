@@ -73,7 +73,10 @@ class Sales::Customer < M2mhub::Base
   end
   
   def attached_opportunity
-    @attached_opportunity ||= self.opportunity_id.present? && Sales::Opportunity.find_by_id(self.opportunity_id.to_i)
+    if @attached_opportunity.nil? and self.opportunity_id.present?
+      @attached_opportunity = Sales::Opportunity.find_by_id(self.opportunity_id.to_i)
+    end
+    @attached_opportunity
   end
   
   after_create :attach_to_opportunity
