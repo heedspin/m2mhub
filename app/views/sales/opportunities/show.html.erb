@@ -77,6 +77,12 @@ $(function() {
 		<strong><%= Sales::Opportunity.human_attribute_name(:end_date) %>:</strong>
 		<%= @opportunity.end_date.try(:to_s, :short_human_date) %>
 		<% end %>
+		
+		<% @opportunity.displays.each do |display| %>
+		<br />
+		<strong>Product:</strong>
+		<%= link_to display.model_number, doogle_display_url(display) %>
+		<% end %>
 	</p>
 
 	<%= simple_format @opportunity.body if @opportunity.body.present? %>

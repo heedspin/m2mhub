@@ -88,7 +88,6 @@ class Sales::QuotesController < M2mhubController
     def current_object
       if @current_object.nil?
         @current_object = Sales::Quote.find(params[:id])
-        @current_object.current_user = current_user
       end
       @current_object
     end
@@ -99,7 +98,6 @@ class Sales::QuotesController < M2mhubController
         if @current_object.customer_name.blank?
           @current_object.customer_name = @current_object.sales_customer.try(:name)
         end
-        @current_object.current_user = current_user
       end
       @current_object
     end

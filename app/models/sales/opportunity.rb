@@ -25,6 +25,7 @@
 #
 
 require 'plutolib/to_xls'
+require 'm2mhub_current_user'
 
 class Sales::Opportunity < M2mhub::Base
   set_table_name 'sales_opportunities'
@@ -37,7 +38,8 @@ class Sales::Opportunity < M2mhub::Base
   accepts_nested_attributes_for :sales_customer
   belongs_to :owner, :class_name => 'User'
   has_many :quotes, :through => :comments, :class_name => 'Sales::Quote'
-  
+  has_many :display_logs, :class_name => 'Doogle::DisplayLog', :foreign_key => 'object_id', :conditions => { :log_type_id => Doogle::LogType.opportunity.id }
+
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
 
@@ -52,6 +54,9 @@ class Sales::Opportunity < M2mhub::Base
   end
   def number_and_title
     "##{id} - #{self.safe_title}"
+  end
+  def number_title_and_customer
+    "##{id} - #{self.safe_title} for #{self.customer_name}"
   end
   def full_sales_person
     @full_sales_person ||= [self.sales_person.try(:name), self.sales_person_name].compact.join(', ')
@@ -108,22 +113,60 @@ class Sales::Opportunity < M2mhub::Base
   before_save :set_customer
   def set_customer
     if !self.create_customer and self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
-      if self.customer_name_changed? 
+      if self.customer_name_changed?
         self.sales_customer = Sales::Customer.with_name(self.customer_name).first
       elsif self.sales_customer.present? # Customer record name changed.
-        self.customer_name = self.sales_customer.name          
+        self.customer_name = self.sales_customer.name
       else
         self.sales_customer_id = nil
       end
     end
     true
   end
-  
+
   before_update :set_customer_rep_status
   def set_customer_rep_status
     if self.opportunity_source_id_changed? and self.source.try(:sales_rep?) and self.sales_customer and self.sales_customer.rep_status.try(:unknown?)
       self.sales_customer.update_attributes(:rep_status => Sales::RepStatus.connected)
     end
+  end
+
+  def part_numbers
+    if self.product.present?
+      self.product.split(/[ ,]+/)
+    else
+      []
+    end
+  end
+
+  def displays
+    @displays ||= self.part_numbers.map { |pn| Doogle::Display.find_by_model_number(pn) }.compact
+  end
+
+  after_create :create_display_logs
+  def create_display_logs
+    self.part_numbers.each do |part_number|
+      if display = Doogle::Display.find_by_model_number(part_number)
+        display.logs.create( :log_type => Doogle::LogType.opportunity,
+                             :object_id => self.id,
+                             :user_id => M2mhubCurrentUser.user.try(:id),
+                             :summary => 'Opportunity',
+                             :event_time => self.created_at )
+      end
+    end
+  end
+
+  before_update :update_display_logs
+  def update_display_logs
+    if self.product_changed?
+      self.display_logs.destroy_all
+      self.create_display_logs
+    end
+  end
+
+  after_destroy :destroy_display_logs
+  def destroy_display_logs
+    self.display_logs.destroy_all
   end
 
   def destroy(dp=nil)
@@ -134,20 +177,20 @@ class Sales::Opportunity < M2mhub::Base
       self.save
     end
   end
-  
+
   def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
     comment.lighthouse_title = [self.product, self.customer_name, self.title].select(&:present?).map(&:strip).join(' - ')
     lighthouse_body = [ ]
-    
+
     # Filter out lines starting with M2MHub:
     self.body.split("\n").each do |line|
       unless line.starts_with?('M2MHub:')
         lighthouse_body.push line
       end
     end
-    
+
     lighthouse_body.push "\n---"
     lighthouse_body.push "Ticket Created By: *#{ticket_created_by}*"
     url = Rails.application.routes.url_helpers.opportunity_url(self, :host => AppConfig.hostname)
@@ -157,7 +200,7 @@ class Sales::Opportunity < M2mhub::Base
     comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
     comment
   end
-  
+
   def guess_website
     if self.body =~ /From: [^@\n]+@([^@\n]+)/m
       domain = $1.strip
@@ -176,7 +219,7 @@ class Sales::Opportunity < M2mhub::Base
     def initialize(opportunities)
       @opportunities = opportunities
     end
-    
+
     def xls_initialize
       xls_field("Opportunity ID") { |o| o.id }
       xls_field("Status") { |o| o.status.name }

@@ -72,8 +72,6 @@ class Sales::Quote < M2mhub::Base
     end
   end
   
-  attr_accessor :current_user
-  
   validate :customer_exists
   def customer_exists
     if self.sales_customer.blank?

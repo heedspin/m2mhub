@@ -1,3 +1,5 @@
+require 'm2mhub_current_user'
+
 class M2mhub::Feature
   class Config
     attr_accessor :name
@@ -19,9 +21,8 @@ class M2mhub::Feature
   end
   
   class << self
-    attr_accessor :current_user
     def enabled?(feature)
-      self.feature_config(feature.to_s).try(:enabled?, current_user)
+      self.feature_config(feature.to_s).try(:enabled?, M2mhubCurrentUser.user)
     end
     
     def feature_config(feature)

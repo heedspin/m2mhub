@@ -4,6 +4,7 @@ require 'menu_selected'
 require 'pdf_generation'
 require 'declarative_authorization'
 require 'active_hash'
+require 'm2mhub_current_user'
 
 class M2mhubController < ApplicationController
   include MenuSelected
@@ -14,12 +15,12 @@ class M2mhubController < ApplicationController
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   before_filter :require_login
-  before_filter :record_feature_user
+  before_filter :record_current_user
   
   protected
   
-    def record_feature_user
-      M2mhub::Feature.current_user = current_user
+    def record_current_user
+      M2mhubCurrentUser.user = current_user
       true
     end
   

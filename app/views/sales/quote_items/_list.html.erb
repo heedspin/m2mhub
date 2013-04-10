@@ -48,6 +48,7 @@ jQuery.fn.quotes = function() {
 		new_row.find("#quote_item_customer_part_number").val(prev.find("#quote_item_customer_part_number").val());
 		add_quote_tr.replaceWith(new_row);
 		new_row.quotes().find("input[type=text]:first").focus();
+		new_row.find("input").first().change();
 				
 		var add_row_content = $("<%= escape_javascript render('sales/quote_items/add_row.html.erb') %>");
 		new_row.after(add_row_content);

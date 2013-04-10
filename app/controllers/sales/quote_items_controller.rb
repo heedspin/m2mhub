@@ -69,7 +69,7 @@ class Sales::QuoteItemsController < M2mhubController
     end
     
     def build_object
-      self.parent_object.items.build(params[:sales_quote_item])
+      self.parent_object.items.build(params[model_name])
     end
 
 end
