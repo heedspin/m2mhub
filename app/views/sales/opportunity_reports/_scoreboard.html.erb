@@ -19,11 +19,16 @@
 		<% opportunity_bucket = territory_report.opportunity_buckets.last %>
 		<% next unless opportunity_bucket.total_quoted_opportunities > 0 %>
 		<tr>
-			<td><%= territory_report.name %></td>
-			<td class="split_results">
+			<td><%= limit_string territory_report.name, 16 %></td>
+			<td>
 				<% if opportunity_bucket.total_quoted_opportunities > 0 %>
-					<span><%= cm opportunity_bucket.total_quoted_opportunities %></span>
-					<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+					<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+						<span class="left">
+							<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+						</span>
+						<span class="right"><%= cm source_bucket.total_value, :rounded_dollars %></span>
+						<br />
+					<% end %>
 				<% end %>
 			</td>
 		</tr>
@@ -31,9 +36,14 @@
 		<tr>
 			<th>Totals</th>
 			<% opportunity_bucket = reports.total_report.opportunity_buckets.last %>
-			<th class="split_results">
-				<span><%= opportunity_bucket.total_quoted_opportunities %></span>
-				<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+			<th>
+				<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+					<span class="left">
+						<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+					</span>
+					<span class="right"><%= cm source_bucket.total_value, :rounded_dollars %></span>
+					<br />
+				<% end %>
 			</th>
 		</tr>			
 		
@@ -47,10 +57,15 @@
 		<% next unless opportunity_bucket.total_quoted_opportunities > 0 %>
 		<tr>
 			<td><%= owner_report.name %></td>
-			<td class="split_results">
+			<td>
 				<% if opportunity_bucket.total_quoted_opportunities > 0 %>
-					<span><%= cm opportunity_bucket.total_quoted_opportunities %></span>
-					<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+					<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+						<span class="left">
+							<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+						</span>
+						<span class="right"><%= cm source_bucket.total_value, :rounded_dollars %></span>
+						<br />
+					<% end %>
 				<% end %>
 			</td>
 		</tr>
@@ -58,9 +73,14 @@
 		<tr>
 			<th>Totals</th>
 			<% opportunity_bucket = reports.total_report.opportunity_buckets.last %>
-			<th class="split_results">
-				<span><%= opportunity_bucket.total_quoted_opportunities %></span>
-				<span><%= cm opportunity_bucket.total_value, :rounded_dollars %></span>
+			<th>
+				<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+					<span class="left">
+						<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+					</span>
+					<span class="right"><%= cm source_bucket.total_value, :rounded_dollars %></span>
+					<br />
+				<% end %>
 			</th>
 		</tr>			
 	</tbody>

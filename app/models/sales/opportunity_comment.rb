@@ -153,15 +153,15 @@ class Sales::OpportunityComment < M2mhub::Base
     end
   end
 
-  # before_save :pad_quote_and_sales_numbers
-  # def pad_quote_and_sales_numbers
-  #   if self.status.active?
-  #     self.quote_id = M2m::Quote.pad_quote_number(self.quote_id) if self.quote_id.present?
-  #   elsif self.status.won?
-  #     self.sales_order_id = M2m::SalesOrder.pad_sales_order_number(self.sales_order_id) if self.sales_order_id.present?
-  #   end
-  #   true
-  # end
+  before_save :pad_quote_and_sales_numbers
+  def pad_quote_and_sales_numbers
+    if self.status.active?
+      self.quote_id = M2m::Quote.pad_quote_number(self.quote_id) if self.quote_id.present?
+    elsif self.status.won?
+      self.sales_order_id = M2m::SalesOrder.pad_sales_order_number(self.sales_order_id) if self.sales_order_id.present?
+    end
+    true
+  end
 
   # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
   def update_status!

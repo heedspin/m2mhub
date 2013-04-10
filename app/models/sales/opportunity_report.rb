@@ -1,15 +1,40 @@
 class Sales::OpportunityReport
+  
+  class SourceBucket
+    attr_accessor :source
+    def initialize(source)
+      @source = source
+      @opportunities = []
+    end
+    def name
+      self.source.try(:name) || 'No Source'
+    end
+    def add_opportunity(opportunity)
+      @opportunities.push opportunity
+    end
+    def total_quoted_opportunities
+      @opportunities.size
+    end
+    def total_value
+      @opportunities.sum { |o| o.amount || 0 }
+    end
+  end
 
   class OpportunityBucket
-    attr_accessor :date, :total_quoted_opportunities, :total_value
+    attr_accessor :date, :total_quoted_opportunities, :total_value, :sources
     def initialize(date)
       @date = date
       @total_quoted_opportunities = 0
       @total_value = 0
+      @sources = {}
     end
     def add_opportunity(opportunity)
       @total_quoted_opportunities += 1
       @total_value += (opportunity.amount || 0)
+      (@sources[opportunity.opportunity_source_id] ||= SourceBucket.new(opportunity.source)).add_opportunity(opportunity)
+    end
+    def sorted_sources
+      sources.values.sort_by(&:name)
     end
   end
 

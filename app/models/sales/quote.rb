@@ -41,6 +41,9 @@ class Sales::Quote < M2mhub::Base
       :conditions => [ 'sales_quotes.date >= ? and sales_quotes.date <= ?', start_date, end_date ]
     }
   }
+  scope :creator, lambda { |user|
+    where(:creator_id => user.id)
+  }
   
   attr_accessor :link_opportunity_id
   
@@ -57,6 +60,11 @@ class Sales::Quote < M2mhub::Base
   before_validation :set_quote_number, :on => :create
   def set_quote_number
     self.quote_number = (Sales::Quote.maximum(:quote_number) || STARTING_QUOTE_NUMBER) + rand(10) + 5
+  end
+  
+  before_save :set_creator
+  def set_creator
+    self.creator_id ||= M2mhubCurrentUser.user.id
   end
   
   after_initialize :set_defaults
