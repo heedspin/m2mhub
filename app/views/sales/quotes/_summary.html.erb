@@ -24,7 +24,13 @@
 	<tbody>
 		<% quote.items.each do |item| %>
 			<tr>
-				<td><%= link_to item.part_number, doogle_display_url(item.part_number) %></td>
+				<td>
+					<% if item.part_number.include?('/') %>
+						<%= item.part_number %>
+					<% else %>
+						<%= link_to item.part_number, doogle_display_url(item.part_number) %>
+					<% end %>
+				</td>
 				<td><%= cm item.expected_cost, :dollars %></td>
 				<td><%= cm item.quantity.to_i %></td>
 				<td><%= cm item.price, :dollars %></td>

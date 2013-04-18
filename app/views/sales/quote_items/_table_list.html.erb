@@ -13,7 +13,7 @@
 	<% quote_items.each do |i| %>
 		<% so_style = cycle('odd', 'even') %>
 		<tr class="<%= so_style %>">
-			<td><%= link_to_item i %></td>
+			<td><%= i.part_number %></td>
 			<td><%= i.customer_part_number %></td>
 			<td><%= cm i.quantity, :item_quantity %></td>
 			<td rowspan="2"><%= cm i.expected_cost, :dollars %></td>
