@@ -10,6 +10,7 @@ class M2mhub::ExternalEventResourcesController < M2mhubController
       @external_event.queue_to_run!
       render :json => @external_event.to_json(:only => [:id, :created_at])
     else
+      logger.error "Failed to save external event: #{@external_event.errors.full_messages}"
       render :json => {:errors => @external_event.errors.full_messages}, :status => :unprocessable_entity
     end
   end
