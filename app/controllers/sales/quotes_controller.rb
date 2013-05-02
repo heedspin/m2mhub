@@ -12,6 +12,10 @@ class Sales::QuotesController < M2mhubController
       @quote.sales_customer = opportunity.sales_customer
       @quote.customer_name = opportunity.customer_name
     end
+    if last_quote = Sales::Quote.by_created_at_desc.creator(current_user).first
+      @quote.foreword = last_quote.foreword
+      @quote.postfix = last_quote.postfix
+    end
   end
 
   def edit
@@ -97,10 +101,6 @@ class Sales::QuotesController < M2mhubController
         @current_object = Sales::Quote.new(params[model_name])
         if @current_object.customer_name.blank?
           @current_object.customer_name = @current_object.sales_customer.try(:name)
-        end
-        if last_quote = Sales::Quote.by_created_at_desc.creator(current_user).first
-          @current_object.foreword = last_quote.foreword
-          @current_object.postfix = last_quote.postfix
         end
       end
       @current_object
