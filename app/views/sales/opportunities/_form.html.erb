@@ -49,10 +49,10 @@ $(function() {
 		<%= f.input :create_customer, :as => :boolean %>
 		<%= f.fields_for :sales_customer do |c| %>
 			<%= c.input :location, :wrapper_html => { :class => 'customer_field', :id => 'sales_customer_location_input' } %>
-			<%= c.input :sales_territory, :wrapper_html => { :class => 'customer_field' }, :member_label => :rep_and_description, :collection => Sales::Territory.by_name %>
+			<%= c.input :sales_territory, :wrapper_html => { :class => 'customer_field' }, :member_label => :rep_and_description, :collection => Sales::Territory.all.sort_by(&:rep_and_description) %>
 			<%= c.input :business_type, :collection => Sales::BusinessType.by_name, :wrapper_html => { :class => 'customer_field' } %>
 			<%= c.input :website, :as => :string, :wrapper_html => { :class => 'customer_field' } %>
-			<%= c.input :lead_level, :collection => Sales::LeadLevel.all, :include_blank => false, :wrapper_html => { :class => 'customer_field' } %>
+			<%#= c.input :lead_level, :collection => Sales::LeadLevel.all, :include_blank => false, :wrapper_html => { :class => 'customer_field' } %>
 			<%= c.input :rep_status, :collection => Sales::RepStatus.all, :include_blank => false, :wrapper_html => { :class => 'customer_field' } %>
 			<%= c.input :notes, :wrapper_html => { :class => 'medium_textarea customer_field' } %>
 		<% end %>

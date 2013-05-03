@@ -41,14 +41,14 @@ $(function() {
 						<%= image_tag AppConfig.in_progress_image %>
 						</span>
 					</li>
-					<%= f.input :lead_level, :collection => Sales::LeadLevel::Search.all, :include_blank => false %>
+					<%#= f.input :lead_level, :collection => Sales::LeadLevel::Search.all, :include_blank => false %>
 				<% end %>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :sales_territory, :collection => Sales::Territory.by_name, :prompt => 'All', :member_label => :rep_and_description %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.all.sort_by(&:rep_and_description), :prompt => 'All', :member_label => :rep_and_description %>
 					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
 				<% end %>
 			</td>
