@@ -118,6 +118,7 @@ class M2m::Shipper < M2m::Base
       :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
     }
   }
+  scope :by_ship_date_desc, :order => 'shmast.fshipdate desc'
   
   def self.monthly_quantity_shipped(start_date, end_date)
     results = connection.select_rows <<-SQL

@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'delayed_job_active_record', '~> 0.3.2'
   s.add_dependency "airbrake"
   s.add_dependency 'active_hash', '~> 0.9.9'
-  s.add_dependency 'spreadsheet', '0.7.4'
+  s.add_dependency 'spreadsheet', '0.8.4'
   s.add_dependency 'lighthouse-api', '2.0'
   s.add_dependency 'addressable', '2.2.6'
   s.add_dependency 'amatch', '0.2.10'
