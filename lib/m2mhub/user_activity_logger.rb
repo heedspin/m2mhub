@@ -26,7 +26,7 @@ module M2mhub::UserActivityLogger
   
   def self.included(base)
     base.class_eval <<-RUBY
-    around_filter :log_user_activity
+    around_filter :log_user_activity, :except => :options
     RUBY
   end
 end
