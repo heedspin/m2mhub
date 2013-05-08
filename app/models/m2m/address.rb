@@ -40,6 +40,12 @@ class M2m::Address < M2m::Base
   # Magic number.  But I don't know the logic the M2M uses to choose this.
   scope :sold_to, :conditions => { :fcaddrtype => 'O' }
   scope :ship_to, :conditions => { :fcaddrtype => 'S' }
+  def sold_to?
+    self.fcaddrtype == 'O'
+  end
+  def ship_to?
+    self.fcaddrtype == 'S'
+  end
   
   alias_attribute :first_name, :fcfname
   alias_attribute :last_name, :fclname
@@ -66,5 +72,16 @@ class M2m::Address < M2m::Base
       self.fcaddrkey = M2m::Address.where(:fcaliaskey => self.fcaliaskey, :fcalias => self.fcalias, :fcaddrtype => self.fcaddrtype).count + 1
     end
     true
+  end
+  
+  def address_type
+    case self.fcaddrtype
+    when 'O'
+      'Sold To'
+    when 'S'
+      'Ship To'
+    else
+      self.fcaddrtype
+    end
   end
 end

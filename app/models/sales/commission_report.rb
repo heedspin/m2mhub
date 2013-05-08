@@ -43,6 +43,13 @@ class Sales::CommissionReport
     }
     xls_field('Customer Number') { |cd| cd.invoice_item.invoice.customer_number }
     xls_field('Customer Name') { |cd| cd.invoice_item.invoice.customer_name }
+    xls_field('Customer State, Main') { |cd| cd.invoice_item.customer.work_state.strip }
+    xls_field('Customer State, Ship-To') { |cd| 
+      cd.invoice_item.customer.addresses.all.select { |a| a.ship_to? && a.work_state.present? }.map { |a| a.work_state.strip }.uniq.sort.join(', ')
+    }
+    xls_field('Customer State, Sold-To') { |cd| 
+      cd.invoice_item.customer.addresses.all.select { |a| a.sold_to? && a.work_state.present? }.map { |a| a.work_state.strip }.uniq.sort.join(', ')
+    }
     xls_field('Group') { |cd| cd.invoice_item.item.try(:fgroup).try(:strip) }
     xls_field('Invoice Description') { |cd| cd.invoice_item.description }
     xls_field('Sales Rep') { |cd| cd.sales_person_name }
