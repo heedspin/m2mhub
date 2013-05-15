@@ -25,14 +25,18 @@ class Sales::CommissionReport
   def xls_sheet_name
     'Commission Report'
   end
+  
+  def xls_clean_string(txt)
+    txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
+  end
 
   def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Invoice Date') { |cd| cd.invoice_item.invoice.date }
     xls_field('Invoice Number') { |cd| cd.invoice_item.invoice_number }
     xls_field('Sales Order Number') { |cd| cd.invoice_item.sales_order_number }
-    xls_field("#{AppConfig.short_name} Part Number") { |cd| cd.invoice_item.part_number }
-    xls_field('Part Description') { |cd| cd.invoice_item.item.try(:description) }
+    xls_field("#{AppConfig.short_name} Part Number") { |cd| 'hi' }
+    xls_field('Part Description') { |cd| 'by' }
     xls_field('Customer Part Number') { |cd| cd.invoice_item.customer_part_number }
     xls_field('Quantity') { |cd| cd.invoice_item.ship_quantity }
     xls_field('Unit Price', dollar_format) { |cd|
