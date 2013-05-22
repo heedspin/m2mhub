@@ -3,7 +3,7 @@
 $(function() {
 	new_company_matcher = /^Create New: (.+)$/;
 	$("input#search_fcompany").autocomplete({
-		source: "<%= m2m_customers_url(:new_prompt => 1) %>",
+		source: "<%= m2m_customers_url(:new_prompt => 0) %>",
 		search: function(event, ui) {
 			$("input#search_fcompany").autocomplete("close");
 			$("#inprogress").show();

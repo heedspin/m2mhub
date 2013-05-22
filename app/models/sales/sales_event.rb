@@ -15,14 +15,14 @@ class Sales::SalesEvent
   end
 
   def self.search(search)
-    os = Sales::Opportunity.not_deleted.lead_level(Sales::LeadLevel::Search.open_lead).start_dates(search.start_date, search.end_date.advance(:days => 1))
+    os = Sales::Opportunity.not_deleted.start_dates(search.start_date, search.end_date.advance(:days => 1))
     os = os.sales_territory(search.sales_territory_id) if search.sales_territory_id.present?
     os = os.owner(search.owner_id) if search.owner_id.present?
     os = os.rep_status(Sales::RepStatus.connected) if search.for_sales_rep
     events = os.all.map { |o| new(o) }
 
     cs = nil
-    cs = Sales::OpportunityComment.not_deleted.lead_level(Sales::LeadLevel::Search.open_lead).notable.created(search.start_date, search.end_date.advance(:days => 1))
+    cs = Sales::OpportunityComment.not_deleted.notable.created(search.start_date, search.end_date.advance(:days => 1))
     cs = cs.status(search.status_id) if search.status_id.present?
     cs = cs.sales_territory(search.sales_territory_id) if search.sales_territory_id.present?
     cs = cs.owner(search.owner_id) if search.owner_id.present?

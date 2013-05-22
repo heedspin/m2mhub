@@ -16,7 +16,13 @@
 		<tr>
 			<td><%= event.date.to_s(:short_human_date) %></td>
 			<td><%= event.type_name %></td>
-			<td><%= link_to limit_string(event.opportunity.sales_customer.name,24), sales_customer_url(event.opportunity.sales_customer) %></td>
+			<td>
+				<% if event.opportunity.sales_customer %>
+				<%= link_to limit_string(event.opportunity.sales_customer.name,24), sales_customer_url(event.opportunity.sales_customer) %>
+				<% else %>
+				<%= limit_string event.opportunity.customer_name, 24 %>
+				<% end %>
+			</td>
 			<td><%= link_to limit_string(event.opportunity.number_and_title, 32), opportunity_url(event.opportunity) %></td>
 			<td>
 				<% if event.event_text %>
@@ -25,9 +31,11 @@
 			</td>
 			<td><%= limit_string(event.opportunity.source.try(:name), 12) %></td>
 			<td>
+				<% if event.opportunity.sales_customer %>
 				<%= rep_text = [limit_string(event.opportunity.sales_customer.sales_territory.try(:sales_rep_name), 12), limit_string(event.opportunity.sales_person_name, 12)].select(&:present?).join(': ') %>
 				<% if rep_text.present? and event.opportunity.sales_customer.rep_status.try(:connected?) %>
 				<br />Connected
+				<% end %>
 				<% end %>
 			</td>
 			<td><%= event.opportunity.owner.try(:first_name) %></td>
