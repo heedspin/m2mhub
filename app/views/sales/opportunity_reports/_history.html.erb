@@ -62,7 +62,7 @@
 			<td colspan="<%= reports.territory_reports.size + 1 %>">
 				<ul>
 					<% reports.homeless_report.opportunities.each do |opportunity| %>
-						<li><%= link_to opportunity.number_and_title, opportunity_url(opportunity) %></li>
+						<li><%= opportunity.xnumber %> - <%= link_to opportunity.safe_title, opportunity_url(opportunity) %></li>
 					<% end %>
 				</ul>
 			</td>
@@ -139,7 +139,7 @@
 			<td colspan="<%= reports.territory_reports.size + 1 %>">
 				<ul>
 					<% reports.ownerless_report.opportunities.each do |opportunity| %>
-						<li><%= link_to opportunity.number_and_title, opportunity_url(opportunity) %></li>
+						<li><%= opportunity.xnumber %> - <%= link_to opportunity.safe_title, opportunity_url(opportunity) %></li>
 					<% end %>
 				</ul>
 			</td>

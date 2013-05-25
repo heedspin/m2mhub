@@ -23,7 +23,7 @@
 				<%= limit_string event.opportunity.customer_name, 24 %>
 				<% end %>
 			</td>
-			<td><%= link_to limit_string(event.opportunity.number_and_title, 32), opportunity_url(event.opportunity) %></td>
+			<td><%= event.opportunity.xnumber %> - <%= link_to limit_string(event.opportunity.safe_title, 32), opportunity_url(event.opportunity) %></td>
 			<td>
 				<% if event.event_text %>
 				<%= link_to event.event_text, event.event_url %>
