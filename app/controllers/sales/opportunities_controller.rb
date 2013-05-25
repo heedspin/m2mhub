@@ -10,6 +10,7 @@ class Sales::OpportunitiesController < M2mhubController
     @search = Search.new(params[:search])
     unless params.member?(:search)
       @search.status = Sales::OpportunityStatus.active
+      @search.owner_id = current_user.id
     end
     s = Sales::Opportunity
     if @search.status_id
@@ -20,9 +21,14 @@ class Sales::OpportunitiesController < M2mhubController
     s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
     s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
     s = s.owner(@search.owner_id) if @search.owner_id
+    s = s.xnumber(@search.xnumber) if @search.xnumber.present?
     @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
     respond_to do |format|
-      format.html
+      format.html do 
+        if s.size == 1
+          redirect_to opportunity_url(@opportunities.first.xnumber)
+        end
+      end
       format.xls do
         headers['Content-Disposition'] = "attachment; filename=\"LXD_Opportunities.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
@@ -115,6 +121,14 @@ class Sales::OpportunitiesController < M2mhubController
     end
 
     def current_object
-      @current_object ||= Sales::Opportunity.find(params[:id])
+      if @current_object.nil?
+        id = params[:id]
+        if id[0..0] == 'X'
+          @current_object = Sales::Opportunity.xnumber(id).first
+        else
+          @current_object = Sales::Opportunity.find(id)
+        end
+      end
+      @current_object
     end
 end

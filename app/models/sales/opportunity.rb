@@ -22,6 +22,7 @@
 #  last_comment_updated_id :integer
 #  sales_customer_id       :integer
 #  owner_id                :integer
+#  xnumber_decimal         :integer
 #
 
 require 'plutolib/to_xls'
@@ -39,6 +40,7 @@ class Sales::Opportunity < M2mhub::Base
   belongs_to :owner, :class_name => 'User'
   has_many :quotes, :through => :comments, :class_name => 'Sales::Quote'
   has_many :display_logs, :class_name => 'Doogle::DisplayLog', :foreign_key => 'object_id', :conditions => { :log_type_id => Doogle::LogType.opportunity.id }
+  validates_uniqueness_of :xnumber_decimal
 
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
@@ -53,7 +55,7 @@ class Sales::Opportunity < M2mhub::Base
     @safe_title ||= self.title.present? ? self.title : self.customer_name
   end
   def number_and_title
-    "##{id} - #{self.safe_title}"
+    "#{self.xnumber} - #{self.safe_title}"
   end
   def number_title_and_customer
     "##{id} - #{self.safe_title} for #{self.customer_name}"
@@ -200,7 +202,7 @@ class Sales::Opportunity < M2mhub::Base
     comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
     comment
   end
-
+  
   def guess_website
     if self.body =~ /From: [^@\n]+@([^@\n]+)/m
       domain = $1.strip
@@ -212,6 +214,73 @@ class Sales::Opportunity < M2mhub::Base
     else
       nil
     end
+  end
+
+  class XNumber
+    def self.test
+      (0..1024000).each do |n|
+        x1 = new(n)
+        x2 = new(x1.to_s)
+        puts "#{n} => #{x1.to_s}\t\t#{x1.to_s} => #{x2.to_i}"        
+        if n != x2.to_i
+          puts "fail"
+          break
+        end
+      end
+    end
+    Alph = ("A".."Z").to_a
+    def initialize(thing)
+      if thing.nil?
+      elsif thing.is_a?(String)
+        @string = thing
+        if @string =~ /^X([A-Z]+)(\d*)$/
+          numbers = $2
+          characters_power = numbers.try(:size) || 0
+          @integer = numbers.present? ? numbers.to_i : 0
+          characters = $1.reverse
+          (0..(characters.size-1)).each do |i|
+            @integer += (characters[i].ord - 65) * (26 ** i) * 10 ** characters_power
+          end
+        end
+        @integer
+      else
+        @integer = thing
+        if @integer == 0
+          @string = 'XA'
+        else
+          # http://stackoverflow.com/questions/14632304/generate-letters-to-represent-number-using-ruby
+          @string, q = '', @integer
+          (q, r = q.divmod(q < 676 ? 26 : 10)) && @string.insert(0,(q < 26 ? Alph[r] : r.to_s)) until q.zero?
+          @string.insert(0, 'X')
+        end
+      end
+    end
+    def to_i
+      @integer
+    end
+    def to_s
+      @string
+    end
+  end
+  
+  before_validation :set_xnumber, :on => :create
+  def set_xnumber
+    self.xnumber_decimal = (Sales::Opportunity.maximum(:xnumber_decimal) || 0) + rand(10) + 5
+  end
+  attr_accessor :xnumber
+  def xnumber
+    @xnumber ||= XNumber.new(self.xnumber_decimal).to_s
+  end
+  def self.xnumber(xnumber)
+    where(:xnumber_decimal => XNumber.new(xnumber).to_i)
+  end
+  
+  def self.fill_in_xnumbers
+    self.all(:order => 'id').each do |o|
+      o.set_xnumber
+      o.save!
+    end
+    true
   end
 
   class Export

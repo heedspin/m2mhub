@@ -43,7 +43,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
+					<%= f.input :owner, :collection => User.active.by_name %>
 					<%= f.input :sales_territory_id, :collection => Sales::Territory.all.sort_by(&:rep_and_description), :prompt => 'All', :member_label => :rep_and_description %>
 				<% end %>
 			</td>
@@ -51,6 +51,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
+					<%= f.input :xnumber, :as => :string %>
 					<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
 						<label class=" label" for="search_customer_name"><%= Sales::Opportunity.human_attribute_name(:customer_name) %></label>
 						<%= f.text_field :customer_name %>
@@ -58,7 +59,7 @@ $(function() {
 						<%= image_tag AppConfig.in_progress_image %>
 						</span>
 					</li>
-					<%= f.input :owner, :collection => User.active.by_name %>
+					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
 				<% end %>
 			</td>
 		</tr>

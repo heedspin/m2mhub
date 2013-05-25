@@ -66,6 +66,7 @@ en:
         amount: Potential Revenue
         customer_name: Customer
         sales_territory_id: Sales Territory
+        xnumber: X Number
       sales/opportunity_comment:
         lighthouse_title: Ticket Title
         lighthouse_body: Ticket Body
