@@ -57,8 +57,8 @@ class Sales::Opportunity < M2mhub::Base
   def number_and_title
     "#{self.xnumber} - #{self.safe_title}"
   end
-  def number_title_and_customer
-    "##{id} - #{self.safe_title} for #{self.customer_name}"
+  def title_and_customer
+    "#{self.safe_title} for #{self.customer_name}"
   end
   def full_sales_person
     @full_sales_person ||= [self.sales_person.try(:name), self.sales_person_name].compact.join(', ')
