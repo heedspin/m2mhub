@@ -183,7 +183,7 @@ class Sales::Opportunity < M2mhub::Base
   def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
     comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
     comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    comment.lighthouse_title = [self.product, self.customer_name, self.title].select(&:present?).map(&:strip).join(' - ')
+    comment.lighthouse_title = "#{self.xnumber}: " + [self.product, self.customer_name, self.title].select(&:present?).map(&:strip).join(' - ')
     lighthouse_body = [ ]
 
     # Filter out lines starting with M2MHub:
@@ -195,7 +195,7 @@ class Sales::Opportunity < M2mhub::Base
 
     lighthouse_body.push "\n---"
     lighthouse_body.push "Ticket Created By: *#{ticket_created_by}*"
-    url = Rails.application.routes.url_helpers.opportunity_url(self, :host => AppConfig.hostname)
+    url = Rails.application.routes.url_helpers.opportunity_url(self.xnumber, :host => AppConfig.hostname)
     lighthouse_body.push "M2MHub Opportunity: [#{comment.lighthouse_title}](#{url})"
     comment.lighthouse_body = lighthouse_body.join("\n")
     comment.lighthouse_assigned_user_id = lighthouse_assigned_user_id
