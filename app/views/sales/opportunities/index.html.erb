@@ -35,6 +35,7 @@ $(function() {
 })
 </script>
 <% end %>
+<% set_focus('#search_xnumber') %>
 
 <%= semantic_form_for @search, :as => :search, :url => opportunities_url, :html => {:method => :get} do |f| %>
 <input id="format_xls" value="xls" name="format" type="hidden" disabled="true">

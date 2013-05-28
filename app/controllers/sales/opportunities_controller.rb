@@ -13,16 +13,20 @@ class Sales::OpportunitiesController < M2mhubController
       @search.owner_id = current_user.id
     end
     s = Sales::Opportunity
-    if @search.status_id
-      s = s.status(@search.status_id)
+    if @search.xnumber.present? and (s = s.xnumber(@search.xnumber)) and (s.count == 1)
+      # Going direct to xnumber opportunity.
+      @opportunities = s
     else
-      s = s.not_deleted
+      if @search.status_id
+        s = s.status(@search.status_id)
+      else
+        s = s.not_deleted
+      end
+      s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
+      s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
+      s = s.owner(@search.owner_id) if @search.owner_id
+      @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
     end
-    s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
-    s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
-    s = s.owner(@search.owner_id) if @search.owner_id
-    s = s.xnumber(@search.xnumber) if @search.xnumber.present?
-    @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
     respond_to do |format|
       format.html do 
         if s.size == 1
