@@ -26,7 +26,7 @@
 	<% @purchase_order_items.each do |i| %>
 		<tr>
 			<td><%= link_to i.purchase_order.vendor.try(:name), vendor_url(i.purchase_order.vendor) %></td>
-			<td><%= i.purchase_order_number %></td>
+			<td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
 			<td><%= i.item_number %></td>
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
