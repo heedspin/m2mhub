@@ -10,7 +10,7 @@ class Sales::OpportunitiesController < M2mhubController
     @search = Search.new(params[:search])
     unless params.member?(:search)
       @search.status = Sales::OpportunityStatus.active
-      @search.owner_id = current_user.id
+      # Introduces 1 opp trap: @search.owner_id = current_user.id
     end
     s = Sales::Opportunity
     @search.xnumber = @search.xnumber.strip.upcase if @search.xnumber.present?
