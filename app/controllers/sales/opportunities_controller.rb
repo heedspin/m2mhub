@@ -13,6 +13,7 @@ class Sales::OpportunitiesController < M2mhubController
       @search.owner_id = current_user.id
     end
     s = Sales::Opportunity
+    @search.xnumber = @search.xnumber.strip.upcase if @search.xnumber.present?
     if @search.xnumber.present? and (s = s.xnumber(@search.xnumber)) and (s.count == 1)
       # Going direct to xnumber opportunity.
       @opportunities = s

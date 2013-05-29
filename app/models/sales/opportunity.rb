@@ -52,7 +52,7 @@ class Sales::Opportunity < M2mhub::Base
   end
 
   def safe_title
-    @safe_title ||= self.title.present? ? self.title : self.customer_name
+    @safe_title ||= self.title.present? ? self.title : (self.customer_name.present? ? self.customer_name : "#{self.xnumber}: No Title")
   end
   def number_and_title
     "#{self.xnumber} - #{self.safe_title}"
