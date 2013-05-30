@@ -25,7 +25,7 @@ class Sales::CommissionReport
   def xls_sheet_name
     'Commission Report'
   end
-  
+
   def xls_clean_string(txt)
     txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
   end
@@ -35,8 +35,8 @@ class Sales::CommissionReport
     xls_field('Invoice Date') { |cd| cd.invoice_item.invoice.date }
     xls_field('Invoice Number') { |cd| cd.invoice_item.invoice_number }
     xls_field('Sales Order Number') { |cd| cd.invoice_item.sales_order_number }
-    xls_field("#{AppConfig.short_name} Part Number") { |cd| 'hi' }
-    xls_field('Part Description') { |cd| 'by' }
+    xls_field("#{AppConfig.short_name} Part Number") { |cd| cd.invoice_item.part_number }
+    xls_field('Part Description') { |cd| cd.invoice_item.item.try(:description) }
     xls_field('Customer Part Number') { |cd| cd.invoice_item.customer_part_number }
     xls_field('Quantity') { |cd| cd.invoice_item.ship_quantity }
     xls_field('Unit Price', dollar_format) { |cd|
@@ -48,20 +48,20 @@ class Sales::CommissionReport
     xls_field('Customer Number') { |cd| cd.invoice_item.invoice.customer_number }
     xls_field('Customer Name') { |cd| cd.invoice_item.invoice.customer_name }
     xls_field('Customer State, Main') { |cd| cd.invoice_item.customer.work_state.strip }
-    xls_field('Customer State, Ship-To') { |cd| 
+    xls_field('Customer State, Ship-To') { |cd|
       cd.invoice_item.customer.addresses.all.select { |a| a.ship_to? && a.work_state.present? }.map { |a| a.work_state.strip }.uniq.sort.join(', ')
     }
-    xls_field('Customer State, Sold-To') { |cd| 
+    xls_field('Customer State, Sold-To') { |cd|
       cd.invoice_item.customer.addresses.all.select { |a| a.sold_to? && a.work_state.present? }.map { |a| a.work_state.strip }.uniq.sort.join(', ')
     }
     xls_field('Group') { |cd| cd.invoice_item.item.try(:fgroup).try(:strip) }
     xls_field('Invoice Description') { |cd| cd.invoice_item.description }
     xls_field('Sales Rep') { |cd| cd.sales_person_name }
     xls_field('Commission Rate') { |cd|
-      cd.commission_percentage.present? ? (cd.commission_percentage / 100).to_f.round(2) : 0.0
+      cd.commission_percentage.present? ? (cd.commission_percentage / 100).to_f.round(3) : 0.0
     }
     xls_field('Total Commission', dollar_format) { |cd|
-      cd.commission_percentage.present? ? ((cd.commission_percentage / 100) * cd.invoice_item.amount).to_f.round(2) : 0.0
+      cd.commission_percentage.present? ? ((cd.commission_percentage / 100) * cd.invoice_item.amount).to_f.round(3) : 0.0
     }
     xls_field('Commission Reason') { |cd| cd.commission_reason }
   end
@@ -76,14 +76,18 @@ class Sales::CommissionReport
     M2m::Item.attach_items(@invoice_items)
     M2m::SalesOrder.attach_sales_orders(@invoice_items)
 
+    result = []
     @finder = Sales::CommissionRateFinder.new
     @invoice_items.map do |invoice_item|
-      name, percentage, reason = @finder.get_rate( :customer => invoice_item.customer,
-                                                   :part_number => invoice_item.part_number,
-                                                   :revision => invoice_item.revision,
-                                                   :invoice => invoice_item.invoice,
-                                                   :sales_order => invoice_item.sales_order )
-      CommissionData.new(invoice_item, name, percentage, reason)
+      rates = @finder.get_rates( :customer => invoice_item.customer,
+                                 :part_number => invoice_item.part_number,
+                                 :revision => invoice_item.revision,
+                                 :invoice => invoice_item.invoice,
+                                 :sales_order => invoice_item.sales_order )
+      rates.each do |name, percentage, reason|
+        result.push CommissionData.new(invoice_item, name, percentage, reason)
+      end
     end
+    result
   end
 end

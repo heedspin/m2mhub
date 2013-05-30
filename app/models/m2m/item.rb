@@ -202,6 +202,11 @@ class M2m::Item < M2m::Base
   alias_attribute :user_memo, :fmusrmemo1
   alias_attribute :standard_memo, :fstdmemo
   alias_attribute :price, :fprice
+  alias_attribute :inspection_required, :finspect
+  
+  def product_class
+    M2m::ProductClass.product_class_key(self.product_class_key).first
+  end
   
   # Uses same calculation that m2m uses.
   def quantity_available

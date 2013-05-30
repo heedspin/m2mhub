@@ -7,6 +7,7 @@ class Sales::CommissionRateFinder
     @commission_rates_for_customer_and_item = {}
     @commission_rates_for_item = {}
     @commission_rates_for_customer = {}
+    @commission_rates_for_item_group = {}
     self.commission_rates.each do |cr|
       if cr.customer_number.present? and cr.part_number.present?
         @commission_rates_for_customer_and_item[[cr.customer_number, cr.part_number, cr.revision]] = cr
@@ -17,12 +18,60 @@ class Sales::CommissionRateFinder
       end
     end
   end
-  def get_rate(args)
+  def get_rates(args)
+    result = []
     customer = args[:customer]
     part_number = args[:part_number]
     revision = args[:revision]
     invoice = args[:invoice]
     sales_order = args[:sales_order]
+    if external_rep_rate = self.get_external_rep_rate(customer, part_number, revision, invoice, sales_order)
+      result.push external_rep_rate
+    end
+    if internal_rates = self.get_internal_rates(part_number, revision, invoice, sales_order)
+      result.concat internal_rates
+    end
+    result
+  end
+  
+  class InternalCommissionConfig
+    attr_accessor :ordered_after, :name
+    def initialize(config)
+      @name = config['name']
+      @ordered_after = config['ordered_after']
+      @commission_percentages = {}
+      config['rates'].each do |commission_percentage, product_classes|
+        product_classes.split(',').map(&:strip).each do |product_class|
+          @commission_percentages[product_class] = commission_percentage
+        end
+      end
+    end
+    
+    def commission_percentage_for(product_class)
+      @commission_percentages[product_class.name.strip] || 0
+    end
+  end
+  
+  def internal_commission_configs
+    @internal_commission_configs ||= AppConfig.internal_commission_rates.map { |config| InternalCommissionConfig.new(config) }
+  end
+  
+  def get_internal_rates(part_number, revision, invoice, sales_order)
+    result = []
+    if item = M2m::Item.part_number(part_number).first
+      self.internal_commission_configs.each do |config|
+        commission_percentage = config.commission_percentage_for(item.product_class)
+        next unless commission_percentage > 0
+        # This is LXD specific.  Sorry...
+        first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(invoice.customer_number).by_date.first
+        next unless first_invoice.date >= config.ordered_after
+        result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
+      end
+    end
+    result
+  end
+  
+  def get_external_rep_rate(customer, part_number, revision, invoice, sales_order)
     if customer.present? and part_number.present? and (cr = self.commission_rate_for_customer_and_item(customer, part_number, revision))
       return cr.sales_person_name, cr.commission_percentage, "Commission Rate #{cr.id} (for customer and item)"
     end

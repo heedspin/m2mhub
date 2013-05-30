@@ -43,4 +43,7 @@ class M2m::ProductClass < M2m::Base
       :conditions => { :fpc_name => txt.upcase }
     }
   }
+  def self.product_class_key(fpc_number)
+    where(:fpc_number => fpc_number)
+  end
 end
