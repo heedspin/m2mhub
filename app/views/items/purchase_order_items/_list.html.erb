@@ -31,7 +31,17 @@
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
 			<td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
-			<td><%= i.inspection_required %></td>
+			<td>
+				<% if i.inspection_required? %>
+					<%= link_to 'Y (view)', inspection_tasks_url(:poi => i.id) %>
+				<% else %>
+					<% if i.purchase_order.status.open? %>
+						<%= link_to 'N (add)', new_inspection_task_url(:quality_inspection_task => { :purchase_order_item_id => i.id }) %>
+					<% else %>
+						N
+					<% end %>
+				<% end %>
+			</td>
 			<td><%= i.purchase_order.status %></td>
 			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>

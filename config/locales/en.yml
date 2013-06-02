@@ -80,6 +80,8 @@ en:
         task_type: Type
         last_receiver_id: Last Receiver
         rma_number: RMA Number
+        purchase_order_number: PO Number
+        part_number: Part Number
       sales/territory:
         sales_rep_name: Sales Rep
       sales/quote:

@@ -40,3 +40,8 @@
 	</tbody>
 </table>
 <% end %>
+
+<% if @purchase_order.inspection_tasks.not_deleted.size > 0 %>
+<h3>Inspection Tasks</h3>
+<%= render 'quality/inspection_tasks/list', :inspection_tasks => @purchase_order.inspection_tasks.not_deleted %>
+<% end %>

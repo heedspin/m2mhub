@@ -96,6 +96,7 @@ class M2m::PurchaseOrderItem < M2m::Base
 
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono
   belongs_to_item :fpartno, :frev
+  has_many :inspection_tasks, :class_name => 'Quality::InspectionTask', :foreign_key => :purchase_order_item_id
 
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :ship_date, :fdateship
@@ -110,6 +111,9 @@ class M2m::PurchaseOrderItem < M2m::Base
   # alias_date_attribute :request_date, :freqdate
   alias_attribute :unit_cost, :fucost
   alias_attribute :inspection_required, :finspect
+  def inspection_required?
+    self.inspection_required == 'Y'
+  end
 
   def safe_promise_date
     self.last_promise_date || self.original_promise_date || Time.current.advance(:years => 1)

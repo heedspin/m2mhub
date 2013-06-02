@@ -335,8 +335,9 @@ form.formtastic fieldset > ol > li.string input, form.formtastic fieldset > ol >
 form.formtastic li.small_string input {
 	width: 100px;
 }
-form.formtastic li.widestring input, form.formtastic li.widetext textarea {
-	width: 399px;
+form.formtastic fieldset > ol > li.widestring input, form.formtastic fieldset > ol > li.widetext textarea {
+	width: 599px;
+	max-width: 100%;
 }
 li.small_textarea textarea {
 	height: 2.5em;

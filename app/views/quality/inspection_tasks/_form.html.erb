@@ -2,23 +2,29 @@
 
 <%= f.inputs do %>
 	<%= f.input :status, :collection => Quality::InspectionTaskStatus.options %>
+	<% if @task.new_record? %>
 	<%= f.input :task_type, :collection => Quality::InspectionTaskType.all, :include_blank => false %>
+	<% else %>
+	<%= f.input :task_type, :as => :string, :input_html => {:readonly => 'readonly'} %>
+	<% end %>
 	<%= f.input :part_number %>
 	<%= f.input :purchase_order_number, :wrapper_html => { :class => 'incoming_inspection' } %>
+	<%= f.input :purchase_order_item_id, :as => :hidden, :wrapper_html => { :class => 'incoming_inspection' } %>
+	<%= f.input :date_expected, :as => :hidden, :wrapper_html => { :class => 'incoming_inspection' } %>
 	<%#= f.input :purchase_order_item_number, :wrapper_html => { :class => 'incoming_inspection' } %>
 	<%= f.input :rma_number, :wrapper_html => { :class => 'rma_inspection' } %>
 	<%#= f.input :rma_item_number, :wrapper_html => { :class => 'rma_inspection' } %>
 	<%= f.input :quantity %>
-	<% if permitted_to? :edit_last_receiver_id %>
-	<%= f.input :last_receiver_id %>
-	<% end %>
-	<%= f.input :title %>
-	<%= f.input :body %>
+	<%# if permitted_to? :edit_last_receiver_id %>
+	<%#= f.input :last_receiver_id %>
+	<%# end %>
+	<%= f.input :title, :wrapper_html => { :class => 'widestring' } %>
+	<%= f.input :body, :wrapper_html => { :class => 'widetext' } %>
 	<%= f.input :create_lighthouse_ticket, :as => :boolean, :label => 'Create Lighthouse Ticket' %>
 	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
-	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field' }%>
-	<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field' } %>
+	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field widestring' }%>
+	<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field widetext' } %>
 <% end %>
 
 <% content_for :javascripts do %>

@@ -36,10 +36,12 @@
 #
 
 require 'm2mhub/lighthouse_watcher'
+require 'plutolib/comma'
 
 class Quality::InspectionTask < M2mhub::Base
   set_table_name 'inspection_tasks'
   include M2mhub::LighthouseWatcher
+  include Plutolib::Comma
   validates_presence_of :part_number
   
   belongs_to_active_hash :status, :class_name => 'Quality::InspectionTaskStatus'
@@ -47,6 +49,8 @@ class Quality::InspectionTask < M2mhub::Base
   belongs_to_item
   belongs_to :rma, :class_name => 'M2m::Rma', :foreign_key => 'rma_number', :primary_key => 'fcrmano'
   belongs_to :last_receiver, :class_name => 'M2m::Receiver', :foreign_key => :last_receiver_id, :primary_key => :freceiver
+  belongs_to :purchase_order_item, :class_name => 'M2m::PurchaseOrderItem'
+  belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :purchase_order_number
 
   attr_accessor :create_lighthouse_ticket
   attr_accessor :lighthouse_assigned_user_id
@@ -66,6 +70,11 @@ class Quality::InspectionTask < M2mhub::Base
       :conditions => [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
     }
   }
+  def self.friendly_purchase_order_number(ponum)
+    padded = M2m::PurchaseOrder.pad_purchase_order_number(ponum)
+    non_padded = ponum.to_i
+    where(['(inspection_tasks.purchase_order_number = ? or inspection_tasks.purchase_order_number = ?)', padded, non_padded])
+  end
   scope :status, lambda { |s|
     s = Quality::InspectionTaskStatus.find(s) unless s.is_a?(Quality::InspectionTaskStatus)
     status_ids = s.children_ids || [s.id]
@@ -79,6 +88,9 @@ class Quality::InspectionTask < M2mhub::Base
       :conditions => [ 'inspection_tasks.rma_number in (?)', rma_numbers.map { |n| M2m::Rma.pad_rma_number(n) }]
     }
   }
+  def self.part_number(txt)
+    where(:part_number => txt)
+  end
   
   before_save :fill_in_details
   def fill_in_details
@@ -110,6 +122,9 @@ class Quality::InspectionTask < M2mhub::Base
       self.lighthouse_ticket.destroy
     end
     self.status = Quality::InspectionTaskStatus.deleted
+    if self.purchase_order_item and self.purchase_order_item.inspection_required?
+      self.purchase_order_item.update_attributes(:inspection_required => 'N')
+    end
     self.save
   end
   
@@ -167,6 +182,46 @@ class Quality::InspectionTask < M2mhub::Base
     Quality::InspectionTask.task_type(Quality::InspectionTaskType.rma_inspection).not_deleted.rma_number(rma_numbers).each do |inspection_task|
       if rma = rmas.detect { |r| r.rma_number == inspection_task.rma_number }
         rma.inspection_task = inspection_task
+      end
+    end
+  end
+  
+  def initialize_from_purchase_order_item(poi)
+    self.status = Quality::InspectionTaskStatus.awaiting_receipt
+    self.task_type = Quality::InspectionTaskType.incoming_inspection
+    self.title = "#{self.task_type.name}: #{poi.part_number}"
+    self.part_number = poi.part_number
+    self.purchase_order_number = poi.purchase_order_number
+    self.quantity = poi.backorder_quantity
+    self.date_expected = poi.last_promise_date || poi.original_promise_date
+
+    url = Rails.application.routes.url_helpers.inspection_tasks_url(:poi => poi.id, :host => AppConfig.hostname)
+    body = []
+    body.push "PO #{self.purchase_order_number} for #{comma(poi.quantity)} #{poi.part_number}"
+    body.push "Currently due: #{self.date_expected.to_s(:database)}"
+    task_body = body.join("\n")
+    body.push "[M2MHub Inspection Task](#{url})"
+    body.push "\n---"
+    body.push AppConfig.inspection_task_default_incoming_inspection_comment
+    ticket_body = body.join("\n")
+    self.create_lighthouse_ticket = true
+    self.lighthouse_project_id = AppConfig.inspection_task_default_lighthouse_project
+    self.lighthouse_assigned_user_id = AppConfig.inspection_task_default_lighthouse_user
+    self.lighthouse_milestone_id = AppConfig.inspection_task_default_lighthouse_incoming_milestone
+    self.lighthouse_title = self.title
+    self.lighthouse_body = ticket_body
+    self.body = task_body
+    true
+  end
+  
+  after_create :set_inspection_required_flag
+  def set_inspection_required_flag
+    logger.info "#{self.task_type.incoming_inspection?} #{self.purchase_order_item_id}"
+    if self.task_type.incoming_inspection? and (poi = M2m::PurchaseOrderItem.find(self.purchase_order_item_id)) and !poi.inspection_required?
+      if poi.update_attributes(:inspection_required => 'Y')
+        logger.info "inspection_required success"
+      else
+        logger.info "inspection_required failure"
       end
     end
   end

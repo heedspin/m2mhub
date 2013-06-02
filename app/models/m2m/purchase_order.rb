@@ -80,6 +80,7 @@ class M2m::PurchaseOrder < M2m::Base
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
   has_many :receivers, :class_name => 'M2m::Receiver', :foreign_key => :fpono, :primary_key => :fpono
+  has_many :inspection_tasks, :class_name => 'Quality::InspectionTask', :foreign_key => :purchase_order_number
 
   scope :status_open,      :conditions => { :fstatus => M2m::PurchaseOrderStatus.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::PurchaseOrderStatus.closed.name }

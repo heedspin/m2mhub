@@ -37,6 +37,11 @@
 			<td><%= task.lighthouse_status %></td>
 			<td><%= task.lighthouse_last_assigned_user_name %></td>
 			<td><%= task.updated_at.to_s(:short_human_date) %></td>
+			<% if permitted_to? :manage, :quality_inspection_tasks %>
+			<td><%= link_to 'edit', edit_inspection_task_url(@task) %></td>
+			<% end %>
+
+			
 		</tr>
 		<% if task.body.present? %>
 		<tr>
@@ -44,7 +49,12 @@
 		</tr>
 		<% end %>
 	</tbody>
-</table>			
+</table>
+
+<% if task.task_type.incoming_inspection? and task.purchase_order %>
+<h3>Purchase Order Status</h3>
+<%= render 'production/purchase_order_items/list', :purchase_order_items => task.purchase_order.items %>
+<% end %>
 
 <% if task.lighthouse_ticket %>
 	<% if task.lighthouse_ticket.closed? and task.status.open? %>
