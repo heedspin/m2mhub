@@ -192,6 +192,7 @@ class Quality::InspectionTask < M2mhub::Base
     self.title = "#{self.task_type.name}: #{poi.part_number}"
     self.part_number = poi.part_number
     self.purchase_order_number = poi.purchase_order_number
+    self.purchase_order_item_id = poi.id
     self.quantity = poi.backorder_quantity
     self.date_expected = poi.last_promise_date || poi.original_promise_date
 

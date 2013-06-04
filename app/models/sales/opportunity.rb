@@ -233,7 +233,7 @@ class Sales::Opportunity < M2mhub::Base
       if thing.nil?
       elsif thing.is_a?(String)
         @string = thing
-        if @string =~ /^X([A-Z]+)(\d*)$/
+        if @string =~ /^X?([A-Z][A-Z])(\d+)$/
           numbers = $2
           characters_power = numbers.try(:size) || 0
           @integer = numbers.present? ? numbers.to_i : 0
