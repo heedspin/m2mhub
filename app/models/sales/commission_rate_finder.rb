@@ -90,7 +90,7 @@ class Sales::CommissionRateFinder
     if customer and customer.sales_person_key.present?
       return customer.sales_person_key, customer.sales_person.try(:commission_percentage), "Customer #{customer.customer_number}"
     end
-    nil
+    return 'ERROR', 0, 'No rate found. Create a house account or assign a rep rate'
   end
 
   def commission_rate_for_customer_and_item(customer, part_number, revision)
