@@ -35,7 +35,7 @@ class Sales::FirstSaleReport
       left join soitem on somast.fsono = soitem.fsono
       where soitem.fquantity >= 100
       group by somast.fcustno, soitem.fpartno
-      order by customer_number, part_number, order_date
+      order by order_date desc, customer_number, part_number
     SQL
     already_ordered = Set.new
     results.each do |customer_number, order_date, part_number|
