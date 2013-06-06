@@ -115,7 +115,7 @@ class Sales::Opportunity < M2mhub::Base
   before_save :set_customer
   def set_customer
     if !self.create_customer and self.customer_name.present? and (self.sales_customer_id.nil? or self.sales_customer.nil? or (self.sales_customer.name != self.customer_name))
-      if self.customer_name_changed?
+      if (self.sales_customer_id.nil? and self.customer_name.present?) or self.customer_name_changed?
         self.sales_customer = Sales::Customer.with_name(self.customer_name).first
       elsif self.sales_customer.present? # Customer record name changed.
         self.customer_name = self.sales_customer.name
