@@ -126,6 +126,10 @@ class M2m::SalesOrderItem < M2m::Base
     }
   }
   scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
+  def self.customer(t)
+    customer_number = M2m::Customer.fcustno_for(t)
+    joins(:sales_order).where([ 'somast.fcustno = ?', customer_number ])
+  end
   scope :customers, lambda { |customer_numbers|
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
     {
@@ -202,5 +206,3 @@ class M2m::SalesOrderItem < M2m::Base
   end
 
 end
-
-
