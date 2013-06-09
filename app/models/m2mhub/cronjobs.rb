@@ -12,6 +12,7 @@ class M2mhub::Cronjobs
   end
 
   # require 'm2mhub/cronjobs' ; M2mhub::Cronjobs.new.delay.medium_frequency
+  # */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.medium_frequency'
   def medium_frequency
     log "Running medium_frequency"
     if M2mhub::Feature.enabled?(:inspection_tasks)
@@ -22,5 +23,22 @@ class M2mhub::Cronjobs
     end    
     log "Finished medium_frequency"
     true
+  end
+  
+  # */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.low_frequency'
+  def low_frequency
+    log "Running low_frequency"
+    log "Updating opportunity comments"
+    Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
+    log "Finished low_frequency"
+  end
+  
+  # */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.low_frequency'
+  # 02 1 * * * /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.nightly'
+  def nightly
+    log "Running nightly"
+    log "Updating opportunity comments"
+    Sales::Opportunity.run_wakeups
+    log "Finished nightly"
   end
 end

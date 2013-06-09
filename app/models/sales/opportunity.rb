@@ -110,6 +110,9 @@ class Sales::Opportunity < M2mhub::Base
   def self.source(source)
     where :opportunity_source_id => source.is_a?(Sales::OpportunitySource) ? source.id : source
   end
+  def self.on_hold_until(date)
+    where [ 'sales_opportunities.status_id = ? and sales_opportunities.wakeup <= ?', Sales::OpportunityStatus.hold, date]
+  end
 
   # This logic is mostly duplicated in quote.
   before_save :set_customer
@@ -307,5 +310,14 @@ class Sales::Opportunity < M2mhub::Base
     def all_data
       @opportunities
     end
+  end
+  
+  def self.run_wakeups
+    Sales::Opportunity.on_hold_until(Date.current).each(&:wakeup!)
+  end
+  
+  def wakeup!
+    self.update_attributes(:status => Sales::OpportunityStatus.active)
+    Sales::OpportunityWakeupNotifier.wakeup_notifier(self).deliver if self.owner_id == 1
   end
 end

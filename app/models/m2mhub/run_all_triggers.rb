@@ -18,8 +18,6 @@ class M2mhub::RunAllTriggers
   def low_frequency
     log "Updating event status"
     M2mhub::Event.open_or_recently_closed.each(&:update_status!)
-    log "Updating opportunity comments"
-    Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
     log "Finished"
     true
   end
