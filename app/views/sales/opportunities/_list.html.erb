@@ -19,7 +19,7 @@ $(function() {
 </script>
 <% end %>
 
-<% lighthouse_comment_columns = 5 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) %>
+<% lighthouse_comment_columns = 6 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) %>
 <% if @opportunities.size > 0 %>
 <h3>
 	<%= comma @opportunities.total_entries %> Opportunities
@@ -43,6 +43,7 @@ $(function() {
 			<th>Wakeup</th>
 			<% end %>
 			<th>Updated</th>
+			<th>Owner</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -68,7 +69,8 @@ $(function() {
  				<%= o.wakeup.try(:to_s,:number_date) %>
 			</td>
 			<% end %>
-			<td><%= format_variable_time o.updated_at %></td>
+			<td><span class="nowrap"><%= format_variable_time o.updated_at %></span></td>
+			<td><%= o.owner.try(:first_name) %></td>
 		</tr>
 		<% if o.last_comment.try(:ticket?) %>
 		<tr class="<%= o.last_comment.lighthouse_closed ? 'lighthouse_ticket_closed' : '' %>">

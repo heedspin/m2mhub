@@ -113,6 +113,9 @@ class Sales::Opportunity < M2mhub::Base
   def self.on_hold_until(date)
     where [ 'sales_opportunities.status_id = ? and sales_opportunities.wakeup <= ?', Sales::OpportunityStatus.hold, date]
   end
+  def self.updated_before(date)
+    where [ 'sales_opportunities.updated_at < ?', date ]
+  end
 
   # This logic is mostly duplicated in quote.
   before_save :set_customer
@@ -205,7 +208,7 @@ class Sales::Opportunity < M2mhub::Base
     comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
     comment
   end
-  
+
   def guess_website
     if self.body =~ /From: [^@\n]+@([^@\n]+)/m
       domain = $1.strip
@@ -224,7 +227,7 @@ class Sales::Opportunity < M2mhub::Base
       (0..1024000).each do |n|
         x1 = new(n)
         x2 = new(x1.to_s)
-        puts "#{n} => #{x1.to_s}\t\t#{x1.to_s} => #{x2.to_i}"        
+        puts "#{n} => #{x1.to_s}\t\t#{x1.to_s} => #{x2.to_i}"
         if n != x2.to_i
           puts "fail"
           break
@@ -265,7 +268,7 @@ class Sales::Opportunity < M2mhub::Base
       @string
     end
   end
-  
+
   before_validation :set_xnumber, :on => :create
   def set_xnumber
     self.xnumber_decimal = (Sales::Opportunity.maximum(:xnumber_decimal) || 0) + rand(10) + 5
@@ -277,7 +280,7 @@ class Sales::Opportunity < M2mhub::Base
   def self.xnumber(xnumber)
     where(:xnumber_decimal => XNumber.new(xnumber).to_i)
   end
-  
+
   def self.fill_in_xnumbers
     self.all(:order => 'id').each do |o|
       o.set_xnumber
@@ -311,13 +314,25 @@ class Sales::Opportunity < M2mhub::Base
       @opportunities
     end
   end
-  
+
   def self.run_wakeups
     Sales::Opportunity.on_hold_until(Date.current).each(&:wakeup!)
   end
-  
+
   def wakeup!
     self.update_attributes(:status => Sales::OpportunityStatus.active)
     Sales::OpportunityWakeupNotifier.wakeup_notifier(self).deliver if self.owner_id == 1
   end
+
+  def self.run_reaper
+    Sales::Opportunity.status(Sales::OpportunityStatus.active).updated_before(Date.current.advance(:months => -2)).each(&:expire!)
+  end
+
+  def expire!
+    self.comments.create(:status_id => Sales::OpportunityStatus.lost.id,
+                         :comment_type_id => Sales::OpportunityCommentType.lost.id,
+                         :loss_reason_id => Sales::OpportunityLossReason.reaper.id,
+                         :comment => "Opportunity has not been active since #{self.updated_at.to_s(:human_date)}")
+  end
+
 end

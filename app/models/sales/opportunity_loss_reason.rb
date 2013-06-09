@@ -10,7 +10,8 @@ class Sales::OpportunityLossReason < ActiveHash::Base
     {:id => 7,  :name => 'Other'},
     {:id => 8,  :name => 'Customer Event (E.g., project cancelled)'},
     {:id => 9,  :name => 'No Bid: Business Too Small'},
-    {:id => 10, :name => 'No Bid: Wrong Product'}
+    {:id => 10, :name => 'No Bid: Wrong Product'},
+    {:id => 11, :name => 'Grim Reaper', :cmethod => :reaper}
   ]
   include Plutolib::ActiveHashMethods
 end

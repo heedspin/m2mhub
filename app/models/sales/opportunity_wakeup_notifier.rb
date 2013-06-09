@@ -3,7 +3,7 @@ class Sales::OpportunityWakeupNotifier < ApplicationMailer
     @opportunity = opportunity
     @opportunity_url = opportunity_url(opportunity, :host => AppConfig.hostname)
     if opportunity.owner
-      mail( :subject => "Wakeup: #{@opportunity.safe_title}",
+      mail( :subject => "Wakeup: #{@opportunity.safe_title}. #{@opportunity.xnumber}",
             :from => AppConfig.email_address,
             :to => @opportunity.owner.email,
             :date => Time.now )
