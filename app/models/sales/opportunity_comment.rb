@@ -66,6 +66,7 @@ class Sales::OpportunityComment < M2mhub::Base
     s = s.id if s.is_a?(Sales::OpportunityStatus)
     where(:sales_opportunities => {:status_id => s}).joins(:opportunity)
   end
+  scope :on_hold, where(:status_id => Sales::OpportunityStatus.hold.id)
   def self.sales_territory(sales_territory_id)
     where(:sales_customers => { :sales_territory_id => sales_territory_id }).joins(:opportunity => :sales_customer)
   end
