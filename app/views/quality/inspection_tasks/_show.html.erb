@@ -37,8 +37,8 @@
 			<td><%= task.lighthouse_status %></td>
 			<td><%= task.lighthouse_last_assigned_user_name %></td>
 			<td><%= task.updated_at.to_s(:short_human_date) %></td>
-			<% if permitted_to? :manage, :quality_inspection_tasks %>
-			<td><%= link_to 'edit', edit_inspection_task_url(@task) %></td>
+			<% if permitted_to?(:manage, :quality_inspection_tasks) and task %>
+			<td><%= link_to 'edit', edit_inspection_task_url(task) %></td>
 			<% end %>
 
 			
