@@ -5,7 +5,7 @@
 	<% if @task.new_record? %>
 	<%= f.input :task_type, :collection => Quality::InspectionTaskType.all, :include_blank => false %>
 	<% else %>
-	<%= f.input :task_type, :as => :string, :input_html => {:readonly => 'readonly'} %>
+	<%= f.input :task_type, :as => :string, :input_html => {:disabled => 'disabled'} %>
 	<% end %>
 	<%= f.input :part_number %>
 	<%= f.input :purchase_order_number, :wrapper_html => { :class => 'incoming_inspection' } %>
