@@ -1,0 +1,12 @@
+#contextassistant {
+	padding: 5px 5px 5px 10px;
+	background-color: #efefef;
+}
+
+#contextassistant p {
+	margin: 0 0 5px 0;
+}
+
+#contextassistant p:last-child {
+	margin: 0;
+}

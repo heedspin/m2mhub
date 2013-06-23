@@ -66,6 +66,10 @@ authorization do
     has_permission_on :backlog_reports, :to => :read
     has_permission_on :sales_opportunities, :to => :manage
     has_permission_on :sales_opportunity_comments, :to => :manage
+    has_permission_on :sales_opportunity_reports, :to => :manage
+    has_permission_on :sales_events, :to => :read
+    has_permission_on :production_vendors, :to => :read
+    has_permission_on :m2mhub_context_assistants, :to => :manage
   end
   
   role :production do

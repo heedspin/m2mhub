@@ -69,6 +69,9 @@ class Sales::Opportunity < M2mhub::Base
   def sales_rep_ane_name
     @sales_rep_ane_name ||= [self.sales_customer.sales_territory.try(:sales_rep_name), self.sales_person_name].join(': ')
   end
+  def title_or_number
+    self.title.present? ? self.title : self.xnumber
+  end
 
   def self.status(s)
     s = s.id if s.is_a?(Sales::OpportunityStatus)
@@ -205,7 +208,7 @@ class Sales::Opportunity < M2mhub::Base
     lighthouse_body.push "M2MHub Opportunity: [#{comment.lighthouse_title}](#{url})"
     comment.lighthouse_body = lighthouse_body.join("\n")
     comment.lighthouse_assigned_user_id = lighthouse_assigned_user_id
-    comment.wakeup = self.wakeup || Date.current.advance(:days => 7)
+    comment.wakeup = Date.current.advance(:days => 7)
     comment
   end
 
@@ -238,7 +241,7 @@ class Sales::Opportunity < M2mhub::Base
     def initialize(thing)
       if thing.nil?
       elsif thing.is_a?(String)
-        @string = thing
+        @string = thing.upcase
         if @string =~ /^X?([A-Z][A-Z])(\d+)$/
           numbers = $2
           characters_power = numbers.try(:size) || 0
@@ -279,6 +282,10 @@ class Sales::Opportunity < M2mhub::Base
   end
   def self.xnumber(xnumber)
     where(:xnumber_decimal => XNumber.new(xnumber).to_i)
+  end
+  def self.with_parsed_xnumber(text)
+    return where('true=true') unless text.present?
+    where [ 'sales_opportunities.xnumber_decimal in (?)', text.scan(/x[a-z]+\d\d?/i).map { |xn| XNumber.new(xn).to_i } ]
   end
 
   def self.fill_in_xnumbers

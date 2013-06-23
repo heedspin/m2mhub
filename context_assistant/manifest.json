@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "M2MHub Opportunity Context Assistant",
+  "description": "Use Opportunity XNumbers to find and display opportunity data.",
+  "version": "1.0",
+	"background": { 
+		"scripts": ["javascripts/jquery-1.7.2.min.js","javascripts/events.js"],
+		"persistent": false
+	},
+  "permissions" : [ "tabs", "storage", "cookies", "https://*.lxdinc.com/", "https://*.smtcoinc.com/" ],
+  "content_scripts" : [
+    {
+      "matches" : [ "https://mail.google.com/*" ],
+      "js" : ["javascripts/jquery-1.7.2.min.js", "javascripts/contentscript.js"],
+			"css" : ["stylesheets/context_assistant.css"],
+      "run_at" : "document_idle"
+    }
+  ]
+}
