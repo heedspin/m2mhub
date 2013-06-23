@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "M2MHub Opportunity Context Assistant",
   "description": "Use Opportunity XNumbers to find and display opportunity data.",
-  "version": "1.0",
+  "version": "3",
 	"background": { 
 		"scripts": ["javascripts/jquery-1.7.2.min.js","javascripts/events.js"],
 		"persistent": false
