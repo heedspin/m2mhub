@@ -1,5 +1,5 @@
 class M2mhub::ContextAssistantChromeExtensionsController < M2mhubController
-  filter_access_to_defaults :context => :m2mhub_context_assistant_chrome_extensions
+  skip_before_filter :require_login
 
   def index
   end
