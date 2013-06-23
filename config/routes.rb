@@ -95,6 +95,7 @@ Rails.application.routes.draw do
   resources :external_event_resources, :controller => 'm2mhub/external_event_resources', :only => [:create]
   
   resources :m2mhub_context_assistants, :controller => 'm2mhub/context_assistants'
+  resources :m2mhub_context_assistant_chrome_extensions, :controller => 'm2mhub/context_assistant_chrome_extensions'
 
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'

@@ -1,0 +1,11 @@
+
+<% if @user_agent.browser == 'Chrome' %>
+<h2>Context Assistant for Chrome</h2>
+<ul>
+	<li>Download <%= link_to 'context_assistant.crx', m2mhub_context_assistant_chrome_extension_url('download') %> to your downloads directory.</li>
+	<li>Copy this text and paste it into a new browser tab: <span>chrome://extensions</span></li>
+	<li>Drag and drop context_assistant.crx onto the extensions page and follow the instructions.</li>
+</ul>
+<% else %>
+<p>I'm sorry, <%= @user_agent.browser %> is not supported at this time.  Install Chrome!</p>
+<% end %>
