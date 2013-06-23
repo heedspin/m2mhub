@@ -1,5 +1,7 @@
 var current_subject = null;
 var dom_modification_timer = null;
+var context_assistants_url = null;
+
 function DOMModificationHandler() {
 	if (dom_modification_timer) {
 		clearTimeout(dom_modification_timer);
@@ -43,7 +45,9 @@ function hideContextAssistant() {
 }
 
 function getContextAssistantsFromServer() {
-	var context_assistants_url = "https://staging.lxdinc.com/m2mhub_context_assistants.json";
+	if (!context_assistants_url) {
+		return null;
+	}
 	// chrome.cookies.get({url:context_assistants}, function(cookies){
 	//   	console.log("Cookies: " + cookies);
 	// });
@@ -103,5 +107,7 @@ function handleContextsFail(xhr, exception){
   console.debug("Ajax call to context_assistants failed: " + xhr.status, + " " + xhr.responseText);
 }
 
-
-// chrome.runtime.sendMessage({hello: "musketeer"}, function() {});	
+chrome.extension.sendMessage({method: "getLocalStorage", key: "opportunity_server"}, function(response) {
+	console.log("Got opportunity_server=" + response.data);
+  context_assistants_url = response.data;
+});

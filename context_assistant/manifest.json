@@ -15,5 +15,6 @@
 			"css" : ["stylesheets/context_assistant.css"],
       "run_at" : "document_idle"
     }
-  ]
+  ],
+	"options_page": "options.html"
 }
