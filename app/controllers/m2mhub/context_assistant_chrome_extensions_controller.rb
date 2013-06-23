@@ -6,7 +6,7 @@ class M2mhub::ContextAssistantChromeExtensionsController < M2mhubController
   
   def show
     headers['Content-type'] = 'application/x-chrome-extension'
-    send_file File.join(M2mhub::Engine.root, 'extensions/chrome/context_assistant/package/context_assistant.crx')
+    send_file File.join(Rails.root, 'tmp/context_assistant.crx')
   end
   
   protected

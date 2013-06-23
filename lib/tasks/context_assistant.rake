@@ -4,12 +4,13 @@ namespace :context_assistant do
   task :chrome => :environment do
     require 'crxmake'
     extension_root = File.join(M2mhub::Engine.root, 'extensions/chrome/context_assistant')
-    puts "Packaging: #{extension_root}"
+    destination_root = File.join(Rails.root, 'tmp')
+    puts "Packaging: #{extension_root} into #{destination_root}"
     # create crx
     CrxMake.make(
       :ex_dir => extension_root,
-      :pkey   => File.join(extension_root, 'package/context_assistant.pem'),
-      :crx_output => File.join(extension_root, 'package/context_assistant.crx'),
+      :pkey   => File.join(destination_root, 'context_assistant.pem'),
+      :crx_output => File.join(destination_root, 'context_assistant.crx'),
       :verbose => true,
       :ignorefile => /\.swp/,
       :ignoredir => /(\.git|package)/
