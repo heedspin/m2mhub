@@ -9,3 +9,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 		sendResponse({});		
 	}
 });
+
+chrome.runtime.onInstalled.addListener(function(object details) {
+	if (details.reason == 'install') {
+		localStorage['opportunity_server'] = "m2mhub.lxdinc.com";
+	}
+});
