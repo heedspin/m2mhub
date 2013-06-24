@@ -308,6 +308,7 @@ class Sales::Opportunity < M2mhub::Base
       xls_field("Date") { |o| o.start_date }
       xls_field('Customer') { |o| o.sales_customer_name }
       xls_field('Source') { |o| o.source.try(:name) }
+      xls_field('Potential Revenue', xls_dollar_format) { |o| o.amount }
       xls_field('Title') { |o| o.title }
       xls_field('Product') { |o| o.product }
       xls_field('Location') { |o| o.sales_customer.try(:location) }
