@@ -1,12 +1,20 @@
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request.method == "getLocalStorage") {
-		var result = localStorage[request.key];
-		if (result) {
-	 		result = "https://" + result + "/m2mhub_context_assistants.json";	
+	if (request.method == "bootstrap") {
+		var opportunity_server = localStorage['opportunity_server'];
+		if (opportunity_server) {
+	 		opportunity_server = "https://" + opportunity_server + "/m2mhub_context_assistants.json";	
 		}
-		sendResponse({data: result});
+		sendResponse({opportunity_server: opportunity_server});		
+		// $.ajax({
+		// 	url: chrome.extension.getURL("/html/new_comment.html"),
+		// 	dataType: "html",
+		// 	success: function(new_comment_html) {
+		// 		sendResponse({opportunity_server: opportunity_server, new_comment_html: new_comment_html});
+		// 	}
+		// });
+		// return true; // Allow asychronous response.
 	}	else {
-		sendResponse({});		
+		sendResponse({});
 	}
 });
 

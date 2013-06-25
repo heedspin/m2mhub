@@ -11,11 +11,15 @@
   "content_scripts" : [
     {
       "matches" : [ "https://mail.google.com/*" ],
-      "js" : ["javascripts/jquery-1.7.2.min.js", "javascripts/contentscript.js"],
+      "js" : ["javascripts/jquery-1.10.1.min.js", "javascripts/contentscript.js", "javascripts/comments.js", "javascripts/opportunities.js", "javascripts/expanding.js", "javascripts/pure_min.js"],
 			"css" : ["stylesheets/context_assistant.css"],
       "run_at" : "document_idle"
     }
   ],
 	"options_page": "options.html",
-	"update_url": "https://m2mhub.lxdinc.com/m2mhub_context_assistant_chrome_extensions.xml"
+	"update_url": "https://m2mhub.lxdinc.com/m2mhub_context_assistant_chrome_extensions.xml",
+	"web_accessible_resources": [
+		"html/new_comment.html",
+		"html/opportunity.html"
+	]
 }

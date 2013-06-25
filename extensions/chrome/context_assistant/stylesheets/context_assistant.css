@@ -1,6 +1,9 @@
 #contextassistant {
 	padding: 5px 5px 5px 10px;
 	background-color: #efefef;
+	height: 5em;
+	max-height: 5em;
+ 	overflow: auto;
 }
 
 #contextassistant p {
@@ -9,4 +12,19 @@
 
 #contextassistant p:last-child {
 	margin: 0;
+}
+
+.ca_comment textarea {
+	padding: .5em;
+	background: #fff;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-size: 1em;
+	line-height: 1.5em;
+	margin: .5em 0;
+	width: 30%;
+}
+
+.ca_opportunity span {
+	display:block;
 }

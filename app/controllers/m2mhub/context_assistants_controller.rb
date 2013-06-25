@@ -12,6 +12,7 @@ class M2mhub::ContextAssistantsController < M2mhubController
         @opportunities = Sales::Opportunity.with_parsed_xnumber(subject).limit(10)
         result = @opportunities.map do |o|
           {
+            :type => 'opportunity',
             :title => o.title_or_number,
             :customer => o.customer_name,
             :customer_url => o.sales_customer_id.present? && Rails.application.routes.url_helpers.sales_customer_url(o.sales_customer_id, :host => AppConfig.hostname),

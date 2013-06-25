@@ -6,7 +6,7 @@ function DOMModificationHandler() {
 	if (dom_modification_timer) {
 		clearTimeout(dom_modification_timer);
 	}	
-	dom_modification_timer = setTimeout(processPageChange, 200);		
+	dom_modification_timer = setTimeout(processPageChange, 200);
 }
 $('body').bind('DOMSubtreeModified', DOMModificationHandler);
 
@@ -19,29 +19,9 @@ function processPageChange() {
 	if (current_subject != new_subject) {
 		current_subject = new_subject;
 		if (current_subject) {
-			showContextAssistant();			
-		} else {
-			hideContextAssistant();
+			getContextAssistantsFromServer();						
 		}
 	}
-}
-
-var context_assistant_div = null;
-function showContextAssistant() {
-	var context_assistant_div = $("#contextassistant");
-	if ((context_assistant_div.length == 0) && current_subject) {
-		// var toolbar_main_container = $("div[role=button] > span:contains('More')").last().parents().eq(10);
-		var toolbar_main_container = $("div[title=Archive]").last().parents().eq(5);
-		// debugger;
-		context_assistant_div = $("<div id=\"contextassistant\"><span>Loading context assistant...</span></div>");
-		toolbar_main_container.children("div:first-child").after(context_assistant_div);
-	}
-	$("#contextassistant").show();
-	getContextAssistantsFromServer();
-}
-
-function hideContextAssistant() {
-	$("#contextassistant").hide();
 }
 
 function getContextAssistantsFromServer() {
@@ -60,54 +40,88 @@ function getContextAssistantsFromServer() {
 	}).done(handleContexts).fail(handleContextsFail);	
 }
 
-function createLink(text, url) {
-	if (!url) return document.createTextNode(text);
-	var a = document.createElement('a');
-	a.title = text;
-	a.href = url;
-	a.appendChild(document.createTextNode(text));
-	return a;
-}
-
 function handleContexts(data) {
 	console.log("Received contexts: " + JSON.stringify(data));
 	var destination = $("#contextassistant");
 	destination.empty();
 	for(var i=0; i < data.length; i++) {
 		var context = data[i];
-		var context_element = document.createElement('div');
-		context_element.class = 'context';
-		var p_element = document.createElement('p');
-		context_element.appendChild(p_element);
-		if (context.customer) {
-			var span_element = document.createElement('span');
-			span_element.appendChild(document.createTextNode("Customer: "));
-			span_element.appendChild(createLink(context.customer, context.customer_url));
-			p_element.appendChild(span_element);
-			p_element.appendChild(document.createTextNode(" "));
+		if (context.type == 'opportunity') {
+			destination.append(opportunity_html)
+			render_opportunity(destination, context);
+		} else if (context.type == 'comment') {
+			destination.append(comment_html)
+			render_comment(destination, context);
 		}
-		{
-			var span_element = document.createElement('span');
-			span_element.appendChild(document.createTextNode("Opportunity: "));
-			span_element.appendChild(createLink(context.title, context.url));
-			p_element.appendChild(span_element);			
-			p_element.appendChild(document.createTextNode(" "));
-		}
-		for (var ii = 0; ii < context.part_numbers.length; ii++) {
-			var part = context.part_numbers[ii];
-			var span_element = document.createElement('span');
-			span_element.appendChild(createLink(part.part_number, part.url));
-			p_element.appendChild(span_element);
-			p_element.appendChild(document.createTextNode(" "));
-		}
-		destination.append(p_element);
 	}
+	new_comment_main();
 }
+
 function handleContextsFail(xhr, exception){
   console.debug("Ajax call to context_assistants failed: " + xhr.status, + " " + xhr.responseText);
 }
 
-chrome.extension.sendMessage({method: "getLocalStorage", key: "opportunity_server"}, function(response) {
-	console.log("Got opportunity_server=" + response.data);
-  context_assistants_url = response.data;
+chrome.extension.sendMessage({method: "bootstrap"}, function(response) {
+	if (response) {
+		if (response.opportunity_server) {
+		  context_assistants_url = response.opportunity_server;
+			console.log("Bootstrap opportunity_server=" + context_assistants_url);
+		}
+		if (response.new_comment_html) {
+			new_comment_html = response.new_comment_html;
+			// console.log("Bootstrap new_comment_html=" + response.new_comment_html);
+		}
+	}
 });
+
+function getParents(node) {
+  var nodes = [node]
+  for (; node; node = node.parentNode) {
+    nodes.unshift(node)
+  }
+  return nodes
+}
+
+function commonAncestor(node1, node2) {
+  var parents1 = getParents(node1)
+  var parents2 = getParents(node2)
+  if (parents1[0] != parents2[0]) {
+		return undefined;
+	}
+  for (var i = 0; i < parents1.length; i++) {
+    if (parents1[i] != parents2[i]) {
+			return parents1[i - 1]
+		}
+  }
+}
+
+var context_assistant_parent = null;
+var context_assistant_div = $("<div id=\"contextassistant\"><span>Loading context assistant...</span></div>");
+var context_time_in_place = 0;
+var load_time = new Date().getTime();
+function placeContextAssistant() {
+	// var toolbar_main_container = $("div[title=Archive]").last().parents().eq(5);
+	var common_ancestor = commonAncestor($("div[title=Archive]").first().get(0), $("h1:not([role=banner])").first().get(0));
+	if (common_ancestor) {
+		if (context_assistant_parent) {
+			if (context_assistant_parent.get(0) != common_ancestor) {
+				console.log("placeContextAssistant: Detected change in ancestory.  Moving context assistant.")
+				context_assistant_div.detach();
+			} else {
+				console.log("placeContextAssistant: No change.")
+				setTimeout(placeContextAssistant, (new Date().getTime() - context_time_in_place) * 2);
+				return;
+			}
+		}
+		context_assistant_parent = $(common_ancestor);
+		context_assistant_parent.children("div:first-child").after(context_assistant_div);
+		context_time_in_place = new Date().getTime();
+		console.log("placeContextAssistant: placing context assistant.")
+		setTimeout(placeContextAssistant, 500);
+	} else {
+		console.log("placeContextAssistant: no common parent.")
+		setTimeout(placeContextAssistant, (new Date().getTime() - load_time) * 2);
+	}
+}
+
+placeContextAssistant();
