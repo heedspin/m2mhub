@@ -1,0 +1,26 @@
+<div id="ca_comments">
+	<div id="ca_comments_list">
+		{{#each_comment comments}}
+		<p class="ca_hidden_edit" data-id="{{id}}">
+			{{#if new_creator}}
+			<strong>{{name creator_id creator_first_name creator_last_name}}:</strong>
+			{{/if}}
+			{{simple_format text}}
+			{{#if_equal creator_id ../current_user.id}}
+			<span class="ca_edit">edit</span>
+			{{/if_equal}}
+		</p>
+		{{/each_comment}}
+	</div>
+	<div id="ca_edit_comments">
+		<div id="ca_new_comment">
+			<textarea class='expanding' placeholder="Enter Comment"></textarea>
+			<button type="button" id="ca_create_comment">Save</button>
+		</div>
+		<div id="ca_edit_comment">
+			<textarea placeholder="Enter Comment"></textarea>
+			<button type="button">Save</button>
+			<input type="checkbox" class="delete_option">Delete</input>
+		</div>
+	</div>
+</div>

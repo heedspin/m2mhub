@@ -10,6 +10,10 @@ class UsersController < M2mhubController
   # GET /users/1
   def show
     @user = current_object
+    respond_to do |format|
+      format.html
+      format.json { render :json => @user.to_context }
+    end
   end
 
   # GET /users/new
@@ -80,7 +84,11 @@ class UsersController < M2mhubController
   protected
 
     def current_object
-      @current_object ||= get_user_object(:find)
+      @current_object ||= if params[:id] == '0'
+        current_user
+      else
+        get_user_object(:find)
+      end
     end
 
     def build_object

@@ -34,9 +34,10 @@
     ];
     
     var textareaCSS = {
-        position: "absolute",
-        height: "100%",
-        resize: "none"
+				// Tim says: I can't understand why this is here or how to override it.  Be gone.
+        // position: "absolute",
+        // height: "100%",
+        // resize: "none"
     };
     
     var preCSS = {

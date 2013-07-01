@@ -1,4 +1,4 @@
-class M2mhub::ContextAssistantChromeExtensionsController < M2mhubController
+class M2mhub::ChromeExtensionsController < M2mhubController
   skip_before_filter :require_login
 
   def index

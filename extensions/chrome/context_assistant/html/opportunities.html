@@ -1,0 +1,22 @@
+<div id="ca_opportunities">
+	{{#each opportunities}}
+	<div class="ca_opportunity">
+		<table>
+			<tbody>
+				<tr>
+					<td>Opp</td>
+					<td>{{link title url}}</td>
+				</tr>
+				<tr>
+					<td>Cust</td>
+					<td>{{link customer customer_url}}</td>
+				</tr>
+				<tr>
+					<td>Own</td>
+					<td>{{name owner_id owner_first_name owner_last_name}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	{{/each}}
+</div>

@@ -39,11 +39,11 @@ class User < M2mhub::Base
   belongs_to_active_hash :user_state
   attr_protected :password, :password_confirmation, :user_role, :user_state
   validates_presence_of :first_name, :last_name, :email, :user_state, :user_role
-
   has_many :user_messages, :dependent => :delete_all
   has_many :messages, :through => :user_messages
-
   belongs_to :notification_preference
+  has_many :context_group_users, :class_name => 'Context::GroupUser'
+  has_many :context_groups, :class_name => 'Context::Group', :through => :context_group_users, :source => :group
 
   attr_accessor :current_password
   scope :active, :conditions => { :user_state_id => UserState.active.id }
@@ -106,6 +106,10 @@ class User < M2mhub::Base
     user = new(:email => email)
     user.save(:validate => false)
     user
+  end
+  
+  def to_context
+    { :first_name => self.first_name, :last_name => self.last_name, :id => self.id }
   end
   
   protected

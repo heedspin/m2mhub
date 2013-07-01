@@ -1,19 +1,28 @@
-var opportunity_html = null;
+var opportunities_template = null;
+var current_context = null;
 
-function render_opportunity(destination, data) {
-	directive = {
-	  'tr:nth-child(1) > td:nth-child(2) > a':'title',
-	  'tr:nth-child(1) > td:nth-child(2) > a@href':'url',
-	  'tr:nth-child(2) > td:nth-child(2) > a':'customer',
-	  'tr:nth-child(2) > td:nth-child(2) > a@href':'customer_url'
-  }
-  destination.render(data, directive);
+function render_opportunities(context, destination) {
+	if (context) {
+		current_context = context;
+		current_opportunities = context.opportunities;		
+	}
+	if (!destination) destination = $("#contextassistant");
+	var opportunity_container = destination.find("#ca_opportunities");
+	if (opportunity_container.length == 0) {
+		opportunity_container = $('<div id="ca_opportunities"></div>');
+		destination.append(opportunity_container);
+	}
+	var html = opportunities_template({ current_user: current_user, 
+		opportunities: current_context.opportunities, 
+		context: current_context 
+	});
+	var old_container = opportunity_container.replaceWith(html);
 }
 
 $.ajax({
-	url: chrome.extension.getURL("html/opportunity.html"),
+	url: chrome.extension.getURL("html/opportunities.html"),
 	dataType: "html",
 	success: function(html) {
-		opportunity_html = html;
+		opportunities_template = Handlebars.compile(html);
 	}
 });

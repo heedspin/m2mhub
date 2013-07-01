@@ -342,5 +342,18 @@ class Sales::Opportunity < M2mhub::Base
                          :loss_reason_id => Sales::OpportunityLossReason.reaper.id,
                          :comment => "Opportunity has not been active since #{self.updated_at.to_s(:human_date)}")
   end
+  
+  def to_context
+    {
+      :title => self.title_or_number,
+      :customer => self.customer_name,
+      :customer_url => self.sales_customer_id.present? && Rails.application.routes.url_helpers.sales_customer_url(self.sales_customer_id, :host => AppConfig.hostname),
+      :part_numbers => self.part_numbers.map { |pn| { :part_number => pn, :url => Rails.application.routes.url_helpers.doogle_display_url(pn, :host => AppConfig.hostname) } },
+      :url => url = Rails.application.routes.url_helpers.opportunity_url(self.xnumber, :host => AppConfig.hostname),
+      :owner_id => self.owner_id,
+      :owner_first_name => self.owner.try(:first_name),
+      :owner_last_name => self.owner.try(:last_name)
+    }
+  end
 
 end

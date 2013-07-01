@@ -1,30 +1,34 @@
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.method == "bootstrap") {
-		var opportunity_server = localStorage['opportunity_server'];
-		if (opportunity_server) {
-	 		opportunity_server = "https://" + opportunity_server + "/m2mhub_context_assistants.json";	
+		console.log("tab " + sender.tab.id + " bootstrapping with url: " + sender.tab.url);
+		var context_server = localStorage['context_server'];
+		var comments_url = null;
+		var contexts_url = null;
+		var current_user_url = null;
+		if (context_server) {
+			comments_url = "https://" + context_server + "/context_comments";
+	 		contexts_url = "https://" + context_server + "/contexts.json";	
+	 		current_user_url = "https://" + context_server + "/users/0.json";	
 		}
-		sendResponse({opportunity_server: opportunity_server});		
-		// $.ajax({
-		// 	url: chrome.extension.getURL("/html/new_comment.html"),
-		// 	dataType: "html",
-		// 	success: function(new_comment_html) {
-		// 		sendResponse({opportunity_server: opportunity_server, new_comment_html: new_comment_html});
-		// 	}
-		// });
-		// return true; // Allow asychronous response.
+		sendResponse({contexts_url: contexts_url, comments_url: comments_url, current_user_url: current_user_url});
+		chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+			if (changeInfo.url && (tab.id == sender.tab.id)) {
+				console.log("tab " + tabId + " changed url: " + changeInfo.url);
+			}		
+		});
 	}	else {
 		sendResponse({});
 	}
 });
 
 chrome.runtime.onInstalled.addListener(function(details) {
-	var default_opportunity_server = "m2mhub.lxdinc.com";
+	var default_context_server = "m2mhub.lxdinc.com";
 	if (details.reason == 'install') {
-		localStorage['opportunity_server'] = default_opportunity_server;
+		localStorage['context_server'] = default_context_server;
 	} else if (details.reason == 'update') {
-		if (!localStorage['opportunity_server']) {
-			localStorage['opportunity_server'] = default_opportunity_server;
+		if (!localStorage['context_server']) {
+			localStorage['context_server'] = default_context_server;
 		}
 	}
 });
+
