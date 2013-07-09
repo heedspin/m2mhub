@@ -60,5 +60,5 @@
 #
 
 class M2m::DefaultRoute < M2m::Base
-  set_table_name 'inrtgc'
+  self.table_name = 'inrtgc'
 end

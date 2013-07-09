@@ -42,7 +42,7 @@
 #
 
 class M2m::ItemGroupCode < M2m::Base
-  set_table_name 'ingrpc'
+  self.table_name = 'ingrpc'
   scope :for_key, lambda { |key|
     {
       :conditions => { :fgc_number => key }

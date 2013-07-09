@@ -1,4 +1,4 @@
-<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% content_for :javascripts, javascript_include_tag('inplace.js') %>
 <% title "Quote #{@quote.quote_number}" %>
 
 <%= render 'sales/opportunities/submenu' %>
@@ -53,7 +53,7 @@
 <%= render 'sales/quote_items/list', :quote_items => @quote.items %>
 
 <% content_for :javascripts do %>
-	<%= javascript_include_tag 'm2mhub/jquery.popupWindow.js' %>
+	<%= javascript_include_tag 'jquery.popupWindow.js' %>
 <script type="text/javascript">
 $(function() {
 	$('.printpop').popupWindow({ 

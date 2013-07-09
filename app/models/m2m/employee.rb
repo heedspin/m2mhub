@@ -29,7 +29,7 @@
 #
 
 class M2m::Employee < M2m::Base
-  set_table_name 'prempl'
+  self.table_name = 'prempl'
   
   alias_attribute :employee_number, :fempno
   

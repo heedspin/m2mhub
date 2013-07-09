@@ -13,7 +13,7 @@
 #
 
 class M2m::JournalEntry < M2m::Base
-  set_table_name 'gljemast'
+  self.table_name = 'gljemast'
   has_many :items, :class_name => 'M2m::JournalEntryItem', :foreign_key => 'fcentry', :primary_key => 'fcentry'
   
   alias_attribute :entry_id, :fcentry

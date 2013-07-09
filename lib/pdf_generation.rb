@@ -46,7 +46,7 @@ class PdfGenerator
     logfile = tempfile.path + '.log'
     FileUtils.mv tempfile.path, source
     destination = tempfile.path + '.pdf'
-    command = "/usr/bin/prince -v -s #{Rails.root}/public/stylesheets/m2mhub/prince.css --log #{logfile} #{source} -o #{destination}"
+    command = "/usr/bin/prince -v -s #{M2mhub::Engine.root}/app/views/shipping/backlog_reports/prince.css --log #{logfile} #{source} -o #{destination}"
     log "Prince command: #{command}"
     `#{command}`
     status = $?

@@ -11,7 +11,7 @@
 #
 
 class Context::GroupContext < M2mhub::Base
-  set_table_name 'context_group_contexts'
+  self.table_name = 'context_group_contexts'
   belongs_to :group, :class_name => 'Context::Group'
   belongs_to :context, :class_name => 'Context::Context'
 end

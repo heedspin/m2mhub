@@ -22,8 +22,8 @@
 				<%= f.inputs do %>
 			  	<%= f.input :department_id, :as => :select, :collection => M2m::Department.all %>
 				<% end %>
-				<%= f.buttons do %>
-				  <%= f.commit_button 'Run' %>
+				<%= f.actions do %>
+				  <%= f.action :submit, :label => 'Run' %>
 				<% end %>
 			</td>
 		</tr>

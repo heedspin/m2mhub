@@ -23,7 +23,7 @@
 #
 
 class Sales::Quote < M2mhub::Base
-  set_table_name 'sales_quotes'
+  self.table_name = 'sales_quotes'
   has_many :items, :class_name => 'Sales::QuoteItem', :dependent => :destroy
   validates_uniqueness_of :quote_number
   belongs_to_active_hash :status, :class_name => 'Sales::QuoteStatus', :foreign_key => :quote_status_id

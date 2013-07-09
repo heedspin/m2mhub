@@ -16,7 +16,7 @@
 #
 
 class M2mhub::Trigger < M2mhub::Base
-  set_table_name 'm2mhub_triggers'
+  self.table_name = 'm2mhub_triggers'
   belongs_to_active_hash :trigger_state, :class_name => 'M2mhub::TriggerState'
   belongs_to_active_hash :trigger_type, :class_name => 'M2mhub::TriggerType'
   belongs_to_active_hash :notification_type, :class_name => 'M2mhub::NotificationType'

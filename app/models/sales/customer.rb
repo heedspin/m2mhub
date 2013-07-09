@@ -20,7 +20,7 @@
 #
 
 class Sales::Customer < M2mhub::Base
-  set_table_name 'sales_customers'
+  self.table_name = 'sales_customers'
   belongs_to :parent_company, :class_name => 'Sales::ParentCompany'
   belongs_to :erp_customer, :class_name => 'M2m::Customer', :foreign_key => 'erp_customer_id'
   belongs_to :sales_territory, :class_name => 'Sales::Territory'

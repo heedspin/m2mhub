@@ -4,7 +4,7 @@
 <p>This is a slow report.  Be patient.</p>
 
 <%= semantic_form_for @commission_backlog_report, :as => 'commission_backlog_report', :url => commission_backlog_reports_url(:format => 'xls') do |f| %>
-	<%= f.buttons do %>
-	  <%= f.commit_button 'Export XLS' %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Export XLS' %>
 	<% end %>
 <% end %>

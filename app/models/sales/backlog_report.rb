@@ -16,7 +16,7 @@ require 'plutolib/to_xls'
 class Sales::BacklogReport < M2mhub::Base
   include Plutolib::SerializedAttributes
   include Plutolib::ToXls
-  set_table_name 'backlog_reports'
+  self.table_name = 'backlog_reports'
   belongs_to_active_hash :report_time_period
   scope :date, lambda { |date|
     {

@@ -74,7 +74,7 @@
 #
 
 class M2m::VendorInvoice < M2m::Base
-  set_table_name 'apmast'
+  self.table_name = 'apmast'
   set_primary_key 'fcinvoice'
     
   alias_attribute :pay_date, :flpaydate

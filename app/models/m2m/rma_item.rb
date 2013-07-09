@@ -36,7 +36,7 @@
 #
 
 class M2m::RmaItem < M2m::Base
-  set_table_name 'syrmaitm'
+  self.table_name = 'syrmaitm'
   belongs_to :rma, :class_name => 'M2m::Rma', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
   has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   belongs_to_item :fcpartno, :fcpartrev

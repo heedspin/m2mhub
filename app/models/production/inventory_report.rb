@@ -27,7 +27,7 @@ require 'production/inventory_movement_data'
 
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
-  set_table_name 'inventory_reports'
+  self.table_name = 'inventory_reports'
   include Plutolib::ToXls
   include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper

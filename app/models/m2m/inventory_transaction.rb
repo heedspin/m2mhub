@@ -52,7 +52,7 @@
 #
 
 class M2m::InventoryTransaction < M2m::Base
-  set_table_name 'intran'
+  self.table_name = 'intran'
   
   belongs_to_item :fpartno, :fcpartrev
   belongs_to :job, :class_name => 'M2m::Job', :foreign_key => :ftojob, :primary_key => :fjobno

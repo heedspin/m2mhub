@@ -18,7 +18,7 @@ require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
 class Production::InventoryReportCustomer < ActiveRecord::Base
-  set_table_name 'inventory_report_customers'
+  self.table_name = 'inventory_report_customers'
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   

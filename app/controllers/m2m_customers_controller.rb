@@ -51,13 +51,13 @@ class M2mCustomersController < M2mhubController
   def autocomplete_index
     # Autocomplete path.
     @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 20)
-    names = @customers.map(&:name)
+    names = @customers.map { |c| { :label => c.name, :value => c.name } } 
     if params[:new_prompt] == '1'
-      names.push "Create New: #{@search_term}"
+      names.push( { :label => "Create New: #{@search_term}", :value => "Create New: #{@search_term}" })
     elsif @customers.size == 0
-      names.push 'No Results'
+      names.push( { :label => 'No Results', :value => 'No Results' })
     end
-    render :json => names
+    render :json => names.to_json
   end
 
   def search_index

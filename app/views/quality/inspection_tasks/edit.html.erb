@@ -1,5 +1,5 @@
 <% title 'Edit Inspection Task' %>
-<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% content_for :javascripts, javascript_include_tag('inplace.js') %>
 
 <%= render 'quality/submenu' %>
 
@@ -11,8 +11,8 @@
 		<%= f.input :delete_lighthouse_ticket, :as => :boolean, :wrapper_html => { :class => 'deletastic_param' }, :label => 'Delete Lighthouse Ticket' %>
 	<% end %>
 
-	<%= f.buttons do %>
-	  <%= f.commit_button :label => 'Update Task' %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Update Task' %>
 	  <%= f.cancel_link %>
 		<li class="deletastic_container">
 			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>

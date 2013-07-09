@@ -29,15 +29,15 @@ m2mhub_config: &m2mhub_config
   inventory_report_filter_part_numbers: samples
   use_boms: true
   cost_method: standard_cost
-  logo_image: m2mhub/github_octocat.jpg
-  in_progress_image: m2mhub/inprogress.gif
-  job_search_image: m2mhub/search.png
-  m2m_logo_image: m2mhub/m2m.gif
-  arrow_collapse_image: m2mhub/arrow_collapse.gif
-  arrow_expand_image: m2mhub/arrow_expand.gif
-  arrow_left_image: m2mhub/arrow_left.png
-  arrow_right_image: m2mhub/arrow_right.png
-  lighthouse_image: m2mhub/lighthouse.png
+  logo_image: github_octocat.jpg
+  in_progress_image: inprogress.gif
+  job_search_image: search.png
+  m2m_logo_image: m2m.gif
+  arrow_collapse_image: arrow_collapse.gif
+  arrow_expand_image: arrow_expand.gif
+  arrow_left_image: arrow_left.png
+  arrow_right_image: arrow_right.png
+  lighthouse_image: lighthouse.png
   enable_commission_report: true
   enable_events: true
   feature_opportunities: true
@@ -50,7 +50,7 @@ m2mhub_config: &m2mhub_config
     sales:
       children: sales/sales_order_items sales/sales_orders sales/m2m_quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports commission_reports sales_reports
     sales_opportunities:
-      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories sales/quotes sales/opportunity_reports sales/sales_events
+      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories sales/quotes sales/opportunity_reports sales/sales_events context/contexts
     sales_customers:
       children: sales_customer_summary sales_customer_opportunities sales/customers/quotes
     sales_customer_summary:

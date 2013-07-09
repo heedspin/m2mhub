@@ -1,5 +1,5 @@
 <% title 'Edit Comment' %>
-<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% content_for :javascripts, javascript_include_tag('inplace.js') %>
 
 <%= render 'sales/submenu' %>
 <br />
@@ -24,8 +24,8 @@
 		<%= render 'sales/opportunity_comments/status_form', :f => f %>
 	<% end %>
 	
-	<%= f.buttons do %>
-	  <%= f.commit_button('Save') unless @comment.comment_type.try(:ticket?) %>
+	<%= f.actions do %>
+	  <%= f.action('Save') unless @comment.comment_type.try(:ticket?) %>
 	  <%= f.cancel_link :url => opportunity_url(@opportunity) %>
 		<li class="deletastic_container">
 			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>

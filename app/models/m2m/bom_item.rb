@@ -29,7 +29,7 @@
 #
 
 class M2m::BomItem < M2m::Base
-  set_table_name 'inboms'
+  self.table_name = 'inboms'
   # set_primary_keys 'fcomponent', 'fcomprev'
   belongs_to_item :fcomponent, :fcomprev
   belongs_to_item :fparent, :fparentrev, :parent

@@ -12,7 +12,7 @@ class UsersController < M2mhubController
     @user = current_object
     respond_to do |format|
       format.html
-      format.json { render :json => @user.to_context }
+      format.json { render :json => @user }
     end
   end
 

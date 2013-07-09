@@ -34,7 +34,7 @@
 #
 
 class M2m::ProductClass < M2m::Base
-  set_table_name 'inprod'
+  self.table_name = 'inprod'
   alias_attribute :name, :fpc_name
   alias_attribute :number, :fpc_number
   

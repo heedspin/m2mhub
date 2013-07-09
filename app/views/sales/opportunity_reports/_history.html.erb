@@ -1,4 +1,11 @@
-<% include_toggle_javascript('report_details', image_tag(AppConfig.arrow_collapse_image),image_tag(AppConfig.arrow_expand_image)) %>
+<% content_for :javascripts do %>
+	<%= javascript_include_tag('inplace.js') %>
+	<script type="text/javascript">
+	$(function() {
+		$(".report_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %>', '<%= image_tag(AppConfig.arrow_expand_image) %>');
+	});
+	</script>
+<% end %>
 
 <table class="data">
 	<thead>
@@ -58,7 +65,7 @@
 				</td>
 			<% end %>
 		</tr>
-		<tr class="hide" id="xreport_details_homeless_<%= reports.period %>">
+		<tr class="hide xreport_details_homeless_<%= reports.period %>">
 			<td colspan="<%= reports.territory_reports.size + 1 %>">
 				<ul>
 					<% reports.homeless_report.opportunities.each do |opportunity| %>
@@ -135,7 +142,7 @@
 				</td>
 			<% end %>
 		</tr>
-		<tr class="hide" id="xreport_details_ownerless_<%= reports.period %>">
+		<tr class="hide xreport_details_ownerless_<%= reports.period %>">
 			<td colspan="<%= reports.territory_reports.size + 1 %>">
 				<ul>
 					<% reports.ownerless_report.opportunities.each do |opportunity| %>

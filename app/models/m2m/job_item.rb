@@ -44,7 +44,7 @@
 #
 
 class M2m::JobItem < M2m::Base
-  set_table_name 'joitem'
+  self.table_name = 'joitem'
   belongs_to :job, :class_name => 'M2m::Job', :foreign_key => 'fjobno', :primary_key => 'fjobno'
   belongs_to_item :fpartno, :fpartrev
   alias_attribute :make_quantity, :fmqty

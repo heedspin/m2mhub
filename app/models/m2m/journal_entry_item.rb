@@ -14,7 +14,7 @@
 #
 
 class M2m::JournalEntryItem < M2m::Base
-  set_table_name 'gljeitem'
+  self.table_name = 'gljeitem'
   alias_date_attribute :date, :fddate
   alias_attribute :description, :fctrsdes
   alias_attribute :debit, :fndebit

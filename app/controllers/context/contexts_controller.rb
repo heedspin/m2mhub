@@ -11,7 +11,7 @@ class Context::ContextsController < M2mhubController
         @context = Context::Context.subject(params[:subject]).accessible_to(current_user).order(:created_at).last
         # Create a temporary context to look for opportunities.
         @context ||= Context::Context.new(:subject => params[:subject])
-        render :json => @context.to_context 
+        render :json => @context
       }
     end
   end

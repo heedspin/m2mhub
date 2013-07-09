@@ -32,9 +32,9 @@ form.formtastic ul.errors li { padding:0; border:none; display:list-item; }
 --------------------------------------------------------------------------------------------------*/
 form.formtastic fieldset { }
 form.formtastic fieldset.inputs { }
-form.formtastic fieldset.buttons { padding:10px; }
+form.formtastic fieldset.actions { padding:10px; }
 form.formtastic fieldset ol { }
-form.formtastic fieldset.buttons li { float:left; padding-right:0.5em; }
+form.formtastic fieldset.actions li { float:left; padding-right:0.5em; }
 
 /* clearfixing the fieldsets */
 form.formtastic fieldset { display: inline-block; }

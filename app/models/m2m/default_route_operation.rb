@@ -37,7 +37,7 @@
 #
 
 class M2m::DefaultRouteOperation < M2m::Base
-  set_table_name 'inrtgs'
+  self.table_name = 'inrtgs'
 
   has_one :work_center, :class_name => 'M2m::WorkCenter', :primary_key => 'fpro_id', :foreign_key => 'fcpro_id'
   

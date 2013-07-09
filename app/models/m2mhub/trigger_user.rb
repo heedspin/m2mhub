@@ -8,7 +8,7 @@
 #
 
 class M2mhub::TriggerUser < M2mhub::Base
-  set_table_name 'm2mhub_trigger_users'
+  self.table_name = 'm2mhub_trigger_users'
   belongs_to :m2mhub_trigger, :class_name => 'M2mhub::Trigger'
   belongs_to :user
 end

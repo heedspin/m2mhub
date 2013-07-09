@@ -14,7 +14,7 @@
 	<%= f.input :users, :as => :check_boxes, :collection => lighthouse_users, :label => 'Ticket Watchers' %>
 <% end %>
 
-<%= f.buttons do %>
-  <%= f.commit_button %>
+<%= f.actions do %>
+  <%= f.action :submit %>
   <%= f.cancel_link %>
 <% end %>

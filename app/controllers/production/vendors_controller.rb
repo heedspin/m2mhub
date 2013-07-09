@@ -20,7 +20,7 @@ class Production::VendorsController < M2mhubController
     @vendors = model_class.name_like(@search_term).by_name.all(:select => 'apvend.fcompany', :limit => 20)
     names = @vendors.map(&:name)
     if @vendors.size == 0
-      names.push 'No Results'
+      names.push({:label => 'No Results', :value => 'No Results'})
     end
     render :json => names
   end

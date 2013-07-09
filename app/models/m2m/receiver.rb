@@ -34,7 +34,7 @@
 #
 
 class M2m::Receiver < M2m::Base
-  set_table_name 'rcmast'
+  self.table_name = 'rcmast'
   set_primary_key 'freceiver'
   
   has_many :items, :class_name => 'M2m::ReceiverItem', :foreign_key => :freceiver, :primary_key => :freceiver

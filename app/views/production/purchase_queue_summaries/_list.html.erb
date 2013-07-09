@@ -1,10 +1,10 @@
-<% include_toggle_javascript('toggle_details', image_tag(AppConfig.arrow_collapse_image),image_tag(AppConfig.arrow_expand_image)) %>
-<% include_toggle_javascript('toggle_form', 'edit', 'cancel') %>
 <% content_for :javascripts do %>
-	<%= javascript_include_tag('m2mhub/inplace.js') %>
+	<%= javascript_include_tag('inplace.js') %>
 	<script type="text/javascript">
 	$(function() {
 		$(".inplace_container").pluto_inplace();
+		$(".toggle_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %>', '<%= image_tag(AppConfig.arrow_expand_image) %>');
+		$(".toggle_form").toggle_visibility('edit', 'cancel');
 	});
 	</script>
 <% end %>
@@ -26,7 +26,9 @@
 		<tr>
 			<td>
 				<a href="#<%= summary.id %>" class="toggle_details" id="toggle_details_<%= summary.id %>">
-					<span class="replace_toggle_details_<%= summary.id %>"><%= image_tag(AppConfig.arrow_collapse_image) %></span>
+					<span class="replace_toggle_details_<%= summary.id %>">
+						<%= image_tag(AppConfig.arrow_collapse_image) %>
+					</span>
 					<%= summary.description %>
 				</a>
 			</td>
@@ -43,7 +45,7 @@
 				<%= render 'production/purchase_queue_notes/inplace', :summary => summary, :note => (summary.note || summary.build_note) %>
 			</td>
 		</tr>
-		<tr class="hide" id="xtoggle_details_<%= summary.id %>">
+		<tr class="hide xtoggle_details_<%= summary.id %>">
 			<td class="left" colspan="7">
 				<%= render 'production/purchase_queue_details/list', :details => summary.details %>
 			</td>

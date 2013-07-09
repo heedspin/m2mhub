@@ -35,7 +35,7 @@
 #
 
 class M2m::Address < M2m::Base
-  set_table_name 'syaddr'
+  self.table_name = 'syaddr'
   
   # Magic number.  But I don't know the logic the M2M uses to choose this.
   scope :sold_to, :conditions => { :fcaddrtype => 'O' }

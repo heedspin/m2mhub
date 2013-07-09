@@ -15,9 +15,9 @@
 		<%= f.input :page_per_customer, :as => :boolean %>
 		<%= f.input :include_open_jobs, :as => :boolean %>
 	<% end %>
-	<%= f.buttons :class => 'floatyfields buttons' do %>
-	  <%= f.commit_button 'View' %>
-		<%= f.commit_button 'Print' %>
+	<%= f.actions :class => 'floatyfields buttons' do %>
+	  <%= f.action :submit, :label => 'View' %>
+		<%= f.action :submit, :label => 'Print' %>
 	<% end %>
 <% end %>
 

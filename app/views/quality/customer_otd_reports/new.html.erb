@@ -1,4 +1,11 @@
-<% include_closed_details_javascript(image_tag(AppConfig.arrow_collapse_image) + ' Show Details', image_tag(AppConfig.arrow_expand_image) + ' Hide Details') %>
+<% content_for :javascripts do %>
+	<%= javascript_include_tag('inplace.js') %>
+	<script type="text/javascript">
+	$(function() {
+		$(".closed_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %> Show Details', '<%= image_tag(AppConfig.arrow_expand_image) %> Hide Details');
+	});
+	</script>
+<% end %>
 <%= render 'quality/submenu' %>
 <br />
 
@@ -30,14 +37,16 @@
 		<td class="right fixdouble"><%= cm month.percent_late, :on_time_delivery_report %>% Late (<%= month.num_late_releases %> / <%= cm month.num_releases %>)</td>
 		<td>
 			<% if month.num_late_releases > 0 %>
-			<a href="#"><span class="show_closed_details" id="closed_details_<%= count %>">
-				<%= image_tag(AppConfig.arrow_collapse_image) %>
-				Show Details
-			</span></a>
+			<a href="#" class="closed_details" id="closed_details_<%= count %>">
+				<span class="replace_closed_details_<%= count %>">
+					<%= image_tag(AppConfig.arrow_collapse_image) %>
+					Show Details
+				</span>
+			</a>
 			<% end %>
 		</td>
 	</tr>
-	<tr class="closed_details xclosed_details_<%= count %>">
+	<tr class="hide xclosed_details_<%= count %>">
 		<td colspan="3">
 			<%= render 'otd_details', :releases => month.late_releases.sort_by(&:due_date) %>
 		</td>

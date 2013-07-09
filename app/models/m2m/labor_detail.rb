@@ -48,7 +48,7 @@
 #
 
 class M2m::LaborDetail < M2m::Base
-  set_table_name 'ladetail'
+  self.table_name = 'ladetail'
   belongs_to :work_center, :class_name => 'M2m::WorkCenter', :foreign_key => :fpro_id, :primary_key => :fcpro_id
   belongs_to :employee, :class_name => 'M2m::Employee', :foreign_key => :fempno, :primary_key => :fempno
   

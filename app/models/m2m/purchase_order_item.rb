@@ -92,7 +92,7 @@
 #
 
 class M2m::PurchaseOrderItem < M2m::Base
-  set_table_name 'poitem'
+  self.table_name = 'poitem'
 
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono
   belongs_to_item :fpartno, :frev

@@ -29,7 +29,7 @@ require 'plutolib/to_xls'
 require 'm2mhub_current_user'
 
 class Sales::Opportunity < M2mhub::Base
-  set_table_name 'sales_opportunities'
+  self.table_name = 'sales_opportunities'
   has_many :comments, :class_name => 'Sales::OpportunityComment', :foreign_key => :opportunity_id, :dependent => :destroy
   belongs_to_active_hash :source, :class_name => 'Sales::OpportunitySource', :foreign_key => :opportunity_source_id
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :primary_key => 'fsalespn'
@@ -343,7 +343,7 @@ class Sales::Opportunity < M2mhub::Base
                          :comment => "Opportunity has not been active since #{self.updated_at.to_s(:human_date)}")
   end
   
-  def to_context
+  def as_json(args=nil)
     {
       :title => self.title_or_number,
       :customer => self.customer_name,

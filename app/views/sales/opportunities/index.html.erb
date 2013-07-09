@@ -66,9 +66,9 @@ $(function() {
 		</tr>
 		<tr>
 			<td>
-				<%= f.buttons do %>
-				  <%= f.commit_button 'Search', :wrapper_html => {:id => 'search'} %>
-				  <%= f.commit_button 'Export', :wrapper_html => {:id => 'export'} %>
+				<%= f.actions do %>
+				  <%= f.action :submit, :label => 'Search', :wrapper_html => {:id => 'search'} %>
+				  <%= f.action :submit, :label => 'Export', :wrapper_html => {:id => 'export'} %>
 					<li><%= link_to 'New Opportunity', new_opportunity_path %></li>
 				<% end %>
 			</td>

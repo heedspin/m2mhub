@@ -13,7 +13,7 @@
 #
 
 class M2m::GlCategory < M2m::Base
-  set_table_name 'glhead'
+  self.table_name = 'glhead'
   def description
     self.fcdescr.strip.titleize
   end

@@ -25,6 +25,12 @@
 			<%= link_to 'Territories', sales_territories_url %>
 		</li>
 		<% end %>
+		
+		<% if M2mhub::Feature.enabled?(:contexts) %>
+		<li class="<%= menu_selected 'context/contexts' %>">
+			<%= link_to 'Contexts', contexts_url %>
+		</li>
+		<% end %>
 	</ul>
 </div>
 <br />

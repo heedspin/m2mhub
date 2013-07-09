@@ -9,8 +9,8 @@
       <%= f.input :password, :required => true, :wrapper_html => { :class => 'string' } %>
       <%= f.input :remember_me, :as => :boolean, :required => false %>
     <% end %>
-    <%= f.buttons do %>
-      <%= f.commit_button "Login" %>
+    <%= f.actions do %>
+      <%= f.action "Login" %>
 			<li class="link"><%= link_to "Forgot Password?", new_password_reset_url %></li>
     <% end %>
   <% end %>

@@ -14,7 +14,7 @@
 require 'm2mhub_current_user'
 
 class Context::Comment < M2mhub::Base
-  set_table_name 'context_comments'
+  self.table_name = 'context_comments'
   belongs_to :context, :class_name => 'Context::Context'
   belongs_to :creator, :class_name => 'User'
   
@@ -23,6 +23,13 @@ class Context::Comment < M2mhub::Base
   
   def self.not_deleted
     where('context_comments.deleted is null or context_comments.deleted = false')
+  end
+  def self.last_first
+    order("context_comments.created_at desc")
+  end
+  def self.accessible_to(user)
+    user = user.id if user.is_a?(User)
+    joins(:context => :group_users).where(:context_group_users => { :user_id => user } )
   end
   
   before_validation :set_creator, :on => :create
@@ -53,15 +60,12 @@ class Context::Comment < M2mhub::Base
       end
     end
   end
-  
-  def to_context
-    {
-      :id => self.id,
-      :text => self.text,
+
+  def as_json(args=nil)
+    super(args).merge({
       :creator_first_name => self.creator.try(:first_name),
-      :creator_last_name => self.creator.try(:last_name),
-      :creator_id => self.creator_id
-    }
+      :creator_last_name => self.creator.try(:last_name)
+    })
   end
   
 end

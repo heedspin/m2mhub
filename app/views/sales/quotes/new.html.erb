@@ -7,8 +7,8 @@
 
 <%= semantic_form_for @quote, :url => sales_quotes_url do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>
-	<%= f.buttons do %>
-	  <%= f.commit_button 'Create' %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Create' %>
 	  <%= f.cancel_link %>
 	<% end %>
 <% end %>

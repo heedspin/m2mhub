@@ -1,7 +1,18 @@
-jQuery.fn.setupInPlaceActions = function() {
-	this.find(".inplace_show").click(function() {
-	  $(this).hide().siblings(".inplace_form").show().find("input[type=text]:first").focus();
-	  return false;
+jQuery.fn.pluto_inplace = function() {
+	// Find all show elements.  If they have edit links, bind to those.  Otherwise, bind to entire show element.
+	this.find(".inplace_show").each(function() {
+		var edit_links = $(this).find(".inplace_edit");
+		if (edit_links.length > 0) {
+			edit_links.click(function() {
+			  $(this).closest(".inplace_show").hide().siblings(".inplace_form").show().find("input[type=text]:first").focus();
+			  return false;
+			});
+		} else {
+			$(this).click(function() {
+			  $(this).hide().siblings(".inplace_form").show().find("input[type=text]:first").focus();
+			  return false;
+			});
+		}
 	});
 	this.find(".inplace_cancel_link").click(function() {
 	  $(this).closest(".inplace_form").hide().siblings(".inplace_show").show();
@@ -39,7 +50,7 @@ jQuery.fn.setupDeletasticActions = function() {
 		var params={};
 		var handle_delete = function(data, textStatus) {
 			if (data.location) {
-				window.location.replace(data.location);
+				window.location.href = data.location;				
 			}
 	  }
 		var handle_error = function(data, textStatus) {

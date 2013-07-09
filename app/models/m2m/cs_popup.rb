@@ -12,7 +12,7 @@
 #
 
 class M2m::CsPopup < M2m::Base
-  set_table_name 'cspopup'
+  self.table_name = 'cspopup'
   scope :for_key, lambda { |key|
     {
       :conditions => { :fcpopkey => key }

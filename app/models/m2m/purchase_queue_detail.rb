@@ -41,7 +41,7 @@
 #
 
 class M2m::PurchaseQueueDetail < M2m::Base
-  set_table_name 'pqdetl'
+  self.table_name = 'pqdetl'
   belongs_to_item :fcpartno, :fcpartrev
   alias_attribute :comment, :fccomment
   alias_attribute :detail_type, :fctype

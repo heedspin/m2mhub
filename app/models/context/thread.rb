@@ -9,5 +9,5 @@
 #
 
 class Context::Context < M2mhub::Base
-  set_table_name 'contexts'
+  self.table_name = 'contexts'
 end

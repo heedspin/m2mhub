@@ -100,7 +100,7 @@
 #
 
 class M2m::JobDetailRouting < M2m::Base
-  set_table_name 'jodrtg'
+  self.table_name = 'jodrtg'
   
   has_one :work_center, :class_name => 'M2m::WorkCenter', :primary_key => 'fpro_id', :foreign_key => 'fcpro_id'
   

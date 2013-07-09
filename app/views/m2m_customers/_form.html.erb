@@ -1,4 +1,3 @@
-<% include_closed_details_javascript('More', 'Less') %>
 <%= f.inputs do %>
   <%= f.input :fcompany %> 
 	<%= f.input :first_name %>
@@ -7,11 +6,11 @@
 	<%= f.input :work_phone %>
 	<%= f.input :notes, :as => :text, :wrapper_html => { :class => 'notes' } %>
 	<li>
-		<a href="#"><span class="show_closed_details" id="closed_details">More</span></a>
+		<a href="#"><span id="closed_details">More</span></a>
 	</li>
 <% end %>
 
-<%= f.inputs :class => 'closed_details xclosed_details' do %>
+<%= f.inputs :class => 'hide xclosed_details' do %>
 	<%= f.input :work_fax, :as => :string %>
 	<%= f.input :work_address, :as => :text, :wrapper_html => { :class => 'address' } %>
 	<%= f.input :work_city, :wrapper_html => { :class => 'half' } %>
@@ -20,8 +19,8 @@
 	<%= f.input :work_country_name, :as => :select, :collection => M2m::Currency.order('fccountry'), :member_label => 'country_name', :member_value => 'country_name' %>
 <% end %>
 
-<%= f.buttons do %>
-  <%= f.commit_button %>
+<%= f.actions do %>
+  <%= f.action :submit %>
   <%= f.cancel_link %>
 <% end %>
 
@@ -29,7 +28,7 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
-	$("#closed_details").trigger('click');
+	$("#closed_details").toggle_visibility('More', 'Less');
 })
 </script>
 <% end %>

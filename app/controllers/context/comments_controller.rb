@@ -1,12 +1,21 @@
 class Context::CommentsController < M2mhubController
   filter_access_to_defaults
 
+  def index
+    @comments = Context::Comment.not_deleted.last_first.accessible_to(current_user)
+    respond_to do |format|
+      format.json {
+        render :json => @comments
+      }
+    end
+  end
+
   def create
     @comment = build_object
     respond_to do |format|
       format.json {
         if @comment.save
-          render :json => @comment.to_context
+          render :json => @comment
         else
           logger.error 'Failed to save comment: ' + @comment.errors.full_messages.join("\n")
           render :json => @comment.errors, :status => :unprocessable_entity

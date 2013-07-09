@@ -144,7 +144,7 @@ require 'm2m/belongs_to_item_group'
 require 'plutolib/active_hash_setter'
 
 class M2m::Item < M2m::Base
-  set_table_name 'inmastx'
+  self.table_name = 'inmastx'
   include Plutolib::ActiveHashSetter
   # has_many :vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fpartno, :primary_key => :fpartno
   # has_many :sales_order_items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fpartno, :primary_key => :fpartno

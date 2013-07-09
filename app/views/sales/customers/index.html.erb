@@ -55,8 +55,8 @@ $(function() {
 		</tr>
 		<tr>
 			<td>
-			  <%= f.buttons do %>
-				  <%= f.commit_button 'Search' %>
+			  <%= f.actions do %>
+				  <%= f.action :submit, :label => 'Search' %>
 					<li>
 						<%= link_to 'New Customer', new_sales_customer_url %>
 					</li>

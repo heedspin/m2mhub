@@ -108,8 +108,8 @@ class User < M2mhub::Base
     user
   end
   
-  def to_context
-    { :first_name => self.first_name, :last_name => self.last_name, :id => self.id }
+  def as_json(args=nil)
+    super((args || {}).merge({:only => [:id, :first_name, :last_name]}))
   end
   
   protected

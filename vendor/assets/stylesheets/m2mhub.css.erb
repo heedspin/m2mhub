@@ -1,3 +1,9 @@
+/*
+*= require formtastic
+*= require_self
+*= require jquery-ui-1.8.20.custom
+*/
+
 /* browser reset
 ---------------------------------------------*/
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
@@ -31,7 +37,7 @@ abbr, acronym {
 /* common elements
 ---------------------------------------------*/
 body {	
-	background:url(../../images/m2mhub/bg_pageshadow.gif) top center no-repeat;
+	background:url(<%= asset_path 'bg_pageshadow.gif' %>) top center no-repeat;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:62.5%;
 	color: #666;
@@ -406,10 +412,15 @@ form.formtastic fieldset.services2 {
 	line-height:1.5em;
 }
 
+/* NESTED FIELDSETS AND LEGENDS (radio, check boxes and date/time inputs use nested fieldsets)
+--------------------------------------------------------------------------------------------------*/
+form.formtastic fieldset > ol > li fieldset ol { float:left; width:74%; margin:0; padding:0 0 0 0; }
+form.formtastic fieldset > ol > li fieldset ol.choices-group { float:left; width:74%; margin:0; padding:0 0 0 25%; }
+
 /* buttons
 ---------------------------------------------*/
 
-form.formtastic fieldset li.commit input {
+form.formtastic fieldset li.action input {
 	display: inline-block;
 	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
 	*display: inline;
@@ -429,14 +440,14 @@ form.formtastic fieldset li.commit input {
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }
-form.formtastic fieldset li.commit input:hover {
+form.formtastic fieldset li.action input:hover {
 	text-decoration: none;
 }
-form.formtastic fieldset li.commit input:active {
+form.formtastic fieldset li.action input:active {
 	position: relative;
 	top: 1px;
 }
-form.formtastic fieldset li.commit input {
+form.formtastic fieldset li.action input {
 	color: #fff;
 	border: solid 1px #13428E;
 	background: #0066cc;
@@ -444,13 +455,13 @@ form.formtastic fieldset li.commit input {
 	background: -moz-linear-gradient(top,  #3F7AC9,  #13428E);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3F7AC9', endColorstr='#13428E');
 }
-form.formtastic fieldset li.commit input:hover {
+form.formtastic fieldset li.action input:hover {
 	background: #184196;
 	background: -webkit-gradient(linear, left top, left bottom, from(#31599C), to(#122C62));
 	background: -moz-linear-gradient(top,  #31599C,  #122C62);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#31599C', endColorstr='#122C62');
 }
-form.formtastic fieldset li.commit input:active {
+form.formtastic fieldset li.action input:active {
 	color: #fff;
 	background: -webkit-gradient(linear, left top, left bottom, from(#254077), to(#3F7AC9));
 	background: -moz-linear-gradient(top,  #254077,  #3F7AC9);
@@ -462,7 +473,7 @@ fieldset.inputs li.boolean label, ol.choices-group li.choice label {
 /*	max-width: 20%;*/
 }
 
-form.formtastic fieldset.horizontal li.commit input {
+form.formtastic fieldset.horizontal li.action input {
 	margin: 15px 0 0 0;
 }
 
@@ -967,7 +978,7 @@ form.formtastic table.flatform ol > li {
 	padding: 0 10px 10px 0;
 }
 
-form.formtastic table.flatform li.commit input {
+form.formtastic table.flatform li.action input {
 	padding: .2em 1em .2em;
 }
 
@@ -1029,11 +1040,6 @@ div.closewindow {
 
 span.currency_symbol {
 	float: left;
-}
-
-/* On Time Delivery Reports */
-.closed_details {
-	display: none;
 }
 
 .otd_report_month {
@@ -1234,7 +1240,11 @@ div.sales_scoreboard {
 	float: left;
 	margin: 0 20px 0 0;
 }
-.split_results span:nth-child(2) {
+span.left {
+	float: left;
+}
+span.right {
+	margin: 0 0 0 5px;
 	float: right;
 }
 
@@ -1315,4 +1325,8 @@ table.quote tr:hover .delete_row { opacity: 1; }
 form.formtastic fieldset.opportunity_customer {
 	padding: 0 0 0 15px;
 	border: 1px solid #c5c5c5;
+}
+
+span.nowrap {
+	white-space: nowrap;
 }

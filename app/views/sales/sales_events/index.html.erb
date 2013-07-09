@@ -16,9 +16,9 @@
 			<%= f.input :end_date, :as => :calendar %>
 			<%= f.input :for_sales_rep, :as => :boolean %>
 		<% end %>
-		<%= f.buttons do %>
-		  <%= f.commit_button 'Search', :wrapper_html => {:id => 'search'} %>
-		  <%= f.commit_button 'Export', :wrapper_html => {:id => 'export'} %>
+		<%= f.actions do %>
+		  <%= f.action :submit, :label => 'Search', :wrapper_html => {:id => 'search'} %>
+		  <%= f.action :submit, :label => 'Export', :wrapper_html => {:id => 'export'} %>
 		<% end %>
 <% end %>
 

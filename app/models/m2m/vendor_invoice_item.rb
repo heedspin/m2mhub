@@ -58,7 +58,7 @@
 #
 
 class M2m::VendorInvoiceItem < M2m::Base
-  set_table_name 'apitem'
+  self.table_name = 'apitem'
   belongs_to :invoice, :class_name => 'M2m::VendorInvoice', :foreign_key => 'fcinvkey'
   
   def invoice

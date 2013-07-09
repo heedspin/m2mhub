@@ -21,7 +21,7 @@
 #
 
 class M2m::WorkCenterLoad < M2m::Base
-  set_table_name 'dbrrlrp'
+  self.table_name = 'dbrrlrp'
   
   belongs_to :work_center, :class_name => 'M2m::WorkCenter', :foreign_key => :fcpro_id
 

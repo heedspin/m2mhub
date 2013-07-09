@@ -60,8 +60,8 @@
 	<% if task.lighthouse_ticket.closed? and task.status.open? %>
 		<%= semantic_form_for task, :url => inspection_task_path(task) do |f| %>
 			<%= f.hidden_field :status_id, :value => Quality::InspectionTaskStatus.closed.id %>
-			<%= f.buttons do %>
-		  	<%= f.commit_button :label => 'Close Task' %>
+			<%= f.actions do %>
+		  	<%= f.action :submit, :label => 'Close Task' %>
 			<% end %>
 		<% end %>
 	<% end %>

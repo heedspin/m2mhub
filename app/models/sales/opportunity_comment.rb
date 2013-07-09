@@ -33,7 +33,7 @@
 require 'm2mhub/lighthouse_watcher'
 
 class Sales::OpportunityComment < M2mhub::Base
-  set_table_name 'sales_opportunity_comments'
+  self.table_name = 'sales_opportunity_comments'
   include M2mhub::LighthouseWatcher
 
   belongs_to :opportunity, :class_name => 'Sales::Opportunity'

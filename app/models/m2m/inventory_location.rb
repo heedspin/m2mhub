@@ -16,7 +16,7 @@
 #
 
 class M2m::InventoryLocation < M2m::Base
-  set_table_name 'inonhd'
+  self.table_name = 'inonhd'
   belongs_to_item :fpartno, :fpartrev
   belongs_to :location, :class_name => 'M2m::Location', :foreign_key => :flocation, :primary_key => :flocation
 

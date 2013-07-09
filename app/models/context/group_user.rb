@@ -10,7 +10,7 @@
 #
 
 class Context::GroupUser < M2mhub::Base
-  set_table_name 'context_group_users'
+  self.table_name = 'context_group_users'
   belongs_to :user
   belongs_to :group, :class_name => 'Context::Group'
   def self.user(user)

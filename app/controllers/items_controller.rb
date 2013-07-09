@@ -9,7 +9,7 @@ class ItemsController < M2mhubController
       if part_numbers.size == 0
         part_numbers.push 'No Results'
       end
-      render :json => part_numbers
+      render :json => part_numbers.to_json
     else
       @search = M2m::Item.new
       search_params = params[:search] || {}

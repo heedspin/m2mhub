@@ -36,7 +36,7 @@
 #
 
 class M2m::Currency < M2m::Base
-  set_table_name 'utcurr'
+  self.table_name = 'utcurr'
   
   def country_name
     self.FCCOUNTRY.strip

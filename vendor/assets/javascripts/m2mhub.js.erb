@@ -1,0 +1,62 @@
+//= require inplace
+//= require jquery.form
+//= require jquery.popupWindow
+//= require jquery.ui.widget
+//= require jquery.ui.autocomplete
+//= require jquery.ui.datepicker
+//= require_self
+
+$(document).ready(function(){
+  $("input.calendar").datepicker({
+    yearRange: '-10:+4',
+    dateFormat: 'mm/dd/yy',
+    showOn: 'button',
+    buttonImage: '<%= image_path("calendar.png") %>',
+    buttonImageOnly: true,
+		inline: true
+  });
+});
+
+function ajax_link(target_id) {
+	$(target_id + ' a.ajax_link').bind('click', function(event){
+    event.preventDefault();
+		$(this).replaceWith('<p class="inprogress">Fetching...</p>');
+		ajax_load_content($(this).attr('href'), target_id)
+	});	
+}
+
+function ajax_load_content(href, target_id) {
+	$.ajax({
+	  url: href,
+	  type: 'GET',
+	  dataType: 'html',
+	  success: function(data) {
+			$(target_id).html(data);
+			ajax_link(target_id);
+	  },
+	  error: function(){
+	    // alert('Unable to load. Please try again later.');
+	  }
+	})
+}
+
+jQuery.fn.toggle_visibility = function(show_text, hide_text) {
+	var _toggle_visibility_off = null;
+	var _toggle_visibility_on = function() {
+		var e = $(this);
+	  var this_id = e.attr("id");
+	  $(".x" + this_id).show();
+	  e.children(".replace_" + this_id).html(hide_text);
+	  e.off('click');
+	  e.on('click', _toggle_visibility_off);
+	}
+	_toggle_visibility_off = function() {
+		var e = $(this);
+		var this_id = e.attr("id");
+		$(".x" + this_id).hide();
+		e.children(".replace_" + this_id).html(show_text);	
+	  e.off('click');
+	  e.on('click', _toggle_visibility_on);
+	}
+	$(this).on('click', _toggle_visibility_on);
+}

@@ -11,6 +11,8 @@ class M2mhubController < ApplicationController
   include MenuSelected
   include PdfGeneration
   include M2mhub::RequireLogin # ApplicationController probably also includes this, but we're having trouble finding it.
+  include Authorization::AuthorizationInController
+  helper Authorization::AuthorizationHelper
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details

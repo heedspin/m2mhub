@@ -10,7 +10,7 @@
 #
 
 class Context::Context < M2mhub::Base
-  set_table_name 'contexts'
+  self.table_name = 'contexts'
   has_many :group_contexts, :class_name => 'Context::GroupContext'
   has_many :groups, :class_name => 'Context::Group', :through => :group_contexts
   has_many :group_users, :class_name => 'Context::GroupUser', :through => :groups
@@ -27,9 +27,10 @@ class Context::Context < M2mhub::Base
     (self.group_users.where({ :context_group_users => { :user_id => user }}).count() == 1)
   end
   
-  def to_context
+  def as_json(args=nil)
     opportunities = Sales::Opportunity.with_parsed_xnumber(self.subject).limit(10)
-    { :comments => self.comments.not_deleted.order(&:created_at).reverse.map(&:to_context),
-      :opportunities => opportunities.map(&:to_context) }
+    { :id => self.id,
+      :comments => self.comments.not_deleted.order(&:created_at).reverse,
+      :opportunities => opportunities }.as_json(args)
   end
 end

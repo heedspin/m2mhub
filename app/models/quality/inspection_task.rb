@@ -39,7 +39,7 @@ require 'm2mhub/lighthouse_watcher'
 require 'plutolib/comma'
 
 class Quality::InspectionTask < M2mhub::Base
-  set_table_name 'inspection_tasks'
+  self.table_name = 'inspection_tasks'
   include M2mhub::LighthouseWatcher
   include Plutolib::Comma
   validates_presence_of :part_number

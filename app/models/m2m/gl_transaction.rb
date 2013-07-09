@@ -23,7 +23,7 @@
 #
 
 class M2m::GlTransaction < M2m::Base
-  set_table_name 'gltran'
+  self.table_name = 'gltran'
   belongs_to :gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fcacctnum', :primary_key => 'fcacctnum'
 
   alias_attribute :post_date, :fddate

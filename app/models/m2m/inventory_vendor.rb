@@ -24,7 +24,7 @@
 #
 
 class M2m::InventoryVendor < M2m::Base
-  set_table_name 'invend'
+  self.table_name = 'invend'
   alias_attribute :vendor_part_number, :fvpartno
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
   

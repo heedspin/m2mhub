@@ -2,13 +2,13 @@
 <html>
 <head>
   <title><%= yield :title %></title>
-  <%= stylesheet_link_tag 'm2mhub/formtastic', 'm2mhub/styles', 'm2mhub/blitzer/jquery-ui-1.8.6.custom' %>
-  <%= javascript_include_tag :defaults %>
+  <%= stylesheet_link_tag 'formtastic', 'styles', 'jquery-ui-1.8.20.custom' %>
+  <%= javascript_include_tag 'application' %>
   <%= yield :javascripts -%>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="author" content="heedspin" />
   <title><%= get_meta_title %></title>
-	<link rel="icon" type="image/png" href="<%= path_to_image('/favicon.ico') %>" />
+	<link rel="icon" type="image/png" href="<%= asset_path 'favicon.ico' %>" />
 </head>
 <body class="popup">
   <div id="header">

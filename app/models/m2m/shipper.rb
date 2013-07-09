@@ -54,7 +54,7 @@
 #
 
 class M2m::Shipper < M2m::Base
-  set_table_name 'shmast'
+  self.table_name = 'shmast'
   set_primary_key 'fshipno'
   
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fcsono, :primary_key => :fcsono

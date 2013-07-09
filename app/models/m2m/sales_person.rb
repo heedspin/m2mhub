@@ -23,7 +23,7 @@
 #
 
 class M2m::SalesPerson < M2m::Base
-  set_table_name 'slspns'
+  self.table_name = 'slspns'
   
   alias_attribute :commission_percentage, :fsalcompct
   

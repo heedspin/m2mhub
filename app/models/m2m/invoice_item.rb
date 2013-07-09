@@ -50,7 +50,7 @@
 #
 
 class M2m::InvoiceItem < M2m::Base
-  set_table_name 'aritem'
+  self.table_name = 'aritem'
 
   belongs_to :invoice, :class_name => 'M2m::Invoice', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to_item :fpartno, :frev

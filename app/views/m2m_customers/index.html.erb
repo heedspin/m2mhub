@@ -40,8 +40,8 @@ $(function() {
 				<div id="inprogress" class="hide">
 				<%= image_tag AppConfig.in_progress_image %>
 				</div>
-			  <%# f.buttons do %>
-				  <%#= f.commit_button 'Search' %>
+			  <%# f.actions do %>
+				  <%#= f.action :submit, :label => 'Search' %>
 				<%# end %>
 			</td>
 		</tr>

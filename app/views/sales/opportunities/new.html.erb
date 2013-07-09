@@ -12,8 +12,8 @@
 
 <%= semantic_form_for @opportunity, :url => opportunities_url do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>
-	<%= f.buttons do %>
-	  <%= f.commit_button 'Create' %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Create' %>
 	  <%= f.cancel_link :url => opportunities_url %>
 	<% end %>
 <% end %>

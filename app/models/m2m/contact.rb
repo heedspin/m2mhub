@@ -39,7 +39,7 @@
 #
 
 class M2m::Contact < M2m::Base
-  set_table_name 'syphon'
+  self.table_name = 'syphon'
   include ActionView::Helpers::NumberHelper
   
   alias_attribute :primary, :IsPrimary

@@ -1,5 +1,5 @@
 <% title 'Edit Opportunity' %>
-<% content_for :javascripts, javascript_include_tag('m2mhub/inplace.js') %>
+<% content_for :javascripts, javascript_include_tag('inplace.js') %>
 
 <%= render 'sales/opportunities/submenu' %>
 <br />
@@ -11,8 +11,8 @@
 		<%= f.input :delete_permanently, :as => :boolean, :wrapper_html => { :class => 'deletastic_param' } %>
 	<% end %>
 	<% end %>
-	<%= f.buttons do %>
-	  <%= f.commit_button 'Save' %>
+	<%= f.actions do %>
+	  <%= f.action :submit %>
 	  <%= f.cancel_link :url => opportunity_url(@opportunity) %>
 		<li class="deletastic_container">
 			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>

@@ -14,7 +14,7 @@
 #
 
 class M2m::Department < M2m::Base
-  set_table_name 'prdept'
+  self.table_name = 'prdept'
   
   alias_attribute :department_number, :fdeptno
   

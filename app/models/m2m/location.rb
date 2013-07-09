@@ -22,7 +22,7 @@
 #
 
 class M2m::Location < M2m::Base
-  set_table_name 'location'
+  self.table_name = 'location'
   
   scope :inspection, :conditions => { :fcinspect => 'Y' }
   

@@ -140,7 +140,7 @@
 #
 
 class M2m::Job < M2m::Base
-  set_table_name 'jomast'
+  self.table_name = 'jomast'
   
   has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
   has_many :items, :class_name => 'M2m::JobItem', :foreign_key => 'fjobno', :primary_key => 'fjobno'

@@ -69,7 +69,7 @@
 
 class M2m::QuoteItem < M2m::Base
   default_scope :order => 'qtitem.fenumber'
-  set_table_name 'qtitem'
+  self.table_name = 'qtitem'
   belongs_to :quote, :class_name => 'M2m::Quote', :foreign_key => :fquoteno, :primary_key => :fquoteno
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono, :primary_key => :fsono
   belongs_to_item :fpartno, :fpartrev

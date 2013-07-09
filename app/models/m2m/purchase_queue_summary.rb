@@ -45,7 +45,7 @@
 #
 
 class M2m::PurchaseQueueSummary < M2m::Base
-  set_table_name 'pqsumm'
+  self.table_name = 'pqsumm'
   belongs_to_item :fcpartno, :fcpartrev
   alias_attribute :comment, :fccomment
   alias_attribute :on_hand, :fnonhand

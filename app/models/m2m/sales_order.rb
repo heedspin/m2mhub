@@ -86,7 +86,7 @@
 #
 
 class M2m::SalesOrder < M2m::Base
-  set_table_name 'somast'
+  self.table_name = 'somast'
   set_primary_key 'fsono'
   
   has_many :items, :class_name => 'M2m::SalesOrderItem', :foreign_key => :fsono, :primary_key => :fsono

@@ -20,7 +20,7 @@
 #
 
 class M2mhub::Event < M2mhub::Base
-  set_table_name 'm2mhub_events'
+  self.table_name = 'm2mhub_events'
   belongs_to :trigger, :class_name => 'M2mhub::Trigger', :foreign_key => 'trigger_id'
   belongs_to :user
   belongs_to_lighthouse_ticket

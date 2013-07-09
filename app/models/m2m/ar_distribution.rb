@@ -22,7 +22,7 @@
 #
 
 class M2m::ArDistribution < M2m::Base
-  set_table_name 'ardist'
+  self.table_name = 'ardist'
   belongs_to :gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fcacctnum', :primary_key => 'fcacctnum'
 
   alias_attribute :gl_account_number, :fcacctnum

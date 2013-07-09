@@ -12,7 +12,7 @@
 #
 
 class M2m::CurrentItem < M2m::Base
-  set_table_name 'invcur'
+  self.table_name = 'invcur'
   belongs_to_item :fcpartno, :fcpartrev
   scope :for_part_number, lambda { |pn| 
     {

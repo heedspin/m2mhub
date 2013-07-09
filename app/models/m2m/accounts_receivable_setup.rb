@@ -45,7 +45,7 @@
 #
 
 class M2m::AccountsReceivableSetup < M2m::Base
-  set_table_name 'csarcv'
+  self.table_name = 'csarcv'
   
   def self.customer_credit
     @customer_credit ||= first.fccustcred.strip

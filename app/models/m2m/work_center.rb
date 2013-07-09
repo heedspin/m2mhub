@@ -48,7 +48,7 @@
 #
 
 class M2m::WorkCenter < M2m::Base
-  set_table_name 'inwork'
+  self.table_name = 'inwork'
   set_primary_key 'fcpro_id'
   
   alias_attribute :work_center_id, :fcpro_id

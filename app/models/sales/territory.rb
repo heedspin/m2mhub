@@ -11,7 +11,7 @@
 #
 
 class Sales::Territory < M2mhub::Base
-  set_table_name 'sales_territories'
+  self.table_name = 'sales_territories'
   scope :by_name, :order => 'name'
   
   def self.by_sales_rep_or_name

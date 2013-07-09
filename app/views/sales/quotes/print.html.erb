@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="utf-8">
 		<title><%= AppConfig.short_name %> Quote <%= @quote.quote_number %></title>
-		<%= stylesheet_link_tag 'm2mhub/quote', :media => 'all' %>
+		<%= stylesheet_link_tag 'quote', :media => 'all' %>
 		<link rel="license" href="http://www.opensource.org/licenses/mit-license/">
 	  <%#= javascript_include_tag :defaults %>
-	  <%= javascript_include_tag 'm2mhub/jquery-1.6.4.min.js' %>
+	  <%= javascript_include_tag 'jquery.js' %>
 		<script type="text/javascript">
 		$(function() {
 			window.print();

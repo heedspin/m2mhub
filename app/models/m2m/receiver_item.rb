@@ -58,7 +58,7 @@
 #
 
 class M2m::ReceiverItem < M2m::Base
-  set_table_name 'rcitem'
+  self.table_name = 'rcitem'
   belongs_to :receiver, :class_name => 'M2m::Receiver', :foreign_key => :freceiver, :primary_key => :freceiver
   belongs_to_item :fpartno, :fpartrev
   

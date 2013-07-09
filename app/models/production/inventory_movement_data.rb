@@ -70,8 +70,8 @@ class Production::InventoryMovementData
     end
   end
 
-  def to_json
-    @movement_data.to_json
+  def as_json(args=nil)
+    @movement_data.as_json(args)
   end
 
   def quantity_for(ttype)

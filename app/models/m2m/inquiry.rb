@@ -38,7 +38,7 @@
 #
 
 class M2m::Inquiry < M2m::Base
-  set_table_name 'inquiry'
+  self.table_name = 'inquiry'
 
   def category
     M2m::CsPopup.cached_lookup('INQUIRY.CategoryCode', self.CategoryCode)

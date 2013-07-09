@@ -20,7 +20,7 @@ require 'plutolib/stateful_delayed_report'
 
 class M2mhub::ExternalEvent < M2mhub::Base
   include Plutolib::StatefulDelayedReport
-  set_table_name 'm2mhub_external_events'
+  self.table_name = 'm2mhub_external_events'
   belongs_to_active_hash :status, :class_name => 'M2mhub::ExternalEventStatus'
   scope :error, :conditions => { :status_id => M2mhub::ExternalEventStatus.error.id }
   validates_uniqueness_of :guid
@@ -90,8 +90,8 @@ class M2mhub::ExternalEvent < M2mhub::Base
     self.json_data = self.data_hash.to_json
   end
   
-  def to_json(args=nil)
-    self.data_hash.to_json(args)
+  def as_json(args=nil)
+    self.data_hash.as_json(args)
   end  
 
   def human_attribute_name(field)

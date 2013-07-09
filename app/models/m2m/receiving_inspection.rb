@@ -25,7 +25,7 @@
 #
 
 class M2m::ReceivingInspection < M2m::Base
-  set_table_name 'rcinsp'
+  self.table_name = 'rcinsp'
   alias_attribute :receiver_number, :fcreceiver
   alias_attribute :item_number, :fcitemno
   belongs_to_item :fcpartno, :fcpartrev

@@ -21,7 +21,7 @@
 require 'm2mhub_current_user'
 
 class Sales::QuoteItem < M2mhub::Base
-  set_table_name 'sales_quote_items'
+  self.table_name = 'sales_quote_items'
   belongs_to :quote, :class_name => 'Sales::Quote'
   has_one :display_log, :class_name => 'Doogle::DisplayLog', :foreign_key => 'object_id', :primary_key => 'quote_id', :conditions => { :log_type_id => Doogle::LogType.quote.id }
 

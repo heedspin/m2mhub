@@ -32,7 +32,7 @@ require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
 class Production::InventoryReportItem < ActiveRecord::Base
-  set_table_name 'inventory_report_items'
+  self.table_name = 'inventory_report_items'
   include ::BelongsToItem
   include ::BelongsToItemGroup # self.group, self.group_name, etc
   include Production::InventoryMovementData::Helper
