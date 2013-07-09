@@ -53,10 +53,10 @@
 		</div><!-- footer -->
 	</div><!-- end wrapper -->
 </body>
-<% if Rails.env.production? %>
+<% if Rails.env.production? and AppConfig.google_analytics_key.present? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', <%= AppConfig.google_analytics_key %>]);
+  _gaq.push(['_setAccount', '<%= AppConfig.google_analytics_key %>']);
   _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
