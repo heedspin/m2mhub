@@ -1,5 +1,4 @@
 <% content_for :javascripts do %>
-	<%= javascript_include_tag('inplace.js') %>
 	<script type="text/javascript">
 	$(function() {
 		$(".closed_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %>', '<%= image_tag(AppConfig.arrow_expand_image) %>');
