@@ -37,6 +37,25 @@ function ajax_load_content(href, target_id) {
 	})
 }
 
+function turn_on_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.show();
+		}
+		obj.children('input, select, textarea').attr('disabled', false)
+	})
+}
+function turn_off_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.hide();
+		}
+		obj.children('input, select, textarea').attr('disabled', true)
+	})
+}
+
 jQuery.fn.toggle_visibility = function(show_text, hide_text) {
 	var _toggle_visibility_off = null;
 	var _toggle_visibility_on = function() {
