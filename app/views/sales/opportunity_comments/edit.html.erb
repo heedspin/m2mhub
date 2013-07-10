@@ -24,7 +24,7 @@
 	<% end %>
 	
 	<%= f.actions do %>
-	  <%= f.action('Save') unless @comment.comment_type.try(:ticket?) %>
+	  <%= f.action(:submit, :label => 'Save') unless @comment.comment_type.try(:ticket?) %>
 	  <%= f.cancel_link :url => opportunity_url(@opportunity) %>
 		<li class="deletastic_container">
 			<%= link_to 'Delete', '#', :class => 'deletastic_delete_link' %>

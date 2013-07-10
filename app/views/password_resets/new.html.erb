@@ -7,7 +7,7 @@
     <%= f.input :email, :required => true %>
   <% end %>
   <%= f.actions do %>
-    <%= f.action "Send me a link to reset my password" %>
+    <%= f.action :submit, :label => "Send me a link to reset my password" %>
     <%= f.cancel_link %>
   <% end %>
 <%# f.cancel_and_submit :submit_text => "Send me a link to reset my password", :cancel_url => login_path %>
