@@ -60,7 +60,7 @@ $(function() {
 						<%= image_tag AppConfig.in_progress_image %>
 						</span>
 					</li>
-					<%= f.input :status, :collection => Sales::OpportunityStatus.all.map{|s| [s.name, s.id]}.unshift(['All', '']), :wrapper_html => { :class => 'opportunity_search_status' }, :include_blank => false %>
+					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :wrapper_html => { :class => 'opportunity_search_status' }, :include_blank => false %>
 				<% end %>
 			</td>
 		</tr>

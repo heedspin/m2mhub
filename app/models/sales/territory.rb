@@ -33,23 +33,4 @@ class Sales::Territory < M2mhub::Base
   def sales_rep_or_name
     @sales_rep_or_name ||= self.sales_rep_name.present? ? self.sales_rep_name : "No Rep: #{self.name}"
   end
-  
-  def self.import
-    # http://en.wikipedia.org/wiki/List_of_regions_of_the_United_States#Official_U.S._regions
-    [ 
-      ['Upstate New York', '', 'Propel Technology'],
-      ['Mid-Atlantic', 'Eastern PA, New Jersey, and Delaware', 'SRG'],
-      ['East North Central', 'Ohio, Indiana, Michigan, Western PA, Kentucky, and West Virginia', 'The Hofstetter Company'],
-      ['Upper Midwest', 'Illinois, Wisconsin, and Minnesota', 'Synergistic Sales, Inc.'],
-      ['Carolinas', 'North Carolina and South Carolina', 'Tech-Source, Inc.'],
-      ['West North Central', 'Missouri, Kansas, Iowa, and Nebraska', 'MINK Associates Inc.'],
-      ['South Central', 'Texas, Oklahoma, Arkansas, Louisiana, and Western Mississippi', 'Erickson Sales'],
-      ['Mountain', 'Arizona, New Mexico, and Las Vegas', 'Straube, SW']
-    ].each do |name, description, sales_rep_name|
-      territory = Sales::Territory.find_by_name(name) || Sales::Territory.new(:name => name)
-      territory.description = description
-      territory.sales_rep_name = sales_rep_name
-      territory.save!
-    end
-  end
 end

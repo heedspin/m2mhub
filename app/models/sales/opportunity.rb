@@ -74,8 +74,8 @@ class Sales::Opportunity < M2mhub::Base
   end
 
   def self.status(s)
-    s = s.id if s.is_a?(Sales::OpportunityStatus)
-    where(:status_id => s)
+    s = Sales::OpportunityStatus.find(s) unless s.is_a?(Sales::OpportunityStatus)
+    where ['sales_opportunities.status_id in (?)', s.children_ids]
   end
   scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]
   scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
