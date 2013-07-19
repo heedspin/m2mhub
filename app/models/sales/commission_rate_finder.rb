@@ -69,7 +69,6 @@ class Sales::CommissionRateFinder
   def get_internal_rates(part_number, revision, invoice, sales_order)
     result = []
     unless house_account?(invoice.customer_number)
-      self.internal_commission_configs
       if item = M2m::Item.part_number(part_number).first
         self.internal_commission_configs.each do |config|
           commission_percentage = config.commission_percentage_for(item.product_class)
