@@ -39,6 +39,7 @@ class Sales::CommissionRateFinder
     def initialize(config)
       @name = config['name']
       @ordered_after = config['ordered_after']
+      @skip_parts = Set.new((config['skip_parts'] || '').split(/[ ,]/).map(&:strip))
       @commission_percentages = {}
       config['rates'].each do |commission_percentage, product_classes|
         product_classes.split(',').map(&:strip).each do |product_class|
@@ -49,6 +50,10 @@ class Sales::CommissionRateFinder
     
     def commission_percentage_for(product_class)
       @commission_percentages[product_class.name.strip] || 0
+    end
+
+    def skip_part?(part_number)
+      @skip_parts.member?(part_number)
     end
   end
   
@@ -76,6 +81,7 @@ class Sales::CommissionRateFinder
           # This is LXD specific.  Sorry...
           first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(invoice.customer_number).by_date.first
           next unless first_invoice.date >= config.ordered_after
+          next if config.skip_part?(part_number)
           result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
         end
       end
