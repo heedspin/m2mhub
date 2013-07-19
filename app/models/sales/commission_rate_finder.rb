@@ -55,17 +55,30 @@ class Sales::CommissionRateFinder
   def internal_commission_configs
     @internal_commission_configs ||= AppConfig.internal_commission_rates.map { |config| InternalCommissionConfig.new(config) }
   end
+
+  def house_account?(customer_number)
+    if @house_accounts.nil?
+      @house_accounts = Set.new
+      (AppConfig.internal_house_accounts || {}).each do |cn, key|
+        @house_accounts.add(cn.to_i)
+      end
+    end
+    @house_accounts.member?(customer_number.to_i)
+  end
   
   def get_internal_rates(part_number, revision, invoice, sales_order)
     result = []
-    if item = M2m::Item.part_number(part_number).first
-      self.internal_commission_configs.each do |config|
-        commission_percentage = config.commission_percentage_for(item.product_class)
-        next unless commission_percentage > 0
-        # This is LXD specific.  Sorry...
-        first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(invoice.customer_number).by_date.first
-        next unless first_invoice.date >= config.ordered_after
-        result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
+    unless house_account?(invoice.customer_number)
+      self.internal_commission_configs
+      if item = M2m::Item.part_number(part_number).first
+        self.internal_commission_configs.each do |config|
+          commission_percentage = config.commission_percentage_for(item.product_class)
+          next unless commission_percentage > 0
+          # This is LXD specific.  Sorry...
+          first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(invoice.customer_number).by_date.first
+          next unless first_invoice.date >= config.ordered_after
+          result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
+        end
       end
     end
     result
