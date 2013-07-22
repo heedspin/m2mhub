@@ -46,7 +46,7 @@ class Sales::FirstSaleReport
       end
       next if already_ordered.member?(key)
       already_ordered.add(key)
-      if soi = M2m::SalesOrderItem.customer(customer_number).where(:fpartno => part_number).first
+      if soi = M2m::SalesOrderItem.customer(customer_number).order_date(order_date).where(:fpartno => part_number).first
         releases = soi.sales_order.releases.for_part_number(soi.part_number).all
         result.push FirstSaleData.new(soi.sales_order, soi, releases)
       end

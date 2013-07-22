@@ -145,6 +145,10 @@ class M2m::SalesOrderItem < M2m::Base
       :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
     }
   }
+  def self.order_date(order_date)
+    order_date = order_date.is_a?(String) ? Date.parse(order_date) : order_date
+    joins(:sales_order).where('somast.forderdate = ?', order_date)
+  end
 
   def self.attach_to_releases(sales_order_releases)
     sales_order_releases = sales_order_releases.to_a
