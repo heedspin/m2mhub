@@ -148,6 +148,8 @@ class Quality::InspectionTask < M2mhub::Base
           self.lighthouse_ticket_id = ticket_id
           self.lighthouse_project_id = project_id
           self.lighthouse_watcher_update
+        else
+          true
         end
       elsif self.lighthouse_project_id.present?
         self.lighthouse_milestone_id ||= self.task_type.rma_inspection? ? AppConfig.inspection_task_default_lighthouse_rma_milestone : AppConfig.inspection_task_default_lighthouse_incoming_milestone

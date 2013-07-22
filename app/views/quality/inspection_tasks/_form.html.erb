@@ -22,6 +22,7 @@
 	<%= f.input :body, :wrapper_html => { :class => 'widetext' } %>
 	<%= f.input :create_lighthouse_ticket, :as => :boolean, :label => 'Create Lighthouse Ticket' %>
 	<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
+	<%= f.input :lighthouse_milestone_id, :as => :hidden, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field widestring' }%>
 	<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field widetext' } %>
