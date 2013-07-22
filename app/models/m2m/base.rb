@@ -2,7 +2,7 @@ require 'm2m/belongs_to_item'
 
 class M2m::Base < ActiveRecord::Base
   self.abstract_class = true
-  set_primary_key 'identity_column'
+  self.primary_key = 'identity_column'
   include ::BelongsToItem
   extend ActiveHash::Associations::ActiveRecordExtensions
 

@@ -72,7 +72,7 @@
 
 class M2m::Invoice < M2m::Base
   self.table_name = 'armast'
-  set_primary_key 'fcinvoice'
+  self.primary_key = 'fcinvoice'
 
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => 'fsono', :primary_key => 'fsono'
   has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'

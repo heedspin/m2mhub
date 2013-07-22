@@ -74,7 +74,7 @@
 
 class M2m::Quote < M2m::Base
   self.table_name = 'qtmast'
-  set_primary_key 'fquoteno'
+  self.primary_key = 'fquoteno'
   
   has_many :items, :class_name => 'M2m::QuoteItem', :foreign_key => :fquoteno, :primary_key => :fquoteno
   

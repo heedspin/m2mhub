@@ -35,7 +35,7 @@
 
 class M2m::Receiver < M2m::Base
   self.table_name = 'rcmast'
-  set_primary_key 'freceiver'
+  self.primary_key = 'freceiver'
   
   has_many :items, :class_name => 'M2m::ReceiverItem', :foreign_key => :freceiver, :primary_key => :freceiver
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono, :primary_key => :fpono

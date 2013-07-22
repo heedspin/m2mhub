@@ -2,7 +2,7 @@ class Sales::SalesOrderReleasesController < M2mhubController
   filter_access_to_defaults :context => :sales_order_releases
 
   class SearchItem < M2m::SalesOrderRelease
-    set_primary_key :_disabled
+    self.primary_key = :_disabled
     attr_accessor :filter_status
   end
 

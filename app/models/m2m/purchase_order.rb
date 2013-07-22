@@ -75,7 +75,7 @@
 
 class M2m::PurchaseOrder < M2m::Base
   self.table_name = 'pomast'
-  set_primary_key 'fpono'
+  self.primary_key = 'fpono'
   
   has_many :items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fpono, :primary_key => :fpono  
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno

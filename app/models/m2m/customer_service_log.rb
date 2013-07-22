@@ -62,7 +62,7 @@
 
 class M2m::CustomerServiceLog < M2m::Base
   self.table_name = 'sycslm'
-  set_primary_key 'fcinqno'
+  self.primary_key = 'fcinqno'
 
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fcsono
   belongs_to_item :fcpartno, :fcpartrev
