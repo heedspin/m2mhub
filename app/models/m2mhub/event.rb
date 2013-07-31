@@ -19,6 +19,8 @@
 #  body                  :text
 #
 
+require 'lighthouse_ticket'
+
 class M2mhub::Event < M2mhub::Base
   self.table_name = 'm2mhub_events'
   belongs_to :trigger, :class_name => 'M2mhub::Trigger', :foreign_key => 'trigger_id'

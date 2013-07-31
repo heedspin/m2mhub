@@ -70,6 +70,7 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 
 # You can add custom inputs or override parts of Formtastic by subclassing Formtastic::FormBuilder and
 # specifying that class here.  Defaults to Formtastic::FormBuilder.
+require 'application_form_builder'
 Formtastic::Helpers::FormHelper.builder = ApplicationFormBuilder
 
 # You can opt-in to Formtastic's use of the HTML5 `required` attribute on `<input>`, `<select>` 
