@@ -42,10 +42,6 @@ Rails.application.routes.draw do
     resources :invoiced_sales_reports, :controller => 'm2m_customers/invoiced_sales_reports'
     resources :sales_backlog_reports, :controller => 'm2m_customers/sales_backlog_reports'
   end
-  resources :sales_customers, :controller => 'sales/customers' do
-    resources :opportunities, :controller => 'sales/customers/opportunities'
-    resources :quotes, :controller => 'sales/customers/quotes'
-  end
   resources :sales_territories, :controller => 'sales/territories'
   resources :parent_companies, :controller => 'sales/parent_companies'
   resources :sales_backlog_reports, :only => [:index, :show], :controller => 'sales/backlog_reports'
@@ -61,10 +57,6 @@ Rails.application.routes.draw do
   match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
-  resources :opportunities, :controller => 'sales/opportunities'
-  resources :opportunity_comments, :controller => 'sales/opportunity_comments'
-  match 'sales_scoreboard' => 'sales/opportunity_reports#index'
-  resources :sales_events, :only => [:index], :controller => 'sales/sales_events'
   
   match 'shipping' => 'shipping/shipping_dashboard#index'
   resources :shippers, :only => [:index, :show], :controller => 'shipping/shippers'
@@ -92,12 +84,7 @@ Rails.application.routes.draw do
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   resources :m2mhub_events, :controller => 'm2mhub/events'
-  resources :external_event_resources, :controller => 'm2mhub/external_event_resources', :only => [:create]
   
-  resources :contexts, :controller => 'context/contexts'
-  resources :context_chrome_extensions, :controller => 'context/chrome_extensions'
-  resources :context_comments, :controller => 'context/comments'
-
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end

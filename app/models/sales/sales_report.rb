@@ -71,10 +71,6 @@ class Sales::SalesReport < M2mhub::Base
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
 
-    if AppConfig.enable_opportunities?
-      self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
-    end
-
     self.save!
   end
 
@@ -113,7 +109,6 @@ class Sales::SalesReport < M2mhub::Base
   def upgrade!
     next_month = self.date.advance(:months => 1)
     beginning_of_year = self.date.beginning_of_year
-    self.new_opportunities = Sales::Opportunity.start_dates(self.date, next_month).sum(:amount)
     self.save!
   end
 

@@ -28,18 +28,12 @@ class M2mhub::Cronjobs
   # */15 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.low_frequency'
   def low_frequency
     log "Running low_frequency"
-    log "Updating opportunity comments"
-    Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
     log "Finished low_frequency"
   end
   
   # 02 1 * * * /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.nightly'
   def nightly
     log "Running nightly"
-    log "Running opportunity wakeups"
-    Sales::Opportunity.run_wakeups
-    log "Running opportunity grim reaper"
-    Sales::Opportunity.run_reaper
     log "Finished nightly"
   end
 end

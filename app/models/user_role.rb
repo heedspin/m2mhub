@@ -5,7 +5,6 @@ class UserRole < ActiveHash::Base
     { :id => 2, :name => 'Sales'},
     { :id => 3, :name => 'Shipping'},
     { :id => 4, :name => 'Manager'},
-    { :id => 5, :name => 'Doogle Admin'},
     { :id => 6, :name => 'Engineer'}
   ]
   include Plutolib::ActiveHashMethods  

@@ -1,6 +1,0 @@
-console.log("Validation errors: " + "<%= @quote_item.errors.full_messages.inspect %>");
-<% if action_name == 'create' %>
-	var row = $("input[name='quote_item[id]',value='']").closest("tr");
-<% else %>
-	var row = $("input[name='quote_item[id]',value=<%= @quote_item.id %>]").closest("tr");
-<% end %>

@@ -33,10 +33,5 @@
 			<%= link_to 'Production', inventory_reports_url %>
 		</li>
 		<% end %>
-		<% if M2mhub::Feature.enabled?(:opportunities) and permitted_to?(:read, :sales_opportunities) %>
-		<li class="<%= menu_selected :sales_opportunities %>">
-			<%= link_to 'Opportunities', opportunities_url %>
-		</li>
-		<% end %>		
 	</ul>        
 </div><!-- nav -->

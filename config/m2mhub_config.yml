@@ -40,7 +40,6 @@ m2mhub_config: &m2mhub_config
   lighthouse_image: lighthouse.png
   enable_commission_report: true
   enable_events: true
-  feature_opportunities: true
   feature_inspection_tasks: all
   m2mhub_menu_selected:
     quality:
@@ -49,14 +48,6 @@ m2mhub_config: &m2mhub_config
       controllers: quality/rmas quality/rma_reports 
     sales:
       children: sales/sales_order_items sales/sales_orders sales/m2m_quotes sales/invoiced_sales_reports sales/pro_forma_sales_reports commission_reports sales_reports
-    sales_opportunities:
-      children: sales/opportunities sales/opportunity_comments sales_customers sales/parent_companies sales/territories sales/quotes sales/opportunity_reports sales/sales_events context/contexts
-    sales_customers:
-      children: sales_customer_summary sales_customer_opportunities sales/customers/quotes
-    sales_customer_summary:
-      controllers: sales/customers
-    sales_customer_opportunities:
-      controllers: sales/customers/opportunities
     sales_reports:
       children: browse_sales_reports sales_backlog_reports sales_bookings_reports export_invoiced_sales
     browse_sales_reports: 
