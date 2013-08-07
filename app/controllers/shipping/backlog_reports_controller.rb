@@ -4,6 +4,7 @@ class Shipping::BacklogReportsController < M2mhubController
   def index
     @report = Shipping::BacklogReport.new(params[:search])
     @report.due_date ||= Date.current.next_week
+    @report.sort_order_id ||= Shipping::BacklogSortOrder.customer_so_pn.id
     @report.run if params.member?(:search)
     @printing = (params[:commit] == 'Print')
     if @printing

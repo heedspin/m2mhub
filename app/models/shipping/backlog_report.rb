@@ -3,7 +3,7 @@ require 'plutolib/active_hash_transient_belongs_to'
 class Shipping::BacklogReport
   include Plutolib::ActiveHashTransientBelongsTo
 
-  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id include_open_jobs)  
+  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id include_open_jobs sort_order_id)  
   
   def initialize(args)
     args ||= {}
@@ -28,6 +28,7 @@ class Shipping::BacklogReport
   active_hash_transient_belongs_to :fob_group
   active_hash_transient_belongs_to :customer_status, :class_name => 'M2m::CustomerStatus'
   active_hash_transient_belongs_to :backlog_group
+  active_hash_transient_belongs_to :sort_order, :class_name => 'Shipping::BacklogSortOrder'
 
   def run
     @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.due_by(self.due_date)
@@ -37,7 +38,7 @@ class Shipping::BacklogReport
     if self.sales_order_numbers.present? and (so_numbers = self.sales_order_numbers.split(/[ ,]/).compact) and (so_numbers.size > 0)
       @releases = @releases.sales_order_numbers(so_numbers)
     end
-    @releases = @releases.includes(:sales_order => :customer).order('somast.fcompany, sorels.fsono, sorels.fpartno').to_a
+    @releases = @releases.includes(:sales_order => :customer).order(self.sort_order.order_sql).to_a
     sales_order_items = M2m::SalesOrderItem.for_releases(@releases).to_a
     M2m::SalesOrderItem.attach_to_releases_for_backlog(@releases, sales_order_items)
     items = M2m::Item.attach_items(sales_order_items)
