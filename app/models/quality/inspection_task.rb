@@ -57,6 +57,10 @@ class Quality::InspectionTask < M2mhub::Base
   attr_accessor :lighthouse_body
   attr_accessor :lighthouse_milestone_id
   attr_accessor :delete_lighthouse_ticket
+
+  def padded_purchase_order_number
+    M2m::PurchaseOrder.pad_purchase_order_number self.purchase_order_number
+  end
   
   scope :not_deleted, :conditions => [ 'inspection_tasks.status_id != ?', Quality::InspectionTaskStatus.deleted.id ]
   scope :task_type, lambda { |task_type|
