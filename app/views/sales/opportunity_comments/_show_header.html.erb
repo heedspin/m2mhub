@@ -1,0 +1,8 @@
+<p>
+	<strong><%= comment.creator.try(:full_name)%></strong><br />
+	<%= comment.created_at.to_s(:letter_date_time) %>
+	<% if comment.status_change? %>
+	<br />
+	<%= comment.previous_status.try(:name) %> &rarr; <%= comment.status.try(:name) %>
+	<% end %>
+</p>
