@@ -39,7 +39,7 @@ td { border-color: #DDD; }
 html { font: 16px/1 'Open Sans', sans-serif; overflow: auto; padding: 0.5in; }
 html { background: #999; cursor: default; }
 
-body { box-sizing: border-box; height: 11in; margin: 0 auto; overflow: hidden; padding: 0.5in; width: 8.5in; }
+body { box-sizing: border-box; margin: 0 auto; padding: 0.5in; overflow: hidden; width: 8.5in; }
 body { background: #FFF; border-radius: 1px; box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); }
 
 /* header */
@@ -105,4 +105,33 @@ aside p { line-height: 1.25; margin: 0 0 10px; }
 	span:empty { display: none; }
 }
 
-@page { margin: 0; }
+@page { 
+	margin: 0; 
+	padding: 0.5in; 
+	}
+
+div.page-break {
+	padding-top: 0.5in;
+}
+
+/*************
+Page Breaks
+*/
+
+@media all {
+	.page-break	{ display: none; }
+}
+
+@media print {
+   table { page-break-inside:auto }
+   tr    { page-break-inside:avoid; page-break-after:auto; }
+   thead { display: table-header-group;}
+ 	.page-break	{ 
+ 		display: block;
+ 		page-break-before: always; 
+ 	}
+ 	table.page-break-table	{ 
+ 		display: block;
+ 		margin-top: 15em;
+ 	}
+}
