@@ -224,7 +224,7 @@ class Quality::InspectionTask < M2mhub::Base
   after_create :set_inspection_required_flag
   def set_inspection_required_flag
     logger.info "#{self.task_type.incoming_inspection?} #{self.purchase_order_item_id}"
-    if self.task_type.incoming_inspection? and self.purchase_order_item_id.present? and (poi = M2m::PurchaseOrderItem.find_by_id(self.purchase_order_item_id)) and !poi.inspection_required?
+    if self.task_type.incoming_inspection? and self.purchase_order_item_id.present? and (poi = M2m::PurchaseOrderItem.find_by_identity_column(self.purchase_order_item_id)) and !poi.inspection_required?
       if poi.update_attributes(:inspection_required => 'Y')
         logger.info "inspection_required success"
       else
