@@ -130,7 +130,7 @@ class Sales::OpportunitiesController < M2mhubController
       if @current_object.nil?
         id = params[:id]
         if id[0..0] == 'X'
-          @current_object = Sales::Opportunity.xnumber(id).first
+          @current_object = Sales::Opportunity.xnumber(id).first || record_not_found
         else
           @current_object = Sales::Opportunity.find(id)
         end
