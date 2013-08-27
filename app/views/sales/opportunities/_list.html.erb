@@ -82,14 +82,21 @@ $(function() {
 				<div class="expand_on_hover"><%= raw o.last_comment.lighthouse_last_comment %></div>
 			</td>
 		</tr>
-		<% elsif o.last_comment and (o.last_comment.comment.present? or o.last_comment.comment_type.sales_order?) %>
+		<% elsif o.last_quote or (o.last_comment and (o.last_comment.comment.present? or o.last_comment.comment_type.sales_order?)) %>
 		<tr>
+			<% if o.last_comment %>
 			<td>
 				<%= render 'sales/opportunity_comments/show_header', :comment => o.last_comment %>
 			</td>
+			<% end %>
 			<td colspan="<%= lighthouse_comment_columns %>">
 				<div class="expand_on_hover">
-					<%= render 'sales/opportunity_comments/show_body', :comment => o.last_comment %>
+					<%= render ('sales/opportunity_comments/show_body', :comment => o.last_comment)if o.last_comment %>
+					<% if o.last_quote %>
+					<div class="opportunity_quote">
+						<%= render 'sales/quotes/summary', :quote => o.last_quote %>
+					</div>
+					<% end %>
 				</div>
 			</td>
 		</tr>

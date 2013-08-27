@@ -1,4 +1,5 @@
 # == Schema Information
+
 #
 # Table name: sales_opportunity_comments
 #
@@ -48,6 +49,7 @@ class Sales::OpportunityComment < M2mhub::Base
   validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
 
   scope :by_id, :order => :id
+  scope :by_created, :order => :created_at
   scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
   scope :not_deleted, where('sales_opportunities.status_id != ? and sales_opportunity_comments.status_id != ?', Sales::OpportunityStatus.deleted.id, Sales::OpportunityStatus.deleted.id).joins(:opportunity)
   scope :with_ticket, lambda { |ticket|
@@ -82,6 +84,7 @@ class Sales::OpportunityComment < M2mhub::Base
     where('sales_customers.lead_level_id in (?)', lead_level.lead_level_ids).joins(:opportunity => :sales_customer)
   end
   scope :notable, where('sales_opportunity_comments.comment_type_id in (?)', [Sales::OpportunityCommentType.quote.id, Sales::OpportunityCommentType.lost.id, Sales::OpportunityCommentType.sales_order.id])
+  scope :quotes, where(:comment_type_id => Sales::OpportunityCommentType.quote.id)
 
   attr_accessor :create_lighthouse_ticket
   def create_lighthouse_ticket=(val)

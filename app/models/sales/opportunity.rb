@@ -45,6 +45,14 @@ class Sales::Opportunity < M2mhub::Base
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
 
+  def last_quote
+    if @last_quote_initialized.nil?
+      @last_quote_initialized = true
+      @last_quote = self.comments.by_created.quotes.last.try(:quote)
+    end
+    @last_quote
+  end
+
   attr_accessor :delete_permanently
   attr_accessor :create_customer
   def create_customer=(val)
