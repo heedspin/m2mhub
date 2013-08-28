@@ -337,7 +337,7 @@ class Sales::Opportunity < M2mhub::Base
 
   def wakeup!
     self.update_attributes(:status => Sales::OpportunityStatus.active)
-    Sales::OpportunityWakeupNotifier.wakeup_notifier(self).deliver if self.owner_id == 1
+    Sales::OpportunityWakeupNotifier.wakeup_notifier(self).deliver
   end
 
   def self.run_reaper
