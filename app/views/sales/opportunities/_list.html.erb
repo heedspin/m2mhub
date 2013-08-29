@@ -50,7 +50,12 @@ $(function() {
 		<% @opportunities.each do |o| %>
 		<tr>
 			<td><%= o.xnumber %> - <%= link_to o.safe_title, opportunity_url(o), {:target=>'_blank'} %></td>
-			<td><%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) : o.customer_name %></td>
+			<td>
+				<%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) : o.customer_name %>
+				<% if o.amount %>
+					<%= cm o.amount, :rounded_dollars %>
+				<% end %>
+			</td>
 			<td>
 				<% if sales_territory = o.sales_customer.try(:sales_territory) %>
 					<%= sales_territory.name %>
