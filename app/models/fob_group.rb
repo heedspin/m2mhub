@@ -1,6 +1,6 @@
 require 'plutolib/active_hash_methods'
 class FobGroup < ActiveHash::Base
-  self.data = AppConfig.fob_groups
+  self.data = AppConfig.fob_groups || []
   include Plutolib::ActiveHashMethods
   
   def self.find_by_fob(fob)
