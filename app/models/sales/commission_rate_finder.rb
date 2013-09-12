@@ -53,7 +53,7 @@ class Sales::CommissionRateFinder
     end
 
     def skip_part?(part_number)
-      @skip_parts.member?(part_number)
+      @skip_parts.any? { |skip_me| part_number.starts_with?(skip_me) }
     end
   end
   
