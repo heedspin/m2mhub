@@ -160,6 +160,9 @@ class M2m::Job < M2m::Base
   }
   scope :released, :conditions => { :fstatus => M2m::Status.released.name }
   scope :status_open, :conditions => [ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ] 
+  def self.status(statuses)
+    where ['jomast.fstatus in (?)', statuses ] 
+  end
   scope :by_date_desc, :order => 'jomast.fhold_dt desc'
   scope :customers, lambda { |customers|
     customer_numbers = customers.map(&:customer_number)

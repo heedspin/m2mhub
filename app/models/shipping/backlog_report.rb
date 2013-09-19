@@ -3,7 +3,7 @@ require 'plutolib/active_hash_transient_belongs_to'
 class Shipping::BacklogReport
   include Plutolib::ActiveHashTransientBelongsTo
 
-  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id include_open_jobs sort_order_id)  
+  ATTRIBUTES = %w(due_date due_after sales_order_numbers page_per_customer releases fob_group_id customer_status_id backlog_group_id include_jobs_id sort_order_id)  
   
   def initialize(args)
     args ||= {}
@@ -20,15 +20,13 @@ class Shipping::BacklogReport
   def page_per_customer=(val)
     @page_per_customer = val.is_a?(String) ? (val.to_i != 0) : val
   end
-  def include_open_jobs=(val)
-    @include_open_jobs = val.is_a?(String) ? (val.to_i != 0) : val
-  end
   
   # active_hash_transient_belongs_to :report_status, :class_name => 'ReportStatus'
   active_hash_transient_belongs_to :fob_group
   active_hash_transient_belongs_to :customer_status, :class_name => 'M2m::CustomerStatus'
   active_hash_transient_belongs_to :backlog_group
   active_hash_transient_belongs_to :sort_order, :class_name => 'Shipping::BacklogSortOrder'
+  active_hash_transient_belongs_to :include_jobs, :class_name => 'Shipping::IncludeJobs'
 
   def run
     @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled.due_by(self.due_date)

@@ -182,6 +182,11 @@ table.backlog table.data td, table.backlog table.data tr {
   padding: 5px;
   }
 
+table.backlog table.data {
+  margin: 0;
+}
+
+
 .sbl_jobs_link {
 	display: none;
 }
