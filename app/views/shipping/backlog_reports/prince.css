@@ -149,7 +149,8 @@ table.backlog td.c1 {
 }
 
 table.backlog tr.spacer td {
-	padding-bottom: 50px;
+  padding-bottom: 10px;
+  border: none;
 }
 
 table.backlog p {
@@ -172,6 +173,14 @@ table.backlog td.centered {
 table.backlog td.right {
 	text-align: right;
 }
+
+table.backlog table.data td, table.backlog table.data tr {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px dotted #c5c5c5;
+  padding: 5px;
+  }
 
 .sbl_jobs_link {
 	display: none;
