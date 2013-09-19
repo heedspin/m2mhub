@@ -28,7 +28,7 @@ class Sales::CommissionRateFinder
     if external_rep_rate = self.get_external_rep_rate(customer, part_number, revision, invoice, sales_order)
       result.push external_rep_rate
     end
-    if internal_rates = self.get_internal_rates(part_number, revision, invoice, sales_order)
+    if internal_rates = self.get_internal_rates(customer, part_number, revision, invoice, sales_order)
       result.concat internal_rates
     end
     result
@@ -71,18 +71,22 @@ class Sales::CommissionRateFinder
     @house_accounts.member?(customer_number.to_i)
   end
   
-  def get_internal_rates(part_number, revision, invoice, sales_order)
+  def get_internal_rates(customer, part_number, revision, invoice, sales_order)
     result = []
-    unless house_account?(invoice.customer_number)
+    unless house_account?(customer.customer_number)
       if item = M2m::Item.part_number(part_number).first
         self.internal_commission_configs.each do |config|
           commission_percentage = config.commission_percentage_for(item.product_class)
           next unless commission_percentage > 0
           # This is LXD specific.  Sorry...
-          first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(invoice.customer_number).by_date.first
-          next unless first_invoice.date >= config.ordered_after
-          next if config.skip_part?(part_number)
-          result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
+          first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(customer.customer_number).by_date.first
+          if first_invoice.nil?
+            result.push "Not yet shipped. #{item.product_class.name.strip}, Commission #{commission_percentage}%"
+          else
+            next unless first_invoice.date >= config.ordered_after
+            next if config.skip_part?(part_number)
+            result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
+          end
         end
       end
     end
