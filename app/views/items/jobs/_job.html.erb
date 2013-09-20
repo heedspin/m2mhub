@@ -1,5 +1,6 @@
+<% detail_routing_lines = job.detail_routings.to_a.each_slice(13).to_a %>
 <tr>
-	<th rowspan="2">
+	<th rowspan="<%= 2 * detail_routing_lines.size %>">
 		<%= mini_format ? (subjob ? 'SJ' : 'J') : (subjob ? 'Subjob' : 'Job') %>: <%= job.job_number %><br />
 		<% if subjob %>
 		<%= job.part_number %><br />
@@ -7,20 +8,33 @@
 		<%= mini_format ? job.status.name[0..2] : job.status %>: <%= job.status_date.try(:to_s, :job_date) %><br />
 		Qty: <%= cm job.quantity, :job_quantity %>
 	</th>
-	<% job.detail_routings.each do |dr| %>
-	<th>
-		<%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %>
-	</th>
+	<% detail_routing_lines.first.each do |dr| %>
+		<th><%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %></th>
 	<% end %>
 </tr>
 <tr>
-<% job.detail_routings.each do |dr| %>
+<% detail_routing_lines.first.each do |dr| %>
 	<td>
 		<%= dr.percentage_complete %>%<br />
 		<%= cm dr.quantity_complete, :job_quantity, 0 %>
 	</td>
 <% end %>
 </tr>
+<% detail_routing_lines[1..-1].each do |detail_routings| %>
+<tr>
+	<% detail_routings.each do |dr| %>
+		<th><%= mini_format ? dr.work_center_id : dr.cached_work_center.short_name %></th>
+	<% end %>
+</tr>
+<tr>
+	<% detail_routings.each do |dr| %>
+		<td>
+			<%= dr.percentage_complete %>%<br />
+			<%= cm dr.quantity_complete, :job_quantity, 0 %>
+		</td>
+	<% end %>
+</tr>
+<% end %>
 <% job.sub_jobs.status_open.by_part_number.each do |sub_job| %>
 <%= render 'items/jobs/job.html.erb', :job => sub_job, :mini_format => mini_format, :subjob => true %>
 <% end %>
