@@ -5,17 +5,18 @@
 <script type="text/javascript">
 $(function() {
 	// http://jsfiddle.net/hQkFH/3/
-	$(".expand_on_hover").hover(function() {
+	$(".expand_on_hover").click(function() {
 		var showme = $(this).find(".hide_until_hover");
 		var height = showme.height();
 		var pad = height + 5;
 		var height2 = showme[0].scrollHeight;
-		showme.animate({ height: height2 }, 300);
-	}, function() {
-		var showme = $(this).find(".hide_until_hover");
-		showme.stop(true, false).animate({ height: 0 }, 150);
-	});
+		if (height == height2) {
+			showme.stop(true, false).animate({ height: 0 }, 150);
+		} else {
+			showme.animate({ height: height2 }, 300);			
+		}
 	})
+})
 </script>
 <% end %>
 
