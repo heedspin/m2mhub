@@ -52,10 +52,15 @@ class Sales::SalesEvent
       @sales_person_name = @opportunity.sales_person_name      
       if comment.comment_type.lost?
         @type_name = 'Lost Opportunity'
-      elsif comment.comment_type.sales_order? and (sales_order_id = comment.sales_order_id).present?
+      elsif comment.comment_type.sales_order?
         @type_name = 'Sales Order'
-        @event_text = "SO #{sales_order_id}"
-        @event_url = Rails.application.routes.url_helpers.sales_order_url(sales_order_id, :host => AppConfig.hostname)
+        sales_order_id = comment.sales_order_id
+        @event_text = [comment.win_type.try(:name)]
+        @event_text.push "SO #{sales_order_id}" if sales_order_id.present?
+        @event_text = @event_text.compact.join(' ')
+        if sales_order_id.present?
+          @event_url = Rails.application.routes.url_helpers.sales_order_url(sales_order_id, :host => AppConfig.hostname)
+        end
       elsif comment.comment_type.quote? and (quote = comment.quote)
         @type_name = 'Quote'
         @event_text = "Quote #{quote.quote_number}"

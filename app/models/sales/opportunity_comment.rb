@@ -1,5 +1,4 @@
 # == Schema Information
-
 #
 # Table name: sales_opportunity_comments
 #
@@ -29,6 +28,7 @@
 #  created_at                         :datetime
 #  updated_at                         :datetime
 #  creator_id                         :integer
+#  win_type_id                        :integer
 #
 
 require 'm2mhub/lighthouse_watcher'
@@ -45,8 +45,10 @@ class Sales::OpportunityComment < M2mhub::Base
   belongs_to_active_hash :loss_reason, :class_name => 'Sales::OpportunityLossReason', :foreign_key => :loss_reason_id
   belongs_to :quote, :class_name => 'Sales::Quote'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :primary_key => 'fsono'
+  belongs_to_active_hash :win_type, :class_name => 'Sales::OpportunityWinType', :foreign_key => :win_type_id
 
   validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
+  validates_presence_of :sales_order_id, :if => lambda { |c| c.status.try(:won?) }
 
   scope :by_id, :order => :id
   scope :by_created, :order => :created_at
@@ -85,6 +87,10 @@ class Sales::OpportunityComment < M2mhub::Base
   end
   scope :notable, where('sales_opportunity_comments.comment_type_id in (?)', [Sales::OpportunityCommentType.quote.id, Sales::OpportunityCommentType.lost.id, Sales::OpportunityCommentType.sales_order.id])
   scope :quotes, where(:comment_type_id => Sales::OpportunityCommentType.quote.id)
+  scope :sales_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id)
+  scope :sample_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.sample_order.id)
+  scope :tooling_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.tooling_order.id)
+  scope :production_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.production_order.id)
 
   attr_accessor :create_lighthouse_ticket
   def create_lighthouse_ticket=(val)
@@ -119,14 +125,13 @@ class Sales::OpportunityComment < M2mhub::Base
   def set_comment_type
     if self.create_lighthouse_ticket
       self.comment_type = Sales::OpportunityCommentType.ticket
-    elsif self.status_id != self.opportunity.status_id
-      if self.status.lost?
-        self.comment_type = Sales::OpportunityCommentType.lost
-      elsif self.status.won?
-        self.comment_type = Sales::OpportunityCommentType.sales_order
-      end
+    elsif self.status.lost?
+      self.comment_type = Sales::OpportunityCommentType.lost
+    elsif self.status.won?
+      self.comment_type = Sales::OpportunityCommentType.sales_order
+    else
+      self.comment_type = Sales::OpportunityCommentType.comment
     end
-    self.comment_type ||= Sales::OpportunityCommentType.comment
   end
 
   def self.set_comment_types

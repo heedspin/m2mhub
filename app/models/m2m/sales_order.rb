@@ -160,7 +160,7 @@ class M2m::SalesOrder < M2m::Base
   end
   
   def total_price
-    self.items.to_a.sum { |i| i.total_price || 0.0 }
+    self.releases.to_a.sum { |i| i.total_price || 0.0 }
   end
   
   def status

@@ -6,14 +6,14 @@
 $(function() {
 	// http://jsfiddle.net/hQkFH/3/
 	$(".expand_on_hover").hover(function() {
-		var height = $(this).height();
+		var showme = $(this).find(".hide_until_hover");
+		var height = showme.height();
 		var pad = height + 5;
-		var height2 = $(this)[0].scrollHeight;
-		if (height2 > 35) {
-			$(this).animate({	height: height2	}, 300);
-		}
+		var height2 = showme[0].scrollHeight;
+		showme.animate({ height: height2 }, 300);
 	}, function() {
-		$(this).stop(true, false).animate({ height: 35 }, 150);
+		var showme = $(this).find(".hide_until_hover");
+		showme.stop(true, false).animate({ height: 0 }, 150);
 	});
 	})
 </script>
@@ -28,32 +28,26 @@ $(function() {
 	<% end %>
 </h3>
 <%= will_paginate @opportunities %>
-<table class="data">
+<table class="data opportunities">
 	<thead>
 		<tr>
-			<th class="fixname">Title</th>
-			<th class="fixshortname">Customer</th>
+			<th class="fixname">Title & Customer</th>
 			<th>Territory</th>
 			<th>Product</th>
-			<th>Status</th>
-			<% if show_won %>
-			<th>Amount</th>
-			<% end %>
-			<% if show_hold %>
-			<th>Wakeup</th>
-			<% end %>
-			<th>Updated</th>
+			<th>Potential</th>
+			<th>Sales Orders</th>
 			<th>Owner</th>
 		</tr>
 	</thead>
-	<tbody>
-		<% @opportunities.each do |o| %>
+	<% @opportunities.each do |o| %>
+	<tbody class="expand_on_hover">
 		<tr>
-			<td><%= o.xnumber %> - <%= link_to o.safe_title, opportunity_url(o), {:target=>'_blank'} %></td>
 			<td>
-				<%= o.sales_customer.present? ? link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) : o.customer_name %>
-				<% if o.amount %>
-					<%= cm o.amount, :rounded_dollars %>
+				<%= o.xnumber %> - <%= link_to limit_string(o.safe_title, 32), opportunity_url(o), {:target=>'_blank', :title => o.safe_title} %><br />
+				<% if o.sales_customer.present? %>
+					<%= link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) %>
+				<% else %>
+					<%= limit_string o.customer_name, 24 %>
 				<% end %>
 			</td>
 			<td>
@@ -62,55 +56,61 @@ $(function() {
 					<% if sales_territory.sales_rep_name.present? %>
 						<br /><%= sales_territory.sales_rep_name %>
 					<% end %>
+				<% else %>
+					<span class="subtle">No territory</span>
 				<% end %>
 			</td>
-			<td><%= o.product %></td>
-			<td><%= o.status.name %></td>
-			<% if show_won %>
-			<td><%= cm o.amount, :rounded_dollars %></td>
-			<% end %>
-			<% if show_hold %>
 			<td>
- 				<%= o.wakeup.try(:to_s,:number_date) %>
+				<% if o.product.present? %>
+				<%= o.product %>
+				<% else %>
+				<span class="subtle">No product</span>
+				<% end %>
 			</td>
-			<% end %>
-			<td><span class="nowrap"><%= format_variable_time o.updated_at %></span></td>
+			<td>
+				<% if o.amount %>
+					<%= cm o.amount, :rounded_dollars %>
+				<% else %>
+					<span class="subtle">No value</span>
+				<% end %>
+			</td>
+			<td>
+				<% if o.total_sales_orders > 0 %>
+					<%= cm o.total_sales_orders, :rounded_dollars %>
+				<% else %>
+					<span class="subtle">No sales orders</span>
+				<% end %>
+			</td>
 			<td><%= o.owner.try(:first_name) %></td>
 		</tr>
-		<% if o.last_comment.try(:ticket?) %>
-		<tr class="<%= o.last_comment.lighthouse_closed ? 'lighthouse_ticket_closed' : '' %>">
-			<td>
-				Status: <%= o.last_comment.lighthouse_status %><br />
-				Assigned: <%= o.last_comment.lighthouse_last_assigned_user_name %>
-			</td>
-			<td colspan="<%= lighthouse_comment_columns %>">
-				<div class="expand_on_hover"><%= raw o.last_comment.lighthouse_last_comment %></div>
-			</td>
-		</tr>
-		<% elsif o.last_quote or (o.last_comment and (o.last_comment.comment.present? or o.last_comment.comment_type.sales_order?)) %>
 		<tr>
-			<% if o.last_comment %>
-			<td>
-				<%= render 'sales/opportunity_comments/show_header', :comment => o.last_comment %>
-			</td>
-			<% end %>
-			<td colspan="<%= lighthouse_comment_columns %>">
-				<div class="expand_on_hover">
-					<%= render ('sales/opportunity_comments/show_body', :comment => o.last_comment)if o.last_comment %>
-					<% if o.last_quote %>
-					<div class="opportunity_quote">
-						<%= render 'sales/quotes/summary', :quote => o.last_quote %>
+			<td colspan="<%= lighthouse_comment_columns + 1%>" class="nopad">
+				<div class="hide_until_hover">
+					<div class="one_of_two">
+						<%= render 'sales/opportunities/sales_order_summary', :opportunity => o %>
+						<% if o.last_comment %>
+							<% if o.last_comment.comment_type.try(:ticket?) %>
+							<div class="opportunity_ticket <%= o.last_comment.lighthouse_ticket.try(:closed) ? 'lighthouse_ticket_closed' : '' %>">
+								<%= render 'sales/opportunity_comments/show_ticket', :comment => o.last_comment %>
+							</div>
+							<% elsif o.last_comment.comment_type.comment? or o.last_comment.comment_type.lost? or o.last_comment.comment_type.sales_order? %>
+							<div class="opportunity_comment">
+								<%= render 'sales/opportunity_comments/show_header', :comment => o.last_comment %>
+								<%= render 'sales/opportunity_comments/show_body', :comment => o.last_comment %>
+							</div>
+							<% end %>
+						<% end %>
+					</div>
+					<% if o.last_quote.try(:quote) %>
+					<div class="one_of_two">
+						<%= render 'sales/quotes/summary', :quote => o.last_quote.quote %>
 					</div>
 					<% end %>
 				</div>
 			</td>
 		</tr>
-		<% end %>
-		<tr class="opportunity_spacer">
-			<td colspan="<%= lighthouse_comment_columns + 1 %>"></td>
-		</tr>
-		<% end %>
 	</tbody>
+	<% end %>
 </table>			
 <%= will_paginate @opportunities %>
 <% end %>

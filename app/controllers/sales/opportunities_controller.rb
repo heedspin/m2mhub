@@ -26,7 +26,7 @@ class Sales::OpportunitiesController < M2mhubController
       s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
       s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
       s = s.owner(@search.owner_id) if @search.owner_id
-      @opportunities = s.by_last_update_desc.paginate(:page => params[:page], :per_page => 50)
+      @opportunities = s.by_amount_desc.paginate(:page => params[:page], :per_page => 50)
     end
     respond_to do |format|
       format.html do 

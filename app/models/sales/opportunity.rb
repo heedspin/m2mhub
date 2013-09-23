@@ -45,12 +45,20 @@ class Sales::Opportunity < M2mhub::Base
   # Do not require customer name.  Web hits may not have them.
   # validates_presence_of :customer_name
 
-  def last_quote
-    if @last_quote_initialized.nil?
-      @last_quote_initialized = true
-      @last_quote = self.comments.by_created.quotes.last.try(:quote)
-    end
-    @last_quote
+  %w(quote sample_order tooling_order production_order).each do |key|
+    self.class_eval <<-RUBY
+      def last_#{key}
+        if @last_#{key}_initialized.nil?
+          @last_#{key}_initialized = true
+          @last_#{key} = self.comments.by_created.#{key}s.last
+        end
+        @last_#{key}
+      end
+    RUBY
+  end
+
+  def total_sales_orders
+    @total_sales_orders ||= self.comments.by_created.sales_orders.all.map(&:sales_order).compact.sum { |so| so.total_price || 0 }
   end
 
   attr_accessor :delete_permanently
@@ -89,6 +97,7 @@ class Sales::Opportunity < M2mhub::Base
   scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
   scope :by_customer_name, :order => :customer_name
   scope :by_last_update_desc, :order => 'sales_opportunities.updated_at desc'
+  scope :by_amount_desc, :order => 'sales_opportunities.amount desc'
   scope :customer_name_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {
@@ -323,7 +332,12 @@ class Sales::Opportunity < M2mhub::Base
       xls_field('Sales Territory') { |o| o.sales_customer.try(:sales_territory).try(:name) }
       xls_field('Sales Company') { |o| o.sales_customer.try(:sales_territory).try(:sales_rep_name) }
       xls_field('Sales Person') { |o| o.sales_person_name }
-      xls_field('Quotes') { |o| o.quotes.map(&:quote_number).join(', ') }
+      xls_field('Quote', xls_date_format) { |o| o.comments.by_created.all.detect { |c| c.comment_type.quote? }.try(:created_at) }
+      xls_field('Sample Order', xls_date_format) { |o| o.comments.by_created.all.reverse.detect { |c| c.comment_type.sales_order? && c.win_type.try(:sample_order?) }.try(:created_at) }
+      xls_field('Tooling Order', xls_date_format) { |o| o.comments.by_created.all.reverse.detect { |c| c.comment_type.sales_order? && c.win_type.try(:tooling_order?) }.try(:created_at) }
+      xls_field('Production Order', xls_date_format) { |o| o.comments.by_created.all.reverse.detect { |c| c.comment_type.sales_order? && c.win_type.try(:production_order?) }.try(:created_at) }
+      xls_field('Last Update', xls_date_format) { |o| o.comments.by_created.all.last.try(:created_at) }
+      xls_field('Last Comment') { |o| o.comments.by_created.all.reverse.detect { |c| c.comment.present? }.try(:comment) }
     end
 
     def all_data

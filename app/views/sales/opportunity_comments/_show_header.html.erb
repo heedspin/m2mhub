@@ -1,8 +1,9 @@
 <p>
-	<strong><%= comment.creator.try(:full_name)%></strong><br />
-	<%= comment.created_at.to_s(:letter_date_time) %>
-	<% if comment.status_change? %>
-	<br />
+	<strong><%= comment.creator.try(:full_name)%></strong>:&nbsp;&nbsp;
+	<% if comment.comment_type.sales_order? %>
+	Won <%= comment.win_type.try(:name) %>
+	<% elsif comment.status_change? %>
 	<%= comment.previous_status.try(:name) %> &rarr; <%= comment.status.try(:name) %>
 	<% end %>
+	&nbsp;&nbsp;<em><%= comment.created_at.to_s(:short_human_date_time) %></em>
 </p>

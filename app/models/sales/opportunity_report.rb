@@ -18,19 +18,24 @@ class Sales::OpportunityReport
     def total_value
       @opportunities.sum { |o| o.amount || 0 }
     end
+    def total_sales_orders
+      @opportunities.sum(&:total_sales_orders)
+    end
   end
 
   class OpportunityBucket
-    attr_accessor :date, :total_quoted_opportunities, :total_value, :sources
+    attr_accessor :date, :total_quoted_opportunities, :total_value, :sources, :total_sales_orders
     def initialize(date)
       @date = date
       @total_quoted_opportunities = 0
       @total_value = 0
+      @total_sales_orders = 0
       @sources = {}
     end
     def add_opportunity(opportunity)
       @total_quoted_opportunities += 1
       @total_value += (opportunity.amount || 0)
+      @total_sales_orders += opportunity.total_sales_orders
       (@sources[opportunity.opportunity_source_id] ||= SourceBucket.new(opportunity.source)).add_opportunity(opportunity)
     end
     def sorted_sources
