@@ -123,14 +123,14 @@ class Sales::OpportunityComment < M2mhub::Base
 
   before_save :set_comment_type
   def set_comment_type
-    if self.create_lighthouse_ticket
-      self.comment_type = Sales::OpportunityCommentType.ticket
+    self.comment_type ||= if self.create_lighthouse_ticket
+      Sales::OpportunityCommentType.ticket
     elsif self.status.lost?
-      self.comment_type = Sales::OpportunityCommentType.lost
+      Sales::OpportunityCommentType.lost
     elsif self.status.won?
-      self.comment_type = Sales::OpportunityCommentType.sales_order
+      Sales::OpportunityCommentType.sales_order
     else
-      self.comment_type = Sales::OpportunityCommentType.comment
+      Sales::OpportunityCommentType.comment
     end
   end
 
