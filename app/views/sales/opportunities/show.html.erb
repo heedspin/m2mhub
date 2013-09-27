@@ -59,7 +59,7 @@ $(function() {
 			<% end %>
 
 			<% if @opportunity.sales_customer %>
-			<br /> <strong>Territory:</strong> <%= @opportunity.sales_customer.sales_territory.name_and_sales_rep %>
+			<br /> <strong>Territory:</strong> <%= @opportunity.sales_customer.try(:sales_territory).try(:name_and_sales_rep) %>
 			<% end %>
 
 			<% if @opportunity.sales_person %>
