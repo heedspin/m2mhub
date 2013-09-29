@@ -4,6 +4,7 @@ class Sales::OpportunitiesController < M2mhubController
 
   class Search < Sales::Opportunity
     attr_accessor :sales_territory_id
+    attr_accessor :win_type_search_id
   end
 
   def index
@@ -26,6 +27,7 @@ class Sales::OpportunitiesController < M2mhubController
       s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
       s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
       s = s.owner(@search.owner_id) if @search.owner_id
+      s = s.win_type_search(@search.win_type_search_id) if @search.win_type_search_id.present?
       @opportunities = s.by_amount_desc.paginate(:page => params[:page], :per_page => 20)
     end
     respond_to do |format|

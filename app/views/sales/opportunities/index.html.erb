@@ -52,7 +52,7 @@ $(function() {
 		<tr>
 			<td>
 				<%= f.inputs do %>
-					<%= f.input :xnumber, :as => :string %>
+					<%= f.input :xnumber, :as => :string, :wrapper_html => { :class => 'string6' } %>
 					<li class="flat string input optional stringish" id="sales_opportunity_customer_name_input">
 						<label class=" label" for="search_customer_name"><%= Sales::Opportunity.human_attribute_name(:customer_name) %></label>
 						<%= f.text_field :customer_name %>
@@ -60,7 +60,8 @@ $(function() {
 						<%= image_tag AppConfig.in_progress_image %>
 						</span>
 					</li>
-					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :wrapper_html => { :class => 'opportunity_search_status' }, :include_blank => false %>
+					<%= f.input :status, :collection => Sales::OpportunityStatus.all, :wrapper_html => { :class => 'opportunity_search_status' }, :include_blank => false, :label => 'State' %>
+					<%= f.input :win_type_search_id, :as => :select, :collection => Sales::OpportunityWinTypeSearch.all, :include_blank => true, :label => 'Sale' %>
 				<% end %>
 			</td>
 		</tr>

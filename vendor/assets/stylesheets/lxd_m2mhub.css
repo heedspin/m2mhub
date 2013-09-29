@@ -56,3 +56,6 @@ table.minimal tbody tr td {
   border: none;
   padding: 2px;
   }
+
+form.formtastic table.flatform fieldset > ol > li.string6 input { max-width:4em; }
+
