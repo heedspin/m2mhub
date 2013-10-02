@@ -57,6 +57,7 @@ class Quality::InspectionTask < M2mhub::Base
   attr_accessor :lighthouse_body
   attr_accessor :lighthouse_milestone_id
   attr_accessor :delete_lighthouse_ticket
+  attr_accessor :lighthouse_watchers
 
   def padded_purchase_order_number
     M2m::PurchaseOrder.pad_purchase_order_number self.purchase_order_number
@@ -157,7 +158,11 @@ class Quality::InspectionTask < M2mhub::Base
         end
       elsif self.lighthouse_project_id.present?
         self.lighthouse_milestone_id ||= self.task_type.rma_inspection? ? AppConfig.inspection_task_default_lighthouse_rma_milestone : AppConfig.inspection_task_default_lighthouse_incoming_milestone
-        self.lighthouse_watcher_create(self.lighthouse_title, self.lighthouse_body, self.lighthouse_assigned_user_id, self.lighthouse_milestone_id)
+        self.lighthouse_watcher_create(self.lighthouse_title, 
+          self.lighthouse_body, 
+          self.lighthouse_assigned_user_id, 
+          self.lighthouse_milestone_id,
+          self.lighthouse_watchers)
       else
         false
       end

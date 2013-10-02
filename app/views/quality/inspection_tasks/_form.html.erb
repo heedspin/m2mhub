@@ -1,3 +1,5 @@
+<% lighthouse_users = User.active.by_name.with_lighthouse_account %>
+
 <%= f.semantic_errors :base %>
 
 <%= f.inputs do %>
@@ -26,6 +28,7 @@
 	<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
 	<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field widestring' }%>
 	<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field widetext' } %>
+	<%= f.input :lighthouse_watchers, :as => :check_boxes, :collection => lighthouse_users.map { |u| [u.full_name, u.lighthouse_user_id] }, :label => 'Ticket Watchers', :wrapper_html => { :class => 'ticket_field' } %>
 <% end %>
 
 <% content_for :javascripts do %>
