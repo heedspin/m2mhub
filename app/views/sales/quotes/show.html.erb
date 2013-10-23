@@ -49,7 +49,7 @@
 
 <hr />
 
-<%= render 'sales/quote_items/list', :quote_items => @quote.items %>
+<%= render 'sales/quote_items/list', :quote_items => @quote.items.by_position %>
 
 <% content_for :javascripts do %>
 	<%= javascript_include_tag 'jquery.popupWindow.js' %>

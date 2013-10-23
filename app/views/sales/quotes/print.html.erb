@@ -16,7 +16,7 @@
 	<body>
 	<% pages = [[]] %>
 	<% current_page = pages.last %>
-	<% @quote.items.each do |item| %>
+	<% @quote.items.by_position.each do |item| %>
 		<% if (item.part_number.blank? and current_page.size > 0) or (current_page.size == 12) %>
 			<% current_page = [] ; pages.push(current_page) %>
 		<% end %>
