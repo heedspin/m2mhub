@@ -22,7 +22,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% quote.items.each do |item| %>
+		<% quote.items.by_position.each do |item| %>
 			<tr>
 				<td>
 					<% if item.part_number.include?('/') %>
