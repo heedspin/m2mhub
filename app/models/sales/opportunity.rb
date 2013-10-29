@@ -82,8 +82,8 @@ class Sales::Opportunity < M2mhub::Base
   def sales_customer_name
     self.sales_customer.try(:name) || self.customer_name
   end
-  def sales_rep_ane_name
-    @sales_rep_ane_name ||= [self.sales_customer.sales_territory.try(:sales_rep_name), self.sales_person_name].join(': ')
+  def sales_rep_name
+    @sales_rep_name ||= [self.sales_customer.sales_territory.try(:sales_rep_name), self.sales_person_name].join(': ')
   end
   def title_or_number
     self.title.present? ? self.title : self.xnumber
