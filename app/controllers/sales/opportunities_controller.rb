@@ -28,12 +28,14 @@ class Sales::OpportunitiesController < M2mhubController
       s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
       s = s.owner(@search.owner_id) if @search.owner_id
       s = s.win_type_search(@search.win_type_search_id) if @search.win_type_search_id.present?
-      @opportunities = s.by_amount_desc.paginate(:page => params[:page], :per_page => 20)
+      @opportunities = s.by_amount_desc
     end
     respond_to do |format|
       format.html do 
         if s.size == 1
           redirect_to opportunity_url(@opportunities.first.xnumber)
+        else
+          @opportunities = @opportunities.paginate(:page => params[:page], :per_page => 20)
         end
       end
       format.xls do
