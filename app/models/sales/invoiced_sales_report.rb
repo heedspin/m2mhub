@@ -46,7 +46,7 @@ class Sales::InvoicedSalesReport
 			@amount = t.value
       if t.is_a?(M2m::ArDistribution)
         @post_date = t.date
-        @customer_name = t.customer.company_name
+        @customer_name = t.customer.try(:company_name) || 'no name'
         d = []
         if t.ref_invoice?
 				  d.push "Invoice #{t.ref_id.to_i}"
