@@ -16,8 +16,6 @@
 <% @report.releases.each do |r| %>
 	<% current_customer = r.sales_order.customer_number %>
 	<% pagebreak = "page-break-before" if (@page_per_customer and last_customer and (last_customer != current_customer)) %>
-	<%# if last_customer and (last_customer != current_customer) %>
-	<%# end %>
 	<% last_customer = current_customer %>
 	<tbody class="<%= pagebreak %> no-inside-page-break">
 		<tr>
@@ -52,8 +50,8 @@
 		</tr>
 		<tr>
 			<td colspan="8" class="<%= sbl_shippable(r, 'bottom') %>">
-				<% if @report.include_open_jobs %>
-					<% if (jobs = M2m::Job.for_item(r.item.item).status_open.by_date_desc.all) and (jobs.size > 0) %>
+				<% unless @report.include_jobs.none? %>
+					<% if (jobs = M2m::Job.for_item(r.item.item).status(@report.include_jobs.job_status).by_date_desc.all) and (jobs.size > 0) %>
 						<%= render 'items/jobs/list.html.erb', :jobs => jobs, :mini_format => true %>
 					<% end %>
 				<% else %>
@@ -72,7 +70,7 @@
 				<% end %>
 			</td>
 		</tr>
-		<% unless @report.include_open_jobs and @printing %>
+		<% unless @printing and !@report.include_jobs.none? %>
 		<tr class="spacer"><td></td></tr>
 		<% end %>
 	</tbody>

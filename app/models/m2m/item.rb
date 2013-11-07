@@ -203,6 +203,7 @@ class M2m::Item < M2m::Base
   alias_attribute :standard_memo, :fstdmemo
   alias_attribute :price, :fprice
   alias_attribute :inspection_required, :finspect
+  alias_attribute :drawing_number, :fdrawno
   
   def product_class
     M2m::ProductClass.product_class_key(self.product_class_key).first

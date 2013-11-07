@@ -27,6 +27,8 @@ $(function() {
 </script>
 <% end %>
 
+<%= render 'submenu' %>
+
 <%= semantic_form_for @search, :as => :search, :url => m2m_customers_path, :html => {:method => :get} do |f| %>
 <table class="flatform">
 	<tbody>

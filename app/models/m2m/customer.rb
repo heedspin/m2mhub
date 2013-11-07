@@ -87,7 +87,6 @@ class M2m::Customer < M2m::Base
   has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
   has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
-  has_one :sales_customer, :class_name => 'Sales::Customer', :foreign_key => 'erp_customer_id', :primary_key => 'identity_column'
 
   alias_attribute :notes, :fmnotes
   alias_attribute :last_name, :fcontact

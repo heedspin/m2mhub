@@ -32,6 +32,8 @@ en:
         sales_order_numbers: Sales Order Numbers
         backlog_group_id: Backlog Group
         sort_order_id: Sort Order
+        include_jobs: Include Jobs
+        page_per_customer: Page Per Customer
       m2m/customer:
         fcompany: Company Name
       sales/customer:
