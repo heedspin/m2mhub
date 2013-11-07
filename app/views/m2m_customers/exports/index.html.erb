@@ -1,0 +1,10 @@
+<%= render 'm2m_customers/submenu' %>
+
+<h2><%= AppConfig.short_name %> Customer Exports</h2>
+<p>This exports all customers.  It's slow.  Wait it out!</p>
+
+<%= semantic_form_for @m2m_customer_export, :as => 'm2m_customer_export', :url => m2m_customer_exports_url(:format => 'xls'), :html => {:method => :get} do |f| %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Export XLS' %>
+	<% end %>
+<% end %>

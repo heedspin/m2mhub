@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     resources :invoiced_sales_reports, :controller => 'm2m_customers/invoiced_sales_reports'
     resources :sales_backlog_reports, :controller => 'm2m_customers/sales_backlog_reports'
   end
+  resources :m2m_customer_exports, :controller => 'm2m_customers/exports', :only => :index
   resources :sales_territories, :controller => 'sales/territories'
   resources :parent_companies, :controller => 'sales/parent_companies'
   resources :sales_backlog_reports, :only => [:index, :show], :controller => 'sales/backlog_reports'
