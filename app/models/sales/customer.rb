@@ -61,6 +61,9 @@ class Sales::Customer < M2mhub::Base
     lead_level = Sales::LeadLevel::Search.find(lead_level) if (lead_level.is_a?(Fixnum) || lead_level.is_a?(String))
     where(['lead_level_id in (?)', lead_level.lead_level_ids])
   }
+  def self.for_m2m_customer(m2m_customer)
+    where :erp_customer_id => m2m_customer.id
+  end
   
   before_save :set_erp_customer
   def set_erp_customer
