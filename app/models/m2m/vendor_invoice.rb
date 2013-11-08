@@ -2,7 +2,7 @@
 #
 # Table name: apmast
 #
-#  fcinvoice        :string(20)       default(""), not null, primary key
+#  fcinvoice        :string(20)       default(""), not null
 #  fvendno          :string(6)        default(""), not null
 #  fccompany        :string(35)       default(""), not null
 #  fnamount         :decimal(, )      default(0.0), not null
@@ -68,18 +68,19 @@
 #  flpremcv         :boolean          default(FALSE), not null
 #  fdtaxpoint       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
 #  timestamp_column :binary
-#  identity_column  :integer          not null
+#  identity_column  :integer          not null, primary key
 #  fmnotes          :text             default(""), not null
 #  fmstreet         :text             default(""), not null
 #
 
 class M2m::VendorInvoice < M2m::Base
-  self.table_name = 'apmast'
-  self.primary_key = 'fcinvoice'
-    
+  self.table_name = 'apmast'    
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
+
   alias_attribute :pay_date, :flpaydate
   alias_attribute :vendor_number, :fvendno
   alias_attribute :invoice_number, :fcinvoice
+  alias_attribute :amount, :fnamount
   
   scope :invoice_number, lambda { |num|
     {
@@ -91,6 +92,18 @@ class M2m::VendorInvoice < M2m::Base
       :conditions => { :fpono => num }
     }
   }
+  def self.invoice_dates(start_date, end_date)
+    start_date = Date.parse(start_date) if start_date.is_a?(String)
+    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    where [ 'apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date ]
+  end
+  def self.invoice_number_like(text)
+    where ['apmast.fcinvoice like ?', '%' + text + '%']
+  end
+  scope :by_date_desc, :order => 'apmast.finvdate desc'
+  def self.vendor_number(num)
+    where :fvendno => M2m::Vendor.pad_vendor_number(num)
+  end
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"
