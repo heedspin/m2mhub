@@ -3,7 +3,7 @@ class Sales::TerritoriesController < M2mhubController
 
   helper_method :sales_rep_options
   def sales_rep_options
-    M2m::Vendor.where(:fcacctnum => AppConfig.sales_rep_gl_account_number.to_s).all.sort_by(&:name)
+    M2m::Vendor.where(:fcacctnum => AppConfig.commissions_gl_account_number.to_s).all.sort_by(&:name)
   end
 
   def index
