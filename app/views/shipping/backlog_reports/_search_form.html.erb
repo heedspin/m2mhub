@@ -8,15 +8,18 @@
 		<%= f.input :fob_group_id, :as => :select, :collection => FobGroup.all %>
 	<% end %>
 	<%= f.inputs :class => 'floatyfields' do %>
-		<%= f.input :backlog_group_id, :as => :select, :collection => BacklogGroup.all %>
-		<%= f.input :sort_order_id, :as => :select, :collection => Shipping::BacklogSortOrder.all, :include_blank => false %>
-	<% end %>
-	<%= f.inputs :class => 'floatyfields' do %>
-		<%= f.input :include_jobs_id, :as => :select, :collection => Shipping::IncludeJobs.all, :include_blank => false %>
+	  <%= f.input :sales_order_numbers %>
 		<%= f.input :page_per_customer, :as => :boolean %>
+		<%#= f.input :backlog_group_id, :as => :select, :collection => BacklogGroup.all %>
+		<%#= f.input :sort_order_id, :as => :select, :collection => Shipping::BacklogSortOrder.all, :include_blank => false %>
 	<% end %>
+	<%#= f.inputs :class => 'floatyfields' do %>
+		<%#= f.input :include_jobs_id, :as => :select, :collection => Shipping::IncludeJobs.all, :include_blank => false %>
+	<%# end %>
 	<%= f.actions :class => 'floatyfields buttons' do %>
 	  <%= f.action :submit, :label => 'View' %>
 		<%= f.action :submit, :label => 'Print' %>
 	<% end %>
 <% end %>
+
+<%= set_focus('#search_due_date') %>
