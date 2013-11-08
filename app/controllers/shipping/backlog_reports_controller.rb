@@ -3,7 +3,7 @@ class Shipping::BacklogReportsController < M2mhubController
 
   def index
     @report = Shipping::BacklogReport.new(params[:search])
-    @report.due_date = Date.current.next_week unless @report.due_date.present?
+    @report.due_date = Date.current.next_week unless (@report.due_date.present? or params.member?(:search))
     @report.sort_order_id ||= Shipping::BacklogSortOrder.customer_so_pn.id
     @report.include_jobs ||= Shipping::IncludeJobs.none
     @report.run if params.member?(:search)

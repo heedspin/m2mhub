@@ -32,11 +32,9 @@ class Shipping::BacklogReport
     @releases = M2m::SalesOrderRelease.filtered.status_open.not_filled
     if self.sales_order_numbers.present? and (so_numbers = self.sales_order_numbers.split(/[ ,]/).compact) and (so_numbers.size > 0)
       @releases = @releases.sales_order_numbers(so_numbers)
-    else
-      # Ignore due date if SO# present.
-      @releases = @releases.due_by(self.due_date) if self.due_date.present?
-      @releases = @releases.due_after(self.due_after) if self.due_after.present? 
     end
+    @releases = @releases.due_by(self.due_date) if self.due_date.present?
+    @releases = @releases.due_after(self.due_after) if self.due_after.present? 
     @releases = @releases.includes(:sales_order => :customer).order(self.sort_order.order_sql).to_a
     sales_order_items = M2m::SalesOrderItem.for_releases(@releases).to_a
     M2m::SalesOrderItem.attach_to_releases_for_backlog(@releases, sales_order_items)
