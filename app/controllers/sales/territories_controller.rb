@@ -1,6 +1,11 @@
 class Sales::TerritoriesController < M2mhubController
   filter_access_to_defaults
 
+  helper_method :sales_rep_options
+  def sales_rep_options
+    M2m::Vendor.where(:fcacctnum => AppConfig.sales_rep_gl_account_number.to_s).all.sort_by(&:name)
+  end
+
   def index
     @territories = Sales::Territory.by_name.all
   end

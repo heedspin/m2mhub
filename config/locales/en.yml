@@ -93,4 +93,6 @@ en:
         customer_part_number: Customer P/N
         part_number: Part Number
         expected_cost: Cost
-        
+      sales/territory:
+        erp_vendor_id: Sales Rep Name
+

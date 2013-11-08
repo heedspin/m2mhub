@@ -8,11 +8,17 @@
 #  description    :text
 #  created_at     :datetime
 #  updated_at     :datetime
+#  erp_vendor_id  :string(255)
 #
 
 class Sales::Territory < M2mhub::Base
   self.table_name = 'sales_territories'
   scope :by_name, :order => 'name'
+  belongs_to :vendor, :class_name => M2m::Vendor, :foreign_key => 'erp_vendor_id', :primary_key => 'fvendno'
+
+  def sales_rep_name
+    self.vendor.try(:name)
+  end
   
   def self.by_sales_rep_or_name
     all.sort_by { |t| [t.sales_rep_name.present? ? t.sales_rep_name : 'ZZZZZZZZZZZZZZZZZZ', t.name ] }
