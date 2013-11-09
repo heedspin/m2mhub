@@ -170,6 +170,10 @@ class Sales::Opportunity < M2mhub::Base
     end
   end
 
+  def all_referenced_part_numbers
+    (self.comments.quotes.all.map { |c| c.quote.items.all.map(&:part_number) }.flatten + self.part_numbers).uniq.sort
+  end
+
   def displays
     @displays ||= self.part_numbers.map { |pn| Doogle::Display.find_by_model_number(pn) }.compact
   end

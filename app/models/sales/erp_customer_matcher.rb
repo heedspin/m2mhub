@@ -26,7 +26,7 @@ class Sales::ErpCustomerMatcher
 		    	end
 	    		log "#{prefix}#{sales_customer.name} <= (#{match.weight}) #{erp_customer.customer_number} #{erp_customer.company_name.strip}"
 		    else
-		    	log "No match for sales customer #{sales_customer.name}"
+		    	# log "No match for sales customer #{sales_customer.name}"
 			  end
 			end
 		end
