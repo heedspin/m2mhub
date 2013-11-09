@@ -24,6 +24,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'active_hash', '~> 1.0.0'
   s.add_dependency 'spreadsheet', '0.8.4'
   s.add_dependency 'addressable', '2.2.6'
-  s.add_dependency 'amatch', '0.2.10'
+  s.add_dependency 'amatch', '0.2.11'
   s.add_dependency 'hominid', '3.0.4'
 end
