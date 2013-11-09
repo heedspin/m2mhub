@@ -274,6 +274,10 @@ class M2m::Customer < M2m::Base
     end
   end
 
+  def self.pad_customer_number(txt)
+    "%06d" % txt.to_i
+  end
+
 end
 
 
