@@ -26,6 +26,8 @@ class M2m::SalesPerson < M2m::Base
   self.table_name = 'slspns'
   
   alias_attribute :commission_percentage, :fsalcompct
+  alias_attribute :vendor_number, :fvendno
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => 'fvendno', :primary_key => 'fvendno'
   
   scope :by_name, :order => :flastname
   
