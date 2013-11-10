@@ -84,8 +84,9 @@ class Sales::CommissionReport
                                  :revision => invoice_item.revision,
                                  :invoice => invoice_item.invoice,
                                  :sales_order => invoice_item.sales_order )
-      rates.each do |name, percentage, reason|
-        result.push CommissionData.new(invoice_item, name, percentage, reason)
+      rates.each do |sales_person, percentage, reason|
+        sales_person_name = sales_person.is_a?(M2m::SalesPerson) ? sales_person.name : sales_person
+        result.push CommissionData.new(invoice_item, sales_person_name, percentage, reason)
       end
     end
     result

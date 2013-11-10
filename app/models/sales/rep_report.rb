@@ -23,7 +23,7 @@ class Sales::RepReport
   end
 
   class RepRow
-    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders, :commissions
+    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders, :commissions, :invoiced
     def initialize(vendor, date)
       @vendor = vendor || (raise "vendor required")
       @date = date || (raise "date required")
@@ -33,6 +33,7 @@ class Sales::RepReport
       @tooling_orders = []
       @production_orders = []
       @commissions = 0.0
+      @invoiced = 0.0
     end
     def vendor_name
       @vendor.is_a?(String) ? @vendor : @vendor.name
@@ -49,6 +50,9 @@ class Sales::RepReport
     def vendor_number
       @vendor.is_a?(M2m::Vendor) ? @vendor.vendor_number : nil
     end
+    def total_sales_orders
+      @opportunities.sum(&:total_sales_orders)
+    end
   end
 
   def rep_row(vendor, date)
@@ -61,17 +65,35 @@ class Sales::RepReport
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').count
   # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| "fdtaxpoint: #{vi.fdtaxpoint.try(:to_date)} Inv: #{vi.finvdate.try(:to_date)} #{vi.vendor.name} #{vi.invoice_number}" }.join("\n")
   def load_commissions
-    M2m::VendorInvoice.invoice_dates(self.start_date, self.end_date).invoice_number_like('Commission').each do |i|
+    M2m::VendorInvoice.invoice_dates(self.start_date.advance(:months => 1), self.end_date.advance(:months => 1)).invoice_number_like('Commission').each do |i|
       if i.date
-        rep_row(i.vendor, i.date).commissions += i.amount
+        rep_row(i.vendor, i.date.advance(:months => -1)).commissions += i.amount
       end
     end
   end
 
-  def xls_data
-    raise ':start_date required' unless self.start_date
-    raise ':end_date required' unless self.end_date
-    self.load_commissions
+  def load_invoices
+    invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
+    M2m::SalesOrder.attach_sales_orders(invoice_items)
+    finder = Sales::CommissionRateFinder.new
+    invoice_items.map do |invoice_item|
+      rates = finder.get_rates( :customer => invoice_item.customer,
+                                :part_number => invoice_item.part_number,
+                                :revision => invoice_item.revision,
+                                :invoice => invoice_item.invoice,
+                                :sales_order => invoice_item.sales_order )
+      rates.each do |sales_person, percentage, reason|
+        if sales_person.is_a?(M2m::SalesPerson) and sales_person.vendor_number.present? and sales_person.vendor
+          rep_row(sales_person.vendor, invoice_item.invoice.date).invoiced += invoice_item.amount
+        else
+          rep_row('LXD', invoice_item.invoice.date).invoiced += invoice_item.amount
+        end
+      end
+    end
+
+  end
+
+  def load_opportunities
     Sales::Opportunity.not_deleted.start_dates(self.start_date, self.end_date).each do |o|
       vendor = if o.source.nil?
         'No Opportunity Source'
@@ -101,13 +123,23 @@ class Sales::RepReport
         self.rep_row(vendor, order.created_at).production_orders.push order
       end
     end
+  end
+
+  def xls_data
+    raise ':start_date required' unless self.start_date
+    raise ':end_date required' unless self.end_date
+    self.load_commissions
+    self.load_invoices
+    self.load_opportunities
     @rep_rows.values.sort
   end
 
   def xls_initialize
     xls_field('Month', xls_date_format) { |rr| rr.date }
     xls_field('Rep Name') { |rr| rr.vendor_name }
+    xls_field('Invoiced', xls_dollar_format) { |rr| rr.invoiced }
     xls_field('Commissions', xls_dollar_format) { |rr| rr.commissions }
+    xls_field('Sales Orders', xls_dollar_format) { |rr| rr.total_sales_orders }
     xls_field('Opportunities') { |rr| rr.opportunities.size }
     xls_field('Quotes') { |rr| rr.quotes.size }
     xls_field('Sample Orders') { |rr| rr.sample_orders.size }
