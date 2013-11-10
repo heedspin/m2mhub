@@ -77,16 +77,18 @@ class M2m::VendorInvoice < M2m::Base
   self.table_name = 'apmast'    
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
 
-  alias_attribute :pay_date, :flpaydate
   alias_attribute :vendor_number, :fvendno
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :amount, :fnamount
+
+  alias_attribute :pay_date, :flpaydate
+  def pay_date
+    M2m::Constants.sanitize_date(self.flpaydate)
+  end
   
-  scope :invoice_number, lambda { |num|
-    {
-      :conditions => { :fcinvoice => num }
-    }
-  }
+  def self.invoice_number(num)
+    where :fcinvoice => num
+  end
   scope :purchase_order_number, lambda { |num|
     {
       :conditions => { :fpono => num }
@@ -103,6 +105,9 @@ class M2m::VendorInvoice < M2m::Base
   scope :by_date_desc, :order => 'apmast.finvdate desc'
   def self.vendor_number(num)
     where :fvendno => M2m::Vendor.pad_vendor_number(num)
+  end
+  def self.vendor_account_number(num)
+    joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
   
   def item_invoice_key

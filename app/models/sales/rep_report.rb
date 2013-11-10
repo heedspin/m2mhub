@@ -22,32 +22,8 @@ class Sales::RepReport
     'Rep Report'
   end
 
-  def month_commissions_for_rep(vendor_number, month)
-    return nil unless vendor_number.present?
-    if @month_commissions_for_rep.nil?
-      results = M2m::VendorInvoice.connection.select_rows <<-SQL
-      select cast( cast(datepart(year, apmast.finvdate) as varchar) + '-' +
-                   cast(datepart(month, apmast.finvdate) as varchar) + '-01' as date) as month,
-             apmast.fvendno,
-             sum(apmast.fnamount) as commission_amount
-      from apmast
-      left join apvend on apvend.fvendno = apmast.fvendno
-      where apmast.finvdate >= '#{start_date.to_s(:database)}'
-        and apmast.finvdate < '#{end_date.to_s(:database)}'
-        and apvend.fcacctnum = '#{AppConfig.commissions_gl_account_number}' 
-      group by datepart(month, apmast.finvdate), datepart(year, apmast.finvdate), apmast.fvendno
-      order by apmast.fvendno, month
-      SQL
-      @month_commissions_for_rep = {}
-      results.each do |month, vendor_number, commission_amount|
-        @month_commissions_for_rep[[Date.parse(month), vendor_number]] = commission_amount
-      end
-    end
-    @month_commissions_for_rep[[month, vendor_number]]
-  end
-
   class RepRow
-    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders
+    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders, :commissions
     def initialize(vendor, date)
       @vendor = vendor || (raise "vendor required")
       @date = date || (raise "date required")
@@ -56,6 +32,7 @@ class Sales::RepReport
       @sample_orders = []
       @tooling_orders = []
       @production_orders = []
+      @commissions = 0.0
     end
     def vendor_name
       @vendor.is_a?(String) ? @vendor : @vendor.name
@@ -75,14 +52,26 @@ class Sales::RepReport
   end
 
   def rep_row(vendor, date)
+    @rep_rows ||= {}
     month = date.to_date.beginning_of_month
     @rep_rows[[vendor, month]] ||= RepRow.new(vendor, month)
+  end
+
+  # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').vendor_account_number(AppConfig.commissions_gl_account_number).count
+  # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').count
+  # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| [vi.pay_date.to_date.beginning_of_month, vi.vendor.name, vi.amount].join(' ') }.join("\n")
+  def load_commissions
+    M2m::VendorInvoice.invoice_dates(self.start_date, self.end_date).invoice_number_like('Commission').each do |i|
+      if i.pay_date
+        rep_row(i.vendor, i.pay_date).commissions += i.amount
+      end
+    end
   end
 
   def xls_data
     raise ':start_date required' unless self.start_date
     raise ':end_date required' unless self.end_date
-    @rep_rows = {}
+    self.load_commissions
     Sales::Opportunity.not_deleted.start_dates(self.start_date, self.end_date).each do |o|
       vendor = if o.source.nil?
         'No Opportunity Source'
@@ -118,7 +107,7 @@ class Sales::RepReport
   def xls_initialize
     xls_field('Month', xls_date_format) { |rr| rr.date }
     xls_field('Rep Name') { |rr| rr.vendor_name }
-    xls_field('Commissions', xls_dollar_format) { |rr| self.month_commissions_for_rep(rr.vendor_number, rr.date) }
+    xls_field('Commissions', xls_dollar_format) { |rr| rr.commissions }
     xls_field('Opportunities') { |rr| rr.opportunities.size }
     xls_field('Quotes') { |rr| rr.quotes.size }
     xls_field('Sample Orders') { |rr| rr.sample_orders.size }
