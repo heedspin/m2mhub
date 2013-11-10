@@ -59,11 +59,11 @@ class Sales::RepReport
 
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').vendor_account_number(AppConfig.commissions_gl_account_number).count
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').count
-  # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| [vi.pay_date.to_date.beginning_of_month, vi.vendor.name, vi.amount].join(' ') }.join("\n")
+  # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| "fdtaxpoint: #{vi.fdtaxpoint.try(:to_date)} Inv: #{vi.finvdate.try(:to_date)} #{vi.vendor.name} #{vi.invoice_number}" }.join("\n")
   def load_commissions
     M2m::VendorInvoice.invoice_dates(self.start_date, self.end_date).invoice_number_like('Commission').each do |i|
-      if i.pay_date
-        rep_row(i.vendor, i.pay_date).commissions += i.amount
+      if i.date
+        rep_row(i.vendor, i.date).commissions += i.amount
       end
     end
   end

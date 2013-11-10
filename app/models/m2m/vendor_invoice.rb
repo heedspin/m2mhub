@@ -85,6 +85,11 @@ class M2m::VendorInvoice < M2m::Base
   def pay_date
     M2m::Constants.sanitize_date(self.flpaydate)
   end
+
+  alias_attribute :date, :finvdate
+  def date
+    M2m::Constants.sanitize_date(self.finvdate)
+  end
   
   def self.invoice_number(num)
     where :fcinvoice => num
