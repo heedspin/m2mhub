@@ -93,6 +93,7 @@ class M2m::SalesOrder < M2m::Base
   has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono
   has_one :customer, :class_name => 'M2m::Customer', :foreign_key => :fcustno, :primary_key => :fcustno
   has_many :invoices, :class_name => 'M2m::Invoice', :foreign_key => :fsono, :primary_key => :fsono
+  belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => :fsoldby, :primary_key => :fsalespn
   
   scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
@@ -153,7 +154,7 @@ class M2m::SalesOrder < M2m::Base
   alias_attribute :prepayment_required, :flprofrqd
   alias_attribute :customer_number, :fcustno
   alias_attribute :commission_percentage, :fsalcompct
-  alias_attribute :sales_person, :fsoldby
+  alias_attribute :sales_person_key, :fsoldby
   
   def customer_name
     M2m::Customer.customer_name(self.fcompany)
