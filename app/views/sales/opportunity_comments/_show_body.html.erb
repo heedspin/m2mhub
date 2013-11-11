@@ -6,6 +6,6 @@
 </p>
 <% elsif comment.status.lost? %>
 <p>
-	<strong>Loss Reason: <%= comment.loss_reason.name %></strong>
+	<strong>Loss Reason: <%= comment.loss_reason.try(:name) %></strong>
 </p>
 <% end %>
