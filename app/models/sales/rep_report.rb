@@ -45,7 +45,7 @@ class Sales::RepReport
       [self.date, self.sorted_vendor_name] <=> [rhs.date, rhs.sorted_vendor_name]
     end
     def is_error_bucket?
-      @vendor.is_a?(String) && (@vendor != 'LXD')
+      @vendor.is_a?(String) && (@vendor != AppConfig.short_name)
     end
     def vendor_number
       @vendor.is_a?(M2m::Vendor) ? @vendor.vendor_number : nil
@@ -63,11 +63,16 @@ class Sales::RepReport
 
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').vendor_account_number(AppConfig.commissions_gl_account_number).count
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').count
-  # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| "fdtaxpoint: #{vi.fdtaxpoint.try(:to_date)} Inv: #{vi.finvdate.try(:to_date)} #{vi.vendor.name} #{vi.invoice_number}" }.join("\n")
+  # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| "#{vi.finvdate.try(:to_date)} #{vi.vendor_number} - #{vi.vendor.name} #{vi.invoice_number}" }.join("\n")
   def load_commissions
     M2m::VendorInvoice.invoice_dates(self.start_date.advance(:months => 1), self.end_date.advance(:months => 1)).invoice_number_like('Commission').each do |i|
       if i.date
-        rep_row(i.vendor, i.date.advance(:months => -1)).commissions += i.amount
+        vendor = if AppConfig.lxd_house_vendors.include?(i.vendor_number)
+          AppConfig.short_name
+        else
+          i.vendor
+        end
+        rep_row(vendor, i.date.advance(:months => -1)).commissions += i.amount
       end
     end
   end
@@ -86,7 +91,7 @@ class Sales::RepReport
         if sales_person.is_a?(M2m::SalesPerson) and sales_person.vendor_number.present? and sales_person.vendor
           rep_row(sales_person.vendor, invoice_item.invoice.date).invoiced += invoice_item.amount
         else
-          rep_row('LXD', invoice_item.invoice.date).invoiced += invoice_item.amount
+          rep_row(AppConfig.short_name, invoice_item.invoice.date).invoiced += invoice_item.amount
         end
       end
     end
@@ -98,7 +103,7 @@ class Sales::RepReport
       vendor = if o.source.nil?
         'No Opportunity Source'
       elsif !o.source.sales_rep?
-        'LXD'
+        AppConfig.short_name
       elsif o.sales_customer.nil?
         'From Rep, No Customer'
       elsif o.sales_customer.sales_territory.nil?
