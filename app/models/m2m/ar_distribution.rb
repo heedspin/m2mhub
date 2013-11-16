@@ -51,6 +51,9 @@ class M2m::ArDistribution < M2m::Base
       :conditions => [ 'ardist.identity_column in (?)', ids ]
     }
   }
+  def self.gl_description_like(text)
+    joins(:gl_account).where(['glmast.fcdescr like ?', '%' + text + '%'])
+  end
   
   def posted?
     self.status == 'P'
@@ -71,12 +74,16 @@ class M2m::ArDistribution < M2m::Base
   def invoice
     @invoice ||= self.ref_invoice? && M2m::Invoice.invoice_number(self.ref_id).first
   end
+  def invoice_number
+    self.ref_invoice? ? self.ref_id : nil
+  end
   
-  def customer_id
+  def customer_number
     self.fccashid[1..6]
   end
+  attr_accessor :customer
   def customer
-    @customer ||= M2m::Customer.with_customer_number(self.customer_id).first
+    @customer ||= M2m::Customer.with_customer_number(self.customer_number).first
   end
   def value
     self.never_posted? ? 0 : (self.amount * self.gl_account.value_multiplier)

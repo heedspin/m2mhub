@@ -42,6 +42,8 @@ class M2mhub::Cronjobs
     Sales::Opportunity.run_wakeups
     log "Running rep report"
     Sales::RepReportRunner.new.run_report
+    log "Running invoice discrepancy report"
+    Finance::InvoiceDiscrepancyReportRunner.new.run_report
     log "Running opportunity grim reaper"
     Sales::Opportunity.run_reaper
     log "Finished nightly"

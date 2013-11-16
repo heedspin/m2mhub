@@ -72,7 +72,7 @@ class Sales::CommissionReport
     raise ':start_date required' unless self.start_date
     raise ':end_date required' unless self.end_date
 
-    @invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
+    @invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date.advance(:days => 1)).not_void.scoped(:include => [:invoice, :customer])
     M2m::Item.attach_items(@invoice_items)
     M2m::SalesOrder.attach_sales_orders(@invoice_items)
 

@@ -80,10 +80,10 @@ class Sales::InvoicedSalesReport
     revenue_journal_entries = M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
     revenue_journal_entries = revenue_journal_entries.select { |je| Sales::SalesReport.is_revenue_account?(je.post_date, je.gl_account_number) }
 
-    ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').includes(:gl_account).all
     ar_distributions = ar_distributions.select { |ar| Sales::SalesReport.is_revenue_account?(ar.date, ar.gl_account_number) }
 
-    all = ar_distributions.map { |ar| ArdistOrGlTransaction.new(ar) } + revenue_journal_entries.map { |je| ArdistOrGlTransaction.new(je) }
+    all = (ar_distributions + revenue_journal_entries).map { |t| ArdistOrGlTransaction.new(t) }
     all.sort_by(&:post_date)
   end
 end

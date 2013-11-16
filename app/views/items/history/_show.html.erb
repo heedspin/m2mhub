@@ -18,7 +18,7 @@
 				Today's On Hand:
 				<% if descrepency %>
 				<strong>
-					Discrepency! History shows <%= cm line_item.quantity_on_hand, :sales_order_quantity, 0 %>, 
+					Discrepancy! History shows <%= cm line_item.quantity_on_hand, :sales_order_quantity, 0 %>, 
 					but M2M reports <%= cm @material_availability_report.item.quantity_on_hand, :sales_order_quantity, 0 %>
 				</strong>
 				<% else %>

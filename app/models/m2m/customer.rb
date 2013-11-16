@@ -278,6 +278,23 @@ class M2m::Customer < M2m::Base
     "%06d" % txt.to_i
   end
 
+  def self.attach_customers(objects, customers=nil)
+    customers ||= M2m::Customer.with_customer_numbers(objects.map(&:customer_number).uniq)
+    customers_hash = {}
+    customers.each { |c| customers_hash[c.customer_number] = c }
+    result = []
+    objects.each do |o|
+      if found = customers_hash[o.customer_number]
+        result.push o.customer = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.customer = nil
+      end
+    end
+    result
+  end
+
+
 end
 
 

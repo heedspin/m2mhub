@@ -8,6 +8,9 @@ class Sales::RepReport
     args ||= {}
     self.start_date = args[:start_date]
     self.end_date = args[:end_date]
+    raise ':start_date required' unless self.start_date
+    raise ':end_date required' unless self.end_date
+    @revenue_sources = []
   end
 
   def start_date=(val)
@@ -18,12 +21,17 @@ class Sales::RepReport
     @end_date = val.is_a?(String) ? Date.parse(val) : val
   end
 
-  def xls_sheet_name
-    'Rep Report'
+  RevenueSource = Struct.new(:invoice_number, :item_number, :date, :amount)
+  def add_revenue_source(thing)
+    @revenue_sources.push( if thing.is_a?(M2m::InvoiceItem)
+      RevenueSource.new(thing.invoice_number, thing.item_number, thing.invoice.date, thing.amount)
+    else
+      RevenueSource.new(thing.description, nil, thing.post_date, thing.amount)
+    end )
   end
 
   class RepRow
-    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders, :commissions, :invoiced
+    attr_accessor :date, :vendor, :xnumbers, :opportunities, :quotes, :sample_orders, :tooling_orders, :production_orders, :commissions, :invoiced, :opportunity_value
     def initialize(vendor, date)
       @vendor = vendor || (raise "vendor required")
       @date = date || (raise "date required")
@@ -34,6 +42,7 @@ class Sales::RepReport
       @production_orders = []
       @commissions = 0.0
       @invoiced = 0.0
+      @opportunity_value = 0
     end
     def vendor_name
       @vendor.is_a?(String) ? @vendor : @vendor.name
@@ -53,10 +62,36 @@ class Sales::RepReport
     def total_sales_orders
       @opportunities.sum(&:total_sales_orders)
     end
+    def total_potential_value
+      self.opportunities.sum { |o| o.amount || 0 }
+    end
+    def median_potential_value
+      # http://stackoverflow.com/questions/14859120/calculating-median-in-ruby
+      sorted = self.opportunities.map(&:amount).compact.sort
+      if sorted.size == 0
+        0
+      elsif sorted.size == 1
+        sorted.first
+      else
+        len = sorted.length
+        (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+      end
+    end
+    def total_quotes
+      self.opportunities.sum { |o| o.comments.all.detect { |c| c.comment_type.quote? } ? 1 : 0 }
+    end
+    def total_sample_orders
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:sample_order?) } ? 1 : 0 }
+    end
+    def total_tooling_orders
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:tooling_order?) } ? 1 : 0 }
+    end
+    def total_production_orders
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:production_order?) } ? 1 : 0 }
+    end
   end
 
   def rep_row(vendor, date)
-    @rep_rows ||= {}
     month = date.to_date.beginning_of_month
     @rep_rows[[vendor, month]] ||= RepRow.new(vendor, month)
   end
@@ -78,10 +113,11 @@ class Sales::RepReport
   end
 
   def load_invoices
-    invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
+    invoice_items = M2m::InvoiceItem.item_types('S', 'F').where('aritem.ftotprice > 0').post_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
     M2m::SalesOrder.attach_sales_orders(invoice_items)
     finder = Sales::CommissionRateFinder.new
-    invoice_items.map do |invoice_item|
+    invoice_items.each do |invoice_item|
+      self.add_revenue_source invoice_item
       rates = finder.get_rates( :customer => invoice_item.customer,
                                 :part_number => invoice_item.part_number,
                                 :revision => invoice_item.revision,
@@ -89,27 +125,27 @@ class Sales::RepReport
                                 :sales_order => invoice_item.sales_order )
       rates.each do |sales_person, percentage, reason|
         if sales_person.is_a?(M2m::SalesPerson) and sales_person.vendor_number.present? and sales_person.vendor
-          rep_row(sales_person.vendor, invoice_item.invoice.date).invoiced += invoice_item.amount
+          rep_row(sales_person.vendor, invoice_item.invoice.gl_date).invoiced += invoice_item.amount
         else
-          rep_row(AppConfig.short_name, invoice_item.invoice.date).invoiced += invoice_item.amount
+          rep_row(AppConfig.short_name, invoice_item.invoice.gl_date).invoiced += invoice_item.amount
         end
       end
     end
-
+    true
   end
 
   def load_opportunities
-    Sales::Opportunity.not_deleted.start_dates(self.start_date, self.end_date).each do |o|
+    Sales::Opportunity.not_deleted.start_dates(self.start_date, self.end_date).includes(:comments).each do |o|
       vendor = if o.source.nil?
-        'No Opportunity Source'
+        'Error: No Opportunity Source'
       elsif !o.source.sales_rep?
         AppConfig.short_name
       elsif o.sales_customer.nil?
-        'From Rep, No Customer'
+        'Error: No Customer'
       elsif o.sales_customer.sales_territory.nil?
-        'From Rep, Customer Has No Territory'
+        'Error: Customer Has No Territory'
       elsif o.sales_customer.sales_territory.erp_vendor_id.nil? or o.sales_customer.sales_territory.vendor.nil?
-        'From Rep, Territory Has No M2M Vendor'
+        'Error: Territory Has No M2M Vendor'
       else
         o.sales_customer.sales_territory.vendor
       end
@@ -130,12 +166,28 @@ class Sales::RepReport
     end
   end
 
+  # Count journal entries and discounts against general bucket total invoiced.
+  def load_gl_exceptions
+    M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.not_adjustments.each do |je|
+      if Sales::SalesReport.is_revenue_account?(je.post_date, je.gl_account_number)
+        self.add_revenue_source Sales::InvoicedSalesReport::ArdistOrGlTransaction.new(je)
+        self.rep_row(AppConfig.short_name, je.post_date).invoiced += je.amount
+      end
+    end
+    M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').gl_description_like('Discounts').each do |ar|
+      if Sales::SalesReport.is_revenue_account?(ar.date, ar.gl_account_number)
+        self.add_revenue_source Sales::InvoicedSalesReport::ArdistOrGlTransaction.new(ar)
+        self.rep_row(AppConfig.short_name, ar.date).invoiced += ar.amount
+      end
+    end
+  end
+
   def xls_data
-    raise ':start_date required' unless self.start_date
-    raise ':end_date required' unless self.end_date
+    @rep_rows = {}
     self.load_commissions
     self.load_invoices
     self.load_opportunities
+    self.load_gl_exceptions
     @rep_rows.values.sort
   end
 
@@ -145,12 +197,23 @@ class Sales::RepReport
     xls_field('Invoiced', xls_dollar_format) { |rr| rr.invoiced }
     xls_field('Commissions', xls_dollar_format) { |rr| rr.commissions }
     xls_field('Sales Orders', xls_dollar_format) { |rr| rr.total_sales_orders }
+    xls_field('Potential Value', xls_dollar_format) { |rr| rr.total_potential_value }
+    xls_field('Median Potential', xls_dollar_format) { |rr| rr.median_potential_value }
     xls_field('Opportunities') { |rr| rr.opportunities.size }
-    xls_field('Quotes') { |rr| rr.quotes.size }
-    xls_field('Sample Orders') { |rr| rr.sample_orders.size }
-    xls_field('Tooling Orders') { |rr| rr.tooling_orders.size }
-    xls_field('Production Orders') { |rr| rr.production_orders.size }
+    xls_field('Quotes') { |rr| rr.total_quotes }
+    xls_field('Sample Orders') { |rr| rr.total_sample_orders }
+    xls_field('Tooling Orders') { |rr| rr.total_tooling_orders }
+    xls_field('Production Orders') { |rr| rr.total_production_orders }
     xls_field('X Numbers') { |rr| rr.is_error_bucket? ? rr.opportunities.map(&:xnumber).join(', ') : '' }
   end
 
+  def xls_each_sheet(&block)
+    yield('Rep Report', xls_fields, xls_data)
+    fields = []
+    fields.push(Plutolib::ToXls::Field.new('Invoice') { |rs| rs.invoice_number })
+    fields.push(Plutolib::ToXls::Field.new('Item') { |rs| rs.item_number })
+    fields.push(Plutolib::ToXls::Field.new('Date') { |rs| rs.date })
+    fields.push(Plutolib::ToXls::Field.new('Amount', xls_dollar_format) { |rs| rs.amount })
+    yield('Invoice Items', fields, @revenue_sources)
+  end
 end

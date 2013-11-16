@@ -93,14 +93,16 @@ class M2m::InvoiceItem < M2m::Base
       :conditions => [ 'armast.fcustno in (?)', customer_numbers ]
     }
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
+  def self.invoice_dates(start_date, end_date)
     start_date = Date.parse(start_date) unless start_date.is_a?(Date)
     end_date = Date.parse(end_date) unless end_date.is_a?(Date)
-    {
-      :joins => :invoice,
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
-  }
+    joins(:invoice).where(['armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date])
+  end
+  def self.post_dates(start_date, end_date)
+    start_date = Date.parse(start_date) unless start_date.is_a?(Date)
+    end_date = Date.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['armast.fdgldate >= ? and armast.fdgldate < ?', start_date, end_date])
+  end
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, :joins => :invoice, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
   scope :gl_category, lambda { |code|
@@ -109,6 +111,10 @@ class M2m::InvoiceItem < M2m::Base
       :conditions => { :glmast => { :fccode => code } }
     }
   }
+  # S - Sales, F - Freight, P - Proforma
+  def self.item_types(*types)
+    where 'aritem.fctype in (?)', types
+  end
 
   def invoice_number
     self.fcinvoice.strip
