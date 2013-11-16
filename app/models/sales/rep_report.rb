@@ -77,13 +77,13 @@ class Sales::RepReport
       self.opportunities.sum { |o| o.comments.all.detect { |c| c.comment_type.quote? } ? 1 : 0 }
     end
     def total_sample_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:sample_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:sample_order?) } ? 1 : 0 }
     end
     def total_tooling_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:tooling_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:tooling_order?) } ? 1 : 0 }
     end
     def total_production_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? and c.win_type.try(:production_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:production_order?) } ? 1 : 0 }
     end
   end
 
@@ -192,11 +192,11 @@ class Sales::RepReport
   def xls_initialize
     xls_field('Month', xls_date_format) { |rr| rr.date }
     xls_field('Rep Name') { |rr| rr.vendor_name }
-    xls_field('Territory Income', xls_dollar_format) { |rr| rr.invoiced }
-    xls_field('Commissions', xls_dollar_format) { |rr| rr.commissions }
-    xls_field('Rep Revenue', xls_dollar_format) { |rr| rr.total_sales_orders }
-    xls_field('Opportunity Value', xls_dollar_format) { |rr| rr.total_potential_value }
-    xls_field('Median Opportunity Value', xls_dollar_format) { |rr| rr.median_potential_value }
+    xls_field('Territory Income', xls_rounded_dollar_format) { |rr| rr.invoiced }
+    xls_field('Commissions', xls_rounded_dollar_format) { |rr| rr.commissions }
+    xls_field('Rep Revenue', xls_rounded_dollar_format) { |rr| rr.total_sales_orders }
+    xls_field('Opportunity Value', xls_rounded_dollar_format) { |rr| rr.total_potential_value }
+    xls_field('Median Opportunity Value', xls_rounded_dollar_format) { |rr| rr.median_potential_value }
     xls_field('Opportunities') { |rr| rr.opportunities.size }
     xls_field('Quotes') { |rr| rr.total_quotes }
     xls_field('Sample Orders') { |rr| rr.total_sample_orders }
