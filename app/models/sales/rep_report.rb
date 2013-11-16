@@ -74,16 +74,16 @@ class Sales::RepReport
       end
     end
     def total_quotes
-      self.opportunities.sum { |o| o.comments.all.detect { |c| c.comment_type.quote? } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.quote? }.size }
     end
     def total_sample_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:sample_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:sample_order?) }.size }
     end
     def total_tooling_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:tooling_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:tooling_order?) }.size }
     end
     def total_production_orders
-      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:production_order?) } ? 1 : 0 }
+      self.opportunities.sum { |o| o.comments.all.select { |c| c.comment_type.sales_order? && c.win_type.try(:production_order?) }.size }
     end
   end
 
