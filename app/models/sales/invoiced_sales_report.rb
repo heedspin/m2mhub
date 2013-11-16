@@ -77,7 +77,7 @@ class Sales::InvoicedSalesReport
   def all_data
     end_date = self.end_date.advance(:days => 1)
 
-    revenue_journal_entries = M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.not_adjustments.includes(:gl_account).all
     revenue_journal_entries = revenue_journal_entries.select { |je| Sales::SalesReport.is_revenue_account?(je.post_date, je.gl_account_number) }
 
     ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').includes(:gl_account).all

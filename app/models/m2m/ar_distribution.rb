@@ -71,6 +71,7 @@ class M2m::ArDistribution < M2m::Base
   def ref_invoice?
     self.ref_key.strip == 'INV'
   end
+  attr_accessor :invoice
   def invoice
     @invoice ||= self.ref_invoice? && M2m::Invoice.invoice_number(self.ref_id).first
   end

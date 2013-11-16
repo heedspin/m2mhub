@@ -126,6 +126,9 @@ class M2m::Invoice < M2m::Base
       :conditions => { :fcinvoice => n }
     }
   }
+  def self.invoice_numbers(numbers)
+    where ['armast.fcinvoice in (?)', numbers]
+  end
   def self.part_number_like(part_number)
     joins(:items).where(['aritem.fpartno like ?', '%' + part_number + '%'])
   end
@@ -171,5 +174,22 @@ class M2m::Invoice < M2m::Base
   def customer_name
     M2m::Customer.customer_name(self.fbcompany)
   end
+
+  def self.attach_invoices(objects, invoices=nil)
+    invoices ||= M2m::Invoice.invoice_numbers(objects.map(&:invoice_number).uniq)
+    invoice_hash = {}
+    invoices.each { |i| invoice_hash[i.invoice_number] = i }
+    result = []
+    objects.each do |o|
+      if found = invoice_hash[o.invoice_number]
+        result.push o.invoice = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.invoice = nil
+      end
+    end
+    result
+  end
+
 
 end

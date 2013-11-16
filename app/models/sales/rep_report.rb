@@ -23,11 +23,7 @@ class Sales::RepReport
 
   RevenueSource = Struct.new(:invoice_number, :item_number, :date, :amount)
   def add_revenue_source(thing)
-    @revenue_sources.push( if thing.is_a?(M2m::InvoiceItem)
-      RevenueSource.new(thing.invoice_number, thing.item_number, thing.invoice.date, thing.amount)
-    else
-      RevenueSource.new(thing.description, nil, thing.post_date, thing.amount)
-    end )
+    @revenue_sources.push RevenueSource.new(thing.description, nil, thing.post_date, thing.amount)
   end
 
   class RepRow
@@ -166,39 +162,41 @@ class Sales::RepReport
     end
   end
 
-  # Count journal entries and discounts against general bucket total invoiced.
-  def load_gl_exceptions
+  def load_gl
     M2m::GlTransaction.post_dates(self.start_date, end_date).journal_entries.gl_category('R').not_balance_entries.not_adjustments.each do |je|
       if Sales::SalesReport.is_revenue_account?(je.post_date, je.gl_account_number)
         self.add_revenue_source Sales::InvoicedSalesReport::ArdistOrGlTransaction.new(je)
-        self.rep_row(AppConfig.short_name, je.post_date).invoiced += je.amount
+        self.rep_row(AppConfig.short_name, je.post_date).invoiced += je.value
       end
     end
-    M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').gl_description_like('Discounts').each do |ar|
+    ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').includes(:gl_account).all
+    M2m::Customer.attach_customers(ar_distributions)
+    M2m::Invoice.attach_invoices(ar_distributions)
+    ar_distributions.each do |ar|
       if Sales::SalesReport.is_revenue_account?(ar.date, ar.gl_account_number)
         self.add_revenue_source Sales::InvoicedSalesReport::ArdistOrGlTransaction.new(ar)
-        self.rep_row(AppConfig.short_name, ar.date).invoiced += ar.amount
+        vendor = ar.customer.try(:sales_person).try(:vendor) || AppConfig.short_name
+        self.rep_row(vendor, ar.date).invoiced += ar.value
       end
     end
   end
 
   def xls_data
     @rep_rows = {}
+    self.load_gl
     self.load_commissions
-    self.load_invoices
     self.load_opportunities
-    self.load_gl_exceptions
     @rep_rows.values.sort
   end
 
   def xls_initialize
     xls_field('Month', xls_date_format) { |rr| rr.date }
     xls_field('Rep Name') { |rr| rr.vendor_name }
-    xls_field('Invoiced', xls_dollar_format) { |rr| rr.invoiced }
+    xls_field('Territory Income', xls_dollar_format) { |rr| rr.invoiced }
     xls_field('Commissions', xls_dollar_format) { |rr| rr.commissions }
-    xls_field('Sales Orders', xls_dollar_format) { |rr| rr.total_sales_orders }
-    xls_field('Potential Value', xls_dollar_format) { |rr| rr.total_potential_value }
-    xls_field('Median Potential', xls_dollar_format) { |rr| rr.median_potential_value }
+    xls_field('Rep Revenue', xls_dollar_format) { |rr| rr.total_sales_orders }
+    xls_field('Opportunity Value', xls_dollar_format) { |rr| rr.total_potential_value }
+    xls_field('Median Opportunity Value', xls_dollar_format) { |rr| rr.median_potential_value }
     xls_field('Opportunities') { |rr| rr.opportunities.size }
     xls_field('Quotes') { |rr| rr.total_quotes }
     xls_field('Sample Orders') { |rr| rr.total_sample_orders }
