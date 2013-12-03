@@ -68,8 +68,12 @@ m2mhub_config: &m2mhub_config
     vendors:
       children: production/vendors production/vendors/purchase_order_items
     m2m_customers:
+      children: m2m_customer_search m2m_customer_exports m2m_customer_summary m2m_customer_quotes m2m_customer_sales_orders m2m_customer_contacts m2m_customer_invoiced_sales_reports m2m_customer_sales_orders m2m_customer_sales_backlog_reports
+    m2m_customer_search:
       controllers: m2m_customers
-      children: m2m_customer_summary m2m_customer_quotes m2m_customer_sales_orders m2m_customer_contacts m2m_customer_invoiced_sales_reports m2m_customer_sales_orders m2m_customer_sales_backlog_reports
+      action: index
+    m2m_customer_exports:
+      controllers: m2m_customers/exports
     m2m_customer_summary:
       controllers: m2m_customers
       action: show

@@ -13,8 +13,8 @@
 			<%= link_to 'Sales', sales_order_items_url %>
 		</li>
 		<% end %>
-		<% if permitted_to?(:read, :customers) %>
-		<li class="<%= menu_selected :customers %>">
+		<% if permitted_to?(:read, :m2m_customers) %>
+		<li class="<%= menu_selected :m2m_customers %>">
 			<%= link_to 'Customers', m2m_customers_url %>
 		</li>
 		<% end %>

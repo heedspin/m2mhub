@@ -92,6 +92,7 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :order_number, :fsono
   alias_attribute :multiple_releases, :fmultiple
   alias_attribute :description, :fdesc
+  alias_attribute :product_class, :fprodcl
 
   scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
@@ -148,6 +149,13 @@ class M2m::SalesOrderItem < M2m::Base
   def self.order_date(order_date)
     order_date = order_date.is_a?(String) ? Date.parse(order_date) : order_date
     joins(:sales_order).where('somast.forderdate = ?', order_date)
+  end
+  def self.product_class(txt)
+    where(:fprodcl => txt)
+  end
+  def self.ordered_since(date)
+    date = Date.parse(date) if date.is_a?(String)
+    joins(:sales_order).where('somast.forderdate >= ?', date)
   end
 
   def self.attach_to_releases(sales_order_releases)

@@ -77,6 +77,10 @@ class M2m::Vendor < M2m::Base
   def name
     @name ||= self.class.safe_titleize(self.fcompany)
   end
+
+  def self.pad_vendor_number(txt)
+    "%06d" % txt.to_i
+  end
   
 end
 
