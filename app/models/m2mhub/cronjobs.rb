@@ -46,6 +46,8 @@ class M2mhub::Cronjobs
     Finance::InvoiceDiscrepancyReportRunner.new.run_report
     log "Running opportunity grim reaper"
     Sales::Opportunity.run_reaper
+    log "Running Doogle sync_all_to_erp"
+    Doogle::Display.sync_all_to_erp
     log "Finished nightly"
   end
 end
