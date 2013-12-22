@@ -78,13 +78,13 @@ class Sales::CommissionRateFinder
         self.internal_commission_configs.each do |config|
           commission_percentage = config.commission_percentage_for(item.product_class)
           next unless commission_percentage > 0
+          next if config.skip_part?(part_number)
           # This is LXD specific.  Sorry...
           first_invoice = M2m::Invoice.part_number_like(part_number[0..part_number.size-2]).customer(customer.customer_number).by_date.first
           if first_invoice.nil?
-            result.push "Not yet shipped. #{item.product_class.name.strip}, Commission #{commission_percentage}%"
+            result.push [config.name, commission_percentage.to_f, "Not yet shipped. #{item.product_class.name.strip}, Commission #{commission_percentage}%"]
           else
             next unless first_invoice.date >= config.ordered_after
-            next if config.skip_part?(part_number)
             result.push [config.name, commission_percentage.to_f, "First ordered #{first_invoice.date.to_s(:database)} on invoice #{first_invoice.number.strip}, #{item.product_class.name.strip}, #{commission_percentage}"]
           end
         end
@@ -95,22 +95,22 @@ class Sales::CommissionRateFinder
   
   def get_external_rep_rate(customer, part_number, revision, invoice, sales_order)
     if customer.present? and part_number.present? and (cr = self.commission_rate_for_customer_and_item(customer, part_number, revision))
-      return cr.sales_person, cr.commission_percentage, "Commission Rate #{cr.id} (for customer and item)"
+      return cr.sales_person.name, cr.commission_percentage, "Commission Rate #{cr.id} (for customer and item)"
     end
     if part_number.present? and (cr = self.commission_rate_for_item(part_number, revision))
-      return cr.sales_person, cr.commission_percentage, "Commission Rate #{cr.id} (for item)"
+      return cr.sales_person.name, cr.commission_percentage, "Commission Rate #{cr.id} (for item)"
     end
     if customer.present? and (cr = self.commission_rate_for_customer(customer))
-      return cr.sales_person, cr.commission_percentage, "Commission Rate #{cr.id} (for customer)"
+      return cr.sales_person.name, cr.commission_percentage, "Commission Rate #{cr.id} (for customer)"
     end
     if invoice and invoice.sales_person.present?
-      return invoice.sales_person, invoice.commission_percentage, "Invoice #{invoice.number}"
+      return invoice.sales_person.name, invoice.commission_percentage, "Invoice #{invoice.number}"
     end
     if sales_order and sales_order.sales_person.present?
-      return sales_order.sales_person, sales_order.commission_percentage, "Sales Order #{sales_order.order_number}"
+      return sales_order.sales_person.name, sales_order.commission_percentage, "Sales Order #{sales_order.order_number}"
     end
     if customer and customer.sales_person_key.present?
-      return customer.sales_person, customer.sales_person.try(:commission_percentage), "Customer #{customer.customer_number}"
+      return customer.sales_person.name, customer.sales_person.try(:commission_percentage), "Customer #{customer.customer_number}"
     end
     return 'ERROR', 0, 'No rate found. Create a house account or assign a rep rate'
   end
