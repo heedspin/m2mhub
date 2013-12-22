@@ -1,5 +1,5 @@
 <%= semantic_form_for @report, :as => 'search', :url => shipping_backlog_reports_path, :html => {:method => :get} do |f| %>
-	<%= f.inputs :class => 'floatyfields' do %>
+ 	<%= f.inputs :class => 'floatyfields' do %>
 	 	<%= f.input :due_after, :as => :calendar, :label => 'Due After', :input_html => {:value => @report.due_after} %>
 	  <%= f.input :due_date, :as => :calendar, :label => 'Due By' %>
 	<% end %>
