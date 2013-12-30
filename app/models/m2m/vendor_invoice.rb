@@ -80,6 +80,8 @@ class M2m::VendorInvoice < M2m::Base
   alias_attribute :vendor_number, :fvendno
   alias_attribute :invoice_number, :fcinvoice
   alias_attribute :amount, :fnamount
+  alias_attribute :vendor_name, :fccompany
+  alias_attribute :status, :fcstatus
 
   alias_attribute :pay_date, :flpaydate
   def pay_date
@@ -114,6 +116,7 @@ class M2m::VendorInvoice < M2m::Base
   def self.vendor_account_number(num)
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
+  scope :not_void, where('apmast.fcstatus != ?', 'V')
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"

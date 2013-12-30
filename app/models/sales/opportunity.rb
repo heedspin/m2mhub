@@ -309,7 +309,10 @@ class Sales::Opportunity < M2mhub::Base
   end
   def self.with_parsed_xnumber(text)
     return where('true=true') unless text.present?
-    where [ 'sales_opportunities.xnumber_decimal in (?)', text.scan(/x[a-z]+\d\d?/i).map { |xn| XNumber.new(xn).to_i } ]
+    where [ 'sales_opportunities.xnumber_decimal in (?)', text.scan(/x[a-z][a-z]\d+?/i).map { |xn| XNumber.new(xn).to_i } ]
+  end
+  def self.xnumbers(xnumbers)
+    where [ 'sales_opportunities.xnumber_decimal in (?)', xnumbers.map { |xn| XNumber.new(xn).to_i } ]
   end
 
   def self.fill_in_xnumbers
@@ -372,17 +375,4 @@ class Sales::Opportunity < M2mhub::Base
                          :comment => "Opportunity has not been active since #{self.updated_at.to_s(:human_date)}")
   end
   
-  def as_json(args=nil)
-    {
-      :title => self.title_or_number,
-      :customer => self.customer_name,
-      :customer_url => self.sales_customer_id.present? && Rails.application.routes.url_helpers.sales_customer_url(self.sales_customer_id, :host => AppConfig.hostname),
-      :part_numbers => self.part_numbers.map { |pn| { :part_number => pn, :url => Rails.application.routes.url_helpers.doogle_display_url(pn, :host => AppConfig.hostname) } },
-      :url => url = Rails.application.routes.url_helpers.opportunity_url(self.xnumber, :host => AppConfig.hostname),
-      :owner_id => self.owner_id,
-      :owner_first_name => self.owner.try(:first_name),
-      :owner_last_name => self.owner.try(:last_name)
-    }
-  end
-
 end

@@ -96,7 +96,7 @@ class Sales::RepReport
   # M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').count
   # puts M2m::VendorInvoice.invoice_dates('2013-01-01', '2014-01-01').invoice_number_like('Commission').map { |vi| "#{vi.finvdate.try(:to_date)} #{vi.vendor_number} - #{vi.vendor.name} #{vi.invoice_number}" }.join("\n")
   def load_commissions
-    M2m::VendorInvoice.invoice_dates(self.start_date.advance(:months => 1), self.end_date.advance(:months => 1)).invoice_number_like('Commission').each do |i|
+    M2m::VendorInvoice.not_void.invoice_dates(self.start_date.advance(:months => 1), self.end_date.advance(:months => 1)).invoice_number_like('Commission').each do |i|
       if i.date
         vendor = if AppConfig.lxd_house_vendors.include?(i.vendor_number)
           AppConfig.short_name

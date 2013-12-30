@@ -17,6 +17,7 @@ class Sales::OpportunityCommentsController < M2mhubController
       flash[:notice] = "Created Comment #{@comment.id}"
       redirect_to opportunity_url(@opportunity)
     else
+      logger.error 'Failed to save opportunity comment: ' + @comment.errors.full_messages.join("\n")
       @comments = @opportunity.comments.by_id
       render :action => '../opportunities/show'
     end
