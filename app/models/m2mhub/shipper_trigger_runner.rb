@@ -15,7 +15,7 @@ class M2mhub::ShipperTriggerRunner < M2mhub::TriggerRunnerBase
       new_event.erp_id = i.id
       new_event.erp_number = i.shipper_number
       new_event.user = @trigger.target_user
-      url = Rails.application.routes.url_helpers.shippers_url(:date => i.shipper.ship_date.to_date.to_s(:database), :host => AppConfig.hostname)
+      url = Rails.application.routes.url_helpers.shipping_daily_reports_url(:date => i.shipper.ship_date.to_date.to_s(:database), :host => AppConfig.hostname)
       new_event.title = "#{@trigger.title}: " + link_to("Shipper #{i.shipper_number}", url)
       if @trigger.notification_type.ticket?
         title = "#{@trigger.title}: Shipper #{i.shipper_number} for #{i.part_number}"

@@ -3,6 +3,6 @@
 <h2>Shippers for <%= item_part_number(@item) %></h2>
 <%= will_paginate @shippers %>
 
-<%= render 'list' %>
+<%= render 'shipping/shippers/index', :shippers => @shippers %>
 
 <%= will_paginate @shippers %>

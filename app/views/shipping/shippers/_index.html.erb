@@ -1,0 +1,37 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Shipper</th>
+			<th><%= M2m::SalesOrderRelease.human_attribute_name(:due_date) %></th>
+			<th><%= M2m::Shipper.human_attribute_name(:ship_date) %></th>
+			<th>Customer</th>
+			<th>SO #</th>
+			<th>Part #</td>
+			<th>Cust Po#</th>
+			<th>Qty Shipped / Ordered</th>
+			<th>Tracking</th>
+		</tr>
+	</thead>
+	<tbody>
+<% shippers.each do |shipper|
+	shipper.items.each do |i| %>
+	<% release = i.sales_order_release %>
+		<tr>
+			<td><%= shipper.fshipno %></td>
+			<td><%= i.sales_order_release.due_date.to_s(:sales_date) if release %></td>
+			<td><%= shipper.ship_date.to_s(:sales_date) %></td>
+			<td><%= link_to shipper.customer_name, m2m_customer_number_url(shipper.customer_number) %></td>
+			<% if release.nil? %>
+			<td colspan="3"></td>
+			<% else %>
+			<td><%= link_to_unless !permitted_to?(:read, :sales_orders), release.sales_order.id, sales_order_url(i.sales_order_release.sales_order.id) %></td>
+			<td><%= link_to_item i.item, i.sales_order_release.part_number %></td>
+			<td><%= i.sales_order_release.sales_order.customer_po %></td>
+			<% end %>
+			<td class="centered"><%= cm(i.quantity_shipped, :sales_order_quantity, 0) %> / <%= cm i.quantity_ordered, :sales_order_quantity %></td>
+			<td><%= shipper.ship_via.strip %> <%= shipper.bill_of_lading %></td>
+		</tr>
+<% end %>
+<% end %>
+	</tbody>
+</table>

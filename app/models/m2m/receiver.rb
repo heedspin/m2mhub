@@ -95,6 +95,7 @@ class M2m::Receiver < M2m::Base
       }
     end
   }
+  scope :by_time_received_desc, :order => 'rcmast.fdaterecv desc'
     
   def status
     # fcstatus are 'C' and 'I' but always show up received.
