@@ -67,7 +67,5 @@
 
 <% if @shippers.size > 0 %>
 <h3>Shippers</h3>
-<% @shippers.each do |s| %>
-	<%= render 'shipping/shippers/show', :shipper => s %>
-<% end %>
+<%= render 'shipping/shippers/index', :shippers => @shippers %>
 <% end %>
