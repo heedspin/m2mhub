@@ -24,7 +24,7 @@
 			<td><%= receiver.received_by %></td>
 			<td><%= receiver.purchase_order_number %></td>
 			<td><%= link_to_item i.item, i.part_number %></td>
-			<td><%= i.purchase_order_item.purchase_order.vendor_name %></td>
+			<td><%= i.purchase_order_item.try(:purchase_order).try(:vendor_name) %></td>
 			<td><%= i.po_vendor_part_number %></td>
 			<td><%= cm i.quantity, :sales_order_quantity %></td>
 			<td><%= i.flocation %></td>
