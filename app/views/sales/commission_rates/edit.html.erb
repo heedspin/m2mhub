@@ -7,8 +7,8 @@
 
 <%= semantic_form_for @commission_rate, :url => commission_rate_url(@commission_rate) do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>
-	<%= f.buttons do %>
-	  <%= f.commit_button %>
+	<%= f.actions do %>
+	  <%= f.action :submit %>
 	  <%= f.cancel_link %>
 	<% end %>
 <% end %>

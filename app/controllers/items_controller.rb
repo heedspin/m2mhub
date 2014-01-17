@@ -9,7 +9,7 @@ class ItemsController < M2mhubController
       if part_numbers.size == 0
         part_numbers.push 'No Results'
       end
-      render :json => part_numbers
+      render :json => part_numbers.to_json
     else
       @search = M2m::Item.new
       search_params = params[:search] || {}
@@ -23,19 +23,19 @@ class ItemsController < M2mhubController
 
   def show
     @item = current_object
-    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).status_open.by_due_date_desc.all#(:include => [:sales_order, :item])
+    @sales_order_releases = M2m::SalesOrderRelease.for_item(@item).by_due_date_desc.limit(5)
     M2m::SalesOrderItem.attach_to_releases_with_item(@sales_order_releases, @item)
     @total_sales_order_releases = M2m::SalesOrderRelease.for_item(@item).count
 
-    @purchase_order_items = M2m::PurchaseOrderItem.for_item(@item).status_open.all(:include => {:purchase_order => :vendor})
-    @total_purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item).count
+    @purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item)
+    @total_purchase_order_items = @purchase_order_items.count
+    @purchase_order_items = @purchase_order_items.includes(:purchase_order => :vendor).reverse_order.limit(5)
 
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
                                                                     :sales_order_releases => @sales_order_releases,
                                                                     :purchase_order_items => @purchase_order_items,
                                                                     :show_history => false )
 
-    @sales_order_releases = @sales_order_releases.select { |s| s.status.open? }
     @purchase_order_items = @purchase_order_items.sort_by { |i| i.safe_promise_date }
     @shippers_count = M2m::Shipper.for_item(@item).count
     @total_quote_items = M2m::QuoteItem.for_item(@item).count

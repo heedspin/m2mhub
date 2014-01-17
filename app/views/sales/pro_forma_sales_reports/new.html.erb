@@ -20,7 +20,7 @@
 		<% rowspan = invoices.size == 0 ? 1 : invoices.size %>
 		<tr>
 			<td rowspan="<%= rowspan %>"><%= link_to so.order_number, sales_order_path(so) %></td>
-			<td rowspan="<%= rowspan %>"><%= link_to so.customer_name, customer_number_url(so.fcustno) %></td>
+			<td rowspan="<%= rowspan %>"><%= link_to so.customer_name, m2m_customer_number_url(so.fcustno) %></td>
 			<td rowspan="<%= rowspan %>"><%= so.due_date.try(:to_s, :sales_date) %></td>
 	<% if invoices.size == 0 %>
 			<td colspan="3"></td>

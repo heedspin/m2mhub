@@ -1,0 +1,27 @@
+<%= render 'production/submenu' %>
+<br />
+
+<h2>Vendors</h2>
+
+<%= will_paginate @vendors %>
+
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Vendor Number</th>
+				<th>Vendor Name</th>
+				<th>GL Account</th>
+			</tr>
+		</thead>
+<% @vendors.each do |vendor| %>
+		<tr>
+			<td><%= vendor.vendor_number %></td>
+			<td><%= link_to vendor.name, vendor_url(vendor) %></td>
+			<td><%= vendor.gl_account.try(:description) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<%= will_paginate @vendors %>

@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class M2m::InventoryTransactionType < ActiveHash::Base
   self.data = [
     {:id => 1, :key => 'T', :name => 'Transfers'},
@@ -11,7 +11,7 @@ class M2m::InventoryTransactionType < ActiveHash::Base
     {:id => 8, :key => 'P', :name => 'Material Postings'},
     {:id => 9, :key => 'H', :name => 'Physical Inventory'},
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
   
   def self.all_receipts
     [self.receipts, self.moves]

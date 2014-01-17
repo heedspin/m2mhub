@@ -11,7 +11,7 @@ class Items::ShippersController < M2mhubController
     if limit = params[:limit]
       @shippers = @shippers.limit(limit.to_i)
     else
-      @shippers = @shippers.paginate(:page => params[:page], :per_page => 10)
+      @shippers = @shippers.paginate(:page => params[:page], :per_page => 20)
     end
     @shippers = @shippers.to_a
     M2m::Item.attach_items(@shippers.map(&:items).flatten)

@@ -1,30 +1,113 @@
 module MenuSelected
-
   def self.included(base)
     base.class_eval <<-EOS
     helper_method :menu_selected
+    helper_method :request_route_info
     EOS
   end
-  
+
   SELECTED_CSS_CLASS='current'
-  
-  def menu_selected(args={})
-    result = if path_regex = args[:path]
-      path_regex.match(request.path).present?
-    elsif path_starts_with = args[:path_starts_with]
-      request.path.starts_with?(path_starts_with)
-    else
-      parent_key = args[:parent]
-      controller_names = args[:controllers] || args[:controller] || self.controller_name
-      controller_names = if controller_names.is_a?(Enumerable)
-        controller_names.map(&:to_s)
-      else
-        [ controller_names.to_s ]
+
+  def menu_config(menu_key)
+    all_configs = AppConfig.menu_selected || {}
+    all_configs[menu_key]
+  end
+
+  class MenuConfigurations
+    class MenuConfig
+      attr_accessor :path, :path_starts_with, :parent, :controllers, :action, :children
+      def initialize(config)
+        %w(path_starts_with parent action).each do |k|
+          self.send("#{k}=", config[k])
+        end
+        if txt = config['controllers'] || config['controller']
+          self.controllers = txt.split(/[ ,]/).map(&:strip)
+        end
+        if txt = config['children']
+          self.children = txt.split(/[ ,]/).map(&:strip)
+        end
+        if txt = config['path']
+          self.path = Regexp.new(txt)
+        end
       end
-      action = (args[:action] || self.action_name).to_s
-      (parent_key.nil? || params[parent_key.to_s.singularize + '_id'].present?) && (controller_names.include?(self.controller_name)) && (action == self.action_name)  
+      def to_s
+        if @to_s.nil?
+          result = []
+          %w(path path_starts_with parent).map do |k| 
+            if value = self.send(k)
+              result.push "#{k}=#{value}"
+            end
+          end
+          if self.controllers
+            result.push 'controllers=' + self.controllers.join(',')
+          end
+          if self.children
+            result.push 'children=' + self.children.join(',')
+          end
+          @to_s = result.join(', ')
+        end
+        @to_s
+      end
     end
-    result ? SELECTED_CSS_CLASS : ''
+
+    include Singleton
+    def initialize
+      @menu_configs = {}
+      (AppConfig.m2mhub_menu_selected || {}).merge(AppConfig.menu_selected || {}).each do |key, config|
+        @menu_configs[key] = MenuConfig.new(config)
+      end
+    end
+
+    def key(txt)
+      txt = txt.to_s
+      @menu_configs[txt] ||= MenuConfig.new('controllers' => txt )
+    end
+  end
+
+  def menu_selected(menu_key)
+    menu_active?(menu_key) ? SELECTED_CSS_CLASS : ''
   end
   
+  def request_route_info
+    Rails.application.routes.recognize_path(request.path)
+  end
+
+  def menu_active?(menu_key)
+    menu_config = MenuConfigurations.instance.key(menu_key)
+    result = false
+    # dbgtxt = [ "menu_active? #{menu_key}", menu_config ]
+    route_info = request_route_info
+    if menu_config.path
+      result = menu_config.path.match(request.path).present?
+      # dbgtxt.push "request.path = #{request.path}"
+    elsif menu_config.path_starts_with
+      result = request.path.starts_with?(menu_config.path_starts_with)
+      # dbgtxt.push "request.path = #{request.path}"
+    elsif menu_config.controllers
+      controller_name = route_info[:controller]
+      result = menu_config.controllers.include?(controller_name)
+      # dbgtxt.push "controller_name=#{controller_name}"
+      if result and menu_config.action
+        action_name = route_info[:action]
+        result = menu_config.action == action_name
+        # dbgtxt.push "#{action_name}=#{action_name}"
+      end
+    end
+    if !result and menu_config.children
+      menu_config.children.each do |child|
+        if result = menu_active?(child)
+          # dbgtxt.push "#{child} child active"
+          break
+        end
+      end
+    end
+    # if result
+    #   dbgtxt.push route_info.inspect
+    #   Rails.logger.info "menu_active? #{menu_key} = #{result}\n\t" + dbgtxt.join("\n\t")
+    # else
+    #   Rails.logger.info "menu_active? #{menu_key} = #{result} #{route_info.inspect}"
+    # end
+    result
+  end
+
 end

@@ -2,7 +2,7 @@ require 'm2m/belongs_to_item'
 
 class M2m::Base < ActiveRecord::Base
   self.abstract_class = true
-  set_primary_key 'identity_column'
+  self.primary_key = 'identity_column'
   include ::BelongsToItem
   extend ActiveHash::Associations::ActiveRecordExtensions
 
@@ -44,6 +44,12 @@ class M2m::Base < ActiveRecord::Base
   # http://info.michael-simons.eu/2008/11/01/turn-off-rors-automatic-timezone-conversion-for-columns/
   def self.time_zone_aware_attributes
     false
+  end
+  
+  # String#titleize will remove hashes.
+  def self.safe_titleize(txt)
+    return nil if txt.nil?
+    txt.strip.gsub(/(\w+)/) { |m| $1.capitalize }
   end
 
   m2m_key = "#{Rails.env}_m2m"

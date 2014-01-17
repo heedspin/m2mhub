@@ -2,17 +2,17 @@
 #
 # Table name: commission_rates
 #
-#  id                    :integer(4)      not null, primary key
-#  customer_id           :integer(4)
+#  id                    :integer          not null, primary key
+#  customer_id           :integer
 #  customer_name         :string(255)
-#  sales_person_id       :integer(4)
+#  customer_number       :string(255)
+#  sales_person_id       :integer
 #  sales_person_name     :string(255)
-#  item_id               :integer(4)
+#  item_id               :integer
 #  part_number           :string(255)
 #  commission_percentage :decimal(12, 4)
 #  created_at            :datetime
 #  updated_at            :datetime
-#  customer_number       :string(255)
 #
 
 class Sales::CommissionRate < M2mhub::Base
@@ -23,6 +23,26 @@ class Sales::CommissionRate < M2mhub::Base
   validate :customer_or_item
 
   scope :by_salesperson_and_customer, :order => [:sales_person_name, :customer_name, :part_number]
+  scope :sales_person, lambda { |sales_person_id|
+    {
+      :conditions => { :sales_person_id => sales_person_id }
+    }
+  }
+  scope :customer, lambda { |customer_id|
+    {
+      :conditions => { :customer_id => customer_id }
+    }
+  }
+  scope :item, lambda { |item_id|
+    {
+      :conditions => { :item_id => item_id }
+    }
+  }
+  
+  def revision
+    # TODO: Add revision column.
+    '000'
+  end
 
   protected
 

@@ -17,11 +17,13 @@ class Production::InventoryMovementData
     end
   end
 
-  TTYPES = [M2m::InventoryTransactionType.scrap,
-            M2m::InventoryTransactionType.receipts,
-            M2m::InventoryTransactionType.issues,
-            M2m::InventoryTransactionType.moves,
-            M2m::InventoryTransactionType.sales_orders]
+  unless defined?(TTYPES) # thwart warning: already initialized constant TTYPES
+    TTYPES = [M2m::InventoryTransactionType.scrap,
+              M2m::InventoryTransactionType.receipts,
+              M2m::InventoryTransactionType.issues,
+              M2m::InventoryTransactionType.moves,
+              M2m::InventoryTransactionType.sales_orders]
+  end
   TTYPES.each do |ttype|
     self.class_eval <<-RUBY
     def #{ttype.cmethod}
@@ -38,7 +40,7 @@ class Production::InventoryMovementData
     end
     RUBY
   end
-  
+
   attr_accessor :object
   def initialize(object)
     @object = object
@@ -60,7 +62,7 @@ class Production::InventoryMovementData
       self.set_cost_for(ttype, total * self.object.cost)
     end
   end
-  
+
   def add(source)
     TTYPES.each do |ttype|
       total_cost = self.cost_for(ttype) + source.cost_for(ttype)
@@ -68,22 +70,22 @@ class Production::InventoryMovementData
     end
   end
 
-  def to_json
-    @movement_data.to_json
+  def as_json(args=nil)
+    @movement_data.as_json(args)
   end
-  
+
   def quantity_for(ttype)
     self.send(ttype.cmethod)
   end
-  
+
   def set_quantity_for(ttype, val)
     send("#{ttype.cmethod}=", val)
   end
-  
+
   def cost_for(ttype)
     self.send("#{ttype.cmethod}_cost")
   end
-  
+
   def set_cost_for(ttype, val)
     send("#{ttype.cmethod}_cost=", val)
   end

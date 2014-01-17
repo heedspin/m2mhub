@@ -10,14 +10,19 @@
 <% end %>
 
 <% if @backlog_report %>
-<h3><%= link_to 'Backlog', backlog_report_url(@backlog_report) %></h3>
+<h3><%= link_to 'Backlog', sales_backlog_report_url(@backlog_report) %></h3>
 <%= render 'sales/backlog_reports/summary', :backlog_report => @backlog_report %>
 <% end %>
 
-<h3><%= link_to 'Recent Sales Orders', sales_orders_url %></h3>
-<%= render 'sales_orders/list' %>
+<% if @sales_events %>
+<h3><%= link_to 'Sales Events', sales_events_url %></h3>
+<%= render 'sales/sales_events/index' %>
+<% end %>
+
+<h3><%= link_to 'Sales Orders', sales_orders_url %></h3>
+<%= render 'sales/sales_orders/list' %>
 
 <% if @quotes.size > 0 %>
-<h3><%= link_to 'Recent Quotes', quotes_url %></h3>
-<%= render 'quotes/list' %>
+<h3><%= link_to 'M2M Quotes', m2m_quotes_url %></h3>
+<%= render 'sales/m2m_quotes/list' %>
 <% end %>

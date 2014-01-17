@@ -1,0 +1,26 @@
+<% title 'New Customer' %>
+
+<% if @similar_customers %>
+<div class="similar_customers">
+	<h3>
+	<% if @similar_customers.size == 1 %>
+	There is 1 existing account that has a similar name:
+	<% else %>
+	There are <%= @similar_customers.size %> existing accounts that have similar names:
+	<% end %>
+	</h3>
+	<ul>
+	<% @similar_customers.each do |customer| %>
+		<li><%= link_to customer.company_name, m2m_customer_url(customer) %></li>
+	<% end %>
+	</ul>
+	<p>
+		Click on an account name above to use an existing account.
+	</p>
+</div>
+<% end %>
+
+<h2>Create New Customer</h2>
+<%= semantic_form_for @customer, :url => m2m_customers_url do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>

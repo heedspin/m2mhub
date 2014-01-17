@@ -13,7 +13,7 @@
 # Indicates that this part is a collection of other parts, but is either never stocked or is never processed via a separate assembly job order. When used on a Bill of Material, this part will be replaced by its components.
 # 
 
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class M2m::ItemSource < ActiveHash::Base
   self.data = [
     {:key => 'M', :name => 'Make'},
@@ -21,5 +21,5 @@ class M2m::ItemSource < ActiveHash::Base
     {:key => 'S', :name => 'Stock'},
     {:key => 'P', :name => 'Phantom'},
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

@@ -2,13 +2,13 @@
 #
 # Table name: m2mhub_external_events
 #
-#  id                    :integer(4)      not null, primary key
-#  status_id             :integer(4)
+#  id                    :integer          not null, primary key
+#  status_id             :integer
 #  source                :string(255)
 #  json_data             :text
 #  request_header        :text
-#  delayed_job_id        :integer(4)
-#  delayed_job_status_id :integer(4)
+#  delayed_job_id        :integer
+#  delayed_job_status_id :integer
 #  delayed_job_log       :text
 #  delayed_job_method    :string(255)
 #  created_at            :datetime
@@ -20,7 +20,7 @@ require 'plutolib/stateful_delayed_report'
 
 class M2mhub::ExternalEvent < M2mhub::Base
   include Plutolib::StatefulDelayedReport
-  set_table_name 'm2mhub_external_events'
+  self.table_name = 'm2mhub_external_events'
   belongs_to_active_hash :status, :class_name => 'M2mhub::ExternalEventStatus'
   scope :error, :conditions => { :status_id => M2mhub::ExternalEventStatus.error.id }
   validates_uniqueness_of :guid
@@ -90,8 +90,8 @@ class M2mhub::ExternalEvent < M2mhub::Base
     self.json_data = self.data_hash.to_json
   end
   
-  def to_json(args=nil)
-    self.data_hash.to_json(args)
+  def as_json(args=nil)
+    self.data_hash.as_json(args)
   end  
 
   def human_attribute_name(field)
@@ -169,6 +169,10 @@ class M2mhub::ExternalEvent < M2mhub::Base
   #   super(mid) # || M2mhub::ExternalEvent::Config.instance.alias_keys_for(self.source_type, mid).present? || self.data_hash.member?(mid)
   # end
   def method_missing(mid, *args)
-    value(mid)
+    if has_attribute?(mid)
+      super
+    else
+      value(mid)
+    end
   end
 end

@@ -21,7 +21,6 @@
 			<th>Cust<br />Part</th>
 			<th>Vend<br />Part</th>
 			<th>Desc</th>
-			<th>Unit Cost</th>
 			<th>Unit Price</th>
 		</tr>
 	</thead>
@@ -35,13 +34,12 @@
 			</td>
 			<td class="centered"><%= r.status %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
-			<td><%= link_to r.sales_order.customer_name, customer_number_url(r.sales_order.fcustno) %></td>
+			<td><%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %></td>
 			<td><%= link_to_item r.item.item, r.item.part_number %></td>
 			<td><%= r.revision %></td>
 			<td><%= r.item.customer_part_number %></td>
 			<td><%= r.item.item.vendors.map { |v| v.vendor_part_number.strip }.join(', ') %></td>
 			<td><%= h r.item.item.fdescript %></td>
-			<td class="monitary"><%= cm r.item.item.try(:total_cost), :dollars %></td>
 			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
 		</tr>
 	<% end %>

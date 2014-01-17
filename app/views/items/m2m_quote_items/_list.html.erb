@@ -1,0 +1,35 @@
+<table class="data">
+	<tbody>
+		<thead>
+			<tr>
+				<th>Quote</th>
+				<th><%= AppConfig.short_name %> Part No.</th>
+				<th>Description</th>
+				<th>Qty</th>
+				<th>Cust Part</th>
+				<th>UnitPrice</th>
+				<th>Total<br />Price</th>
+				<th>Sales<br />Order</th>
+			</tr>
+		</thead>
+<% @quote_items.each do |item| %>
+		<tr>
+			<td><%= link_to item.quote.quote_number, m2m_quote_url(item.quote) %></td>
+			<td><%= link_to_item item.item, item.part_number %></td>
+			<td><%= simple_format item.fdesc.strip %></td>
+			<td><%= cm item.quantity, :sales_order_quantity %></td>
+			<td><%= item.fcustpart %></td>
+			<td class="monitary"><%= cm item.unit_price, :dollars %></td>
+			<td class="monitary"><%= cm (item.unit_price * item.quantity), :dollars %></td>
+			<td><%= link_to item.sales_order_number, sales_order_url(item.fsono) %></td>
+		</tr>
+<% end %>
+<% if (@total_quote_items || 0) > @quote_items.size %>
+<tr>
+	<td class="ninjaborders" colspan="8">
+		<%= link_to "Browse all #{@total_quote_items} Quote Items", item_m2m_quote_items_url(@item) %>
+	</td>
+</tr>
+<% end %>
+	</tbody>
+</table>

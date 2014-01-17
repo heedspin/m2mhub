@@ -1,0 +1,21 @@
+<%= render 'shipping/submenu' %>
+<br />
+
+<%= render 'shipping/backlog_reports/search_form' %>
+
+<% if @report.releases.size > 0 %>
+<%= render 'shipping/backlog_reports/list' %>
+<% end %>
+
+<% content_for :javascripts do %>
+	<%= javascript_include_tag 'jquery.popupWindow.js' %>
+<script type="text/javascript">
+$(function() {
+	$('.jobspopup').popupWindow({ 
+		centerScreen:1,
+		height:700, 
+		width: 400
+	}); 
+});
+</script>
+<% end %>

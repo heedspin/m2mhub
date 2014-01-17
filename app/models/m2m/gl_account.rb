@@ -2,26 +2,26 @@
 #
 # Table name: glmast
 #
-#  fcacctnum        :string(25)      default(""), not null
-#  fcclass          :string(1)       default(""), not null
-#  fccode           :string(1)       default(""), not null
-#  fcdescr          :string(40)      default(""), not null
-#  fcparentid       :string(25)      default(""), not null
-#  fctype           :string(3)       default(""), not null
-#  flfunds          :boolean         default(FALSE), not null
-#  flconsol         :boolean         default(FALSE), not null
-#  flinactive       :boolean         default(FALSE), not null
-#  fnorder          :integer(4)      default(0), not null
-#  flrevlcurr       :boolean         default(FALSE), not null
+#  fcacctnum        :string(25)       default(""), not null
+#  fcclass          :string(1)        default(""), not null
+#  fccode           :string(1)        default(""), not null
+#  fcdescr          :string(40)       default(""), not null
+#  fcparentid       :string(25)       default(""), not null
+#  fctype           :string(3)        default(""), not null
+#  flfunds          :boolean          default(FALSE), not null
+#  flconsol         :boolean          default(FALSE), not null
+#  flinactive       :boolean          default(FALSE), not null
+#  fnorder          :integer          default(0), not null
+#  flrevlcurr       :boolean          default(FALSE), not null
 #  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fmnote           :text            default(""), not null
-#  fcactcat         :string(1)       default(""), not null
-#  flcash           :boolean         default(FALSE), not null
+#  identity_column  :integer          not null, primary key
+#  fmnote           :text             default(""), not null
+#  fcactcat         :string(1)        default(""), not null
+#  flcash           :boolean          default(FALSE), not null
 #
 
 class M2m::GlAccount < M2m::Base
-  set_table_name 'glmast'
+  self.table_name = 'glmast'
   belongs_to :gl_category, :class_name => 'M2m::GlCategory', :foreign_key => 'fccode', :primary_key => 'fccode'
   alias_attribute :category_code, :fccode
   alias_attribute :account_number, :fcacctnum

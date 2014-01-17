@@ -1,0 +1,32 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Receiver</th>
+			<th>By</th>
+			<th>PO</th>
+			<th><%= AppConfig.short_name %> Part #</th>
+			<th>PO Vendor Part #</th>
+			<th>Qty Received</th>
+			<th>Location</th>
+		</tr>
+	</thead>
+	<tbody>
+<% receivers.each do |receiver|
+	receiver.items.each do |i| %>
+		<tr>
+			<td><%= receiver.time_received.to_s(:sales_date) %></td>
+			<td><%= receiver.time_received.to_s(:just_time) %></td>
+			<td><%= receiver.id %></td>
+			<td><%= receiver.received_by %></td>
+			<td><%= receiver.purchase_order_number %></td>
+			<td><%= link_to_item i.item, i.part_number %></td>
+			<td><%= i.po_vendor_part_number %></td>
+			<td><%= cm i.quantity, :sales_order_quantity %></td>
+			<td><%= i.flocation %></td>
+		</tr>
+<% end %>
+<% end %>
+	</tbody>
+</table>

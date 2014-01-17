@@ -1,0 +1,43 @@
+<% title 'Inspection Tasks' %>
+<%= render 'quality/submenu' %>
+<br />
+
+<%= semantic_form_for @search, :as => :search, :url => inspection_tasks_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+					<%= f.input :status, :collection => Quality::InspectionTaskStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
+					<%= f.input :task_type, :collection => Quality::InspectionTaskType.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.actions do %>
+				  <%= f.action :submit, :label => 'Search' %>
+					<% if permitted_to? :manage, :quality_inspection_tasks %>
+					<li><%= link_to 'New Inspection Task', new_inspection_task_path %></li>
+					<% end %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<% end %>
+
+<%= set_focus('#search_status') %>
+
+<% if @tasks.size == 0 %>
+<p>There are no tasks, yet.  Create one!</p>
+<% else %>
+<%= will_paginate @tasks %>
+<%= render 'list', :inspection_tasks => @tasks %>		
+<% end %>
+
+<% if @inspection_items %>
+<h3>Parts In Inspection</h3>
+<%= render 'production/inspection_items/list' %>
+<% end %>
+

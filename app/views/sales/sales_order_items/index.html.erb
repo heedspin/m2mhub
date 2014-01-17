@@ -1,0 +1,22 @@
+<%= render 'sales/submenu' %>
+
+<%= semantic_form_for :search, :url => sales_order_items_path, :html => {:method => :get} do |f| %>
+	<%= f.inputs do %>
+  	<%= f.input :order_number, :as => :string, :label => M2m::SalesOrderItem.human_attribute_name(:search_order_number) %>
+	  <%= f.input :part_number, :as => :string, :label => M2m::SalesOrderItem.human_attribute_name(:search_part_number) %>
+	<% end %>
+  <%= f.actions do %>
+	  <%= f.action :submit, :label => 'Search' %>
+	<% end %>
+<% end %>
+
+<% if @sales_order_items %>
+<% if @sales_order_items.size > 0 %>
+<%= will_paginate @sales_order_items %>
+<%= render 'list' %>
+<% else %>
+<h3>No matches</h3>
+<% end %>
+<% end %>
+
+<%= set_focus('#search_order_number') %>

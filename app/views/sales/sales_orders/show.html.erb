@@ -1,0 +1,73 @@
+<%= render 'sales/submenu' %>
+<br />
+
+<div class="paging">
+	<%= link_to("&laquo; Previous".html_safe, sales_order_url(@next_sales_order.order_number)) if @next_sales_order  %>
+	<%= link_to("Next &raquo;".html_safe, 
+	sales_order_url(@previous_sales_order.order_number)) if @previous_sales_order %>
+</div>
+
+<h2>Sales Order <%= @sales_order.fsono %></h2>
+<p>
+	<%= M2m::SalesOrder.human_attribute_name(:order_date) %>: <%= @sales_order.order_date.to_s(:sales_date) %><br />
+	Status: <%= @sales_order.status %><br />
+	Customer: <strong><%= link_to @sales_order.customer_name, m2m_customer_number_url(@sales_order.fcustno) %></strong><br />
+	Customer PO#: <%= @sales_order.customer_po %><br />
+	Total: <%= cm @sales_order.total_price, :dollars %><br />
+	Sales Rep: <%= @sales_order.fsoldby %><br />
+	Coord: <%= @sales_order.fsocoord %><br />
+</p>
+
+<h3>Releases</h3>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Number</th>
+			<th><%= M2m::SalesOrderRelease.human_attribute_name(:due_date) %></th>
+			<th>Delivery<br />Committment</th>
+			<th>Status</th>
+			<th><%= AppConfig.short_name %> Part No.</th>
+			<th>Description</th>
+			<th>Cust Part No.</th>
+			<th>Unit Price</th>
+			<th>Shp /<br />Ordered</th>
+			<th>On Hand / <br />Committed</th>
+			<th>Total Price</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @sales_order.releases.sort_by(&:due_date).each do |r| %>
+		<tr class="<%= r.master? ? 'master-release' : '' %>">
+			<td><%= r.sales_order_release_id %>-<%= r.sales_order_release_number %> <%= 'Master' if r.master? %></td>
+			<td><%= r.due_date.to_s(:sales_date) %></td>
+			<td><%= h r.fdelivery.strip %></td>
+			<td class="centered"><%= r.status %></td>
+			<% if r.item.nil? %>
+			<td colspan="5"></td>
+			<% else %>
+			<td><%= link_to_item r.item, r.part_number %></td>
+			<td><%= simple_format r.sales_order_item.description.strip %></td>
+			<td><%= r.sales_order_item.customer_part_number %></td>
+			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
+			<% end %>
+			<td class="right">
+				<%= cm r.quantity_shipped, :sales_order_quantity, 0 %> / <%= cm r.quantity, :sales_order_quantity %>
+			</td>
+			<td class="centered">
+				<% if r.item %>
+				<%= cm(r.item.quantity_on_hand, :sales_order_quantity, 0) %>
+				/ <%= cm(r.item.quantity_committed, :sales_order_quantity, 0) %>
+				<% end %>
+			</td>
+			<td class="monitary"><%= cm(r.release_price, :dollars) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+
+<% if @shippers.size > 0 %>
+<h3>Shippers</h3>
+<% @shippers.each do |s| %>
+	<%= render 'shipping/shippers/show', :shipper => s %>
+<% end %>
+<% end %>

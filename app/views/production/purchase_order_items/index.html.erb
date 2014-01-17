@@ -1,0 +1,31 @@
+<%= render 'production/submenu' %>
+
+<h2>Purchase Order Items</h2>
+
+<%= semantic_form_for @search, :as => :search, :url => purchase_order_items_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+					<%= f.input :status_id, :collection => M2m::PurchaseOrderStatus.all, :prompt => 'All', :wrapper_html => { :class => 'opportunity_search_status' } %>
+					<%= f.input :inspection_required, :collection => [['',''], ['Yes', 'Y'], ['No', 'N']] %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.actions do %>
+				  <%= f.action :submit, :label => 'Search' %>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<% end %>
+
+<%= will_paginate @purchase_order_items %>
+
+<%= render 'list', :purchase_order_items => @purchase_order_items, :include_po_link => true, :include_vendor => true %>
+
+<%= will_paginate @purchase_order_items %>

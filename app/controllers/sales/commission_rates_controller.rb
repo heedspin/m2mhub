@@ -5,7 +5,26 @@ class Sales::CommissionRatesController < M2mhubController
     if AppConfig.use_item_revisions?
       raise "Need to implement item autocomplete with revisions"
     end
-    @commission_rates = Sales::CommissionRate.by_salesperson_and_customer.paginate(:page => params[:page], :per_page => 50)
+
+    @search = Sales::CommissionRate.new(params[:search])
+    s = Sales::CommissionRate
+    if @search.sales_person_id.present?
+      s = s.sales_person(@search.sales_person_id)
+    end
+    if @search.customer_id.present?
+      s = s.customer(@search.customer_id)
+    end
+    if @search.item_id.present?
+      s = s.item(@search.item_id)
+    end
+
+    @commission_rates = s.by_salesperson_and_customer.paginate(:page => params[:page], :per_page => 50)
+    sales_person_ids = Sales::CommissionRate.connection.select_values('select distinct sales_person_id from commission_rates')
+    @sales_person_options = M2m::SalesPerson.where(['identity_column in (?)', sales_person_ids]).by_name.all
+    customer_ids = Sales::CommissionRate.connection.select_values('select distinct customer_id from commission_rates')
+    @customer_options = M2m::Customer.where(['identity_column in (?)', customer_ids]).by_name.all
+    item_ids = Sales::CommissionRate.connection.select_values('select distinct item_id from commission_rates')
+    @item_options = M2m::Item.where(['identity_column in (?)', item_ids]).by_part_rev_desc.all
   end
 
   def new

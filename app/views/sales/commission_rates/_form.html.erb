@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(function() {
 	$("input#sales_commission_rate_customer_name").autocomplete({
-		source: "<%= customers_url %>",
+		source: "<%= m2m_customers_url %>",
 		search: function(event, ui) { 
 			$("input#sales_commission_rate_customer_name").autocomplete("close");
 			$("#customer_inprogress").show();

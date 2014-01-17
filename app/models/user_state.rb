@@ -1,4 +1,4 @@
-require 'active_hash_methods'
+require 'plutolib/active_hash_methods'
 class UserState < ActiveHash::Base
   self.data = [
     {:id => 1, :name => 'Unconfirmed'},
@@ -6,5 +6,5 @@ class UserState < ActiveHash::Base
     {:id => 3, :name => 'Suspended'},
     {:id => 4, :name => 'Deleted'}
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
 end

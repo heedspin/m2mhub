@@ -1,0 +1,69 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Part Number</th>
+			<th>Quantity</th>
+			<% if task.task_type.rma_inspection? %>
+			<th>RMA</th>
+			<th>Customer</th>
+			<% else %>
+			<th>PO</th>
+			<th>Due Date</th>
+			<% end %>
+			<th>Ticket Status</th>
+			<th>Assigned</th>
+			<th>Modified</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= task.status %></td>
+			<td><%= task.task_type %></td>
+			<td><%= link_to_item task.item %></td>
+			<td><%= cm task.quantity, :item_quantity %></td>
+			<% if task.task_type.rma_inspection? %>
+			<td><%= link_to task.rma_number, rma_url(task.rma_number) %></td>
+			<td><%= task.rma_customer_name %></td>
+			<% else %>
+			<td>
+				<% if task.purchase_order_number.present? %>
+				<%= link_to task.purchase_order_number, purchase_order_url(task.purchase_order_number) %>
+				<% end %>
+			</td>
+			<td><%= task.date_expected.try(:to_s, :short_human_date) %></td>
+			<% end %>
+			<td><%= task.lighthouse_status %></td>
+			<td><%= task.lighthouse_last_assigned_user_name %></td>
+			<td><%= task.updated_at.to_s(:short_human_date) %></td>
+			<% if permitted_to?(:manage, :quality_inspection_tasks) and task %>
+			<td><%= link_to 'edit', edit_inspection_task_url(task) %></td>
+			<% end %>
+
+			
+		</tr>
+		<% if task.body.present? %>
+		<tr>
+			<td colspan="9"><%= simple_format task.body %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<% if task.task_type.incoming_inspection? and task.purchase_order %>
+<h3>Purchase Order Status</h3>
+<%= render 'production/purchase_order_items/list', :purchase_order_items => task.purchase_order.items %>
+<% end %>
+
+<% if task.lighthouse_ticket %>
+	<% if task.lighthouse_ticket.closed? and task.status.open? %>
+		<%= semantic_form_for task, :url => inspection_task_path(task) do |f| %>
+			<%= f.hidden_field :status_id, :value => Quality::InspectionTaskStatus.closed.id %>
+			<%= f.actions do %>
+		  	<%= f.action :submit, :label => 'Close Task' %>
+			<% end %>
+		<% end %>
+	<% end %>
+	<%= render 'quality/inspection_tasks/lighthouse_ticket', :ticket => task.lighthouse_ticket %>
+<% end %>

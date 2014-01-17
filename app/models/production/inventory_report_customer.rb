@@ -2,11 +2,11 @@
 #
 # Table name: inventory_report_customers
 #
-#  id                   :integer(4)      not null, primary key
-#  inventory_report_id  :integer(4)
+#  id                   :integer          not null, primary key
+#  inventory_report_id  :integer
 #  customer_name        :string(255)
 #  customer_number      :string(255)
-#  m2m_identity_column  :integer(4)
+#  m2m_identity_column  :integer
 #  movement_data        :text
 #  total_on_hand_cost   :decimal(12, 2)
 #  total_on_order_cost  :decimal(12, 2)
@@ -18,7 +18,7 @@ require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
 class Production::InventoryReportCustomer < ActiveRecord::Base
-  set_table_name 'inventory_report_customers'
+  self.table_name = 'inventory_report_customers'
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   

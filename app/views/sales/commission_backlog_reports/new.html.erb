@@ -1,0 +1,10 @@
+<%= render 'sales/commission_reports/submenu' %>
+
+<h2><%= AppConfig.short_name %> Commission Backlog Reports</h2>
+<p>This is a slow report.  Be patient.</p>
+
+<%= semantic_form_for @commission_backlog_report, :as => 'commission_backlog_report', :url => commission_backlog_reports_url(:format => 'xls') do |f| %>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Export XLS' %>
+	<% end %>
+<% end %>

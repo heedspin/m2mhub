@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <style>
+			@page {
+			  size: US-Letter landscape;
+				margin: .7in .5in .7in .7in;
+				@top-center { 
+					content: '<%= @title %>';
+				}
+			  @bottom-center {
+			    content: counter(page) " of " counter(pages)
+			  }
+			}
+    </style>
+  </head>
+  <body>
+    <%= render :template => 'shipping/backlog_reports/_list.html.erb' %>
+  </body>
+</html>

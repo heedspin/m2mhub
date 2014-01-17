@@ -1,0 +1,20 @@
+<% if @quotes.size > 0 %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Quote #</th>
+			<th>Company</th>
+			<th>Date</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @quotes.each do |q| %>
+		<tr>
+			<td><%= link_to q.fquoteno, m2m_quote_url(q.fquoteno) %></td>
+			<td><%= link_to q.customer_name, m2m_customer_number_url(q.fcustno) %></td>
+			<td><%= q.fquotedate.to_s(:sales_date) %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
+<% end %>

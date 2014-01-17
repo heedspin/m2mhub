@@ -1,7 +1,90 @@
+# == Schema Information
+#
+# Table name: sorels
+#
+#  fenumber         :string(3)        default(""), not null
+#  finumber         :string(3)        default(""), not null
+#  fpartno          :string(25)       default(""), not null
+#  fpartrev         :string(3)        default(""), not null
+#  frelease         :string(3)        default(""), not null
+#  fshptoaddr       :string(4)        default(""), not null
+#  fsono            :string(6)        default(""), not null
+#  favailship       :boolean          default(FALSE), not null
+#  fbook            :decimal(15, 5)   default(0.0), not null
+#  fbqty            :decimal(15, 5)   default(0.0), not null
+#  fdiscount        :decimal(17, 5)   default(0.0), not null
+#  fduedate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  finvamount       :decimal(17, 5)   default(0.0), not null
+#  finvqty          :decimal(15, 5)   default(0.0), not null
+#  fjob             :boolean          default(FALSE), not null
+#  fjoqty           :decimal(15, 5)   default(0.0), not null
+#  flabcost         :decimal(17, 5)   default(0.0), not null
+#  flngth           :decimal(15, 5)   default(0.0), not null
+#  flshipdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fmasterrel       :boolean          default(FALSE), not null
+#  fmatlcost        :decimal(17, 5)   default(0.0), not null
+#  fmaxqty          :decimal(15, 5)   default(0.0), not null
+#  fmqty            :decimal(15, 5)   default(0.0), not null
+#  fmsi             :decimal(15, 5)   default(0.0), not null
+#  fnetprice        :decimal(17, 5)   default(0.0), not null
+#  fninvship        :decimal(15, 5)   default(0.0), not null
+#  fnpurvar         :decimal(, )      default(0.0), not null
+#  forderqty        :decimal(15, 5)   default(0.0), not null
+#  fothrcost        :decimal(17, 5)   default(0.0), not null
+#  fovhdcost        :decimal(17, 5)   default(0.0), not null
+#  fpoqty           :decimal(15, 5)   default(0.0), not null
+#  fpostatus        :string(6)        default(""), not null
+#  fquant           :decimal(15, 5)   default(0.0), not null
+#  fsetupcost       :decimal(17, 5)   default(0.0), not null
+#  fshipbook        :decimal(15, 5)   default(0.0), not null
+#  fshipbuy         :decimal(15, 5)   default(0.0), not null
+#  fshipmake        :decimal(15, 5)   default(0.0), not null
+#  fshpbefdue       :boolean          default(FALSE), not null
+#  fsplitshp        :boolean          default(FALSE), not null
+#  fstatus          :string(10)       default(""), not null
+#  fstkqty          :decimal(15, 5)   default(0.0), not null
+#  fsubcost         :decimal(17, 5)   default(0.0), not null
+#  ftoolcost        :decimal(17, 5)   default(0.0), not null
+#  ftoshpbook       :decimal(15, 5)   default(0.0), not null
+#  ftoshpbuy        :decimal(15, 5)   default(0.0), not null
+#  ftoshpmake       :decimal(15, 5)   default(0.0), not null
+#  funetprice       :decimal(17, 5)   default(0.0), not null
+#  fvendno          :string(6)        default(""), not null
+#  fwidth           :decimal(15, 5)   default(0.0), not null
+#  fnretpoqty       :decimal(17, 5)   default(0.0), not null
+#  fnettxnprice     :decimal(17, 5)   default(0.0), not null
+#  funettxnpric     :decimal(17, 5)   default(0.0), not null
+#  fneteuropr       :decimal(17, 5)   default(0.0), not null
+#  funeteuropr      :decimal(17, 5)   default(0.0), not null
+#  fdiscpct         :decimal(17, 5)   default(0.0), not null
+#  fljrdif          :boolean          default(FALSE), not null
+#  flistaxabl       :boolean          default(FALSE), not null
+#  flatp            :boolean          default(FALSE), not null
+#  fcbin            :string(14)       default(""), not null
+#  fcloc            :string(14)       default(""), not null
+#  timestamp_column :binary
+#  identity_column  :integer          not null, primary key
+#  fdelivery        :text             default(""), not null
+#  fcpbtype         :string(1)        default(""), not null
+#  fcudrev          :string(3)        default(""), not null
+#  fndbrmod         :integer          default(0), not null
+#  fpriority        :integer          default(4), not null
+#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flInvcPoss       :boolean          default(FALSE), not null
+#  fmatlpadj        :decimal(16, 5)   default(0.0), not null
+#  ftoolpadj        :decimal(16, 5)   default(0.0), not null
+#  flabpadj         :decimal(16, 5)   default(0.0), not null
+#  fovhdpadj        :decimal(16, 5)   default(0.0), not null
+#  fsubpadj         :decimal(16, 5)   default(0.0), not null
+#  fothrpadj        :decimal(16, 5)   default(0.0), not null
+#  fsetuppadj       :decimal(16, 5)   default(0.0), not null
+#  fnISOQty         :decimal(15, 5)   default(0.0), not null
+#
+
 class M2m::SalesOrderRelease < M2m::Base
 
   # default_scope :order => 'sorels.fenumber'
-  set_table_name 'sorels'
+  self.table_name = 'sorels'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   belongs_to_item :fpartno, :fpartrev
   attr_accessor :sales_order_item
@@ -27,13 +110,13 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :due_by, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate <= ?', date.to_s(:database) ]
+      :conditions => [ 'sorels.fduedate <= ?', date ]
     }
   }
   scope :due_after, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {
-      :conditions => [ 'sorels.fduedate >= ?', date.to_s(:database) ]
+      :conditions => [ 'sorels.fduedate >= ?', date ]
     }
   }
   scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
@@ -67,9 +150,22 @@ class M2m::SalesOrderRelease < M2m::Base
       :conditions => { :somast => { :fcustno => customer.customer_number } }
     }
   }
+  scope :customers, lambda { |customer_numbers|
+    customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
+    {
+      :joins => :sales_order,
+      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
+    }
+  }
   scope :for_sales_order, lambda { |sono|
     {
       :conditions => { :fsono => sono }
+    }
+  }
+  scope :sales_order_numbers, lambda { |so_numbers|
+    so_numbers = so_numbers.map { |n| M2m::SalesOrder.pad_sales_order_number(n) }
+    {
+      :conditions => [ 'sorels.fsono in (?)', so_numbers ]
     }
   }
   scope :with_number, lambda { |num|
@@ -252,88 +348,4 @@ class M2m::SalesOrderRelease < M2m::Base
 
 end
 
-
-
-# == Schema Information
-#
-# Table name: sorels
-#
-#  fenumber         :string(3)       default(""), not null
-#  finumber         :string(3)       default(""), not null
-#  fpartno          :string(25)      default(""), not null
-#  fpartrev         :string(3)       default(""), not null
-#  frelease         :string(3)       default(""), not null
-#  fshptoaddr       :string(4)       default(""), not null
-#  fsono            :string(6)       default(""), not null
-#  favailship       :boolean         default(FALSE), not null
-#  fbook            :decimal(15, 5)  default(0.0), not null
-#  fbqty            :decimal(15, 5)  default(0.0), not null
-#  fdiscount        :decimal(17, 5)  default(0.0), not null
-#  fduedate         :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  finvamount       :decimal(17, 5)  default(0.0), not null
-#  finvqty          :decimal(15, 5)  default(0.0), not null
-#  fjob             :boolean         default(FALSE), not null
-#  fjoqty           :decimal(15, 5)  default(0.0), not null
-#  flabcost         :decimal(17, 5)  default(0.0), not null
-#  flngth           :decimal(15, 5)  default(0.0), not null
-#  flshipdate       :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fmasterrel       :boolean         default(FALSE), not null
-#  fmatlcost        :decimal(17, 5)  default(0.0), not null
-#  fmaxqty          :decimal(15, 5)  default(0.0), not null
-#  fmqty            :decimal(15, 5)  default(0.0), not null
-#  fmsi             :decimal(15, 5)  default(0.0), not null
-#  fnetprice        :decimal(17, 5)  default(0.0), not null
-#  fninvship        :decimal(15, 5)  default(0.0), not null
-#  fnpurvar         :decimal(, )     default(0.0), not null
-#  forderqty        :decimal(15, 5)  default(0.0), not null
-#  fothrcost        :decimal(17, 5)  default(0.0), not null
-#  fovhdcost        :decimal(17, 5)  default(0.0), not null
-#  fpoqty           :decimal(15, 5)  default(0.0), not null
-#  fpostatus        :string(6)       default(""), not null
-#  fquant           :decimal(15, 5)  default(0.0), not null
-#  fsetupcost       :decimal(17, 5)  default(0.0), not null
-#  fshipbook        :decimal(15, 5)  default(0.0), not null
-#  fshipbuy         :decimal(15, 5)  default(0.0), not null
-#  fshipmake        :decimal(15, 5)  default(0.0), not null
-#  fshpbefdue       :boolean         default(FALSE), not null
-#  fsplitshp        :boolean         default(FALSE), not null
-#  fstatus          :string(10)      default(""), not null
-#  fstkqty          :decimal(15, 5)  default(0.0), not null
-#  fsubcost         :decimal(17, 5)  default(0.0), not null
-#  ftoolcost        :decimal(17, 5)  default(0.0), not null
-#  ftoshpbook       :decimal(15, 5)  default(0.0), not null
-#  ftoshpbuy        :decimal(15, 5)  default(0.0), not null
-#  ftoshpmake       :decimal(15, 5)  default(0.0), not null
-#  funetprice       :decimal(17, 5)  default(0.0), not null
-#  fvendno          :string(6)       default(""), not null
-#  fwidth           :decimal(15, 5)  default(0.0), not null
-#  fnretpoqty       :decimal(17, 5)  default(0.0), not null
-#  fnettxnprice     :decimal(17, 5)  default(0.0), not null
-#  funettxnpric     :decimal(17, 5)  default(0.0), not null
-#  fneteuropr       :decimal(17, 5)  default(0.0), not null
-#  funeteuropr      :decimal(17, 5)  default(0.0), not null
-#  fdiscpct         :decimal(17, 5)  default(0.0), not null
-#  fljrdif          :boolean         default(FALSE), not null
-#  flistaxabl       :boolean         default(FALSE), not null
-#  flatp            :boolean         default(FALSE), not null
-#  fcbin            :string(14)      default(""), not null
-#  fcloc            :string(14)      default(""), not null
-#  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fdelivery        :text            default(""), not null
-#  fcpbtype         :string(1)       default(""), not null
-#  fcudrev          :string(3)       default(""), not null
-#  fndbrmod         :integer(4)      default(0), not null
-#  fpriority        :integer(4)      default(4), not null
-#  SchedDate        :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flInvcPoss       :boolean         default(FALSE), not null
-#  fmatlpadj        :decimal(16, 5)  default(0.0), not null
-#  ftoolpadj        :decimal(16, 5)  default(0.0), not null
-#  flabpadj         :decimal(16, 5)  default(0.0), not null
-#  fovhdpadj        :decimal(16, 5)  default(0.0), not null
-#  fsubpadj         :decimal(16, 5)  default(0.0), not null
-#  fothrpadj        :decimal(16, 5)  default(0.0), not null
-#  fsetuppadj       :decimal(16, 5)  default(0.0), not null
-#  fnISOQty         :decimal(15, 5)  default(0.0), not null
-#
 

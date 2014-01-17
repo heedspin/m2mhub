@@ -26,9 +26,14 @@ en:
         # fduedate: To Ship
       m2m/shipper:
         ship_date: Shipped
-      sales_backlog_report:
-        fob_group: FOB Group
-        customer_status: Customer Status
+      shipping/backlog_report:
+        fob_group_id: FOB Group
+        customer_status_id: Customer Status
+        sales_order_numbers: Sales Order Numbers
+        backlog_group_id: Backlog Group
+        sort_order_id: Sort Order
+        include_jobs: Include Jobs
+        page_per_customer: Page Per Customer
       m2m/customer:
         fcompany: Company Name
       m2m/contact:
@@ -50,14 +55,18 @@ en:
         net_invoiced_sales: Net Invoiced Sales
         ytd_invoiced_sales: YTD Invoiced Sales
         ytd_net_invoiced_sales: YTD Net Invoiced Sales
-        new_opportunities: New Opportunities
+        new_opportunities: Opportunities
       sales/bookings_report:
         bookings: Bookings
         ytd_bookings: YTD Bookings
-      sales/opportunity:
-        amount: Potential Revenue
-      sales/opportunity_comment:
+      quality/inspection_task:
         lighthouse_title: Ticket Title
         lighthouse_body: Ticket Body
         lighthouse_assigned_user_id: Assigned To
-        lighthouse_project_id: Project
+        lighthouse_project_id: Lighthouse Project
+        task_type: Type
+        last_receiver_id: Last Receiver
+        rma_number: RMA Number
+        purchase_order_number: PO Number
+        part_number: Part Number
+        

@@ -2,10 +2,7 @@
 <% browse_all_link = link_to("Browse all #{@total_purchase_order_items} Purchase Order Items", item_purchase_order_items_url(@item)) %>
 <% end %>
 <% if @purchase_order_items.size == 0 %>
-	<p>No <%= @total_purchase_order_items > 0 ? 'open' : '' %> purchase orders</p>
-	<% if browse_all_link %>
-		<p><%= browse_all_link %></p>
-	<% end %>
+	<p>No purchase orders</p>
 <% else %>
 <table class="data">
 	<thead>
@@ -16,26 +13,40 @@
 			<th>Rel</th>
 			<th>Quantity</th>
 			<th>Promise<br />Date</th>
+			<th>Inspection<br />Required</th>
 			<th>Status</th>
 			<th>Received</th>
-			<th>Date Received</th>
+			<th>Date<br />Received</th>
 			<th>Vendor Part</th>
+			<th>Unit Cost</th>
 			<th>Description</th>
 		</tr>
 	</thead>
 	<tbody>
 	<% @purchase_order_items.each do |i| %>
 		<tr>
-			<td><%= i.purchase_order.vendor.try(:name) %></td>
-			<td><%= i.purchase_order_number %></td>
+			<td><%= link_to i.purchase_order.vendor.try(:name), vendor_url(i.purchase_order.vendor) %></td>
+			<td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
 			<td><%= i.item_number %></td>
 			<td><%= i.release %></td>
 			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
 			<td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
+			<td>
+				<% if i.inspection_required? %>
+					<%= link_to 'Y (view)', inspection_tasks_url(:poi => i.id) %>
+				<% else %>
+					<% if i.purchase_order.status.open? %>
+						<%= link_to 'N (add)', new_inspection_task_url(:quality_inspection_task => { :purchase_order_item_id => i.id }) %>
+					<% else %>
+						N
+					<% end %>
+				<% end %>
+			</td>
 			<td><%= i.purchase_order.status %></td>
 			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
 			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
 			<td><%= @item.vendors.map { |v| v.fvpartno.strip }.join(', ') %></td>
+			<td><%= cm i.unit_cost, :dollars %></td>
 			<td><%= h @item.fdescript %></td>
 		</tr>
 	<% end %>

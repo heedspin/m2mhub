@@ -1,11 +1,3 @@
-<% content_for :javascripts do %>
-<script type="text/javascript">
-$(function() {
-	ajax_link('#shippers');
-});
-</script>
-<% end %>
-
 <%= render 'summary' %>
 
 <h3>Material Availability</h3>
@@ -24,17 +16,7 @@ $(function() {
 <% if @quote_items.size > 0 %>
 <h3>Quotes:</h3>
 <div id="quote_items">
-<%= render 'items/quote_items/list' %>
+<%= render 'items/m2m_quote_items/list' %>
 </div>
 <% end %>
 
-<h3>Shippers</h3>
-<div id="shippers">
-	<p>
-	<% if @shippers_count == 0 %>
-	No Shippers
-	<% else %>
-	<%= link_to "Show #{[@shippers_count, 5].min} of #{cm @shippers_count} Shippers", item_shippers_url(@item, :limit => 5), :class => 'ajax_link' %>	
-	<% end %>
-	</p>
-</div>

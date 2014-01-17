@@ -99,15 +99,17 @@ class Quality::CreditMemoReport
     rma_items = rmas.map(&:items).flatten
     M2m::Item.attach_items(rma_items)
     invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).to_a
-    results = M2m::InventoryVendor.connection.select_rows <<-SQL
-    select syrmaitm.identity_column, invend.fvendno as vendor_number
-    from syrmaitm
-    left join invend on invend.fpartno = syrmaitm.fcpartno and invend.fpartrev = syrmaitm.fcpartrev
-    where syrmaitm.identity_column in (#{rma_items.map(&:identity_column).join(',')})    
-    SQL
     @vendor_for_item = {}
-    results.each do |rma_item_identity_column, vendor_number|
-      @vendor_for_item[rma_item_identity_column] = vendor_number
+    if rma_items.size > 0
+      results = M2m::InventoryVendor.connection.select_rows <<-SQL
+      select syrmaitm.identity_column, invend.fvendno as vendor_number
+      from syrmaitm
+      left join invend on invend.fpartno = syrmaitm.fcpartno and invend.fpartrev = syrmaitm.fcpartrev
+      where syrmaitm.identity_column in (#{rma_items.map(&:identity_column).join(',')})    
+      SQL
+      results.each do |rma_item_identity_column, vendor_number|
+        @vendor_for_item[rma_item_identity_column] = vendor_number
+      end
     end
     rmas.each do |rma|
       next unless rma.severity.nil? || AppConfig.credit_memo_report_severity_names.include?(rma.severity_name)

@@ -2,25 +2,27 @@
 #
 # Table name: m2mhub_events
 #
-#  id                    :integer(4)      not null, primary key
-#  trigger_id            :integer(4)
+#  id                    :integer          not null, primary key
+#  trigger_id            :integer
 #  erp_type              :string(255)
-#  erp_id                :integer(4)
+#  erp_id                :integer
 #  erp_number            :string(255)
 #  lighthouse_ticket_id  :string(255)
 #  lighthouse_project_id :string(255)
 #  title                 :string(255)
-#  user_id               :integer(4)
+#  user_id               :integer
 #  created_at            :datetime
 #  updated_at            :datetime
 #  ticket_status         :string(255)
-#  closed                :boolean(1)
+#  closed                :boolean
 #  ticket_url            :string(255)
 #  body                  :text
 #
 
+require 'lighthouse_ticket'
+
 class M2mhub::Event < M2mhub::Base
-  set_table_name 'm2mhub_events'
+  self.table_name = 'm2mhub_events'
   belongs_to :trigger, :class_name => 'M2mhub::Trigger', :foreign_key => 'trigger_id'
   belongs_to :user
   belongs_to_lighthouse_ticket

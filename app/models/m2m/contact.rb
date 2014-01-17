@@ -1,5 +1,45 @@
+# == Schema Information
+#
+# Table name: syphon
+#
+#  fllongdist       :boolean          default(FALSE), not null
+#  fcfax            :string(25)       default(""), not null
+#  fcclass          :string(3)        default(""), not null
+#  fcemail          :string(60)       default(""), not null
+#  fcextensio       :string(6)        default(""), not null
+#  fcnumber         :string(25)       default(""), not null
+#  fcsourceid       :string(6)        default(""), not null
+#  fcs_alias        :string(10)       default(""), not null
+#  fcbesttime       :string(10)       default(""), not null
+#  fccurid          :string(3)        default(""), not null
+#  fcfname          :string(15)       default(""), not null
+#  fcontact         :string(20)       default(""), not null
+#  fcrange          :string(10)       default(""), not null
+#  fsalute          :string(5)        default(""), not null
+#  fctitle          :string(25)       default(""), not null
+#  fccountry        :string(25)       default(""), not null
+#  timestamp_column :binary
+#  identity_column  :integer          not null, primary key
+#  fmnotes          :text             default(""), not null
+#  fncrmmod         :integer          default(0), not null
+#  fccrmcntct       :string(12)       default(""), not null
+#  Number           :string(6)        default("0"), not null
+#  PhoneWork        :string(20)       default(""), not null
+#  PhoneHome        :string(20)       default(""), not null
+#  PhoneMobile      :string(20)       default(""), not null
+#  Address          :text             default(""), not null
+#  City             :string(20)       default(""), not null
+#  State            :string(20)       default(""), not null
+#  PostalCode       :string(10)       default(""), not null
+#  URL              :string(100)      default(""), not null
+#  IsPrimary        :boolean          default(FALSE), not null
+#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flEdited         :boolean          default(FALSE), not null
+#
+
 class M2m::Contact < M2m::Base
-  set_table_name 'syphon'
+  self.table_name = 'syphon'
   include ActionView::Helpers::NumberHelper
   
   alias_attribute :primary, :IsPrimary
@@ -65,44 +105,3 @@ class M2m::Contact < M2m::Base
   validates_presence_of :first_name, :last_name
   
 end
-
-# == Schema Information
-#
-# Table name: syphon
-#
-#  fllongdist       :boolean         default(FALSE), not null
-#  fcfax            :string(25)      default(""), not null
-#  fcclass          :string(3)       default(""), not null
-#  fcemail          :string(60)      default(""), not null
-#  fcextensio       :string(6)       default(""), not null
-#  fcnumber         :string(25)      default(""), not null
-#  fcsourceid       :string(6)       default(""), not null
-#  fcs_alias        :string(10)      default(""), not null
-#  fcbesttime       :string(10)      default(""), not null
-#  fccurid          :string(3)       default(""), not null
-#  fcfname          :string(15)      default(""), not null
-#  fcontact         :string(20)      default(""), not null
-#  fcrange          :string(10)      default(""), not null
-#  fsalute          :string(5)       default(""), not null
-#  fctitle          :string(25)      default(""), not null
-#  fccountry        :string(25)      default(""), not null
-#  timestamp_column :binary
-#  identity_column  :integer(4)      not null, primary key
-#  fmnotes          :text            default(""), not null
-#  fncrmmod         :integer(4)      default(0), not null
-#  fccrmcntct       :string(12)      default(""), not null
-#  Number           :string(6)       default("0"), not null
-#  PhoneWork        :string(20)      default(""), not null
-#  PhoneHome        :string(20)      default(""), not null
-#  PhoneMobile      :string(20)      default(""), not null
-#  Address          :text            default(""), not null
-#  City             :string(20)      default(""), not null
-#  State            :string(20)      default(""), not null
-#  PostalCode       :string(10)      default(""), not null
-#  URL              :string(100)     default(""), not null
-#  IsPrimary        :boolean         default(FALSE), not null
-#  CreatedDate      :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModifiedDate     :datetime        default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flEdited         :boolean         default(FALSE), not null
-#
-

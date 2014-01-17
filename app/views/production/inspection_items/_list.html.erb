@@ -1,0 +1,19 @@
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Part</th>
+			<th>Quantity</th>
+			<th>Last Received</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @inspection_items.each do |ii| %>
+		<tr>
+			<td><%= link_to_item(ii.item) %></td>
+			<td><%= cm ii.inventory_location.quantity_on_hand, :item_quantity %></td>
+			<td><%= ii.last_inbound_transaction.time.to_s(:short_human_date_time) %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

@@ -1,3 +1,4 @@
+require 'plutolib/active_hash_methods'
 class Production::InventoryReportQuantity < ActiveHash::Base
   self.data = [
     {:id => 1, :key => :on_hand},
@@ -5,7 +6,7 @@ class Production::InventoryReportQuantity < ActiveHash::Base
     {:id => 3, :key => :committed},
     {:id => 4, :key => :available},
   ]
-  include ActiveHashMethods
+  include Plutolib::ActiveHashMethods
   def total_cost_key
     "total_#{self.key}_cost"
   end

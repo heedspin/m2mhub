@@ -5,8 +5,8 @@
 	<%= f.inputs do %>
 	 	<%= f.input :report_date, :as => :calendar %>
 	<% end %>
-	<%= f.buttons do %>
-		<%= f.commit_button 'Create' %>
+	<%= f.actions do %>
+		<%= f.action :submit, :label => 'Create' %>
 	<% end %>
 <% end %>
 <% end %>

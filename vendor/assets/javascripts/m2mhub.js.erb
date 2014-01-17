@@ -1,0 +1,55 @@
+//= require inplace
+//= require jquery.form
+//= require jquery.popupWindow
+//= require_self
+
+$(document).ready(function(){
+  $("input.calendar").datepicker({
+    yearRange: '-10:+4',
+    dateFormat: 'mm/dd/yy',
+    showOn: 'button',
+    buttonImage: '<%= image_path("calendar.png") %>',
+    buttonImageOnly: true,
+		inline: true
+  });
+});
+
+function turn_on_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.show();
+		}
+		obj.children('input, select, textarea').attr('disabled', false)
+	})
+}
+function turn_off_fields(matcher) {
+	$(matcher).each(function() {
+		var obj = $(this);
+		if (!obj.hasClass("hidden")) {
+			obj.hide();
+		}
+		obj.children('input, select, textarea').attr('disabled', true)
+	})
+}
+
+jQuery.fn.toggle_visibility = function(show_text, hide_text) {
+	var _toggle_visibility_off = null;
+	var _toggle_visibility_on = function() {
+		var e = $(this);
+	  var this_id = e.attr("id");
+	  $(".x" + this_id).show();
+	  e.children(".replace_" + this_id).html(hide_text);
+	  e.off('click');
+	  e.on('click', _toggle_visibility_off);
+	}
+	_toggle_visibility_off = function() {
+		var e = $(this);
+		var this_id = e.attr("id");
+		$(".x" + this_id).hide();
+		e.children(".replace_" + this_id).html(show_text);	
+	  e.off('click');
+	  e.on('click', _toggle_visibility_on);
+	}
+	$(this).on('click', _toggle_visibility_on);
+}

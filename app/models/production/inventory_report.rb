@@ -2,14 +2,14 @@
 #
 # Table name: inventory_reports
 #
-#  id                              :integer(4)      not null, primary key
-#  delayed_job_id                  :integer(4)
-#  delayed_job_status_id           :integer(4)
+#  id                              :integer          not null, primary key
+#  delayed_job_id                  :integer
+#  delayed_job_status_id           :integer
 #  delayed_job_log                 :text
 #  created_at                      :datetime
 #  updated_at                      :datetime
-#  inventory_report_cost_method_id :integer(4)
-#  total_run_time_seconds          :integer(4)
+#  inventory_report_cost_method_id :integer
+#  total_run_time_seconds          :integer
 #  earliest_release_date           :datetime
 #  movement_data                   :text
 #  report_date                     :date
@@ -21,14 +21,13 @@
 
 require 'plutolib/stateful_delayed_report'
 require 'plutolib/to_xls'
-require 'active_hash_methods'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
-  set_table_name 'inventory_reports'
+  self.table_name = 'inventory_reports'
   include Plutolib::ToXls
   include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
@@ -168,8 +167,9 @@ class Production::InventoryReport < ActiveRecord::Base
     @past_releases ||= {}
   end
   
-  def xls_initialize  
+  def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
+    cost_format = Spreadsheet::Format.new(:number_format => '$#,##0.000')
     xls_field("Part Number") { |r| r.part_number_and_revision }
     xls_field('Part Description') { |r| r.item.try(:description) }
     xls_field('Group') { |r| r.item.try(:short_group_name) }
@@ -184,9 +184,9 @@ class Production::InventoryReport < ActiveRecord::Base
     xls_field('Quantity Available') { |r| r.quantity_available }
     xls_field('Total On Order') { |r| r.total_on_order_cost }
     xls_field('Quantity On Order') { |r| r.quantity_on_order }
-    xls_field('Unit Cost', dollar_format) { |r| r.cost.round(2) }
+    xls_field('Unit Cost', cost_format) { |r| r.cost.to_f.round(3) }
     xls_field('Last Receipt', xls_date_format) { |r| r.last_incoming_date }
-    xls_field('Last Ship', xls_date_format) { |r| r.last_ship }
+    xls_field('Last Ship', xls_date_format) { |r| r.last_outgoing_date }
     xls_field('Last Sales Order') { |r| r.last_sales_order_release.try(:sales_order_number) }
     xls_field('Next Receipt', xls_date_format) { |r| r.next_incoming_date }
     xls_field('Next Ship', xls_date_format) { |r| r.next_outgoing_date }

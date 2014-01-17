@@ -12,7 +12,11 @@ class M2mhub::ExternalEventHandler
     if @handler_classes.nil?
       @handler_classes = {}
       (AppConfig.external_event_handlers || {}).each do |source_key, handler_class_name|
-        @handler_classes[source_key] = handler_class_name.constantize
+        begin
+          @handler_classes[source_key] = handler_class_name.constantize
+        rescue NameError
+          log_error "Could not load #{handler_class_name}. Ignoring..."
+        end
       end
     end
     @handler_classes[external_event.source_type] || @handler_classes['default']

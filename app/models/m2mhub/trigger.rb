@@ -2,12 +2,12 @@
 #
 # Table name: m2mhub_triggers
 #
-#  id                    :integer(4)      not null, primary key
-#  trigger_type_id       :integer(4)
-#  trigger_state_id      :integer(4)
+#  id                    :integer          not null, primary key
+#  trigger_type_id       :integer
+#  trigger_state_id      :integer
 #  part_number           :string(255)
-#  notification_type_id  :integer(4)
-#  target_user_id        :integer(4)
+#  notification_type_id  :integer
+#  target_user_id        :integer
 #  lighthouse_project_id :string(255)
 #  title                 :string(255)
 #  instructions          :text
@@ -15,10 +15,8 @@
 #  updated_at            :datetime
 #
 
-require 'active_hash_methods'
-
 class M2mhub::Trigger < M2mhub::Base
-  set_table_name 'm2mhub_triggers'
+  self.table_name = 'm2mhub_triggers'
   belongs_to_active_hash :trigger_state, :class_name => 'M2mhub::TriggerState'
   belongs_to_active_hash :trigger_type, :class_name => 'M2mhub::TriggerType'
   belongs_to_active_hash :notification_type, :class_name => 'M2mhub::NotificationType'

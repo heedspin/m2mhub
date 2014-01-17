@@ -1,3 +1,4 @@
+<% title "RMA #{@rma.rma_number}" %>
 <%= render 'quality/submenu' %>
 <br />
 
@@ -8,10 +9,11 @@ Company RMA: <%= @rma.company_rma_number %><br />
 Status: <%= @rma.status.try(:name) %><br />
 Category: <%= @rma.severity_name %><br />
 Date: <%= @rma.date.to_s(:rma_date) %><br />
-Customer: <%= link_to @rma.customer_name, customer_number_url(@rma.customer_number) %><br />
+Customer: <%= link_to @rma.customer_name, m2m_customer_number_url(@rma.customer_number) %><br />
 <% if @rma.sales_order_number.present? %>
 Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_order_number)  %><br />
 <% end %>
+
 <table class="data">
 	<thead>
 		<tr>
@@ -37,11 +39,14 @@ Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_ord
 	</tbody>
 </table>
 
-<% if AppConfig.lighthouse_account %>
-<% if @rma.lighthouse_ticket %>
-<%= render 'quality/rmas/lighthouse_ticket', :ticket => @rma.lighthouse_ticket %>
+<% if M2mhub::Feature.enabled?(:inspection_tasks) %>
+<% if @rma.inspection_task %>
+	<hr />
+	<h2><%= link_to "Inspection Task: #{@rma.inspection_task.title}", inspection_task_url(@rma.inspection_task) %></h2>
+	<%= render 'quality/inspection_tasks/show', :task => @rma.inspection_task %>
 <% else %>
-<h3>Create Lighthouse Ticket</h3>
-<%= render 'quality/rmas/create_lighthouse_ticket' %>
+	<p><%= link_to 'Create Inspection Task', @new_inspection_task_url %></p>
 <% end %>
 <% end %>
+
+

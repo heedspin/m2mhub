@@ -1,0 +1,42 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Sales Order</th>
+			<th>Quantity</th>
+			<th>Status</th>
+			<th>Customer PO #</th>
+			<th><%= M2m::SalesOrderItem.human_attribute_name(:due_date) %></th>
+			<th>Customer</th>
+			<th><%= AppConfig.short_name %> Part</th>
+			<th>Customer Part</th>
+			<th>Vendor Part</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @sales_order_items.each do |i| %>
+		<tr>
+			<td><%= link_to search_excerpt(i.sales_order.order_number, @search.try(:order_number)), sales_order_url(i.sales_order) %></td>
+			<td><%= cm i.quantity, :sales_order_quantity %></td>
+			<td><%= i.sales_order.status %></td>
+			<td><%= search_excerpt(i.sales_order.customer_po, @search.try(:order_number)) %></td>
+			<td><%= i.due_date.to_s(:sales_date) %></td>
+			<td><%= link_to i.sales_order.customer_name, m2m_customer_number_url(i.sales_order.fcustno) %></td>
+			<td>
+				<% if i.item %>
+				<%= link_to search_excerpt(i.item.part_number, @search.try(:part_number)), item_url(i.item.id) %>
+				<% else %>
+				<%= i.part_number %>
+				<% end %>
+			</td>
+			<td><%= search_excerpt(i.customer_part_number, @search.try(:part_number)) %></td>
+			<td>
+				<% if i.item %>
+					<%= i.item.vendors.map { |v| v.fvpartno.strip }.join(', ') %>
+				<% end %>
+			</td>
+			<td><%= h i.item.try(:fdescript) %></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>

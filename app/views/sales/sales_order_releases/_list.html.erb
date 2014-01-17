@@ -1,0 +1,62 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$("#show_closed_so").toggle(function() { 
+	  $(".closed_so").show();
+	  $(this).html("Hide Closed Sales Orders");
+	}, function() {
+	  $(".closed_so").hide();
+	  $(this).html("Show Closed Sales Orders");
+	});
+});
+</script>
+<% end %>
+
+<% if sales_order_releases.size == 0 %>
+	<p>No sales orders</p>
+<% else %>
+<table class="data">
+	<thead>
+		<tr>
+			<th><%= M2m::SalesOrderRelease.human_attribute_name(:due_date) %></th>
+			<th>SO</th>
+			<th>Qty</th>
+			<th>Status</th>
+			<th>Cust PO</th>
+			<th>Customer</th>
+			<th><%= AppConfig.short_name %> Part</th>
+			<th>Rev</th>
+			<th>Cust<br />Part</th>
+			<th>Vend<br />Part</th>
+			<th>Desc</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% sales_order_releases.each do |r| %>
+		<tr class="<%= r.closed? ? 'closed_so' : '' %>">
+			<td><%= r.due_date.to_s(:sales_date) %></td>
+			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
+			<td><%= cm r.quantity, :sales_order_quantity %></td>
+			<td><%= r.status %></td>
+			<td><%= r.sales_order.customer_po %></td>
+			<td><%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %></td>
+			<td><%= link_to_item r.item.item., r.item.item.part_number %></td>
+			<td><%= r.revision %></td>
+			<td><%= r.item.customer_part_number %></td>
+			<td><%= r.item.item.vendors.map { |v| v.vendor_part_number.strip }.join(', ') %></td>
+			<td><%= h r.item.item.fdescript %></td>
+			<td class="monitary"><%= cm r.unit_price, :dollars %></td>
+		</tr>
+	<% end %>
+	<% if sales_order_releases.count { |r| r.closed? } > 0 %>
+	<tr>
+		<td class="ninjaborders" colspan="13">
+			<%= link_to "Show Closed Sales Orders", '#', :id => 'show_closed_so' %>
+		</td>
+	</tr>
+	<% end %>
+	
+	</tbody>
+</table>
+<% end %>

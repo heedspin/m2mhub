@@ -1,0 +1,28 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>SO #</th>
+			<th>Cust Po#</th>
+			<th>Date</th>
+			<th>Company</th>
+			<th>Total Price</th>
+			<th>Rep</th>
+			<th>Coord</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @sales_orders.each do |so| %>
+		<tr>
+			<td><%= link_to so.fsono, sales_order_url(so.fsono) %></td>
+			<td><%= so.customer_po %></td>
+			<td><%= so.order_date.to_s(:sales_date) %></td>
+			<td><%= link_to so.customer_name, m2m_customer_number_url(so.fcustno) %></td>
+			<td class="monitary"><%= cm so.total_price, :rounded_dollars %></td>
+			<td class="centered"><%= so.fsoldby %></td>
+			<td class="centered"><%= so.fsocoord %></td>
+			<td class="centered"><%= so.fstatus %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>

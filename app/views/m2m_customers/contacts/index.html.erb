@@ -1,0 +1,32 @@
+
+<%= render 'm2m_customers/summary' %>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Fax</th>
+			<th>Email</th>
+			<th>Primary?</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @contacts.sort_by(&:name).each do |contact| %>
+		<tr class="<%= contact.primary? ? 'primary-contact' : '' %>">
+			<td><%= contact.name %></td>
+			<td><%= contact.phone_number_array.join(', ') %></td>
+			<td><%= number_to_phone contact.fax %></td>
+			<td><%= contact.email %></td>
+			<td><%= contact.primary? %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%# if permitted_to? :edit, contact %>
+<p>
+	<%= link_to 'edit', edit_m2m_customer_url(@customer) %>
+</p>
+<%# end %>
+

@@ -1,24 +1,15 @@
-<% @jobs.each do |j| %>
-	<div class="job">
-		<table class="data">
-			<thead>
-				<tr>
-					<th colspan="4">
-						Rev: <%= j.revision %>&nbsp;
-						Job: <%= j.job_number %>
-						<span class="jobstatus"><%= j.status %>: <%= j.status_date.try(:to_s, :job_date) %></span>
-					</th>
-			</thead>
-			<tbody>
-		<% j.detail_routings.each do |dr| %>
-			<tr>
-				<td><%= dr.work_center.name %></td>
-				<td><%= dr.work_center_id %></td>
-				<td><%= dr.percentage_complete %>%</td>
-				<td><%= cm dr.quantity_complete, :job_quantity, 0 %> / <%= cm dr.quantity, :job_quantity %></td>
-			</tr>
-		<% end %>
-			</tbody>
-		</table>
-	</div>
+<% unless defined?(mini_format) %>
+<% mini_format = false %>
 <% end %>
+<table class="data">
+	<tbody>
+		<% jobs.each do |job| %>
+		<%= render 'items/jobs/job.html.erb', :job => job, :mini_format => mini_format, :subjob => false %>
+		<% unless job == jobs.last %>
+		<tr class="spacer">
+			<td></td>
+		</tr>
+		<% end %>
+		<% end %>
+	</tbody>
+</table>

@@ -1,3 +1,5 @@
+require 'plutolib/with_retries'
+
 module BelongsToLighthouse
   module ClassMethods
     def belongs_to_lighthouse_ticket
@@ -6,11 +8,13 @@ module BelongsToLighthouse
       def lighthouse_ticket
         if @lighthouse_ticket.nil? and self.lighthouse_ticket_id and self.lighthouse_project_id
           begin
-            if @lighthouse_ticket = Lighthouse::Ticket.find(self.lighthouse_ticket_id, :params => { :project_id => self.lighthouse_project_id })
-              # Convert to time objects.
-              @lighthouse_ticket.created_at = Time.parse(@lighthouse_ticket.created_at)
-              @lighthouse_ticket.versions.each do |v|
-                v.created_at = Time.parse(v.created_at)
+            Plutolib::WithRetries.with_retries do
+              if @lighthouse_ticket = Lighthouse::Ticket.find(self.lighthouse_ticket_id, :params => { :project_id => self.lighthouse_project_id })
+                # Convert to time objects.
+                @lighthouse_ticket.created_at = Time.parse(@lighthouse_ticket.created_at)
+                @lighthouse_ticket.versions.each do |v|
+                  v.created_at = Time.parse(v.created_at)
+                end
               end
             end
           rescue ActiveResource::ResourceNotFound
@@ -25,7 +29,12 @@ module BelongsToLighthouse
       self.class_eval <<-RUBY
       attr_accessor :lighthouse_project
       def lighthouse_project
-        @lighthouse_project ||= (self.lighthouse_project_id && Lighthouse::Project.find(self.lighthouse_project_id))
+        if @lighthouse_project.nil? and self.lighthouse_project_id
+          Plutolib::WithRetries.with_retries do
+            @lighthouse_project = Lighthouse::Project.find(self.lighthouse_project_id)
+          end
+        end
+        @lighthouse_project
       end
       RUBY
     end

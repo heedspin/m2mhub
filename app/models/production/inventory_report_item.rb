@@ -2,27 +2,27 @@
 #
 # Table name: inventory_report_items
 #
-#  id                                     :integer(4)      not null, primary key
-#  inventory_report_id                    :integer(4)
-#  inventory_report_customer_id           :integer(4)
+#  id                                     :integer          not null, primary key
+#  inventory_report_id                    :integer
+#  inventory_report_customer_id           :integer
 #  part_number                            :string(255)
 #  revision                               :string(255)
-#  m2m_identity_column                    :integer(4)
-#  inventory_report_cost_method_id        :integer(4)
+#  m2m_identity_column                    :integer
+#  inventory_report_cost_method_id        :integer
 #  last_incoming_date                     :datetime
 #  last_outgoing_date                     :datetime
 #  next_outgoing_date                     :datetime
 #  next_incoming_date                     :datetime
 #  item_group_code_key                    :string(255)
-#  last_incoming_inventory_transaction_id :integer(4)
-#  next_sales_order_release_id            :integer(4)
-#  last_sales_order_release_id            :integer(4)
+#  last_incoming_inventory_transaction_id :integer
+#  next_sales_order_release_id            :integer
+#  last_sales_order_release_id            :integer
 #  movement_data                          :text
 #  quantity_on_hand                       :decimal(12, 2)
 #  quantity_committed                     :decimal(12, 2)
 #  quantity_available                     :decimal(12, 2)
 #  quantity_on_order                      :decimal(12, 2)
-#  cost                                   :decimal(12, 2)
+#  cost                                   :decimal(14, 4)
 #
 
 require 'm2m/belongs_to_item'
@@ -32,7 +32,7 @@ require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
 class Production::InventoryReportItem < ActiveRecord::Base
-  set_table_name 'inventory_report_items'
+  self.table_name = 'inventory_report_items'
   include ::BelongsToItem
   include ::BelongsToItemGroup # self.group, self.group_name, etc
   include Production::InventoryMovementData::Helper
@@ -53,10 +53,6 @@ class Production::InventoryReportItem < ActiveRecord::Base
     @latest_activity ||= [self.last_outgoing_date, self.last_incoming_date, self.next_outgoing_date, self.next_incoming_date].compact.max
   end
   
-  def last_ship
-    self.last_sales_order_release.try(:last_ship_date)
-  end
-
   attr_accessor :next_outgoing_parent_item
   def next_outgoing_parent_item
     unless @_loaded_next_outgoing_parent_item
@@ -107,13 +103,16 @@ class Production::InventoryReportItem < ActiveRecord::Base
 
   def find_last_outgoing
     if self.last_sales_order_release = @past_releases[self.item.part_number_revision]
+      self.last_outgoing_date = self.last_sales_order_release.try(:last_ship_date)
       @last_customer = self.last_sales_order_release.sales_order.customer
+    else
+      self.last_outgoing_date = self.item.inventory_transactions.by_time_desc.outgoing.first.try(:time)
     end
   end
 
   def find_last_incoming_transaction
     # item.receiver_items.by_time_received_desc.scoped(:include => :receiver).first.try(:receiver).try(:time_received)
-    if self.last_incoming_inventory_transaction = item.inventory_transactions.by_time_desc.incoming.first
+    if self.last_incoming_inventory_transaction = self.item.inventory_transactions.by_time_desc.incoming.first
       self.last_incoming_date = self.last_incoming_inventory_transaction.time
     end
   end

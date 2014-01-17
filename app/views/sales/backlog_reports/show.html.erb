@@ -3,6 +3,10 @@
 
 <h2>Backlog Report For <%= @backlog_report.date.to_s(:sales_date) %></h2>
 
+<p>
+	<%= link_to 'Export Backlog Report', sales_backlog_report_url(@backlog_report, :format => 'xls') %>
+</p>
+
 <table class="data">
 	<thead>
 		<tr>
@@ -34,7 +38,7 @@
 		<tr class="<%= summary.late? ? 'late-release' : '' %>">
 			<td><%= summary.due_date.to_s(:sales_date) %></td>
 			<% if summary.release %>
-			<td><%= link_to summary.release.sales_order.customer.company_name, customer_url(summary.release.sales_order.customer) %></td>
+			<td><%= link_to summary.release.sales_order.customer.company_name, m2m_customer_url(summary.release.sales_order.customer) %></td>
 			<td><%= link_to "SO #{summary.release.sales_order.order_number}", sales_order_url(summary.release.sales_order) %></td>
 			<td><%= link_to_item summary.release.item %></td>
 			<% else %>

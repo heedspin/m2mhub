@@ -1,0 +1,26 @@
+<table class="data">
+	<thead>
+		<tr>
+			<th>Time</th>
+			<% if permitted_to?(:manage, :m2mhub_user_activities) %>
+			<th>User</th>
+			<th>IP Address</th>
+			<% end %>
+			<th>Activity</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @user_activities.each do |ua| %>
+		<tr>
+			<td><%= ua.created_at.day == Date.current.day ? ua.created_at.to_s(:time) : ua.created_at.to_s(:event_date) %></td>
+			<% if permitted_to?(:manage, :m2mhub_user_activities) %>
+			<td><%= ua.user.try(:full_name) %></td>
+			<td><%= ua.remote_ip %></td>
+			<% end %>
+			<td><%= link_to_unless ua.password_related?, ua.report_name, url_for_user_activity(ua), :title => ua.params %></td>
+			<td><%= ua.params_to_url_hash.inspect unless ua.password_related? %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+

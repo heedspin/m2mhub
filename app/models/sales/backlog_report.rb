@@ -2,7 +2,7 @@
 #
 # Table name: backlog_reports
 #
-#  id            :integer(4)      not null, primary key
+#  id            :integer          not null, primary key
 #  date          :date
 #  total_backlog :decimal(12, 2)
 #  created_at    :datetime
@@ -11,10 +11,12 @@
 #
 
 require 'plutolib/serialized_attributes'
+require 'plutolib/to_xls'
 
 class Sales::BacklogReport < M2mhub::Base
   include Plutolib::SerializedAttributes
-  set_table_name 'backlog_reports'
+  include Plutolib::ToXls
+  self.table_name = 'backlog_reports'
   belongs_to_active_hash :report_time_period
   scope :date, lambda { |date|
     {
@@ -162,6 +164,27 @@ class Sales::BacklogReport < M2mhub::Base
   end
   def future_bucket
     @future_bucket ||= BacklogBucket.new(:future, self.date)
+  end
+  
+  def xls_filename
+    Time.now.strftime("%y%m%d") + '_' + AppConfig.short_name + '_Backlog'
+  end
+  
+  def xls_sheet_name
+    'Backlog'
+  end
+  
+  def xls_initialize
+    dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
+    xls_field('Due Date') { |r| r.due_date }
+    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name) }
+    xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
+    xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
+    xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
+  end  
+  
+  def all_data
+    self.sales_release_summaries
   end
 
 end

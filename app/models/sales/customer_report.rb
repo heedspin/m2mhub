@@ -2,7 +2,7 @@
 #
 # Table name: customer_reports
 #
-#  id                 :integer(4)      not null, primary key
+#  id                 :integer          not null, primary key
 #  customer_number    :string(255)
 #  total_quote_amount :decimal(12, 2)
 #  total_sales_amount :decimal(12, 2)
@@ -13,7 +13,7 @@
 require 'csv'
 
 class Sales::CustomerReport < M2mhub::Base
-  set_table_name 'customer_reports'
+  self.table_name = 'customer_reports'
   belongs_to :customer, :class_name => 'M2m::Customer', :primary_key => 'fcustno', :foreign_key => :customer_number
 
   # Sales::CustomerReport.run
