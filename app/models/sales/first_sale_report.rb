@@ -34,6 +34,7 @@ class Sales::FirstSaleReport
       from somast
       left join soitem on somast.fsono = soitem.fsono
       where soitem.fquantity >= 100
+        and somast.fstatus != 'CANCELLED'
       group by somast.fcustno, soitem.fpartno
       order by order_date desc, customer_number, part_number
     SQL
