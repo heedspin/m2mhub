@@ -59,9 +59,8 @@
 					<thead>
 						<tr>
 							<th><span>Item / Description</span></th>
-							<th><span>Unit Price</span></th>
 							<th><span>Quantity</span></th>
-							<th><span>Total Price</span></th>
+							<th><span>Unit Price</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -76,9 +75,8 @@
 										<% end %>
 									</div>
 								</td>
-								<td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
 								<td><span><%= cm item.quantity, :item_quantity %></span></td>
-								<td><span data-prefix>$</span><span><%= cm item.total_price, :two_decimals %></span></td>
+								<td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
 							</tr>
 						<% end %>
 					</tbody>
