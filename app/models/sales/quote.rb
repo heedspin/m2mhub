@@ -59,7 +59,7 @@ class Sales::Quote < M2mhub::Base
   
   before_validation :set_quote_number, :on => :create
   def set_quote_number
-    self.quote_number = (Sales::Quote.maximum(:quote_number) || STARTING_QUOTE_NUMBER) + rand(10) + 5
+    self.quote_number = (Sales::Quote.maximum(:quote_number) || STARTING_QUOTE_NUMBER) + rand(3) + 1
   end
   
   before_save :set_creator

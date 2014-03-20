@@ -298,7 +298,7 @@ class Sales::Opportunity < M2mhub::Base
 
   before_validation :set_xnumber, :on => :create
   def set_xnumber
-    self.xnumber_decimal = (Sales::Opportunity.maximum(:xnumber_decimal) || 0) + rand(10) + 5
+    self.xnumber_decimal = (Sales::Opportunity.maximum(:xnumber_decimal) || 0) + rand(3) + 1
   end
   attr_accessor :xnumber
   def xnumber

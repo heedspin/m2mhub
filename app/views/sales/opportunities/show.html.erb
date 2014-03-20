@@ -18,6 +18,10 @@ $(function() {
 <%= render 'sales/opportunities/submenu' %>
 <br />
 
+<% if @opportunity.errors.size > 0 %>
+<div class="flash_error">Errors: <%= @opportunity.errors.full_messages.join("<br />\n") %></div>
+<% end %>
+
 <div class="opportunity">
 	<% if permitted_to?(:edit, :sales_opportunities) %>
 	<div class="hiddenedit">
