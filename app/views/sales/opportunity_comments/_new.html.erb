@@ -2,15 +2,7 @@
   <%= f.semantic_errors :base %>
 	<%= f.inputs do %>
 		<%= f.input :opportunity_id, :as => :hidden %>
-		<%#= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'not_ticket_field' }, :value => Sales::OpportunityCommentType.comment.id %>
-		<%#= f.input :comment_type_id, :as => :hidden, :wrapper_html => { :class => 'ticket_field' }, :value => Sales::OpportunityCommentType.ticket.id %>
-
-		<%= f.input :create_lighthouse_ticket, :as => :boolean %>
-		<%= f.input :lighthouse_project_id, :collection => Lighthouse::Project.all.map { |p| [p.name, p.id] }, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
-		<%= f.input :lighthouse_assigned_user_id, :as => :select, :collection => Lighthouse::User.options, :include_blank => false, :wrapper_html => { :class => 'ticket_field' } %>
-		<%= f.input :lighthouse_title, :as => :string, :wrapper_html => { :class => 'ticket_field' }%>
-		<%= f.input :lighthouse_body, :as => :text, :wrapper_html => { :class => 'ticket_field' } %>
-		<%= f.input :comment, :wrapper_html => { :class => 'not_ticket_field' } %>
+		<%= f.input :comment %>
 	<% end %>
 	<%= render 'sales/opportunity_comments/status_form', :f => f %>
 	<div class="clear"></div>
@@ -24,20 +16,4 @@
 			<% end %>
 		</li>
 	<% end %>
-<% end %>
-
-<% content_for :javascripts do %>
-<script type="text/javascript">
-$(function() {
-	$("#sales_opportunity_comment_create_lighthouse_ticket").change(function() {
-		if ($(this).is(":checked")) {
-			turn_on_fields(".ticket_field");
-			turn_off_fields(".not_ticket_field");
-		} else {
-			turn_on_fields(".not_ticket_field");
-			turn_off_fields(".ticket_field");
-		}
-	}).trigger('change');
-});
-</script>
 <% end %>
