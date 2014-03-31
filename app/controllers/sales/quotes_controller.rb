@@ -30,6 +30,7 @@ class Sales::QuotesController < M2mhubController
         if @quote.link_opportunity_id
           opportunity = Sales::Opportunity.find(@quote.link_opportunity_id)
           comment = opportunity.comments.build
+          comment.creator_id = current_user.id
           comment.quote_id = @quote.id
           comment.comment_type = Sales::OpportunityCommentType.quote
           comment.status = Sales::OpportunityStatus.active

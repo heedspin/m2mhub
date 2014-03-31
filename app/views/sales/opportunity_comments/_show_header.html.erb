@@ -1,9 +1,16 @@
 <p>
-	<strong><%= comment.creator.try(:full_name)%></strong>:&nbsp;&nbsp;
+	<em><%= comment.created_at.to_s(:short_human_date_time) %></em>
+	<% if full_name = comment.creator.try(:full_name) %>
+	by <strong><%= full_name %></strong>
+	<% end %>
+	<br />
 	<% if comment.comment_type.sales_order? %>
 	Won <%= comment.win_type.try(:name) %>
-	<% elsif comment.status_change? %>
+	<% elsif comment.status_change? and comment.previous_status.try(:name) %>
 	<%= comment.previous_status.try(:name) %> &rarr; <%= comment.status.try(:name) %>
+	<% if comment.status.hold? %>
+	<br />
+	Wakeup: <%= comment.wakeup.to_s(:short_human_date) %>
 	<% end %>
-	&nbsp;&nbsp;<em><%= comment.created_at.to_s(:short_human_date_time) %></em>
+	<% end %>
 </p>

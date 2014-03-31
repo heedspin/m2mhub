@@ -16,6 +16,7 @@
 	</div>
 	<% elsif comment.comment_type.try(:quote?) %>
 	<div class="opportunity_quote">
+		<%= render 'sales/opportunity_comments/show_header', :comment => comment %>
 		<%= render 'sales/quotes/summary', :quote => comment.quote %>
 	</div>
 	<% end %>
