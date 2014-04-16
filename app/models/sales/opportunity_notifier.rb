@@ -28,7 +28,7 @@ class Sales::OpportunityNotifier < ApplicationMailer
     if @opportunity.owner
       mail( :subject => "#{@opportunity.safe_title}. Ticket #{@opportunity.xnumber}",
             :from => AppConfig.email_address,
-            :to => [@opportunity.owner.email, AppConfig.new_opportunity_email_addresses.split(',')].flatten.compact.join(','),
+            :to => [@opportunity.owner.email, AppConfig.new_opportunity_email_addresses.split(',')].flatten.compact.uniq.join(','),
             :date => Time.now )
     end
   end
