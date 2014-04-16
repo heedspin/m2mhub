@@ -11,8 +11,7 @@ class CalendarInput < Formtastic::Inputs::StringInput
       :class => 'calendar'
     }
     unless options.member?(:value)
-      value_option = value || Date.current
-      unless value_option.is_a?(String)
+      if (value_option = value) and (value_option.is_a?(Date))
         value_option = value_option.to_s(:calendar_date)
       end
       excellent_options[:value] = value_option

@@ -6,8 +6,8 @@
 #  group_id      :integer
 #  context_id    :integer
 #  permission_id :integer
-#  created_at    :datetime
-#  updated_at    :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 class Context::GroupContext < M2mhub::Base

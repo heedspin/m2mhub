@@ -38,8 +38,8 @@ class M2mhub::Cronjobs
   # 02 1 * * * /var/www/lxdhub/script/runner.sh 'M2mhub::Cronjobs.new.delay.nightly'
   def nightly
     log "Running nightly"
-    log "Running opportunity wakeups"
-    Sales::Opportunity.run_wakeups
+    log "Running opportunity run_notifications"
+    Sales::Opportunity.run_notifications
     log "Running rep report"
     Sales::RepReportRunner.new.run_report
     log "Running invoice discrepancy report"

@@ -355,13 +355,14 @@ class Sales::Opportunity < M2mhub::Base
     end
   end
 
-  def self.run_wakeups
+  def self.run_notifications
     Sales::Opportunity.on_hold_until(Date.current).each(&:wakeup!)
+    Sales::OpportunityComment.reminder_on(Date.current).each(&:send_reminder!)
   end
 
   def wakeup!
     self.update_attributes(:status => Sales::OpportunityStatus.active)
-    Sales::OpportunityWakeupNotifier.wakeup_notifier(self).deliver
+    Sales::OpportunityNotifier.wakeup_notifier(self).deliver
   end
 
   def self.run_reaper
@@ -373,6 +374,11 @@ class Sales::Opportunity < M2mhub::Base
                          :comment_type_id => Sales::OpportunityCommentType.lost.id,
                          :loss_reason_id => Sales::OpportunityLossReason.reaper.id,
                          :comment => "Opportunity has not been active since #{self.updated_at.to_s(:human_date)}")
+  end
+
+  after_create :send_new_opportunity_notification
+  def send_new_opportunity_notification
+    Sales::OpportunityNotifier.new_opportunity_notifier(self).deliver
   end
   
 end

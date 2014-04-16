@@ -5,8 +5,8 @@
 #  id         :integer          not null, primary key
 #  key        :string(255)
 #  subject    :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 class Context::Context < M2mhub::Base

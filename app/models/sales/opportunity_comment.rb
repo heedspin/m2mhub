@@ -29,6 +29,8 @@
 #  updated_at                         :datetime
 #  creator_id                         :integer
 #  win_type_id                        :integer
+#  reminder                           :date
+#  reminder_sent                      :boolean          default(FALSE)
 #
 
 require 'm2mhub/lighthouse_watcher'
@@ -47,7 +49,7 @@ class Sales::OpportunityComment < M2mhub::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :primary_key => 'fsono'
   belongs_to_active_hash :win_type, :class_name => 'Sales::OpportunityWinType', :foreign_key => :win_type_id
 
-  validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
+  # validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
   validates_presence_of :sales_order_id, :if => lambda { |c| c.status.try(:won?) }
 
   scope :by_id, :order => :id
@@ -91,6 +93,12 @@ class Sales::OpportunityComment < M2mhub::Base
   scope :sample_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.sample_order.id)
   scope :tooling_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.tooling_order.id)
   scope :production_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.production_order.id)
+  def self.reminder_on(date)
+    includes(:opportunity).where [ 
+      'sales_opportunities.status_id in (?) and sales_opportunity_comments.status_id = ? and sales_opportunity_comments.reminder = ? and sales_opportunity_comments.reminder_sent = false', 
+      Sales::OpportunityStatus.all_open, Sales::OpportunityStatus.active, date 
+    ]
+  end
 
   attr_accessor :create_lighthouse_ticket
   def create_lighthouse_ticket=(val)
@@ -206,5 +214,20 @@ class Sales::OpportunityComment < M2mhub::Base
     # self.opportunity.last_comment = self ; self.opportunity.save! ====> BOOOOM!!!!!!!!!!
     self.opportunity.last_comment_updated_id = self.id
     self.opportunity.save_without_timestamping!
+  end
+
+  def send_reminder!
+    Sales::OpportunityNotifier.reminder_notifier(self).deliver
+    self.reminder_sent = true
+    self.save!
+  end
+
+  # If a reminder comment is edited, clear the reminder sent flag.
+  # before_save :reset_reminder_set
+  def reset_reminder_set
+    if self.status.active? and self.reminder.present?
+      self.reminder_sent = false
+    end
+    true
   end
 end

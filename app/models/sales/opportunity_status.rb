@@ -4,7 +4,7 @@ class Sales::OpportunityStatus < ActiveHash::Base
     {:id => 8, :open => false, :name => 'All', :cmethod => :is_all, :_children_ids => [1, 2, 3, 4, 7]},
     {:id => 9, :open => false, :name => 'Open and Hold', :_children_ids => [1, 2, 3]},
     {:id => 1, :open => true,  :name => 'Open', :cmethod => :active, :_children_ids => [1, 2]},
-    {:id => 2, :open => false, :name => 'Won'},
+    {:id => 2, :open => true, :name => 'Won'},
     {:id => 3, :open => true,  :name => 'On Hold', :cmethod => :hold},
     {:id => 4, :open => false, :name => 'Lost'},
     {:id => 7, :open => false, :name => 'Closed'},

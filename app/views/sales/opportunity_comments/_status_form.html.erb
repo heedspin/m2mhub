@@ -3,7 +3,7 @@
 	<%#= f.input :quote_id, :wrapper_html => { :class => 'active_field number' } %>
 	<%= f.input :loss_reason, :collection => Sales::OpportunityLossReason.all, :include_blank => false, :wrapper_html => { :class => 'lost_field' } %>
 	<%= f.input :wakeup, :as => :calendar, :wrapper_html => { :class => 'hold_field' } %>
-	<%#= f.input :wakeup, :as => :calendar, :label => 'Reminder', :wrapper_html => { :class => 'active_field'} %>
+	<%= f.input :reminder, :as => :calendar, :label => 'Reminder', :wrapper_html => { :class => 'active_field'} %>
 	<%= f.input :win_type, :collection => Sales::OpportunityWinType.all, :include_blank => false, :wrapper_html => { :class => 'won_field' } %>
 	<%= f.input :sales_order_id, :wrapper_html => { :class => 'won_field number' } %>
 	<%= f.input :date, :as => :calendar, :wrapper_html => { :class => 'won_field lost_field' } %>
@@ -18,12 +18,12 @@ $(function() {
 		var to_show = show_map[$(this).val()];
 		for (var i = 0; i < all_fields.length; i++) {
 			field = all_fields[i];
-			$("." + field).hide();
+			$("." + field).hide().find("input").attr("disabled", true);
 		}
 		for (var i = 0; i < all_fields.length; i++) {
 			field = all_fields[i];
 			if (to_show == field) {
-				$("." + field).show();
+				$("." + field).show().find("input").attr("disabled", false);
 			}
 		}
 	}).trigger('change');
