@@ -29,7 +29,6 @@ class M2mhub::Cronjobs
   def low_frequency
     log "Running low_frequency"
     log "Updating opportunity comments"
-    Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
     Sales::ErpCustomerMatcher.new.run_report
     Sales::SalesOrderAssigner.new.run_report
     log "Finished low_frequency"

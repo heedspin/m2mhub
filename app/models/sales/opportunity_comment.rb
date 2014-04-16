@@ -180,6 +180,7 @@ class Sales::OpportunityComment < M2mhub::Base
     true
   end
 
+  # Removed from cronjobs.rb...
   # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
   def update_status!
     self.lighthouse_watcher_update

@@ -49,6 +49,7 @@ class Sales::OpportunitiesController < M2mhubController
   def new
     @opportunity = build_object
     @opportunity.owner_id = current_user.id
+    @opportunity.start_date ||= Date.current
     if @opportunity.sales_customer
       @opportunity.customer_name = @opportunity.sales_customer.name
     else
