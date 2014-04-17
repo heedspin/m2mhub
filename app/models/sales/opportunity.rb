@@ -213,29 +213,6 @@ class Sales::Opportunity < M2mhub::Base
     end
   end
 
-  def build_ticket_comment(ticket_created_by, lighthouse_assigned_user_id)
-    comment = self.comments.build(:status_id => self.status_id, :comment_type_id => Sales::OpportunityCommentType.ticket.id)
-    comment.lighthouse_project_id = AppConfig.opportunities_default_lighthouse_project_id
-    comment.lighthouse_title = "#{self.xnumber}: " + [self.product, self.customer_name, self.title].select(&:present?).map(&:strip).join(' - ')
-    lighthouse_body = [ ]
-
-    # Filter out lines starting with M2MHub:
-    self.body.split("\n").each do |line|
-      unless line.starts_with?('M2MHub:')
-        lighthouse_body.push line
-      end
-    end
-
-    lighthouse_body.push "\n---"
-    lighthouse_body.push "Ticket Created By: *#{ticket_created_by}*"
-    url = Rails.application.routes.url_helpers.opportunity_url(self.xnumber, :host => AppConfig.hostname)
-    lighthouse_body.push "M2MHub Opportunity: [#{comment.lighthouse_title}](#{url})"
-    comment.lighthouse_body = lighthouse_body.join("\n")
-    comment.lighthouse_assigned_user_id = lighthouse_assigned_user_id
-    comment.wakeup = Date.current.advance(:days => 7)
-    comment
-  end
-
   def guess_website
     if self.body =~ /From: [^@\n]+@([^@\n]+)/m
       domain = $1.strip

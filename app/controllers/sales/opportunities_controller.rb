@@ -90,8 +90,8 @@ class Sales::OpportunitiesController < M2mhubController
 
   def show
     @opportunity = current_object
-    @comment = @opportunity.build_ticket_comment(current_user.full_name,
-                                                 current_user.lighthouse_user_id)
+    @comment = @opportunity.comments.build(:wakeup => Date.current.advance(:days => 7),
+      :date => Date.current)
     @comments = @opportunity.comments.by_id
     if @opportunity.sales_customer.nil?
       @similar_customers = if @opportunity.customer_name.present?
