@@ -224,9 +224,9 @@ class Sales::OpportunityComment < M2mhub::Base
   end
 
   # If a reminder comment is edited, clear the reminder sent flag.
-  # before_save :reset_reminder_set
+  before_save :reset_reminder_set
   def reset_reminder_set
-    if self.status.active? and self.reminder.present?
+    if !self.reminder_sent_changed? and self.status.active? and self.reminder.present?
       self.reminder_sent = false
     end
     true
