@@ -10,7 +10,7 @@ class Sales::OpportunitiesController < M2mhubController
   def index
     @search = Search.new(params[:search])
     unless params.member?(:search)
-      @search.status = Sales::OpportunityStatus.open #_and_hold
+      @search.status = Sales::OpportunityStatus.active
       # Introduces 1 opp trap: @search.owner_id = current_user.id
     end
     s = Sales::Opportunity
