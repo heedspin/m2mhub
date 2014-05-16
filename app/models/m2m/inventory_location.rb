@@ -36,11 +36,7 @@ class M2m::InventoryLocation < M2m::Base
   scope :with_quantity_on_hand, :conditions => 'inonhd.fonhand > 0'
   
   def location_description
-    if self.bin.present?
-      self.bin
-    else
-      self.flocation.titleize
-    end
+    [self.flocation, self.bin].select(&:present?).join('-').map(&:titleize)
   end
 
   def self.attach_to_items(locations, items)
