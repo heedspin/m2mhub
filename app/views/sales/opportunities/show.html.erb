@@ -49,8 +49,12 @@ $(function() {
 	
 	<div class="opportunity_header">
 		<p>
-			<strong><%= Sales::Opportunity.human_attribute_name(:owner) %>:</strong> <%= @opportunity.owner.try(:full_name) %><br />
-			<strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
+			<strong><%= Sales::Opportunity.human_attribute_name(:owner) %>:</strong> <%= @opportunity.owner.try(:full_name) %>
+			<% if @opportunity.sales_person_name %>
+			<br /><strong>Sales Rep:</strong>
+			<%= @opportunity.sales_person_name %>
+			<% end %>			
+			<br /><strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
 			<%= @opportunity.status.try(:name) %>
 			<% if @opportunity.status.try(:hold?) and @opportunity.wakeup %>
 			- Wakeup: <%= @opportunity.wakeup.to_s(:short_human_date) %>
@@ -65,22 +69,10 @@ $(function() {
 			<% if @opportunity.sales_customer %>
 			<br /> <strong>Territory:</strong> <%= @opportunity.sales_customer.try(:sales_territory).try(:name_and_sales_rep) %>
 			<% end %>
-
-			<% if @opportunity.sales_person %>
-			<br />	
-			<strong><%= Sales::Opportunity.human_attribute_name(:sales_person) %>:</strong>
-			<%= @opportunity.full_sales_person %>
-			<% end %>
 			
 			<br />	
 			<strong><%= Sales::Opportunity.human_attribute_name(:start_date) %>:</strong>
 			<%= @opportunity.start_date.try(:to_s, :short_human_date) %>
-
-			<% if @opportunity.end_date %>
-			<br />	
-			<strong><%= Sales::Opportunity.human_attribute_name(:end_date) %>:</strong>
-			<%= @opportunity.end_date.try(:to_s, :short_human_date) %>
-			<% end %>
 			
 			<% @opportunity.displays.each do |display| %>
 			<br />
