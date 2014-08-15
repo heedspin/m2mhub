@@ -9,33 +9,35 @@ class Sales::OpportunitiesController < M2mhubController
 
   def index
     @search = Search.new(params[:search])
-    unless params.member?(:search)
-      @search.status = Sales::OpportunityStatus.active
-      # Introduces 1 opp trap: @search.owner_id = current_user.id
-    end
-    s = Sales::Opportunity
-    @search.xnumber = @search.xnumber.strip.upcase if @search.xnumber.present?
-    if @search.xnumber.present? and (s = s.xnumber(@search.xnumber)) and (s.count == 1)
-      # Going direct to xnumber opportunity.
-      @opportunities = s
-    else
-      if @search.status_id
-        s = s.status(@search.status_id)
+    if params.member?(:search)
+      s = Sales::Opportunity
+      @search.xnumber = @search.xnumber.strip.upcase if @search.xnumber.present?
+      if @search.xnumber.present? and (s = s.xnumber(@search.xnumber)) and (s.count == 1)
+        # Going direct to xnumber opportunity.
+        @opportunities = s
       else
-        s = s.not_deleted
+        if @search.status_id
+          s = s.status(@search.status_id)
+        else
+          s = s.not_deleted
+        end
+        s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
+        s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
+        s = s.owner(@search.owner_id) if @search.owner_id
+        s = s.win_type_search(@search.win_type_search_id) if @search.win_type_search_id.present?
+        @opportunities = s.by_amount_desc
       end
-      s = s.customer_name_like(@search.customer_name) if @search.customer_name.present?
-      s = s.sales_territory(@search.sales_territory_id) if @search.sales_territory_id.present?
-      s = s.owner(@search.owner_id) if @search.owner_id
-      s = s.win_type_search(@search.win_type_search_id) if @search.win_type_search_id.present?
-      @opportunities = s.by_amount_desc
+    else
+      @search.status = Sales::OpportunityStatus.active
     end
     respond_to do |format|
       format.html do 
-        if s.size == 1
-          redirect_to opportunity_url(@opportunities.first.xnumber)
-        else
-          @opportunities = @opportunities.paginate(:page => params[:page], :per_page => 20)
+        if @opportunities
+          if @opportunities.size == 1
+            redirect_to opportunity_url(@opportunities.first.xnumber)
+          else
+            @opportunities = @opportunities.paginate(:page => params[:page], :per_page => 20)
+          end
         end
       end
       format.xls do

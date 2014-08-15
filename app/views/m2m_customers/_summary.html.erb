@@ -3,12 +3,12 @@
 <% title @customer.name %>
 <h2><%= @customer.name %></h2>
 
-<% if primary = @customer.contacts.primary.first %>
 <p>
-	Primary Contact: <%= primary.name %> <%= primary.email %> <%= primary.phone_number_array.join(', ') %><br />
+	<% if primary = @customer.contacts.primary.first %>
+		Primary Contact: <%= primary.name %> <%= primary.email %> <%= primary.phone_number_array.join(', ') %><br />
+	<% end %>
 	Customer Number: <%= @customer.customer_number %>
 </p>
-<% end %>
 
 <div class="submenu">
 	<ul>
