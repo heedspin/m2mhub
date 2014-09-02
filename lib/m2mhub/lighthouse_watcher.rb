@@ -19,6 +19,7 @@ module M2mhub::LighthouseWatcher
 
   def lighthouse_watcher_update
     if self.lighthouse_ticket
+      log "lighthouse_watcher_update"
       self.lighthouse_closed       = self.lighthouse_ticket.closed?
       self.lighthouse_status       = self.lighthouse_ticket.state
       self.lighthouse_url          = self.lighthouse_ticket.url

@@ -19,7 +19,8 @@ class M2mhub::Cronjobs
       tasks = Quality::InspectionTask.status_open.all
       Quality::RmaInspectionRunner.new.run(tasks.select { |t| t.task_type.rma_inspection? })
       Quality::IncomingInspectionRunner.new.run(tasks.select { |t| t.task_type.incoming_inspection? })
-      tasks.each(&:update_lighthouse_status!)
+      # THIS TRIPS OUR RATE LIMIT WITH LH.
+      # tasks.each(&:update_lighthouse_status!)
     end    
     log "Finished medium_frequency"
     true
@@ -47,6 +48,15 @@ class M2mhub::Cronjobs
     Sales::Opportunity.run_reaper
     log "Running Doogle sync_all_to_erp"
     Doogle::Display.sync_all_to_erp
+    log "Updating inspection task tickets"
+    if M2mhub::Feature.enabled?(:inspection_tasks)
+      tasks = Quality::InspectionTask.status_open.all
+      # THIS CAN TRIP OUR RATE LIMIT WITH LH.
+      tasks.each do |t|
+        t.update_lighthouse_status!
+        sleep(1)
+      end
+    end
     log "Finished nightly"
   end
 end

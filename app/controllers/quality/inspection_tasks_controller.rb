@@ -59,6 +59,7 @@ class Quality::InspectionTasksController < M2mhubController
 
   def show
     @task = current_object
+    @task.update_lighthouse_status!
   end
   
   def destroy
