@@ -37,7 +37,7 @@ require 'm2mhub/lighthouse_watcher'
 
 class Sales::OpportunityComment < M2mhub::Base
   self.table_name = 'sales_opportunity_comments'
-  include M2mhub::LighthouseWatcher
+  # include M2mhub::LighthouseWatcher
 
   belongs_to :opportunity, :class_name => 'Sales::Opportunity'
   belongs_to_active_hash :status, :class_name => 'Sales::OpportunityStatus', :foreign_key => :status_id
@@ -54,14 +54,14 @@ class Sales::OpportunityComment < M2mhub::Base
 
   scope :by_id, :order => :id
   scope :by_created, :order => :created_at
-  scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
+  # scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
   scope :not_deleted, where('sales_opportunities.status_id != ? and sales_opportunity_comments.status_id != ?', Sales::OpportunityStatus.deleted.id, Sales::OpportunityStatus.deleted.id).joins(:opportunity)
-  scope :with_ticket, lambda { |ticket|
-    ticket_id = ticket.is_a?(Lighthouse::Ticket) ? ticket.id : ticket
-    {
-      :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
-    }
-  }
+  # scope :with_ticket, lambda { |ticket|
+  #   ticket_id = ticket.is_a?(Lighthouse::Ticket) ? ticket.id : ticket
+  #   {
+  #     :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
+  #   }
+  # }
   scope :to_monitor, :joins => :opportunity, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.all_open.map(&:id)]
   def self.created(start_date, end_date)
     start_date = start_date.to_time.utc
@@ -100,18 +100,18 @@ class Sales::OpportunityComment < M2mhub::Base
     ]
   end
 
-  attr_accessor :create_lighthouse_ticket
-  def create_lighthouse_ticket=(val)
-    @create_lighthouse_ticket = val.is_a?(TrueClass) || (val == '1')
-  end
-  attr_accessor :lighthouse_assigned_user_id
-  attr_accessor :lighthouse_body
-  attr_accessor :delete_lighthouse_ticket
+  # attr_accessor :create_lighthouse_ticket
+  # def create_lighthouse_ticket=(val)
+  #   @create_lighthouse_ticket = val.is_a?(TrueClass) || (val == '1')
+  # end
+  # attr_accessor :lighthouse_assigned_user_id
+  # attr_accessor :lighthouse_body
+  # attr_accessor :delete_lighthouse_ticket
 
   def destroy
-    if self.comment_type.try(:ticket?) and self.lighthouse_ticket and self.delete_lighthouse_ticket
-      self.lighthouse_ticket.destroy
-    end
+    # if self.comment_type.try(:ticket?) and self.lighthouse_ticket and self.delete_lighthouse_ticket
+    #   self.lighthouse_ticket.destroy
+    # end
     if next_last_comment = self.opportunity.comments.where(['sales_opportunity_comments.id != ?', self.id]).order('sales_opportunity_comments.id desc').first
       next_last_comment.update_opportunity
     else
@@ -125,15 +125,15 @@ class Sales::OpportunityComment < M2mhub::Base
     self.status_id != self.previous_status_id
   end
 
-  def ticket?
-    self.comment_type.try(:ticket?)
-  end
+  # def ticket?
+  #   self.comment_type.try(:ticket?)
+  # end
 
   before_save :set_comment_type
   def set_comment_type
-    self.comment_type ||= if self.create_lighthouse_ticket
-      Sales::OpportunityCommentType.ticket
-    elsif self.status.lost?
+    # self.comment_type ||= if self.create_lighthouse_ticket
+    #   Sales::OpportunityCommentType.ticket
+    self.comment_type ||= if self.status.lost?
       Sales::OpportunityCommentType.lost
     elsif self.status.won?
       Sales::OpportunityCommentType.sales_order
@@ -149,26 +149,26 @@ class Sales::OpportunityComment < M2mhub::Base
                                          {:comment_type_id => Sales::OpportunityCommentType.comment.id, :status_id => Sales::OpportunityStatus.won.id})
   end
 
-  before_create :handle_lighthouse
-  def handle_lighthouse
-    if self.create_lighthouse_ticket and self.lighthouse_ticket_id.nil? and self.lighthouse_project_id.present?
-      self.lighthouse_watcher_create(self.lighthouse_title, self.lighthouse_body, self.lighthouse_assigned_user_id)
-    elsif self.comment =~ /lighthouseapp.com\/projects\/(\d+)[^\/]*\/tickets\/(\d+)/
-      # Import the ticket and change our comment type.
-      project_id = $1
-      ticket_id = $2
-      if self.lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => project_id })
-        self.lighthouse_ticket_id = ticket_id
-        self.lighthouse_project_id = project_id
-        self.lighthouse_watcher_update
-        self.comment_type = Sales::OpportunityCommentType.ticket
-        # Ignore any status settings.
-        self.status_id = self.opportunity.status_id
-      end
-    else
-      true
-    end
-  end
+  # before_create :handle_lighthouse
+  # def handle_lighthouse
+  #   if self.create_lighthouse_ticket and self.lighthouse_ticket_id.nil? and self.lighthouse_project_id.present?
+  #     self.lighthouse_watcher_create(self.lighthouse_title, self.lighthouse_body, self.lighthouse_assigned_user_id)
+  #   elsif self.comment =~ /lighthouseapp.com\/projects\/(\d+)[^\/]*\/tickets\/(\d+)/
+  #     # Import the ticket and change our comment type.
+  #     project_id = $1
+  #     ticket_id = $2
+  #     if self.lighthouse_ticket = Lighthouse::Ticket.find(ticket_id, :params => { :project_id => project_id })
+  #       self.lighthouse_ticket_id = ticket_id
+  #       self.lighthouse_project_id = project_id
+  #       self.lighthouse_watcher_update
+  #       self.comment_type = Sales::OpportunityCommentType.ticket
+  #       # Ignore any status settings.
+  #       self.status_id = self.opportunity.status_id
+  #     end
+  #   else
+  #     true
+  #   end
+  # end
 
   before_save :pad_quote_and_sales_numbers
   def pad_quote_and_sales_numbers
@@ -182,14 +182,14 @@ class Sales::OpportunityComment < M2mhub::Base
 
   # Removed from cronjobs.rb...
   # Sales::OpportunityComment.to_monitor.each { |c| Sales::OpportunityComment.find(c.id).update_status! }
-  def update_status!
-    self.lighthouse_watcher_update
-    if self.changed?
-      self.save_without_timestamping!
-    else
-      true
-    end
-  end
+  # def update_status!
+  #   self.lighthouse_watcher_update
+  #   if self.changed?
+  #     self.save_without_timestamping!
+  #   else
+  #     true
+  #   end
+  # end
 
   before_save :update_opportunity
   def update_opportunity

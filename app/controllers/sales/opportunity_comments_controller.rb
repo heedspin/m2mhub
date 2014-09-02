@@ -35,9 +35,9 @@ class Sales::OpportunityCommentsController < M2mhubController
 
   def destroy
     @comment = current_object
-    if comment_params = params[model_name]
-      @comment.delete_lighthouse_ticket = value_to_bool(comment_params[:delete_lighthouse_ticket])
-    end
+    # if comment_params = params[model_name]
+    #   @comment.delete_lighthouse_ticket = value_to_bool(comment_params[:delete_lighthouse_ticket])
+    # end
     @comment.destroy
     respond_to do |format|
       destination = opportunity_url(@comment.opportunity)
