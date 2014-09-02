@@ -135,6 +135,10 @@ class Quality::InspectionTask < M2mhub::Base
   
   def update_lighthouse_status!
     self.lighthouse_watcher_update
+    # Automatically close 7 days after LH ticket is marked resolved.
+    if (self.lighthouse_status == 'resolved') and (Time.current - self.lighthouse_last_updated_at > 7.days)
+      self.status_id = Quality::InspectionTaskStatus.closed.id
+    end
     if self.changed?
       self.save!
     else
