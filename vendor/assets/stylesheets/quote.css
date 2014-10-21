@@ -57,7 +57,7 @@ header input { cursor: pointer; -ms-filter:"progid:DXImageTransform.Microsoft.Al
 
 /* article */
 
-article, article address, table.meta, table.inventory { margin: 0 0 3em; }
+article, article address, table.meta, table.inventory { margin: 0 0 15px; }
 article:after { clear: both; content: ""; display: table; }
 article h1 { clip: rect(0 0 0 0); position: absolute; }
 
