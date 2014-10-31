@@ -196,60 +196,6 @@ class M2m::Customer < M2m::Base
     @sales_territory ||= M2m::SalesTerritory.cached_lookup(self.territory_code)
   end
 
-  after_save :after_save_madness
-  def after_save_madness
-    unless @running_after_save_madness
-      begin
-        @running_after_save_madness = true
-        need_to_save_self = false
-        if self.fcustno.blank?
-          self.fcustno = self.id
-          need_to_save_self = true
-        end
-        contact = self.primary_contact || self.contacts.primary.new
-        soldto = self.addresses.sold_to.first
-        if soldto.nil?
-          soldto = self.addresses.sold_to.new
-          soldto.set_fcaddrkey
-        end
-        shipto = self.addresses.ship_to.first
-        if shipto.nil?
-          shipto = self.addresses.ship_to.new
-          shipto.set_fcaddrkey
-        end
-        # self.addresses << address
-        %w(first_name last_name work_email work_phone notes work_fax work_address work_city work_state work_postal_code work_country_name).each do |a|
-          contact.send("#{a}=", self.send(a))
-          soldto.send("#{a}=", self.send(a))
-          shipto.send("#{a}=", self.send(a))
-        end
-        soldto.company_name = self.company_name
-        shipto.company_name = self.company_name
-        unless self.fcsoldto.present?
-          self.fcsoldto = soldto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.fcshipto.present?
-          self.fcshipto = shipto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.contact_number.present?
-          self.contact_number = contact.contact_number
-          need_to_save_self = true
-        end
-        contact.save! if contact.changed?
-        soldto.save! if soldto.changed?
-        shipto.save! if shipto.changed?
-        self.save! if need_to_save_self
-      rescue
-        raise $!
-      ensure
-        @running_after_save_madness = false
-      end
-    end
-    true
-  end
-
   def self.data_to_params(data, params)
     hash = JSON.parse ActiveSupport::Base64.decode64(CGI.unescape(data))
     hash.each do |key, value|
