@@ -36,13 +36,14 @@ class M2m::GlTransaction < M2m::Base
   alias_attribute :updated_at, :fctime_ts
   alias_attribute :reverse, :flreverse
 
-  scope :post_dates, lambda { |start_date, end_date|
+  def self.account_number(n)
+    where :fcacctnum => n
+  end
+  def self.post_dates(start_date, end_date)
     start_date = Date.parse(start_date) if start_date.is_a?(String)
     end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'gltran.fddate >= ? and gltran.fddate < ?', start_date, end_date ]
-    }
-  }
+    where [ 'gltran.fddate >= ? and gltran.fddate < ?', start_date, end_date ]
+  end
   REFKEY_JOURNAL_ENTRY='JE'
   scope :journal_entries, :conditions => { :fcrefclass => REFKEY_JOURNAL_ENTRY }
   scope :gl_category, lambda { |category_code|

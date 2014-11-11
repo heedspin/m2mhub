@@ -23,21 +23,18 @@
 class M2m::GlAccount < M2m::Base
   self.table_name = 'glmast'
   belongs_to :gl_category, :class_name => 'M2m::GlCategory', :foreign_key => 'fccode', :primary_key => 'fccode'
+  has_many :items, :class_name => 'M2m::GlItem', :foreign_key => 'fcacctnum'
   alias_attribute :category_code, :fccode
   alias_attribute :account_number, :fcacctnum
   alias_attribute :parent_account_number, :fcparentid
   alias_attribute :class_key, :fcclass
   alias_attribute :description, :fcdescr
-  scope :account_number, lambda { |n|
-    {
-      :conditions => { :fcacctnum => n }
-    }
-  }
-  scope :parent_account_number, lambda { |n|
-    {
-      :conditions => { :fcparentid => n }
-    }
-  }
+  def self.account_number(n)
+    where :fcacctnum => n
+  end
+  def self.parent_account_number(n)
+    where :fcparentid => n
+  end
   scope :revenue_account, :conditions => { :fccode => 'R' }
   def description
     self.fcdescr.strip.titleize

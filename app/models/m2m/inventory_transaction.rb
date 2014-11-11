@@ -96,6 +96,18 @@ class M2m::InventoryTransaction < M2m::Base
       :conditions => { :ftoloc => location }
     }
   }
+
+  def self.to_or_from(job)
+    where ['intran.ftojob = ? or intran.ffromjob = ?', job.job_number, job.job_number]
+  end
+
+  def type_transfer?
+    self.ftype == 'T'
+  end
+
+  def type_incoming?
+    self.ftype == 'I'
+  end
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 
@@ -128,7 +140,14 @@ class M2m::InventoryTransaction < M2m::Base
   end
   
   def job
-    @job ||= M2m::Job.with_job_number(self.job_number).first
+    @job ||= M2m::Job.job_number(self.job_number).first
+  end
+
+  def labor_cost
+    self.quantity.abs * self.flabor
+  end
+  def overhead_cost
+    self.quantity.abs * self.fovrhd
   end
   
   def to_log

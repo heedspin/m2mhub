@@ -46,4 +46,8 @@ class M2m::ProductClass < M2m::Base
   def self.product_class_key(fpc_number)
     where(:fpc_number => fpc_number)
   end
+
+  def self.material_account_numbers
+    @material_account_numbers ||= self.connection.select_rows('SELECT DISTINCT inprod.fmatlacc FROM inprod').map(&:first)
+  end
 end

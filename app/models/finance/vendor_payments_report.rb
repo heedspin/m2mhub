@@ -1,6 +1,7 @@
 require 'plutolib/to_xls'
 require 'plutolib/stateless_delayed_report'
 
+# Finance::VendorPaymentsReport.new(:start_date => '2012-01-01', :end_date => '2013-12-31').to_xls('2012_2013_smt_vendor_payments.xls')
 class Finance::VendorPaymentsReport
   include Plutolib::ToXls
   attr_accessor :start_date, :end_date

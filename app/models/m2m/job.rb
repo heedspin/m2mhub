@@ -143,21 +143,32 @@ class M2m::Job < M2m::Base
   self.table_name = 'jomast'
   
   has_many :detail_routings, :class_name => 'M2m::JobDetailRouting', :foreign_key => :fjobno, :primary_key => :fjobno
+  has_many :detail_boms, :class_name => 'M2m::JobDetailBom', :foreign_key => :fjobno, :primary_key => :fjobno
+  has_many :labor_details, :class_name => 'M2m::DailyLaborDetail', :foreign_key => :fjobno, :primary_key => :fjobno
   has_many :items, :class_name => 'M2m::JobItem', :foreign_key => 'fjobno', :primary_key => 'fjobno'
   belongs_to_item :fpartno, :fpartrev
   belongs_to :parent_job, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
   has_many :sub_jobs, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
+  has_one :price_summary, :class_name => 'M2m::JobPriceSummary', :foreign_key => 'fjobno', :primary_key => 'fjobno'
+  has_many :purchase_order_items, :class_name => 'M2m::PurchaseOrderItem', :foreign_key => :fjokey, :primary_key => 'fjobno'
+  has_many :receiver_items, :class_name => 'M2m::ReceiverItem', :foreign_key => :fjokey, :primary_key => 'fjobno'
+  has_many :gl_production_postings, :class_name => 'M2m::GlProductionPosting', :foreign_key => :fjob_so, :primary_key => 'fjobno'
+  has_many :to_inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :ftojob, :primary_key => 'fjobno'
 
   scope :for_item, lambda { |item|
     {
       :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
     }
   }
-  scope :with_job_number, lambda { |jobno|
-    {
-      :conditions => { :fjobno => jobno }
-    }
-  }
+  def self.job_number(jobno)
+    where :fjobno => jobno
+  end
+  def self.job_family(jobno_prefix)
+    where ['jomast.fjobno like ?', jobno_prefix + '-%']
+  end
+  def self.job_number_not(job_numbers)
+    where ['jomast.fjobno not in (?)', job_numbers]
+  end
   scope :released, :conditions => { :fstatus => M2m::Status.released.name }
   scope :status_open, :conditions => [ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ] 
   def self.status(statuses)
@@ -221,4 +232,100 @@ class M2m::Job < M2m::Base
   def customer
     @customer ||= M2m::Customer.with_customer_number(self.customer_number).first
   end
+
+  def material_cost
+    (self.item.try(:rolled_material_cost) || 0.0) * self.quantity
+  end
+
+  def labor_cost
+    self.cached_detail_routings.sum(&:labor_cost)
+  end
+
+  def fixed_cost
+    self.cached_detail_routings.sum(&:fixed_cost)
+  end
+
+  def sub_cost
+    self.cached_detail_routings.sum(&:sub_cost)
+  end
+
+  def other_cost
+    self.cached_detail_routings.sum(&:other_cost)
+  end
+
+  def overhead_cost
+    self.cached_detail_routings.sum(&:overhead_cost)
+  end
+
+  def total_cost
+    self.material_cost + self.labor_cost + self.fixed_cost + self.sub_cost + self.other_cost + self.overhead_cost
+  end
+
+  def actual_material_cost
+    begin
+      @actual_material_cost ||= self.gl_production_postings.inventory_issuances.part_numbers(self.cached_detail_boms.map(&:part_number)).sum(:fnamount)
+    rescue ActiveRecord::StatementInvalid
+      begin
+        @actual_material_cost ||= self.gl_production_postings.inventory_issuances.part_numbers(self.cached_detail_boms.map(&:part_number)).sum(:fnamount)
+      rescue
+        raise $!
+      end
+    end
+  end
+
+  def actual_labor_cost
+    if @actual_labor_cost.nil?
+      transferred_in = self.cached_inventory_transactions.select(&:type_incoming?).sum(&:labor_cost)
+      transferred_out = self.cached_inventory_transactions.select(&:type_transfer?).sum(&:labor_cost)
+      @actual_labor_cost = self.cached_labor_details.sum(&:labor_cost) + transferred_in - transferred_out
+    end
+    @actual_labor_cost
+  end
+
+  def actual_sub_cost
+    @actual_sub_cost ||= self.purchase_order_items.sum do |poi|
+      poi.invoice_items.sum(&:price)
+    end
+  end
+
+  def actual_overhead_cost
+    if @actual_overhead_cost.nil?
+      transferred_in = self.cached_inventory_transactions.select(&:type_incoming?).sum(&:overhead_cost)
+      transferred_out = self.cached_inventory_transactions.select(&:type_transfer?).sum(&:overhead_cost)
+      @actual_overhead_cost = self.cached_labor_details.sum(&:overhead_cost) + transferred_in - transferred_out
+    end
+    @actual_overhead_cost
+  end
+
+  def actual_cost
+    self.actual_material_cost + self.actual_labor_cost + self.actual_sub_cost + self.actual_overhead_cost
+  end
+
+  def cached_detail_routings
+    @cached_detail_routings ||= self.detail_routings.all
+  end
+  def add_cached_detail_routing(v)
+    (@cached_detail_routings ||= []).push(v)
+  end
+
+  def cached_labor_details
+    @cached_labor_details ||= self.labor_details.all
+  end
+  def add_cached_labor_detail(v)
+    (@cached_labor_details ||= []).push(v)
+  end
+
+  def cached_detail_boms
+    @cached_detail_boms ||= self.detail_boms.all
+  end
+  def add_cached_detail_bom(v)
+    (@cached_detail_boms ||= []).push(v)
+  end
+
+  def cached_inventory_transactions
+    @cached_inventory_transactions ||= M2m::InventoryTransaction.to_or_from(self).select([:ftype, :fqty, :flabor, :fovrhd]).all
+  end
+  # def add_cached_inventory_transactions(v)
+  #   (@cached_inventory_transactions ||= []).push(v)
+  # end
 end
