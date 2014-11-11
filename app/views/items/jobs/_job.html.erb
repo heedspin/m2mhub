@@ -1,4 +1,4 @@
-<% detail_routing_lines = job.detail_routings.to_a.each_slice(13).to_a %>
+<% detail_routing_lines = job.detail_routings.by_operation_number.to_a.each_slice(13).to_a %>
 <tr>
 	<th rowspan="<%= 2 * detail_routing_lines.size %>">
 		<%= mini_format ? (subjob ? 'SJ' : 'J') : (subjob ? 'Subjob' : 'Job') %>: <%= job.job_number %><br />

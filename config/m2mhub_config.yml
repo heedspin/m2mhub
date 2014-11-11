@@ -62,7 +62,7 @@ m2mhub_config: &m2mhub_config
     items:
       path_starts_with: /items
     shipping:
-      children: shipping/backlog_reports shipping/shipping_dashboard shipping/shippers shipping/receivers
+      children: shipping/backlog_reports shipping/daily_reports
     production:
       children: production/production_dashboard production/work_center_load_reports production/obsolete_reports production/customer_reports production/inventory_reports production/labor_reports production/purchase_queue_summaries production/vendors production/vendors/purchase_order_items purchase_orders
     vendors:
