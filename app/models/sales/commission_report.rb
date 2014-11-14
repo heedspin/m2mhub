@@ -11,11 +11,29 @@ class Sales::CommissionReport
   end
 
   def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
+    begin
+      @start_date = val.is_a?(String) ? Date.parse(val) : val
+    rescue ArgumentError
+      begin
+        @start_date = Date.strptime(val, '%m/%d/%Y') 
+      rescue ArgumentError
+        raise "#{val} is an invalid date"
+      end
+    end
+    @start_date
   end
 
   def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
+    begin
+      @end_date = val.is_a?(String) ? Date.parse(val) : val
+    rescue ArgumentError
+      begin
+        @end_date = Date.strptime(val, '%m/%d/%Y') 
+      rescue ArgumentError
+        raise "#{val} is an invalid date"
+      end
+    end
+    @end_date
   end
 
   def xls_filename
@@ -27,7 +45,11 @@ class Sales::CommissionReport
   end
 
   def xls_clean_string(txt)
-    txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
+    if RUBY_VERSION >= "1.9.3"
+      txt
+    else
+      txt.try :tr, "\x91-\x94\x9c\x9d\x80\212", "''\"\"\"\"'S"
+    end
   end
 
   def xls_initialize

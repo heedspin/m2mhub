@@ -175,8 +175,8 @@ class M2m::Customer < M2m::Base
     self.ffob.strip
   end
 
-  validates_uniqueness_of :fcompany
-  validates_presence_of :first_name, :last_name, :fcompany
+  # validates_uniqueness_of :fcompany
+  # validates_presence_of :first_name, :last_name, :fcompany
 
   before_save :update_timestamps
   def update_timestamps
