@@ -343,7 +343,7 @@ class Sales::Opportunity < M2mhub::Base
   end
 
   def self.run_reaper
-    Sales::Opportunity.status(Sales::OpportunityStatus.active).updated_before(Date.current.advance(:months => -2)).each(&:expire!)
+    Sales::Opportunity.status(Sales::OpportunityStatus.active).updated_before(Date.current.advance(:months => -6)).each(&:expire!)
   end
 
   def expire!
