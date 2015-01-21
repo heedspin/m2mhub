@@ -60,6 +60,7 @@ class Sales::CommissionReport
     xls_field("#{AppConfig.short_name} Part Number") { |cd| cd.invoice_item.part_number }
     xls_field('Part Description') { |cd| cd.invoice_item.item.try(:description) }
     xls_field('Customer Part Number') { |cd| cd.invoice_item.customer_part_number }
+    xls_field('Customer PO') { |cd| cd.invoice_item.sales_order.try(:customer_po) }
     xls_field('Quantity') { |cd| cd.invoice_item.ship_quantity }
     xls_field('Unit Price', dollar_format) { |cd|
       cd.invoice_item.unit_price.to_f.round(2)
