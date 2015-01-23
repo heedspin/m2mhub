@@ -1,5 +1,5 @@
 # Production::WorkInProgressReport::Runner.new.run_report
-# Production::WorkInProgressReportRunner.new.run_in_backgroun!
+# Production::WorkInProgressReport::Runner.new.delay.run_report
 require 'plutolib/active_hash_transient_belongs_to'
 require 'plutolib/to_xls'
 require 'plutolib/stateless_delayed_report'
