@@ -80,7 +80,7 @@ class Production::WorkInProgressReport
     def run_report
       report = Production::WorkInProgressReport.new
       report.include_jobs ||= Shipping::IncludeJobs.open
-      report.to_xls File.join(AppConfig.default_report_directory, "#{AppConfig.short_name} WIP.xls")
+      report.to_xls File.join(AppConfig.wip_report_directory, "#{AppConfig.short_name} WIP.xls")
     end
   end
 
