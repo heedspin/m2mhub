@@ -65,5 +65,4 @@ class M2m::Base < ActiveRecord::Base
   end
   puts msg
   Rails.logger.info msg
-  M2m::Base.logger = M2m::Base.logger
 end

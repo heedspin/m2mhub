@@ -48,7 +48,8 @@ class Sales::CommissionReport
     if RUBY_VERSION >= "1.9.3"
       txt
     else
-      txt.try :tr, "\x91-\x94\x9c\x9d\x80\212", "''\"\"\"\"'S"
+      # \326
+      txt.try :tr, "\x91-\x94\x9c\x9d\x80\212\326", "''\"\"\"\"'S"
     end
   end
 
