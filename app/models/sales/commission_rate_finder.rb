@@ -104,7 +104,7 @@ class Sales::CommissionRateFinder
       return cr.sales_person.name, cr.commission_percentage, "Commission Rate #{cr.id} (for customer)"
     end
     if invoice and invoice.sales_person.present?
-      return invoice.sales_person.name, invoice.commission_percentage, "Invoice #{invoice.number}"
+      return invoice.sales_person.name, invoice.commission_percentage, "Invoice #{invoice.invoice_number}"
     end
     if sales_order and sales_order.sales_person.present?
       return sales_order.sales_person.name, sales_order.commission_percentage, "Sales Order #{sales_order.order_number}"
