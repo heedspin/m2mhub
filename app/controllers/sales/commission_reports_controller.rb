@@ -14,6 +14,7 @@ class Sales::CommissionReportsController < M2mhubController
       f.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@commission_report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
+        Spreadsheet.client_encoding = 'ISO-8859-1'
         render :text => @commission_report.to_xls
       end
     end
