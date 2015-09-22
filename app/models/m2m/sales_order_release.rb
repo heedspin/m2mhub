@@ -346,6 +346,10 @@ class M2m::SalesOrderRelease < M2m::Base
     self.fmasterrel
   end
 
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self).map(&:vendor)
+  end
+
 end
 
 

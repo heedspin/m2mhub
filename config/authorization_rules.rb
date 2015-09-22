@@ -68,6 +68,8 @@ authorization do
     has_permission_on :sales_events, :to => :read
     has_permission_on :production_vendors, :to => :read
     has_permission_on :m2mhub_context_assistants, :to => :manage
+    has_permission_on :production_purchase_order_items, :to => :read
+    has_permission_on :production_purchase_orders, :to => :read
   end
   
   role :production do
