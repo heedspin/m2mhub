@@ -30,8 +30,9 @@ class Quality::CustomerOtdReport
     end
     def add_late_release(release)
       @late_releases.push release
-      vendor_name = release.item.vendors.first.vendor.name
-      (@vendor_lates[vendor_name] ||= VendorLates.new(vendor_name)).add_late_release(release)
+      if vendor_name = release.item.vendors.first.try(:vendor).try(:name)
+        (@vendor_lates[vendor_name] ||= VendorLates.new(vendor_name)).add_late_release(release)
+      end
     end
     def num_late_releases
       @late_releases.size
@@ -96,8 +97,10 @@ class Quality::CustomerOtdReport
     late_releases = M2m::SalesOrderRelease.shipped_late.due(@start_date, @end_date)
     M2m::SalesOrderItem.attach_to_releases(late_releases)
     late_releases.each do |release|
-      month_for(release.due_date).add_late_release(release)
-      self.get_vendor_late(release.item.vendors.first.vendor.name).add_late_release(release)
+      if vendor_name = release.item.vendors.first.try(:vendor).try(:name)
+        month_for(release.due_date).add_late_release(release)
+        self.get_vendor_late(vendor_name).add_late_release(release)
+      end
     end
     true
   end
