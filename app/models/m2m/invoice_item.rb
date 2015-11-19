@@ -194,4 +194,8 @@ class M2m::InvoiceItem < M2m::Base
   def for_rma_item?(rma_item)
     self.rma_key.strip == M2m::InvoiceItem.rma_key(rma_item)
   end
+
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self)
+  end
 end
