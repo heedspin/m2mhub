@@ -28,6 +28,9 @@
 require 'plutolib/to_xls'
 require 'm2mhub_current_user'
 
+# Sales::Opportunity.connection.execute 'create index opportunities_xnumber on sales_opportunities(xnumber_decimal)'
+#
+
 class Sales::Opportunity < M2mhub::Base
   self.table_name = 'sales_opportunities'
   has_many :comments, :class_name => 'Sales::OpportunityComment', :foreign_key => :opportunity_id, :dependent => :destroy

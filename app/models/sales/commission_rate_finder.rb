@@ -58,7 +58,11 @@ class Sales::CommissionRateFinder
   end
   
   def internal_commission_configs
-    @internal_commission_configs ||= AppConfig.internal_commission_rates.map { |config| InternalCommissionConfig.new(config) }
+    @internal_commission_configs ||= if AppConfig.internal_commission_rates
+      AppConfig.internal_commission_rates.map { |config| InternalCommissionConfig.new(config) }
+    else
+      []
+    end
   end
 
   def house_account?(customer_number)

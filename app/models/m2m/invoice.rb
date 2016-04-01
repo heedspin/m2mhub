@@ -111,8 +111,22 @@ class M2m::Invoice < M2m::Base
       :conditions => [ 'armast.finvdate < ?', end_date ]
     }
   }
+  scope :after, lambda { |start_date|
+    start_date = Date.parse(start_date) if start_date.is_a?(String)
+    {
+      :conditions => [ 'armast.finvdate >= ?', start_date ]
+    }
+  }
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
+  scope :unpaid, :conditions => [ 'armast.fcstatus = ?', ['U'] ]
+  scope :unpaid_or_partial, :conditions => [ 'armast.fcstatus in (?)', ['U', 'P'] ]
+  scope :not_paid_before, lambda { |date|
+    date = Date.parse(date) if date.is_a?(String)
+    {
+      :conditions => [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
+    }
+  }
   scope :by_date, :order => :finvdate
   scope :for_date, lambda { |date|
     {
@@ -126,6 +140,7 @@ class M2m::Invoice < M2m::Base
       :conditions => { :fcinvoice => n }
     }
   }
+  scope :normal_type, :conditions => [ 'armast.finvtype = ?', 'N' ]
   def self.invoice_numbers(numbers)
     where ['armast.fcinvoice in (?)', numbers]
   end
