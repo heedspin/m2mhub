@@ -118,6 +118,13 @@ class M2m::Shipper < M2m::Base
       :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
     }
   }
+  scope :for_item_with_duplicates, lambda { |item|
+    {
+      # Using include vs joins eliminates duplicates.
+      :joins => :items,
+      :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
+    }
+  }
   scope :by_ship_date_desc, :order => 'shmast.fshipdate desc'
   
   def self.monthly_quantity_shipped(start_date, end_date)
