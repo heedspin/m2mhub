@@ -310,7 +310,7 @@ class Sales::Opportunity < M2mhub::Base
     end
 
     def xls_initialize
-      xls_field("Opportunity ID") { |o| o.id }
+      xls_field("X Number") { |o| o.xnumber }
       xls_field("Status") { |o| o.status.name }
       xls_field("Date") { |o| o.start_date }
       xls_field('Customer') { |o| o.sales_customer_name }
