@@ -157,7 +157,7 @@ class M2m::Job < M2m::Base
 
   scope :for_item, lambda { |item|
     {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
+      :conditions => { :fpartno => item.try(:part_number), :fpartrev => item.try(:revision) }
     }
   }
   def self.job_number(jobno)
