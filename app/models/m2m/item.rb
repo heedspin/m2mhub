@@ -282,7 +282,7 @@ class M2m::Item < M2m::Base
   }
   scope :with_part_numbers, lambda { |part_numbers| 
     {
-      :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq]
+      :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq ]
     } 
   }
   scope :by_rev_desc, :order => 'inmastx.frev desc'
@@ -327,7 +327,7 @@ class M2m::Item < M2m::Base
   end
 
   def self.attach_items(objects, items=nil)
-    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number))
     items_hash = {}
     items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
     result = []
