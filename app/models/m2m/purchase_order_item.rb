@@ -155,6 +155,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   }
   scope :by_last_promised, :order => :flstpdate
   scope :by_date_received_desc, :order => 'poitem.frcpdate desc'
+  scope :by_po_date_desc, :order => 'pomast.forddate desc'
   scope :inspection_required, lambda { |ch|
     if ch.is_a?(TrueClass)
       ch = 'Y'

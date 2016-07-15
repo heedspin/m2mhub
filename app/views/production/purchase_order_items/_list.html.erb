@@ -11,53 +11,55 @@
 <% browse_all_link = link_to("Browse all #{@total_purchase_order_items} Purchase Order Items", vendor_purchase_order_items_url(@vendor)) %>
 <% end %>
 <% if purchase_order_items.size == 0 %>
-	<p>No purchase orders</p>
+  <p>No purchase orders</p>
 <% else %>
 <table class="data">
-	<thead>
-		<tr>
-			<% if include_vendor %>
-			<th>Vendor</th>
-			<% end %>
-			<% if include_po_link %>
-			<th>PO No</th>
-			<% end %>
-			<th>Item</th>
-			<th>Item No</th>
-			<th>Rel</th>
-			<th>Quantity</th>
-			<th>Promise<br />Date</th>
-			<th>Inspection<br />Required</th>
-			<th>Status</th>
-			<th>Received</th>
-			<th>Date<br />Received</th>
-			<th>Unit Cost</th>
-		</tr>
-	</thead>
-	<tbody>
-	<% purchase_order_items.each do |i| %>
-		<tr>
-			<% if include_vendor %>
-			<td><%= link_to limit_string(i.purchase_order.vendor_name, 16), vendor_url(i.purchase_order.vendor_number) %></td>
-			<% end %>
-			<% if include_po_link %>
-			<td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
-			<% end %>
-			<td><%= link_to_item(i.item, i.part_number) %></td>
-			<td><%= i.item_number %></td>
-			<td><%= i.release %></td>
-			<td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
-			<td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
-			<td><%= i.inspection_required %></td>
-			<td><%= i.purchase_order.status %></td>
-			<td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
-			<td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
-			<td><%= cm i.unit_cost, :dollars %></td>
-		</tr>
-	<% end %>
-	<% if include_browse_all %>
-		<tr><td class="ninjaborders" colspan="8"><%= browse_all_link %></td></tr>
-	<% end %>
-	</tbody>
+  <thead>
+    <tr>
+      <th>Ordered</th>
+      <% if include_vendor %>
+      <th>Vendor</th>
+      <% end %>
+      <% if include_po_link %>
+      <th>PO No</th>
+      <% end %>
+      <th>Item</th>
+      <th>Item No</th>
+      <th>Rel</th>
+      <th>Quantity</th>
+      <th>Promise<br />Date</th>
+      <th>Inspection<br />Required</th>
+      <th>Status</th>
+      <th>Received</th>
+      <th>Date<br />Received</th>
+      <th>Unit Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% purchase_order_items.each do |i| %>
+    <tr>
+      <td><%= i.purchase_order.order_date.to_s(:purchase_date) %></td>
+      <% if include_vendor %>
+      <td><%= link_to limit_string(i.purchase_order.vendor_name, 16), vendor_url(i.purchase_order.vendor_number) %></td>
+      <% end %>
+      <% if include_po_link %>
+      <td><%= link_to i.purchase_order_number, purchase_order_url(i.purchase_order_number) %></td>
+      <% end %>
+      <td><%= link_to_item(i.item, i.part_number) %></td>
+      <td><%= i.item_number %></td>
+      <td><%= i.release %></td>
+      <td class="right"><%= cm i.quantity, :purchase_order_quantity %></td>
+      <td><%= i.last_promise_date.to_s(:purchase_date) if i.last_promise_date %></td>
+      <td><%= i.inspection_required %></td>
+      <td><%= i.purchase_order.status %></td>
+      <td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
+      <td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
+      <td><%= cm i.unit_cost, :dollars %></td>
+    </tr>
+  <% end %>
+  <% if include_browse_all %>
+    <tr><td class="ninjaborders" colspan="8"><%= browse_all_link %></td></tr>
+  <% end %>
+  </tbody>
 </table>
 <% end %>

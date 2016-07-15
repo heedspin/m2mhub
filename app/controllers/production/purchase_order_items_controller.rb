@@ -15,7 +15,7 @@ class Production::PurchaseOrderItemsController < M2mhubController
       status = M2m::PurchaseOrderStatus.find(@search.status_id)      
       s = s.with_status(status)
       if status.open?
-        s = s.by_last_promised
+        s = s.by_po_date_desc
       else
         s = s.by_date_received_desc
       end
