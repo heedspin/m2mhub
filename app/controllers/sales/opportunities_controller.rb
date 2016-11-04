@@ -28,7 +28,7 @@ class Sales::OpportunitiesController < M2mhubController
         @opportunities = s.by_amount_desc
       end
     else
-      @search.status = Sales::OpportunityStatus.active
+      @search.status = Sales::OpportunityStatus.is_all
     end
     respond_to do |format|
       format.html do 
