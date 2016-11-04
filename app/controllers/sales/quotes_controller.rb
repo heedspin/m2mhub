@@ -7,7 +7,6 @@ class Sales::QuotesController < M2mhubController
 
   def new
     @quote = build_object
-    @quote.date ||= Date.current
     if @quote.link_opportunity_id
       opportunity = Sales::Opportunity.find(@quote.link_opportunity_id)
       @quote.sales_customer = opportunity.sales_customer
@@ -62,6 +61,7 @@ class Sales::QuotesController < M2mhubController
 
   def show
     @quote = current_object
+    @quote.date = Date.current
     if params[:print]
       render :action => 'print', :layout => false
     end
