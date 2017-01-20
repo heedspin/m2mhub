@@ -14,11 +14,11 @@ class Production::PurchaseOrderItemsController < M2mhubController
     if @search.status_id.present?
       status = M2m::PurchaseOrderStatus.find(@search.status_id)      
       s = s.with_status(status)
-      if status.open?
-        s = s.by_po_date_desc
-      else
+      # if status.open?
+      #   s = s.by_po_date_desc
+      # else
         s = s.by_date_received_desc
-      end
+      # end
     end
     if @search.inspection_required.present?
       s = s.inspection_required(@search.inspection_required)
