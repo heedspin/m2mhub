@@ -53,7 +53,7 @@
       <td><%= i.inspection_required %></td>
       <td><%= i.purchase_order.status %></td>
       <td class="right"><%= cm i.quantity_received, :purchase_order_quantity %></td>
-      <td><%= i.date_received.to_s(:purchase_date) if i.quantity_received > 0 %></td>
+      <td><%= i.date_received.to_s(:purchase_date) if i.date_received and (i.quantity_received > 0) %></td>
       <td><%= cm i.unit_cost, :dollars %></td>
     </tr>
   <% end %>
