@@ -46,4 +46,8 @@ class M2m::SalesPerson < M2m::Base
   def initials
     self.fsalespn.strip
   end
+
+  def self.active
+    where ['slspns.flastname not like ?', 'DO NOT USE%']
+  end
 end

@@ -18,6 +18,7 @@
 class Sales::CommissionRate < M2mhub::Base
   belongs_to :customer, :class_name => 'M2m::Customer'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson'
+  belongs_to :second_sales_person, :class_name => 'M2m::SalesPerson'
   belongs_to :item, :class_name => 'M2m::Item'
   validates_presence_of :sales_person
   validate :customer_or_item
@@ -25,7 +26,7 @@ class Sales::CommissionRate < M2mhub::Base
   scope :by_salesperson_and_customer, :order => [:sales_person_name, :customer_name, :part_number]
   scope :sales_person, lambda { |sales_person_id|
     {
-      :conditions => { :sales_person_id => sales_person_id }
+      :conditions => ['sales_person_id = ? or second_sales_person_id = ?', sales_person_id, sales_person_id]
     }
   }
   scope :customer, lambda { |customer_id|
@@ -38,10 +39,27 @@ class Sales::CommissionRate < M2mhub::Base
       :conditions => { :item_id => item_id }
     }
   }
-  
+
+  def self.matching_item(item)
+    where ['commission_rates.part_number like ?', self.get_base_part_number(item.part_number) + '%']
+  end
+
   def revision
     # TODO: Add revision column.
     '000'
+  end
+
+  def base_part_number
+    self.class.get_base_part_number(self.part_number)
+  end
+  def self.get_base_part_number(part_number)
+    if part_number.nil?
+      nil
+    elsif part_number.strip =~ /^([A-Z]\d\d\d\d)[A-Z]$/
+      $1
+    else
+      part_number
+    end
   end
 
   protected
