@@ -195,5 +195,9 @@ class M2m::SalesOrder < M2m::Base
   def self.pad_sales_order_number(txt)
     "%06d" % txt.to_i
   end
+
+  def ship_to_address
+    @ship_to_address ||= self.customer.addresses.key(self.fshptoaddr).first
+  end
 end
 

@@ -46,6 +46,10 @@ class M2m::Address < M2m::Base
   def ship_to?
     self.fcaddrtype == 'S'
   end
+
+  def self.key(key)
+    where [ 'syaddr.fcaddrkey = ?', key ]
+  end
   
   alias_attribute :first_name, :fcfname
   alias_attribute :last_name, :fclname

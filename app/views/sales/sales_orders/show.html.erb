@@ -8,6 +8,7 @@
 </div>
 
 <h2>Sales Order <%= @sales_order.fsono %></h2>
+<div class="column1">
 <p>
   <%= M2m::SalesOrder.human_attribute_name(:order_date) %>: <%= @sales_order.order_date.to_s(:sales_date) %><br />
   Status: <%= @sales_order.status %><br />
@@ -17,7 +18,18 @@
   Sales Rep: <%= @sales_order.fsoldby %><br />
   Coord: <%= @sales_order.fsocoord %><br />
 </p>
+</div>
 
+<div class="column1" style="margin-left:30px;">
+<h3>Ship To</h3>
+<p>
+  <%= @sales_order.ship_to_address.company_name.titleize %><br />
+  <%= @sales_order.ship_to_address.work_address.gsub("\n",'<br />').html_safe %><br />
+  <%= @sales_order.ship_to_address.work_city.strip %>, <%= @sales_order.ship_to_address.work_state.strip %>, <%= @sales_order.ship_to_address.work_postal_code.strip %>
+</p>
+</div>
+
+<div class="clear"></div>
 <h3>Releases</h3>
 <table class="data">
   <thead>
@@ -69,4 +81,3 @@
 <h3>Shippers</h3>
 <%= render 'shipping/shippers/index', :shippers => @shippers %>
 <% end %>
-
