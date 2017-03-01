@@ -29,9 +29,9 @@ class Sales::CommissionRateFinder
     if external_rep_rates = self.get_external_rep_rate(customer, part_number, revision, invoice, sales_order)
       result.concat external_rep_rates
     end
-    if internal_rates = self.get_internal_rates(customer, part_number, revision, invoice, sales_order)
-      result.concat internal_rates
-    end
+    # if internal_rates = self.get_internal_rates(customer, part_number, revision, invoice, sales_order)
+    #   result.concat internal_rates
+    # end
     result
   end
   
@@ -127,7 +127,7 @@ class Sales::CommissionRateFinder
     if customer and customer.sales_person_key.present?
       return [[customer.sales_person.name, customer.sales_person.try(:commission_percentage), "Customer #{customer.customer_number}. Create rate!"]]
     end
-    return 'ERROR', 0, 'No rate found. Create rate for #{customer}, #{part_number}.'
+    return [['ERROR', 0, "No rate found. Create rate for #{customer.name}, #{part_number}."]]
   end
 
   def commission_rate_for_customer_and_item(customer, part_number, revision)
