@@ -12,6 +12,8 @@ class Sales::FirstSaleReport
   end
 
   def xls_initialize
+    # Windows friendly encoding
+    Spreadsheet.client_encoding = 'ISO-8859-1'
     xls_field('Customer') { |d| d.sales_order.customer_name }
     xls_field('Order Date') { |d| d.sales_order.order_date }
     xls_field('Sales Order') { |d| d.sales_order.order_number }
@@ -29,8 +31,8 @@ class Sales::FirstSaleReport
     result = []
     results = M2m::SalesOrderItem.connection.select_rows <<-SQL
       select somast.fcustno as customer_number,
-      	min(somast.forderdate) as order_date,
-      	soitem.fpartno as part_number
+        min(somast.forderdate) as order_date,
+        soitem.fpartno as part_number
       from somast
       left join soitem on somast.fsono = soitem.fsono
       where soitem.fquantity >= 100
