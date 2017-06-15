@@ -3,7 +3,7 @@ class Items::M2mQuoteItemsController < M2mhubController
 
   def index
     @item = parent_object
-    @quote_items = M2m::QuoteItem.for_item(@item).reverse_order.paginate(:page => params[:page], :per_page => 10)
+    @quote_items = M2m::QuoteItem.for_item(@item).rev_order.paginate(:page => params[:page], :per_page => 10)
   end
 
   protected

@@ -46,9 +46,9 @@ class User < M2mhub::Base
   has_many :context_groups, :class_name => 'Context::Group', :through => :context_group_users, :source => :group
 
   attr_accessor :current_password
-  scope :active, :conditions => { :user_state_id => UserState.active.id }
-  scope :by_name, :order => [:first_name, :last_name]
-  scope :with_lighthouse_account, :conditions => 'users.lighthouse_user_id is not null and users.lighthouse_user_id != \'\''
+  scope :active, -> { where(user_state_id: UserState.active.id) }
+  scope :by_name, -> { order(:first_name, :last_name) }
+  scope :with_lighthouse_account, -> { where('users.lighthouse_user_id is not null and users.lighthouse_user_id != \'\'') }
   
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]

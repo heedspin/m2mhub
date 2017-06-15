@@ -58,9 +58,9 @@ class M2m::BomItem < M2m::Base
   # scope :current, {
   #   :joins => 'invcur on fcpartno = inboms.'
   # }
-  scope :just_item_columns, :select => [:fcomponent, :fcomprev, :fparent, :fparentrev]
-  scope :by_parent_part_rev, :order => [ :fparent, :fparentrev ]
-  scope :by_child_part_rev, :order => [ :fcomponent, :fcomprev ]
+  scope :just_item_columns, -> { select(:fcomponent, :fcomprev, :fparent, :fparentrev) }
+  scope :by_parent_part_rev, -> { order(:fparent, :fparentrev) }
+  scope :by_child_part_rev, -> { order(:fcomponent, :fcomprev) }
   
   def for_parent?(thing)
     (self.parent_part_number == thing.part_number) && (self.parent_revision == thing.revision)

@@ -104,9 +104,9 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
   scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
   scope :status_not_cancelled, :joins => :sales_order, :conditions => ['somast.fstatus != ?', M2m::Status.cancelled.name]
-  scope :by_due_date, :order => 'sorels.fduedate'
-  scope :by_due_date_desc, :order => 'sorels.fduedate desc'
-  scope :by_last_ship_date_desc, :order => 'sorels.flshipdate desc'
+  scope :by_due_date, -> { order('sorels.fduedate') }
+  scope :by_due_date_desc, -> { order('sorels.fduedate desc') }
+  scope :by_last_ship_date_desc, -> { order('sorels.flshipdate desc') }
   scope :due_by, lambda { |date|
     date = date.is_a?(String) ? Date.parse(date) : date
     {

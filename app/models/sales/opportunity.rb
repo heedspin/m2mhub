@@ -42,7 +42,7 @@ class Sales::Opportunity < M2mhub::Base
   accepts_nested_attributes_for :sales_customer
   belongs_to :owner, :class_name => 'User'
   has_many :quotes, :through => :comments, :class_name => 'Sales::Quote'
-  has_many :display_logs, :class_name => 'Doogle::DisplayLog', :foreign_key => 'object_id', :conditions => { :log_type_id => Doogle::LogType.opportunity.id }
+  has_many :display_logs, -> { where(log_type_id: Doogle::LogType.opportunity.id) }, class_name: 'Doogle::DisplayLog', foreign_key: :object_id
   validates_uniqueness_of :xnumber_decimal
 
   # Do not require customer name.  Web hits may not have them.
@@ -98,9 +98,9 @@ class Sales::Opportunity < M2mhub::Base
   end
   scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]
   scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
-  scope :by_customer_name, :order => :customer_name
-  scope :by_last_update_desc, :order => 'sales_opportunities.updated_at desc'
-  scope :by_amount_desc, :order => 'sales_opportunities.amount desc'
+  scope :by_customer_name, -> { order(:customer_name) }
+  scope :by_last_update_desc, -> { order('sales_opportunities.updated_at desc') }
+  scope :by_amount_desc, -> { order('sales_opportunities.amount desc') }
   scope :customer_name_like, lambda { |text|
     text = '%' + (text || '') + '%'
     {

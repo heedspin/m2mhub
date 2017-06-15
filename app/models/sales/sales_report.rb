@@ -28,7 +28,7 @@ class Sales::SalesReport < M2mhub::Base
       :conditions => { :report_time_period_id => report_time_period.id }
     }
   }
-  scope :by_date_desc, :order => 'sales_reports.date desc'
+  scope :by_date_desc, -> { order('sales_reports.date desc') }
   scope :month, lambda { |month|
     month = Date.parse(month) if month.is_a?(String)
     {
@@ -126,9 +126,9 @@ class Sales::SalesReport < M2mhub::Base
   serialized_attribute :ytd_new_opportunities, :des => :to_i
 
   def ar_distributions
-    @ar_distributions ||= M2m::ArDistribution.ids(self.ar_distribution_ids).all(:include => :gl_account)
+    @ar_distributions ||= M2m::ArDistribution.with_ids(self.ar_distribution_ids).all(:include => :gl_account)
   end
   def gl_transactions
-    @gl_transactions ||= M2m::GlTransaction.ids(self.gl_transaction_ids).all(:include => :gl_account)
+    @gl_transactions ||= M2m::GlTransaction.with_ids(self.gl_transaction_ids).all(:include => :gl_account)
   end
 end

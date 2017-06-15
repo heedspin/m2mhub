@@ -55,10 +55,10 @@ class M2m::Base < ActiveRecord::Base
   m2m_key = "#{Rails.env}_m2m"
   msg = if config = M2m::Base.configurations[m2m_key]
     begin
-      self.establish_connection m2m_key
+      self.establish_connection m2m_key.to_sym
       "Connected #{m2m_key} to #{config.inspect}"
     rescue
-      "Failed to connect #{m2m_key} to #{config.inspect}"
+      raise
     end
   else
     "No #{m2m_key} connection"

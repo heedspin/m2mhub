@@ -99,9 +99,9 @@ class M2m::SalesOrder < M2m::Base
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
   
-  scope :by_order_number_desc, :order => 'somast.fsono desc'  
-  scope :by_due_date, :order => 'somast.fduedate'
-  scope :by_order_date, :order => 'somast.forderdate'
+  scope :by_order_number_desc, -> { order('somast.fsono desc') }
+  scope :by_due_date, -> { order('somast.fduedate') }
+  scope :by_order_date, -> { order('somast.forderdate') }
   
   # scope :since, lambda { |day|
   #   {

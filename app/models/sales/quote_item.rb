@@ -25,7 +25,7 @@ class Sales::QuoteItem < M2mhub::Base
   belongs_to :quote, :class_name => 'Sales::Quote'
   has_one :display_log, :class_name => 'Doogle::DisplayLog', :foreign_key => 'object_id', :primary_key => 'quote_id', :conditions => { :log_type_id => Doogle::LogType.quote.id }
 
-  scope :by_position, :order => [:position, :id]
+  scope :by_position, -> { order(:position, :id) }
 
   def margin
     if @margin.nil?

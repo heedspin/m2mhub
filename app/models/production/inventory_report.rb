@@ -37,7 +37,7 @@ class Production::InventoryReport < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => '::Production::InventoryReportCostMethod'
 
-  scope :by_date_desc, :order => 'inventory_reports.report_date desc, inventory_reports.created_at desc'
+  scope :by_date_desc, -> { order('inventory_reports.report_date desc, inventory_reports.created_at desc') }
 
   def run_report
     report_start_time = Time.now.to_i

@@ -34,9 +34,7 @@ class M2m::ArDistribution < M2m::Base
   scope :dates, lambda { |start_date, end_date|
     start_date = Date.parse(start_date) if start_date.is_a?(String)
     end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'ardist.fddate >= ? and ardist.fddate < ?', start_date, end_date ]
-    }
+    where([ 'ardist.fddate >= ? and ardist.fddate < ?', start_date, end_date ])
   }
   scope :gl_category, lambda { |category_code|
     {
@@ -44,9 +42,9 @@ class M2m::ArDistribution < M2m::Base
       :conditions => { :glmast => { :fccode => category_code } }
     }
   }
-  scope :not_cash, :conditions => 'ardist.fcrefname <> \'CSH\''
-  scope :non_zero, :conditions => 'ardist.fnamount != 0'
-  scope :ids, lambda { |ids|
+  scope :not_cash, -> { where('ardist.fcrefname <> \'CSH\'') }
+  scope :non_zero, -> { where('ardist.fnamount != 0') }
+  scope :with_ids, lambda { |ids|
     {
       :conditions => [ 'ardist.identity_column in (?)', ids ]
     }

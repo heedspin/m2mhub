@@ -7,8 +7,8 @@ class Sales::M2mQuotesController < M2mhubController
 
   def show
     @quote = current_object
-    @previous_quote = M2m::Quote.find(:first, :conditions => ['fquoteno < ?', current_object.fquoteno], :order => 'fquoteno desc')
-    @next_quote = M2m::Quote.find(:first, :conditions => ['fquoteno > ?', current_object.fquoteno], :order => 'fquoteno')
+    @previous_quote = M2m::Quote.where(['fquoteno < ?', current_object.fquoteno]).order('fquoteno desc').first
+    @next_quote = M2m::Quote.where(['fquoteno > ?', current_object.fquoteno]).order(:fquoteno).first
   end
   
   def new

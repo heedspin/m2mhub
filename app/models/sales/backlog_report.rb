@@ -28,7 +28,7 @@ class Sales::BacklogReport < M2mhub::Base
       :conditions => { :report_time_period_id => report_time_period.id }
     }
   }
-  scope :by_date_desc, :order => 'backlog_reports.date desc'
+  scope :by_date_desc, -> { order('backlog_reports.date desc') }
 
   def run!
     memos = []

@@ -109,7 +109,7 @@ class M2m::VendorInvoice < M2m::Base
   def self.invoice_number_like(text)
     where ['apmast.fcinvoice like ?', '%' + text + '%']
   end
-  scope :by_date_desc, :order => 'apmast.finvdate desc'
+  scope :by_date_desc, -> { order('apmast.finvdate desc') }
   def self.vendor_number(num)
     where :fvendno => M2m::Vendor.pad_vendor_number(num)
   end

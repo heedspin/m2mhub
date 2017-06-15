@@ -127,7 +127,7 @@ class M2m::Invoice < M2m::Base
       :conditions => [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
     }
   }
-  scope :by_date, :order => :finvdate
+  scope :by_date, -> { order(:finvdate) }
   scope :for_date, lambda { |date|
     {
       :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]

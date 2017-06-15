@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resource :user_session
   root :to => 'home#index'
-  match 'login' => 'user_sessions#new', :as => :login
-  match 'logout' => 'user_sessions#destroy', :as => :logout
+  get 'login' => 'user_sessions#new', :as => :login
+  get 'logout' => 'user_sessions#destroy', :as => :logout
   resource :user_session
   resources :users do
     member do
@@ -59,12 +59,12 @@ Rails.application.routes.draw do
   resources :commission_rates, :controller => 'sales/commission_rates'
   resources :commission_reports, :controller => 'sales/commission_reports'
   resources :commission_backlog_reports, :controller => 'sales/commission_backlog_reports'
-  match 'quality' => 'quality/quality_dashboard#index'
+  get 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
   resources :opportunities, :controller => 'sales/opportunities'
   resources :opportunity_comments, :controller => 'sales/opportunity_comments'
-  match 'sales_scoreboard' => 'sales/opportunity_reports#index'
+  get 'sales_scoreboard' => 'sales/opportunity_reports#index'
   resources :sales_events, :only => [:index], :controller => 'sales/sales_events'
   
   resources :shipping_backlog_reports, :only => [:index, :show], :controller => 'shipping/backlog_reports'
@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   
   resources :rmas, :only => [:show], :controller => 'quality/rmas'
 
-  match 'production' => 'production/production_dashboard#index'
+  get 'production' => 'production/production_dashboard#index'
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
   resources :inventory_reports, :controller => 'production/inventory_reports' do
     resources :customer_reports, :only => [:index, :show], :controller => 'production/inventory_reports/customer_reports'
@@ -98,5 +98,5 @@ Rails.application.routes.draw do
   resources :context_comments, :controller => 'context/comments'
 
   # Specify thing regular expression because the routes use '.' as separator.
-  match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
+  get 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end

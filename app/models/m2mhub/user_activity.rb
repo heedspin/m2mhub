@@ -29,7 +29,7 @@ class M2mhub::UserActivity < ActiveRecord::Base
       :conditions => { :user_id => user.id }
     }
   }
-  scope :by_date_desc, :order => 'user_activities.created_at desc'
+  scope :by_date_desc, -> { order('user_activities.created_at desc') }
 
   scope :with_name, lambda { |report_name|
     {:conditions => {:report_name => report_name}}

@@ -50,7 +50,7 @@ class Sales::Customer < M2mhub::Base
       :conditions => [ 'sales_customers.name = ?', txt ]
     }
   }
-  scope :by_name, :order => :name
+  scope :by_name, -> { order(:name) }
   scope :sales_territory, lambda { |sales_territory|
     where(:sales_territory_id => sales_territory.is_a?(Sales::Territory) ? sales_territory.id : sales_territory)
   }

@@ -72,7 +72,7 @@ class M2m::Receiver < M2m::Base
       :order => 'rcmast.fdaterecv desc'
     }
   }
-  scope :by_id_desc, :order => 'rcmast.freceiver desc'
+  scope :by_id_desc, -> { order('rcmast.freceiver desc') }
   scope :rma_number, lambda { |rma_number|
     if rma_number.is_a?(Enumerable)
       {
@@ -95,7 +95,7 @@ class M2m::Receiver < M2m::Base
       }
     end
   }
-  scope :by_time_received_desc, :order => 'rcmast.fdaterecv desc'
+  scope :by_time_received_desc, -> { order('rcmast.fdaterecv desc') }
     
   def status
     # fcstatus are 'C' and 'I' but always show up received.

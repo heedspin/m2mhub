@@ -13,7 +13,7 @@
 
 class Sales::Territory < M2mhub::Base
   self.table_name = 'sales_territories'
-  scope :by_name, :order => 'name'
+  scope :by_name, -> { order('name') }
   belongs_to :vendor, :class_name => M2m::Vendor, :foreign_key => 'erp_vendor_id', :primary_key => 'fvendno'
 
   def sales_rep_name

@@ -62,7 +62,7 @@ class M2m::Vendor < M2m::Base
       :conditions => [ 'apvend.fvendno in (?)', vendor_numbers ]
     }
   }
-  scope :by_name, :order => :fcompany
+  scope :by_name, -> { order(:fcompany) }
   scope :name_like, lambda { |txt|
     {
       :conditions => [ 'apvend.fcompany like ?', '%' + (txt || '') + '%' ]

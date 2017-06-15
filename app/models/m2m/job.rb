@@ -163,7 +163,7 @@ class M2m::Job < M2m::Base
   def self.status(statuses)
     where ['jomast.fstatus in (?)', statuses ] 
   end
-  scope :by_date_desc, :order => 'jomast.fhold_dt desc'
+  scope :by_date_desc, -> { order('jomast.fhold_dt desc') }
   scope :customers, lambda { |customers|
     customer_numbers = customers.map(&:customer_number)
     {
@@ -176,7 +176,7 @@ class M2m::Job < M2m::Base
       :conditions => [ 'jomast.fact_rel >= ?', date ]
     }
   }
-  scope :by_part_number, :order => 'jobmast.fpartno'
+  scope :by_part_number, -> { order('jobmast.fpartno') }
   
   def status
     M2m::Status.find_by_name(self.fstatus)

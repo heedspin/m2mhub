@@ -52,8 +52,8 @@ class Sales::OpportunityComment < M2mhub::Base
   # validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
   validates_presence_of :sales_order_id, :if => lambda { |c| c.status.try(:won?) }
 
-  scope :by_id, :order => :id
-  scope :by_created, :order => :created_at
+  scope :by_id, -> { order(:id) }
+  scope :by_created, -> { order(:created_at) }
   # scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
   scope :not_deleted, where('sales_opportunities.status_id != ? and sales_opportunity_comments.status_id != ?', Sales::OpportunityStatus.deleted.id, Sales::OpportunityStatus.deleted.id).joins(:opportunity)
   # scope :with_ticket, lambda { |ticket|

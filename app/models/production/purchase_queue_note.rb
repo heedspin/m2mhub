@@ -13,7 +13,7 @@
 
 class Production::PurchaseQueueNote < M2mhub::Base
   belongs_to :item, :class_name => 'M2m::Item'
-  scope :by_date_desc, :order => 'purchase_queue_notes.created_at desc'
+  scope :by_date_desc, -> { order('purchase_queue_notes.created_at desc') }
   scope :for_summary, lambda { |summary|
     {
       :conditions => { :part_number => summary.part_number, :revision => summary.revision }

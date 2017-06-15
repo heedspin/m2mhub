@@ -18,8 +18,8 @@ class Sales::SalesOrdersController < M2mhubController
     @sales_order.releases.each { |r| r.attach_items_from_sales_order(@sales_order) }
     @sales_order.items.each { |i| i.attach_releases_from_sales_order(@sales_order) }
     
-    @previous_sales_order = M2m::SalesOrder.find(:first, :conditions => ['fsono < ?', current_object.fsono], :order => 'somast.fsono desc')
-    @next_sales_order = M2m::SalesOrder.find(:first, :conditions => ['fsono > ?', current_object.fsono], :order => 'somast.fsono')
+    @previous_sales_order = M2m::SalesOrder.where(['fsono < ?', current_object.fsono]).order('somast.fsono desc').first
+    @next_sales_order = M2m::SalesOrder.where(['fsono > ?', current_object.fsono]).order('somast.fsono').first
     @shipper_items = M2m::ShipperItem.for_sales_order(@sales_order).includes(:shipper).all
     @shippers = @shipper_items.map do |i|
       # Optimization    

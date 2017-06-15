@@ -81,7 +81,7 @@ class M2m::Contact < M2m::Base
     self.save
   end
   
-  scope :primary, :conditions => { :IsPrimary => true }
+  scope :primary, -> { where(IsPrimary: true) }
 
   def phone_number_array
     result = []

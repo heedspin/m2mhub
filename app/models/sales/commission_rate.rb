@@ -23,7 +23,7 @@ class Sales::CommissionRate < M2mhub::Base
   validates_presence_of :sales_person
   validate :customer_or_item
 
-  scope :by_salesperson_and_customer, :order => [:sales_person_name, :customer_name, :part_number]
+  scope :by_salesperson_and_customer, -> { order(:sales_person_name, :customer_name, :part_number) }
   scope :sales_person, lambda { |sales_person_id|
     {
       :conditions => ['sales_person_id = ? or second_sales_person_id = ?', sales_person_id, sales_person_id]

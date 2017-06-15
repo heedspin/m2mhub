@@ -285,9 +285,9 @@ class M2m::Item < M2m::Base
       :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq]
     } 
   }
-  scope :by_rev_desc, :order => 'inmastx.frev desc'
-  scope :by_part_number, :order => 'inmastx.fpartno'
-  scope :by_part_rev_desc, :order => 'inmastx.fpartno, inmastx.frev desc'
+  scope :by_rev_desc, -> { order('inmastx.frev').reverse_order }
+  scope :by_part_number, -> { order('inmastx.fpartno') }
+  scope :by_part_rev_desc, -> { order('inmastx.fpartno, inmastx.frev desc') }
   scope :company_or_vendor_part_number_like, lambda { |text|
     text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
     {

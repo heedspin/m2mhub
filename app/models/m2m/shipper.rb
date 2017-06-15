@@ -96,7 +96,7 @@ class M2m::Shipper < M2m::Base
       :order => 'shmast.fshipdate desc'
     }
   }
-  scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
+  scope :by_shipper_number_desc, -> { order('shmast.fshipno desc') }
   scope :next_shipper, lambda { |shipper| 
     {
       :conditions => ['fshipno > ?', shipper.fsono], 
@@ -125,7 +125,7 @@ class M2m::Shipper < M2m::Base
       :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
     }
   }
-  scope :by_ship_date_desc, :order => 'shmast.fshipdate desc'
+  scope :by_ship_date_desc, -> { order('shmast.fshipdate desc') }
   
   def self.monthly_quantity_shipped(start_date, end_date)
     results = connection.select_rows <<-SQL

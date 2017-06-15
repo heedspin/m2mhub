@@ -38,8 +38,8 @@ class M2m::Address < M2m::Base
   self.table_name = 'syaddr'
   
   # Magic number.  But I don't know the logic the M2M uses to choose this.
-  scope :sold_to, :conditions => { :fcaddrtype => 'O' }
-  scope :ship_to, :conditions => { :fcaddrtype => 'S' }
+  scope :sold_to, -> { where(fcaddrtype: 'O') }
+  scope :ship_to, -> { where(fcaddrtype: 'S') }
   def sold_to?
     self.fcaddrtype == 'O'
   end

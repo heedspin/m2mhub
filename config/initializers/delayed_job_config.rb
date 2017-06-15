@@ -1,7 +1,7 @@
 Delayed::Worker.max_attempts = 1
 Delayed::Worker.max_run_time = 6.hours
-Delayed::Worker.logger = ActiveSupport::BufferedLogger.new("log/#{Rails.env}_delayed_jobs.log", Rails.logger.level)
-Delayed::Worker.logger.auto_flushing = 1
+Delayed::Worker.logger = ActiveSupport::Logger.new("log/#{Rails.env}_delayed_jobs.log", Rails.logger.level)
+# Delayed::Worker.logger.auto_flushing = 1
 if caller.last =~ /.*\/script\/delayed_job:\d+$/
   AppConfig.delayed_job = true
   ActiveRecord::Base.logger = Delayed::Worker.logger

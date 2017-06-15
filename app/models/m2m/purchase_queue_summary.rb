@@ -86,5 +86,5 @@ class M2m::PurchaseQueueSummary < M2m::Base
     }
   }
   
-  scope :by_due_date, :order => :fdduedate
+  scope :by_due_date, -> { order(:fdduedate) }
 end

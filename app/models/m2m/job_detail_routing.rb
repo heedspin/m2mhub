@@ -104,8 +104,8 @@ class M2m::JobDetailRouting < M2m::Base
   
   has_one :work_center, :class_name => 'M2m::WorkCenter', :primary_key => 'fpro_id', :foreign_key => 'fcpro_id'
   
-  scope :by_operation_number, :order => 'foperno'
-  
+  scope :by_operation_number, -> { order(:foperno) }
+
   alias_attribute :operation_number, :foperno
   alias_attribute :quantity_complete, :fnqty_comp
   alias_attribute :percentage_complete, :fnpct_comp

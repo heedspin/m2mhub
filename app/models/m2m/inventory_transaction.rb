@@ -71,8 +71,8 @@ class M2m::InventoryTransaction < M2m::Base
   alias_attribute :from_bin, :ffrombin
   alias_attribute :to_bin, :ftobin
   alias_attribute :job_number, :ftojob
-  scope :by_time, :order => :fctime_ts
-  scope :by_time_desc, :order => 'intran.fctime_ts desc'
+  scope :by_time, -> { order(:fctime_ts) }
+  scope :by_time_desc, -> { order('intran.fctime_ts desc') }
   scope :outgoing, :conditions => ['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]
   scope :incoming, :conditions => ['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]
   scope :to_sales, :conditions => 'intran.ftoso != \'\''
@@ -141,5 +141,5 @@ class M2m::InventoryTransaction < M2m::Base
     end
     "#{id} #{self.date.to_s(:number_date)} #{self.transaction_type} #{self.quantity} #{tofrom.join(' ')}"
   end
-	
+  
 end

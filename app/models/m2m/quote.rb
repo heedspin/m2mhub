@@ -82,7 +82,7 @@ class M2m::Quote < M2m::Base
   scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
   scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
 
-  scope :by_quote_number_desc, :order => 'fquoteno desc'  
+  scope :by_quote_number_desc, -> { order('fquoteno desc') }
 
   scope :since, lambda { |day|
     {

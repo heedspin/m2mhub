@@ -69,5 +69,5 @@ class M2m::LaborDetail < M2m::Base
       :conditions => { :prempl => { :fdept => department.department_number } }
     }
   }
-  scope :by_date, :order => :fdate
+  scope :by_date, -> { order(:fdate) }
 end

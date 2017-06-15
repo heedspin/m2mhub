@@ -78,7 +78,7 @@
 #
 
 class M2m::SalesOrderItem < M2m::Base
-  default_scope :order => 'soitem.fenumber'
+  default_scope -> { order('soitem.fenumber') }
   self.table_name = 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   # has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''

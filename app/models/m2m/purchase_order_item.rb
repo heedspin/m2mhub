@@ -138,7 +138,7 @@ class M2m::PurchaseOrderItem < M2m::Base
       :conditions => { :pomast => { :fstatus => status_name.upcase } }
     }
   }
-  scope :reverse_order, :order => 'poitem.fpono desc, poitem.fitemno'
+  scope :rev_order, -> { order('poitem.fpono desc, poitem.fitemno') }
   scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
   scope :vendor, lambda { |vendor|
     vendor_number = vendor.is_a?(M2m::Vendor) ? vendor.vendor_number : vendor
@@ -153,9 +153,9 @@ class M2m::PurchaseOrderItem < M2m::Base
       :conditions => [ 'poitem.flstpdate >= ?', date ]
     }
   }
-  scope :by_last_promised, :order => :flstpdate
-  scope :by_date_received_desc, :order => 'poitem.frcpdate desc'
-  scope :by_po_date_desc, :order => 'pomast.forddate desc'
+  scope :by_last_promised, -> { order(:flstpdate) }
+  scope :by_date_received_desc, -> { order('poitem.frcpdate').reverse_order }
+  scope :by_po_date_desc, -> { order('pomast.forddate').reverse_order }
   scope :inspection_required, lambda { |ch|
     if ch.is_a?(TrueClass)
       ch = 'Y'

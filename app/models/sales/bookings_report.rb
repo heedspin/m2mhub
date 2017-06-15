@@ -33,7 +33,7 @@ class Sales::BookingsReport < M2mhub::Base
       :conditions => { :report_time_period_id => report_time_period.id }
     }
   }
-  scope :by_date_desc, :order => 'bookings_reports.date desc'
+  scope :by_date_desc, -> { order('bookings_reports.date desc') }
   scope :month, lambda { |month|
     {
       :conditions => { :date => month.beginning_of_month, :report_time_period_id => ReportTimePeriod.month.id }

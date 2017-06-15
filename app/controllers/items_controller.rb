@@ -29,7 +29,7 @@ class ItemsController < M2mhubController
 
     @purchase_order_items = M2m::PurchaseOrderItem.filtered.for_item(@item)
     @total_purchase_order_items = @purchase_order_items.count
-    @purchase_order_items = @purchase_order_items.includes(:purchase_order => :vendor).reverse_order.limit(5)
+    @purchase_order_items = @purchase_order_items.includes(:purchase_order => :vendor).pono_reverse_order.limit(5)
 
     @material_availability_report = MaterialAvailabilityReport.new( :item => @item,
                                                                     :sales_order_releases => @sales_order_releases,
@@ -39,7 +39,7 @@ class ItemsController < M2mhubController
     @purchase_order_items = @purchase_order_items.sort_by { |i| i.safe_promise_date }
     @shippers_count = M2m::Shipper.for_item(@item).count
     @total_quote_items = M2m::QuoteItem.for_item(@item).count
-    @quote_items = M2m::QuoteItem.for_item(@item).reverse_order.all(:limit => 3)
+    @quote_items = M2m::QuoteItem.for_item(@item).rev_order.all(:limit => 3)
   end
 
   protected

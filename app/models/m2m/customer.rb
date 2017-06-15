@@ -83,9 +83,9 @@ class M2m::Customer < M2m::Base
 
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno, :primary_key => 'fcustno'
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno, :primary_key => 'fcustno'
-  has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM' }
-  has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
-  has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
+  has_many :contacts, -> { where(fcs_alias: 'SLCDPM') }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_one :primary_contact, -> { where(fcs_alias: 'SLCDPM', IsPrimary: true) }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_many :addresses, -> { where(fcalias: 'SLCDPM') }, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
 
   alias_attribute :notes, :fmnotes
@@ -135,7 +135,7 @@ class M2m::Customer < M2m::Base
       :conditions => [ 'slcdpmx.fcompany = ?', txt ]
     }
   }
-  scope :by_name, :order => 'fcompany'
+  scope :by_name, -> { order(:fcompany) }
 
   scope :with_customer_numbers, lambda { |customer_numbers|
     {

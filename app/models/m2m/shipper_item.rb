@@ -29,7 +29,7 @@
 #
 
 class M2m::ShipperItem < M2m::Base
-  default_scope :order => 'shitem.fenumber'
+  default_scope -> { order('shitem.fenumber') }
   self.table_name = 'shitem'
 
   belongs_to :shipper, :class_name => 'M2m::Shipper', :foreign_key => :fshipno
