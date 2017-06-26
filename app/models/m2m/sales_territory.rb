@@ -12,7 +12,7 @@
 #
 
 class M2m::SalesTerritory < M2m::CsPopup
-  default_scope where(:fcpopkey => 'SLCDPM.FCTERR')
+  default_scope -> { where(:fcpopkey => 'SLCDPM.FCTERR') }
   def name
     self.text
   end
