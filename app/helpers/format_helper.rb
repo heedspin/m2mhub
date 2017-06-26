@@ -2,12 +2,24 @@ require 'plutolib/comma'
 
 module FormatHelper
   include Plutolib::Comma
+
+  def cm_dollars(thing)
+    if thing.round(2) != thing.round(3)
+      cm(thing, :dollars_fraction)
+    else
+      cm(thing, :dollars)
+    end
+  end
   
   def cm(thing, company_config_key=nil, default=nil)
     if thing and (thing.to_f != 0)
       case thing
       when BigDecimal, Float, Fixnum
-        comma(company_sprintf(thing, company_config_key))
+        if (company_config_key == :dollars) and (thing.round(2) != thing.round(3))
+          comma(company_sprintf(thing, :dollars_fraction))
+        else
+          comma(company_sprintf(thing, company_config_key))
+        end
       else
         comma(thing)
       end

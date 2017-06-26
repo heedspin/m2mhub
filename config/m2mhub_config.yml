@@ -5,6 +5,7 @@ m2mhub_config: &m2mhub_config
   otd_lead_time: 28
   rounded_dollars: "$%.0f"
   dollars: "$%.2f"
+  dollars_fraction: "$%p"
   two_decimals: "%.2f"
   sales_order_quantity: "%.0f"
   purchase_order_quantity: "%.0f"
