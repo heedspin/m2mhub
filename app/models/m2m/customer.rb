@@ -120,39 +120,27 @@ class M2m::Customer < M2m::Base
       # Ignore this exception.  Probably because we used a :select.
     end
   end
-  scope :name_like, lambda { |text|
-    {
-      :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
-    }
+  scope :name_like, -> (text) {
+    where [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
   }
-  scope :with_names, lambda { |names|
-    {
-      :conditions => [ 'slcdpmx.fcompany in (?)', names ]
-    }
+  scope :with_names, -> (names) {
+    where [ 'slcdpmx.fcompany in (?)', names ]
   }
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => [ 'slcdpmx.fcompany = ?', txt ]
-    }
+  scope :with_name, -> (txt) {
+    where [ 'slcdpmx.fcompany = ?', txt ]
   }
   scope :by_name, -> { order(:fcompany) }
 
-  scope :with_customer_numbers, lambda { |customer_numbers|
-    {
-      :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
-    }
+  scope :with_customer_numbers, -> (customer_numbers) {
+    where [ 'slcdpmx.fcustno in (?)', customer_numbers ]
   }
-  scope :with_customer_number, lambda { |custno|
-    {
-      :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
-    }
+  scope :with_customer_number, -> (custno) {
+    where :fcustno => M2m::Customer.fcustno_for(custno)
   }
-  scope :created_between, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
-    }
+  scope :created_between, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
   }
 
   def status

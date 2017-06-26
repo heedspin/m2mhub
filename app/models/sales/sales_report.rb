@@ -18,22 +18,16 @@ class Sales::SalesReport < M2mhub::Base
   include Plutolib::SerializedAttributes
   self.table_name = 'sales_reports'
   belongs_to_active_hash :report_time_period
-  scope :date, lambda { |date|
-    {
-      :conditions => { :date => date }
-    }
+  scope :date, -> (date) {
+    where :date => date
   }
-  scope :time_period, lambda { |report_time_period|
-    {
-      :conditions => { :report_time_period_id => report_time_period.id }
-    }
+  scope :time_period, -> (report_time_period) {
+    where :report_time_period_id => report_time_period.id
   }
   scope :by_date_desc, -> { order('sales_reports.date desc') }
-  scope :month, lambda { |month|
-    month = Date.parse(month) if month.is_a?(String)
-    {
-      :conditions => { :date => month.beginning_of_month, :report_time_period_id => ReportTimePeriod.month.id }
-    }
+  scope :month, -> (month) {
+    month = DateParser.parse(month) if month.is_a?(String)
+    where :date => month.beginning_of_month, :report_time_period_id => ReportTimePeriod.month.id
   }
 
   # Bookings
@@ -52,21 +46,21 @@ class Sales::SalesReport < M2mhub::Base
     beginning_of_year = self.date.beginning_of_year
     
     # Adding the not_adjustments filter removes entries that may be LXD specific. If so I will need to refactor this out of the core.
-    revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(self.date, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.includes(:gl_account)
     revenue_journal_entries = revenue_journal_entries.select { |je| self.class.is_revenue_account?(je.post_date, je.gl_account_number) }
     self.gl_transaction_ids = revenue_journal_entries.map(&:id)
 
-    ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(self.date, next_month).non_zero.gl_category('R').includes(:gl_account)
     ar_distributions = ar_distributions.select { |ar| self.class.is_revenue_account?(ar.date, ar.gl_account_number) }
     self.ar_distribution_ids = ar_distributions.map(&:id)
     # puts ar_distributions.map { |ar| [ar.date.to_s(:database), ar.gl_account_number, ar.amount, ar.status].join(', ') }.join("\n")
 
     self.invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
 
-    revenue_journal_entries = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.all(:include => :gl_account)
+    revenue_journal_entries = M2m::GlTransaction.post_dates(beginning_of_year, next_month).journal_entries.gl_category('R').not_balance_entries.not_adjustments.includes(:gl_account)
     revenue_journal_entries = revenue_journal_entries.select { |je| self.class.is_revenue_account?(je.post_date, je.gl_account_number) }
 
-    ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').all(:include => :gl_account)
+    ar_distributions = M2m::ArDistribution.dates(beginning_of_year, next_month).non_zero.gl_category('R').includes(:gl_account)
     ar_distributions = ar_distributions.select { |ar| self.class.is_revenue_account?(ar.date, ar.gl_account_number) }
 
     self.ytd_invoiced_sales = ar_distributions.sum(&:value) + revenue_journal_entries.sum(&:value)
@@ -84,7 +78,7 @@ class Sales::SalesReport < M2mhub::Base
     end
     def not_revenue_accounts(on_date)
       return [] unless AppConfig.sales_report_not_revenue_accounts
-      on_date = Date.parse(on_date) if on_date.is_a?(String)
+      on_date = DateParser.parse(on_date) if on_date.is_a?(String)
       @not_revenue_accounts ||= {}
       if @not_revenue_accounts.member?(on_date)
         r = @not_revenue_accounts[on_date]
@@ -95,9 +89,9 @@ class Sales::SalesReport < M2mhub::Base
         AppConfig.sales_report_not_revenue_accounts.each do |account_number, config|
           config ||= {}
           start_date = config['start_date']
-          start_date = Date.parse(start_date) if start_date.is_a?(String)
+          start_date = DateParser.parse(start_date) if start_date.is_a?(String)
           end_date = config['end_date']
-          end_date = Date.parse(end_date) if end_date.is_a?(String)
+          end_date = DateParser.parse(end_date) if end_date.is_a?(String)
           if (start_date.nil? or (on_date >= start_date)) and (end_date.nil? or (on_date <= end_date))
             result.push account_number.to_s
           end
@@ -126,9 +120,9 @@ class Sales::SalesReport < M2mhub::Base
   serialized_attribute :ytd_new_opportunities, :des => :to_i
 
   def ar_distributions
-    @ar_distributions ||= M2m::ArDistribution.with_ids(self.ar_distribution_ids).all(:include => :gl_account)
+    @ar_distributions ||= M2m::ArDistribution.with_ids(self.ar_distribution_ids).includes(:gl_account)
   end
   def gl_transactions
-    @gl_transactions ||= M2m::GlTransaction.with_ids(self.gl_transaction_ids).all(:include => :gl_account)
+    @gl_transactions ||= M2m::GlTransaction.with_ids(self.gl_transaction_ids).includes(:gl_account)
   end
 end

@@ -49,20 +49,13 @@ class Sales::OpportunityComment < M2mhub::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :primary_key => 'fsono'
   belongs_to_active_hash :win_type, :class_name => 'Sales::OpportunityWinType', :foreign_key => :win_type_id
 
-  # validates_presence_of :lighthouse_title, :if => lambda { |c| c.comment_type.try(:ticket?) }
-  validates_presence_of :sales_order_id, :if => lambda { |c| c.status.try(:won?) }
+  validates_presence_of :sales_order_id, if: -> (c) { c.status.try(:won?) }
 
   scope :by_id, -> { order(:id) }
   scope :by_created, -> { order(:created_at) }
   # scope :open_tickets, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunity_comments.lighthouse_closed = ?', Sales::OpportunityCommentType.ticket.id, false ]
-  scope :not_deleted, where('sales_opportunities.status_id != ? and sales_opportunity_comments.status_id != ?', Sales::OpportunityStatus.deleted.id, Sales::OpportunityStatus.deleted.id).joins(:opportunity)
-  # scope :with_ticket, lambda { |ticket|
-  #   ticket_id = ticket.is_a?(Lighthouse::Ticket) ? ticket.id : ticket
-  #   {
-  #     :conditions => [ 'sales_opportunity_comments.lighthouse_ticket_id = ?', ticket_id ]
-  #   }
-  # }
-  scope :to_monitor, :joins => :opportunity, :conditions => [ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.all_open.map(&:id)]
+  scope :not_deleted, -> { where('sales_opportunities.status_id != ? and sales_opportunity_comments.status_id != ?', Sales::OpportunityStatus.deleted.id, Sales::OpportunityStatus.deleted.id).joins(:opportunity) }
+  scope :to_monitor, -> { joins(:opportunity).where([ 'sales_opportunity_comments.comment_type_id = ? and sales_opportunities.status_id in (?)', Sales::OpportunityCommentType.ticket.id, Sales::OpportunityStatus.all_open.map(&:id)]) }
   def self.created(start_date, end_date)
     start_date = start_date.to_time.utc
     end_date = end_date.to_time.utc
@@ -72,7 +65,7 @@ class Sales::OpportunityComment < M2mhub::Base
     s = s.id if s.is_a?(Sales::OpportunityStatus)
     where(:sales_opportunities => {:status_id => s}).joins(:opportunity)
   end
-  scope :on_hold, where(:status_id => Sales::OpportunityStatus.hold.id)
+  scope :on_hold, -> { where(:status_id => Sales::OpportunityStatus.hold.id) }
   def self.sales_territory(sales_territory_id)
     where(:sales_customers => { :sales_territory_id => sales_territory_id }).joins(:opportunity => :sales_customer)
   end
@@ -87,17 +80,17 @@ class Sales::OpportunityComment < M2mhub::Base
     lead_level = Sales::LeadLevel::Search.find(lead_level) if (lead_level.is_a?(Fixnum) || lead_level.is_a?(String))
     where('sales_customers.lead_level_id in (?)', lead_level.lead_level_ids).joins(:opportunity => :sales_customer)
   end
-  scope :notable, where('sales_opportunity_comments.comment_type_id in (?)', [Sales::OpportunityCommentType.quote.id, Sales::OpportunityCommentType.lost.id, Sales::OpportunityCommentType.sales_order.id])
-  scope :quotes, where(:comment_type_id => Sales::OpportunityCommentType.quote.id)
-  scope :sales_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id)
-  scope :sample_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.sample_order.id)
-  scope :tooling_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.tooling_order.id)
-  scope :production_orders, where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.production_order.id)
+  scope :notable, -> { where('sales_opportunity_comments.comment_type_id in (?)', [Sales::OpportunityCommentType.quote.id, Sales::OpportunityCommentType.lost.id, Sales::OpportunityCommentType.sales_order.id]) }
+  scope :quotes, -> { where(:comment_type_id => Sales::OpportunityCommentType.quote.id) }
+  scope :sales_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id) }
+  scope :sample_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.sample_order.id) }
+  scope :tooling_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.tooling_order.id) }
+  scope :production_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.production_order.id) }
   def self.reminder_on(date)
-    includes(:opportunity).where [ 
+    includes(:opportunity).where([ 
       'sales_opportunities.status_id in (?) and sales_opportunity_comments.status_id = ? and sales_opportunity_comments.reminder = ? and sales_opportunity_comments.reminder_sent = false', 
       Sales::OpportunityStatus.all_open, Sales::OpportunityStatus.active, date 
-    ]
+    ])
   end
 
   # attr_accessor :create_lighthouse_ticket

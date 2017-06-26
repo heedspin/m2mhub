@@ -40,30 +40,26 @@ class Sales::Customer < M2mhub::Base
     @erp_customer_name ||= self.erp_customer.try(:name)
   end
 
-  scope :name_like, lambda { |txt|
-    {
-      :conditions => [ 'sales_customers.name like ?', "%#{txt}%" ]
-    }
+  scope :name_like, -> (txt) {
+    where [ 'sales_customers.name like ?', "%#{txt}%" ]
   }
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => [ 'sales_customers.name = ?', txt ]
-    }
+  scope :with_name, -> (txt) {
+    where [ 'sales_customers.name = ?', txt ]
   }
   scope :by_name, -> { order(:name) }
-  scope :sales_territory, lambda { |sales_territory|
+  scope :sales_territory, -> (sales_territory) {
     where(:sales_territory_id => sales_territory.is_a?(Sales::Territory) ? sales_territory.id : sales_territory)
   }
-  scope :rep_status, lambda { |rep_status|
+  scope :rep_status, -> (rep_status) {
     where(:rep_status_id => rep_status.is_a?(Sales::RepStatus) ? rep_status.id : rep_status)
   }
-  scope :lead_level, lambda { |lead_level|
+  scope :lead_level, -> (lead_level) {
     lead_level = Sales::LeadLevel::Search.find(lead_level) if (lead_level.is_a?(Fixnum) || lead_level.is_a?(String))
     where(['lead_level_id in (?)', lead_level.lead_level_ids])
   }
   def self.erp_customer(erp_customer_id)
     erp_customer_id = erp_customer_id.id if erp_customer_id.is_a?(M2m::Customer)
-    where :erp_customer_id => erp_customer_id
+    where erp_customer_id: erp_customer_id.to_s
   end
   
   before_save :set_erp_customer

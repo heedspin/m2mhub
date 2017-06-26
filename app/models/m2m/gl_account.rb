@@ -28,17 +28,13 @@ class M2m::GlAccount < M2m::Base
   alias_attribute :parent_account_number, :fcparentid
   alias_attribute :class_key, :fcclass
   alias_attribute :description, :fcdescr
-  scope :account_number, lambda { |n|
-    {
-      :conditions => { :fcacctnum => n }
-    }
+  scope :account_number, -> (n) {
+    where :fcacctnum => n
   }
-  scope :parent_account_number, lambda { |n|
-    {
-      :conditions => { :fcparentid => n }
-    }
+  scope :parent_account_number, -> (n) {
+    where :fcparentid => n
   }
-  scope :revenue_account, :conditions => { :fccode => 'R' }
+  scope :revenue_account, -> { where(:fccode => 'R') }
   def description
     self.fcdescr.strip.titleize
   end

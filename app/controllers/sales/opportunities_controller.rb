@@ -98,7 +98,7 @@ class Sales::OpportunitiesController < M2mhubController
     if @opportunity.sales_customer.nil?
       @similar_customers = if @opportunity.customer_name.present?
         Amatcher.find_similar( :match => @opportunity.customer_name, :method => :name,
-                               :objects => Sales::Customer.scoped(:select => 'id, name'),
+                               :objects => Sales::Customer.select('id, name'),
                                :limit => 10, :threshold => 0.7 )
       else
         []

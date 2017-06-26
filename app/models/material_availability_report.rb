@@ -159,10 +159,10 @@ class MaterialAvailabilityReport
         next if (t.transaction_type.receipts? or t.transaction_type.issues?)
         @line_items.push i = InventoryLineItem.new(t)
       end
-      @item.receiver_items.all(:include => :receiver).each do |r|
+      @item.receiver_items.includes(:receiver).each do |r|
         @line_items.push ReceiverLineItem.new(r)
       end
-      @item.shipper_items.all(:include => :shipper).each do |s|
+      @item.shipper_items.includes(:shipper).each do |s|
         @line_items.push ShipperLineItem.new(s)
       end
       @line_items.push TodayLineItem.new

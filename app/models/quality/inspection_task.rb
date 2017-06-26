@@ -63,35 +63,27 @@ class Quality::InspectionTask < M2mhub::Base
     M2m::PurchaseOrder.pad_purchase_order_number self.purchase_order_number
   end
   
-  scope :not_deleted, :conditions => [ 'inspection_tasks.status_id != ?', Quality::InspectionTaskStatus.deleted.id ]
-  scope :task_type, lambda { |task_type|
-    {
-      :conditions => { :task_type_id => task_type.id }
-    }
+  scope :not_deleted, -> { where([ 'inspection_tasks.status_id != ?', Quality::InspectionTaskStatus.deleted.id ]) }
+  scope :task_type, -> (task_type) {
+    where :task_type_id => task_type.id
   }
-  scope :status_open, :conditions => [ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ]
-  scope :purchase_order_number, lambda { |ponums|
-    {
-      :conditions => [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
-    }
+  scope :status_open, -> { where([ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ]) }
+  scope :purchase_order_number, -> (ponums) {
+    where [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
   }
   def self.friendly_purchase_order_number(ponum)
     padded = M2m::PurchaseOrder.pad_purchase_order_number(ponum)
     non_padded = ponum.to_i
     where(['(inspection_tasks.purchase_order_number = ? or inspection_tasks.purchase_order_number = ?)', padded, non_padded])
   end
-  scope :status, lambda { |s|
+  scope :status, -> (s) { 
     s = Quality::InspectionTaskStatus.find(s) unless s.is_a?(Quality::InspectionTaskStatus)
     status_ids = s.children_ids || [s.id]
-    {
-      :conditions => [ 'inspection_tasks.status_id in (?)', status_ids ]
-    }
+    where [ 'inspection_tasks.status_id in (?)', status_ids ]
   }
-  scope :rma_number, lambda { |num|
+  scope :rma_number, -> (num) {
     rma_numbers = num.is_a?(Enumerable) ? num : [ num ]
-    {
-      :conditions => [ 'inspection_tasks.rma_number in (?)', rma_numbers.map { |n| M2m::Rma.pad_rma_number(n) }]
-    }
+    where [ 'inspection_tasks.rma_number in (?)', rma_numbers.map { |n| M2m::Rma.pad_rma_number(n) }]
   }
   def self.part_number(txt)
     where(:part_number => txt)

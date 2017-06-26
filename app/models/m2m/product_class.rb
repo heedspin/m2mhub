@@ -38,10 +38,8 @@ class M2m::ProductClass < M2m::Base
   alias_attribute :name, :fpc_name
   alias_attribute :number, :fpc_number
   
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => { :fpc_name => txt.upcase }
-    }
+  scope :with_name, -> (txt) {
+    where :fpc_name => txt.upcase
   }
   def self.product_class_key(fpc_number)
     where(:fpc_number => fpc_number)

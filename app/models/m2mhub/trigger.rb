@@ -26,8 +26,8 @@ class M2mhub::Trigger < M2mhub::Base
   has_many :users, :through => :trigger_users
   belongs_to_lighthouse_project
   
-  scope :enabled, :conditions => { :trigger_state_id => M2mhub::TriggerState.enabled.id }
-  scope :not_deleted, :conditions => [ 'm2mhub_triggers.trigger_state_id != ?', M2mhub::TriggerState.deleted.id ]
+  scope :enabled, -> { where(:trigger_state_id => M2mhub::TriggerState.enabled.id) }
+  scope :not_deleted, -> { where([ 'm2mhub_triggers.trigger_state_id != ?', M2mhub::TriggerState.deleted.id ]) }
   scope :by_part_number, -> { order(:part_number, :created_at) }
   
   def destroy

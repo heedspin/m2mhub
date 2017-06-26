@@ -92,55 +92,41 @@ class M2m::Invoice < M2m::Base
   alias_attribute :sales_order_number, :fsono
   alias_attribute :number, :fnumber
 
-  scope :customer, lambda { |customer|
+  scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :conditions => { :fcustno => custno }
-    }
+    where :fcustno => custno
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
+  scope :invoice_dates, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
   }
-  scope :before, lambda { |end_date|
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate < ?', end_date ]
-    }
+  scope :before, -> (end_date) {
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate < ?', end_date ]
   }
-  scope :after, lambda { |start_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate >= ?', start_date ]
-    }
+  scope :after, -> (start_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    where [ 'armast.finvdate >= ?', start_date ]
   }
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
-  scope :unpaid, :conditions => [ 'armast.fcstatus = ?', ['U'] ]
-  scope :unpaid_or_partial, :conditions => [ 'armast.fcstatus in (?)', ['U', 'P'] ]
-  scope :not_paid_before, lambda { |date|
-    date = Date.parse(date) if date.is_a?(String)
-    {
-      :conditions => [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
-    }
+  scope :not_void, -> { where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid, -> { where([ 'armast.fcstatus = ?', ['U'] ]) }
+  scope :unpaid_or_partial, -> { where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :not_paid_before, -> (date) {
+    date = DateParser.parse(date) if date.is_a?(String)
+    where [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
   }
   scope :by_date, -> { order(:finvdate) }
-  scope :for_date, lambda { |date|
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
-    }
+  scope :for_date, -> (date) {
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
   }
-  scope :invoice_number, lambda { |n|
+  scope :invoice_number, -> (n) {
     # Zero pad.
     n = "%010d" % n if n.is_a?(Fixnum)
-    {
-      :conditions => { :fcinvoice => n }
-    }
+    where :fcinvoice => n
   }
-  scope :normal_type, :conditions => [ 'armast.finvtype = ?', 'N' ]
+  scope :normal_type, -> { where([ 'armast.finvtype = ?', 'N' ]) }
   def self.invoice_numbers(numbers)
     where ['armast.fcinvoice in (?)', numbers]
   end

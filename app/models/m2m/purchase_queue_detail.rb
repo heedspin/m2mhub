@@ -61,10 +61,8 @@ class M2m::PurchaseQueueDetail < M2m::Base
   alias_attribute :line_number, :fclineno
   alias_attribute :supply_or_demand_key, :fcsupdem
   
-  scope :for_summary, lambda { |summary|
-    {
-      :conditions => { :fcpartno => summary.part_number, :fcpartrev => summary.revision }
-    }
+  scope :for_summary, -> (summary) {
+    where :fcpartno => summary.part_number, :fcpartrev => summary.revision
   }
 
   def sort_tuple

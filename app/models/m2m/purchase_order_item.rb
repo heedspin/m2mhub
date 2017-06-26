@@ -119,52 +119,40 @@ class M2m::PurchaseOrderItem < M2m::Base
     self.last_promise_date || self.original_promise_date || Time.current.advance(:years => 1)
   end
 
-  scope :status_open,      :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::PurchaseOrderStatus.open.name} }
-  scope :status_closed,    :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::PurchaseOrderStatus.closed.name} }
-  scope :status_cancelled, :joins => :purchase_order, :conditions => { :pomast => {:fstatus => M2m::PurchaseOrderStatus.cancelled.name} }
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :frev => item.revision }
-    }
+  scope :status_open,      -> { joins(:purchase_order).where(:pomast => {:fstatus => M2m::PurchaseOrderStatus.open.name}) }
+  scope :status_closed,    -> { joins(:purchase_order).where(:pomast => {:fstatus => M2m::PurchaseOrderStatus.closed.name}) }
+  scope :status_cancelled, -> { joins(:purchase_order).where(:pomast => {:fstatus => M2m::PurchaseOrderStatus.cancelled.name}) }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :frev => item.revision
   }
-  scope :for_itemno, lambda { |itemno|
-    {
-      :conditions => { :fitemno => itemno }
-    }
+  scope :for_itemno, -> (itemno) {
+    where :fitemno => itemno
   }
-  scope :with_status, lambda { |status|
+  scope :with_status, -> (status) {
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
-    {
-      :conditions => { :pomast => { :fstatus => status_name.upcase } }
-    }
+    where :pomast => { :fstatus => status_name.upcase }
   }
   scope :rev_order, -> { order('poitem.fpono desc, poitem.fitemno') }
-  scope :filtered, :conditions => ['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]
-  scope :vendor, lambda { |vendor|
+  scope :filtered, -> { where(['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]) }
+  scope :vendor, -> (vendor) {
     vendor_number = vendor.is_a?(M2m::Vendor) ? vendor.vendor_number : vendor
-    {
-      :joins => :purchase_order,
-      :conditions => { :pomast => { :fvendno => vendor_number } }
-    }
+    joins(:purchase_order).
+    where(:pomast => { :fvendno => vendor_number })
   }
-  scope :last_promised_after, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'poitem.flstpdate >= ?', date ]
-    }
+  scope :last_promised_after, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where [ 'poitem.flstpdate >= ?', date ]
   }
   scope :by_last_promised, -> { order(:flstpdate) }
   scope :by_date_received_desc, -> { order('poitem.frcpdate').reverse_order }
   scope :by_po_date_desc, -> { order('pomast.forddate').reverse_order }
-  scope :inspection_required, lambda { |ch|
+  scope :inspection_required, -> (ch) {
     if ch.is_a?(TrueClass)
       ch = 'Y'
     elsif ch.is_a?(FalseClass)
       ch = 'N'
     end
-    {
-      :conditions => { :finspect => ch }
-    }
+    where :finspect => ch
   }
 
   def master_release?

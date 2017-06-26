@@ -96,22 +96,20 @@ class Sales::Opportunity < M2mhub::Base
     s = Sales::OpportunityStatus.find(s) unless s.is_a?(Sales::OpportunityStatus)
     where ['sales_opportunities.status_id in (?)', s.children_ids]
   end
-  scope :status_closed, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]
-  scope :status_open, :conditions => [ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]
+  scope :status_closed, -> { where([ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_closed.map(&:id) ]) }
+  scope :status_open, -> { where([ 'sales_opportunities.status_id in (?)', Sales::OpportunityStatus.all_open.map(&:id) ]) }
   scope :by_customer_name, -> { order(:customer_name) }
   scope :by_last_update_desc, -> { order('sales_opportunities.updated_at desc') }
   scope :by_amount_desc, -> { order('sales_opportunities.amount desc') }
-  scope :customer_name_like, lambda { |text|
+  scope :customer_name_like, -> (text) {
     text = '%' + (text || '') + '%'
-    {
-      :include => :sales_customer,
-      :conditions => [ 'sales_opportunities.customer_name like ? or sales_customers.name like ?', text, text ]
-    }
+    includes(:sales_customer).
+    where([ 'sales_opportunities.customer_name like ? or sales_customers.name like ?', text, text ])
   }
-  scope :not_deleted, :conditions => [ 'sales_opportunities.status_id != ?', Sales::OpportunityStatus.deleted.id ]
+  scope :not_deleted, -> { where([ 'sales_opportunities.status_id != ?', Sales::OpportunityStatus.deleted.id ]) }
   def self.start_dates(start_date, end_date)
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
     where [ 'sales_opportunities.start_date >= ? and sales_opportunities.start_date < ?', start_date, end_date ]
   end
   def self.sales_territory(sales_territory_id)
@@ -296,7 +294,7 @@ class Sales::Opportunity < M2mhub::Base
   end
 
   def self.fill_in_xnumbers
-    self.all(:order => 'id').each do |o|
+    self.order(:id).each do |o|
       o.set_xnumber
       o.save!
     end

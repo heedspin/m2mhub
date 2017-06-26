@@ -2,10 +2,10 @@ class M2mhub::ShipperTriggerRunner < M2mhub::TriggerRunnerBase
   include ActionView::Helpers::UrlHelper
   def run
     earliest_time = Time.current.advance(:days => Rails.env.development? ? -70 : -2)
-    items = M2m::ShipperItem.scoped(:conditions => ['shitem.fpartno like ?', @trigger.part_number + '%']).shipped_after(earliest_time)
+    items = M2m::ShipperItem.where(['shitem.fpartno like ?', @trigger.part_number + '%']).shipped_after(earliest_time)
     recent_events = @trigger.events.since(earliest_time).all
     if recent_events.size > 0
-      items = items.scoped(:conditions => ["#{M2m::ShipperItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
+      items = items.where(["#{M2m::ShipperItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
     end
     result = 0
     items.each do |i|

@@ -98,7 +98,7 @@ class Quality::CreditMemoReport
     customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).to_a
     rma_items = rmas.map(&:items).flatten
     M2m::Item.attach_items(rma_items)
-    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).to_a
+    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).includes(:invoice).to_a
     @vendor_for_item = {}
     if rma_items.size > 0
       results = M2m::InventoryVendor.connection.select_rows <<-SQL

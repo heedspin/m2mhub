@@ -12,7 +12,7 @@ class Sales::CommissionReportRunner
   end
 
   # Sales::CommissionReportRunner.new.run_in_background!
-  # Sales::CommissionReportRunner.new.run_year(Date.parse('2013-01-01'))
+  # Sales::CommissionReportRunner.new.run_year(DateParser.parse('2013-01-01'))
   def run_year(date)
     log "Running #{date.year}"
     basedir = Rails.env.development? ? Rails.root : AppConfig.sales_dropbox_root
@@ -22,8 +22,8 @@ class Sales::CommissionReportRunner
 
   # Sales::CommissionReportRunner.new.run_range('2013-06-01', '2013-07-01')
   def run_range(start_date, end_date)
-    start_date = Date.parse(start_date) unless start_date.is_a?(Date)
-    end_date = Date.parse(end_date) unless end_date.is_a?(Date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
     basedir = Rails.env.development? ? Rails.root : AppConfig.sales_dropbox_root
     r = Sales::CommissionReport.new(:start_date => start_date, :end_date => end_date)
     r.to_xls File.join(basedir, 'Commission Report.xls')

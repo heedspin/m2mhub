@@ -80,10 +80,8 @@ class M2m::PurchaseQueueSummary < M2m::Base
   def build_note
     @note = Production::PurchaseQueueNote.new(:part_number => self.part_number, :revision => self.revision)
   end
-  scope :for_note, lambda { |note|
-    {
-      :conditions => { :fcpartno => note.part_number, :fcpartrev => note.revision }
-    }
+  scope :for_note, -> (note) {
+    where :fcpartno => note.part_number, :fcpartrev => note.revision
   }
   
   scope :by_due_date, -> { order(:fdduedate) }

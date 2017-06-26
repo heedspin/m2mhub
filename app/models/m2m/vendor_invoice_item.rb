@@ -66,17 +66,13 @@ class M2m::VendorInvoiceItem < M2m::Base
   end
   
   belongs_to_item :fpartno, :frev
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :vendor, lambda { |v|
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :vendor, -> (v) {
     v = v.vendor_number if v.is_a?(M2m::Vendor)
-    {
-      :conditions => [ 'SUBSTRING(apitem.fcinvkey,1,6) = ?', v.to_s]
-    }
+    where [ 'SUBSTRING(apitem.fcinvkey,1,6) = ?', v.to_s]
   }
-  scope :invoice_key, lambda { |ik|
-    {
-      :conditions => { :fcinvkey => ik }
-    }
+  scope :invoice_key, -> (ik) {
+    where :fcinvkey => ik
   }
   alias_attribute :invoice_key, :fcinvkey
   def invoice_number

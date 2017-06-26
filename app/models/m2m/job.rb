@@ -148,33 +148,25 @@ class M2m::Job < M2m::Base
   belongs_to :parent_job, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
   has_many :sub_jobs, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
 
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  scope :with_job_number, lambda { |jobno|
-    {
-      :conditions => { :fjobno => jobno }
-    }
+  scope :with_job_number, -> (jobno) {
+    where :fjobno => jobno
   }
-  scope :released, :conditions => { :fstatus => M2m::Status.released.name }
-  scope :status_open, :conditions => [ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ] 
+  scope :released, -> { where(:fstatus => M2m::Status.released.name) }
+  scope :status_open, -> { where([ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ]) }
   def self.status(statuses)
     where ['jomast.fstatus in (?)', statuses ] 
   end
   scope :by_date_desc, -> { order('jomast.fhold_dt desc') }
-  scope :customers, lambda { |customers|
+  scope :customers, -> (customers) {
     customer_numbers = customers.map(&:customer_number)
-    {
-      :conditions => [ 'jomast.fcus_id in (?)', customer_numbers ]
-    }
+    where [ 'jomast.fcus_id in (?)', customer_numbers ]
   }
-  scope :released_since, lambda { |date|
-    date = Date.parse(date) if date.is_a?(String)
-    {
-      :conditions => [ 'jomast.fact_rel >= ?', date ]
-    }
+  scope :released_since, -> (date) {
+    date = DateParser.parse(date) if date.is_a?(String)
+    where [ 'jomast.fact_rel >= ?', date ]
   }
   scope :by_part_number, -> { order('jobmast.fpartno') }
   

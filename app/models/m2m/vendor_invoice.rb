@@ -96,14 +96,12 @@ class M2m::VendorInvoice < M2m::Base
   def self.invoice_number(num)
     where :fcinvoice => num
   end
-  scope :purchase_order_number, lambda { |num|
-    {
-      :conditions => { :fpono => num }
-    }
+  scope :purchase_order_number, -> (num) {
+    where :fpono => num
   }
   def self.invoice_dates(start_date, end_date)
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
     where [ 'apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date ]
   end
   def self.invoice_number_like(text)
@@ -116,7 +114,7 @@ class M2m::VendorInvoice < M2m::Base
   def self.vendor_account_number(num)
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
-  scope :not_void, where('apmast.fcstatus != ?', 'V')
+  scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"

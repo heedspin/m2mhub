@@ -12,7 +12,7 @@ class Finance::InvoiceDiscrepancyReportRunner
   end
 
   # Finance::InvoiceDiscrepancyReportRunner.new.run_in_background!
-  # Finance::InvoiceDiscrepancyReportRunner.new.run_year(Date.parse('2013-01-01'))
+  # Finance::InvoiceDiscrepancyReportRunner.new.run_year(DateParser.parse('2013-01-01'))
   def run_year(date)
     log "Running #{date.year}"
     basedir = Rails.env.development? ? Rails.root : AppConfig.sales_dropbox_root

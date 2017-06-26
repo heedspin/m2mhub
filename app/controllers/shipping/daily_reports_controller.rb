@@ -3,7 +3,7 @@ class Shipping::DailyReportsController < M2mhubController
 
   def index
     if date = params[:date]
-      @date = Date.parse(date)
+      @date = DateParser.parse(date)
     end
     @date ||= Date.current
 

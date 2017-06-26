@@ -14,25 +14,19 @@
 
 class M2mhub::UserActivity < ActiveRecord::Base
   belongs_to :user
-  scope :year_in, lambda { |year|
-    {
-      :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', year.start_date, year.start_date.advance(:years => 1) ]
-    }
+  scope :year_in, -> (year) {
+    where [ 'user_activities.created_at > ? and user_activities.created_at < ?', year.start_date, year.start_date.advance(:years => 1) ]
   }
-  scope :month_in, lambda { |month|
-    {
-      :conditions => [ 'user_activities.created_at > ? and user_activities.created_at < ?', month, month.advance(:months => 1) ]
-    }
+  scope :month_in, -> (month) {
+    where [ 'user_activities.created_at > ? and user_activities.created_at < ?', month, month.advance(:months => 1) ]
   }
-  scope :for_user, lambda { |user|
-    {
-      :conditions => { :user_id => user.id }
-    }
+  scope :for_user, -> (user) {
+    where :user_id => user.id
   }
   scope :by_date_desc, -> { order('user_activities.created_at desc') }
 
-  scope :with_name, lambda { |report_name|
-    {:conditions => {:report_name => report_name}}
+  scope :with_name, -> (report_name) {
+    where :report_name => report_name
   }
 
   def password_related?

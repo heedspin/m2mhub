@@ -13,11 +13,11 @@ class Finance::InvoiceDiscrepancyReport
   end
 
   def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
+    @start_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
 
   def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
+    @end_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
 
   class Reconciler
@@ -64,7 +64,7 @@ class Finance::InvoiceDiscrepancyReport
 
   def xls_each_sheet(&block)
     by_invoice_number = {}
-    M2m::InvoiceItem.item_types('S', 'F', 'M').where('aritem.ftotprice > 0').post_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer]).each do |ii|
+    M2m::InvoiceItem.item_types('S', 'F', 'M').where('aritem.ftotprice > 0').post_dates(self.start_date, self.end_date).not_void.includes([:invoice, :customer]).each do |ii|
       (by_invoice_number[ii.invoice_number.strip] ||= Reconciler.new).add_invoice_item ii
     end
     ar_distributions = M2m::ArDistribution.dates(self.start_date, end_date).non_zero.gl_category('R').includes(:gl_account).all

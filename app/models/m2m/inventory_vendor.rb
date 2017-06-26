@@ -29,20 +29,14 @@ class M2m::InventoryVendor < M2m::Base
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fvendno, :primary_key => :fvendno
   alias_attribute :vendor_number, :fvendno
   
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  scope :part_number, lambda { |part_number|
-    {
-      :conditions => { :fpartno => part_number }
-    }
+  scope :part_number, -> (part_number) {
+    where :fpartno => part_number
   }
-  scope :revision, lambda { |revision|
-    {
-      :conditions => { :fpartrev => revision }
-    }
+  scope :revision, -> (revision) {
+    where :fpartrev => revision
   }
 end
 

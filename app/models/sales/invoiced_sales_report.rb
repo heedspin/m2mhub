@@ -12,11 +12,11 @@ class Sales::InvoicedSalesReport
   end
   
   def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
+    @start_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
   
   def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
+    @end_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
   
   def xls_filename
@@ -43,33 +43,33 @@ class Sales::InvoicedSalesReport
     attr_accessor :post_date, :customer_name, :gl_account, :description, :amount
     def initialize(t)
       @gl_account = t.gl_account_number.strip + ' ' + t.gl_account.description.strip
-			@amount = t.value
+      @amount = t.value
       if t.is_a?(M2m::ArDistribution)
         @post_date = t.date
         @customer_name = t.customer.try(:company_name) || 'no name'
         d = []
         if t.ref_invoice?
-				  d.push "Invoice #{t.ref_id.to_i}"
-				  if t.invoice.sales_order_number.present?
-				 	  d.push "for SO #{t.invoice.sales_order_number.to_i}"
-			 	  end
-				  if t.invoice.number.present?
-					  d.push "shipper #{t.invoice.number.to_i}"
-				  end
+          d.push "Invoice #{t.ref_id.to_i}"
+          if t.invoice.sales_order_number.present?
+            d.push "for SO #{t.invoice.sales_order_number.to_i}"
+          end
+          if t.invoice.number.present?
+            d.push "shipper #{t.invoice.number.to_i}"
+          end
         else
-				  d.push "#{t.ref_key.strip}: #{t.ref_id.strip}"
-				end
-				@description = d.join(' ')
+          d.push "#{t.ref_key.strip}: #{t.ref_id.strip}"
+        end
+        @description = d.join(' ')
       else
-  			@post_date = t.post_date
-  			d = []
+        @post_date = t.post_date
+        d = []
         if t.journal_entry?
-  			  d.push "Journal Entry"
+          d.push "Journal Entry"
         else
           d.push t.ref_key.strip
-  			end
+        end
         d.push "#{t.ref_id.to_i}: #{t.description.strip}"
-				@description = d.join(' ')
+        @description = d.join(' ')
       end
     end
   end

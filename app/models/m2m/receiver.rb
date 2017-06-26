@@ -52,47 +52,33 @@ class M2m::Receiver < M2m::Base
     self.time_received.to_date
   end
 
-  scope :with_date_received, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date.to_s(:database), date.advance(:days => 1).to_s(:database) ],
-    }
+  scope :with_date_received, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date.to_s(:database), date.advance(:days => 1).to_s(:database) ])
   }
-  scope :for_next_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'rcmast.fdaterecv >= ?', date.advance(:days => 1).to_s(:database) ],
-      :order => :fdaterecv
-    }
+  scope :for_next_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'rcmast.fdaterecv >= ?', date.advance(:days => 1).to_s(:database) ]).
+    order(:fdaterecv)
   }
-  scope :for_previous_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'rcmast.fdaterecv < ?', date.to_s(:database) ],
-      :order => 'rcmast.fdaterecv desc'
-    }
+  scope :for_previous_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'rcmast.fdaterecv < ?', date.to_s(:database) ]).
+    order('rcmast.fdaterecv desc')
   }
   scope :by_id_desc, -> { order('rcmast.freceiver desc') }
-  scope :rma_number, lambda { |rma_number|
+  scope :rma_number, -> (rma_number) {
     if rma_number.is_a?(Enumerable)
-      {
-        :conditions => ['rcmast.frmano in (?)', rma_number.map { |n| M2m::Rma.pad_rma_number(n) } ]
-      }
+      where ['rcmast.frmano in (?)', rma_number.map { |n| M2m::Rma.pad_rma_number(n) } ]
     else
-      {
-        :conditions => { :frmano => M2m::Rma.pad_rma_number(rma_number) }
-      }
+      where :frmano => M2m::Rma.pad_rma_number(rma_number)
     end
   }
-  scope :purchase_order_number, lambda { |pono|
+  scope :purchase_order_number, -> (pono) {
     if pono.is_a?(Enumerable)
-      {
-        :conditions => ['rcmast.fpono in (?)', pono.map { |n| M2m::PurchaseOrder.pad_purchase_order_number(n) } ]
-      }
+      where ['rcmast.fpono in (?)', pono.map { |n| M2m::PurchaseOrder.pad_purchase_order_number(n) } ]
     else
-      {
-        :conditions => { :fpono => M2m::PurchaseOrder.pad_purchase_order_number(pono) }
-      }
+      where :fpono => M2m::PurchaseOrder.pad_purchase_order_number(pono)
     end
   }
   scope :by_time_received_desc, -> { order('rcmast.fdaterecv desc') }

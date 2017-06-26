@@ -4,7 +4,7 @@ class Sales::ProFormaSalesReportsController < M2mhubController
   def new
     # @report = build_object
     # @report.run
-    @sales_orders = M2m::SalesOrder.status_open.prepayment_required.scoped(:include => :invoices).by_due_date
+    @sales_orders = M2m::SalesOrder.status_open.prepayment_required.includes(:invoices).by_due_date
   end
 
   protected

@@ -22,7 +22,7 @@ class M2mhub::ExternalEvent < M2mhub::Base
   include Plutolib::StatefulDelayedReport
   self.table_name = 'm2mhub_external_events'
   belongs_to_active_hash :status, :class_name => 'M2mhub::ExternalEventStatus'
-  scope :error, :conditions => { :status_id => M2mhub::ExternalEventStatus.error.id }
+  scope :error, -> { where(:status_id => M2mhub::ExternalEventStatus.error.id) }
   validates_uniqueness_of :guid
   attr_accessor :dry_run
   
@@ -116,7 +116,7 @@ class M2mhub::ExternalEvent < M2mhub::Base
   end
   def date
     if (v = value(:date))
-      Date.parse(v)
+      DateParser.parse(v)
     else
       nil
     end

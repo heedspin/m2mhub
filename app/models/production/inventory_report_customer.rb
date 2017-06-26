@@ -26,14 +26,10 @@ class Production::InventoryReportCustomer < ActiveRecord::Base
   has_many :item_reports, :class_name => 'Production::InventoryReportItem'
   scope :by_on_hand, -> { order('total_on_hand_cost') }
   scope :by_on_hand_desc, -> order('inventory_report_customers.total_on_hand_cost desc') }
-  scope :with_less_onhand, lambda { |inventory_report_customer|
-    {
-      :conditions => [ 'inventory_report_customers.total_on_hand_cost < ? and inventory_report_customers.id != ?', inventory_report_customer.total_on_hand_cost, inventory_report_customer.id ]
-    }
+  scope :with_less_onhand, -> (inventory_report_customer) {
+    [ 'inventory_report_customers.total_on_hand_cost < ? and inventory_report_customers.id != ?', inventory_report_customer.total_on_hand_cost, inventory_report_customer.id ]
   }
-  scope :with_more_onhand, lambda { |inventory_report_customer|
-    {
-      :conditions => [ 'inventory_report_customers.total_on_hand_cost > ? and inventory_report_customers.id != ?', inventory_report_customer.total_on_hand_cost, inventory_report_customer.id ]
-    }
+  scope :with_more_onhand, -> (inventory_report_customer) {
+    where [ 'inventory_report_customers.total_on_hand_cost > ? and inventory_report_customers.id != ?', inventory_report_customer.total_on_hand_cost, inventory_report_customer.id ]
   }
 end

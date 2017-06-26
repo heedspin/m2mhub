@@ -141,7 +141,7 @@ class Production::InventoryReport < ActiveRecord::Base
     offset = 0
     while offset < MAX_PAST_RELEASES
       # find_in_batches breaks sorting
-      releases = M2m::SalesOrderRelease.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
+      releases = M2m::SalesOrderRelease.includes(:sales_order => :customer).limit(1000).offset(offset)
       break if releases.size == 0
       offset += releases.size
       @bom_children.for_releases(releases).each do |release, bom_children|
@@ -173,7 +173,7 @@ class Production::InventoryReport < ActiveRecord::Base
     xls_field("Part Number") { |r| r.part_number_and_revision }
     xls_field('Part Description') { |r| r.item.try(:description) }
     xls_field('Group') { |r| r.item.try(:short_group_name) }
-    never = Date.parse('1901-01-01')
+    never = DateParser.parse('1901-01-01')
     xls_field('Latest Activity Date') { |r| r.latest_activity || never }
     xls_field('On Hand Cost', dollar_format) { |r| r.total_on_hand_cost }
     xls_field('Last Customer') { |r| r.customer_report.try(:customer_name) }

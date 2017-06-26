@@ -12,7 +12,7 @@ class Sales::RepReportRunner
   end
 
   # Sales::RepReportRunner.new.run_in_background!
-  # Sales::RepReportRunner.new.run_year(Date.parse('2013-01-01'))
+  # Sales::RepReportRunner.new.run_year(DateParser.parse('2013-01-01'))
   def run_year(date)
     log "Running #{date.year}"
     basedir = Rails.env.development? ? Rails.root : AppConfig.sales_dropbox_root

@@ -14,11 +14,11 @@ class Sales::RepReport
   end
 
   def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
+    @start_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
 
   def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
+    @end_date = val.is_a?(String) ? DateParser.parse(val) : val
   end
 
   RevenueSource = Struct.new(:invoice_number, :item_number, :date, :amount)
@@ -109,7 +109,7 @@ class Sales::RepReport
   end
 
   def load_invoices
-    invoice_items = M2m::InvoiceItem.item_types('S', 'F').where('aritem.ftotprice > 0').post_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
+    invoice_items = M2m::InvoiceItem.item_types('S', 'F').where('aritem.ftotprice > 0').post_dates(self.start_date, self.end_date).not_void.includes([:invoice, :customer])
     M2m::SalesOrder.attach_sales_orders(invoice_items)
     finder = Sales::CommissionRateFinder.new
     invoice_items.each do |invoice_item|

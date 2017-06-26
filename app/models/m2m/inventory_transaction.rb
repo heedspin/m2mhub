@@ -73,28 +73,20 @@ class M2m::InventoryTransaction < M2m::Base
   alias_attribute :job_number, :ftojob
   scope :by_time, -> { order(:fctime_ts) }
   scope :by_time_desc, -> { order('intran.fctime_ts desc') }
-  scope :outgoing, :conditions => ['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]
-  scope :incoming, :conditions => ['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]
-  scope :to_sales, :conditions => 'intran.ftoso != \'\''
-  scope :between, lambda { |from_date, to_date|
-    {
-      :conditions => [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
-    }
+  scope :outgoing, -> { where(['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]) }
+  scope :incoming, -> { where(['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]) }
+  scope :to_sales, -> { where('intran.ftoso != \'\'') }
+  scope :between, -> (from_date, to_date) {
+    where [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
   }
-  scope :part_number, lambda { |part_number|
-    {
-      :conditions => { :fpartno => part_number }
-    }
+  scope :part_number, -> (part_number) {
+    where :fpartno => part_number
   }
-  scope :revision, lambda { |revision|
-    {
-      :conditions => { :fcpartrev => revision }
-    }
+  scope :revision, -> (revision) {
+    where :fcpartrev => revision
   }
-  scope :to_location, lambda { |location|
-    {
-      :conditions => { :ftoloc => location }
-    }
+  scope :to_location, -> (location) {
+    where :ftoloc => location
   }
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;

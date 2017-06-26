@@ -34,10 +34,11 @@ class User < M2mhub::Base
   acts_as_authentic do |c|
     c.validate_password_field = true
     c.maintain_sessions = false
+    c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
+    c.crypto_provider = Authlogic::CryptoProviders::SCrypt
   end
   belongs_to_active_hash :user_role
   belongs_to_active_hash :user_state
-  attr_protected :password, :password_confirmation, :user_role, :user_state
   validates_presence_of :first_name, :last_name, :email, :user_state, :user_role
   has_many :user_messages, :dependent => :delete_all
   has_many :messages, :through => :user_messages

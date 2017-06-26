@@ -24,7 +24,7 @@
 class M2m::Location < M2m::Base
   self.table_name = 'location'
   
-  scope :inspection, :conditions => { :fcinspect => 'Y' }
+  scope :inspection, -> { where(:fcinspect => 'Y') }
   
   has_many :inventory_locations, :class_name => 'M2m::InventoryLocation', :foreign_key => :flocation, :primary_key => :flocation
 end

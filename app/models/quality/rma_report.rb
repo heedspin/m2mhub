@@ -23,7 +23,7 @@ class Quality::RmaReport
   end
   
   def run
-    rmas = M2m::Rma.between(@start_date, @end_date).scoped(:include => :items).all
+    rmas = M2m::Rma.between(@start_date, @end_date).includes(:items).all
     if M2mhub::Feature.enabled?(:inspection_tasks)
       Quality::InspectionTask.attach_to_rmas(rmas)
     end

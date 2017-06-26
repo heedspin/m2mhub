@@ -52,16 +52,12 @@ class M2m::Rma < M2m::Base
   alias_attribute :sales_order_number, :fcsono
   alias_attribute :padded_rma_number, :fcrmano
 
-  scope :between, lambda { |start_date, end_date|
-    {
-      :conditions => [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
-    }
+  scope :between, -> (start_date, end_date) {
+    where [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
   }
 
-  scope :with_rma_numbers, lambda { |rma_numbers|
-    {
-      :conditions => [ 'syrmama.fcrmano in (?)', rma_numbers ]
-    }
+  scope :with_rma_numbers, -> (rma_numbers) {
+    where [ 'syrmama.fcrmano in (?)', rma_numbers ]
   }
 
   attr_accessor :inspection_task

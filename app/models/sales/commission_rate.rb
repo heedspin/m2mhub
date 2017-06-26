@@ -24,20 +24,14 @@ class Sales::CommissionRate < M2mhub::Base
   validate :customer_or_item
 
   scope :by_salesperson_and_customer, -> { order(:sales_person_name, :customer_name, :part_number) }
-  scope :sales_person, lambda { |sales_person_id|
-    {
-      :conditions => ['sales_person_id = ? or second_sales_person_id = ?', sales_person_id, sales_person_id]
-    }
+  scope :sales_person, -> (sales_person_id) {
+    where ['sales_person_id = ? or second_sales_person_id = ?', sales_person_id, sales_person_id]
   }
-  scope :customer, lambda { |customer_id|
-    {
-      :conditions => { :customer_id => customer_id }
-    }
+  scope :customer, -> (customer_id) {
+    where :customer_id => customer_id
   }
-  scope :item, lambda { |item_id|
-    {
-      :conditions => { :item_id => item_id }
-    }
+  scope :item, -> (item_id) {
+    where :item_id => item_id
   }
 
   def self.matching_item(item)

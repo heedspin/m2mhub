@@ -81,12 +81,10 @@ class M2m::ReceiverItem < M2m::Base
     self.purchase_order_item.try(:vendor_part_number)
   end
 
-  scope :by_time_received_desc, { :joins => :receiver, :order => 'rcmast.fdaterecv desc, rcitem.fitemno' }  
-  scope :received_since, lambda { |date|
-    { 
-      :joins => :receiver, 
-      :conditions => [ 'rcmast.fdaterecv >= ?', date ]
-    }
+  scope :by_time_received_desc, -> { joins(:receiver).order('rcmast.fdaterecv desc, rcitem.fitemno') }
+  scope :received_since, -> (date) {
+    joins(:receiver).
+    where([ 'rcmast.fdaterecv >= ?', date ])
   }
 end
 

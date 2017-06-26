@@ -35,25 +35,17 @@ class M2m::BomItem < M2m::Base
 
   alias_attribute :quantity, :fqty
 
-  scope :with_parent_item, lambda { |item|
-    {
-      :conditions => { :fparent => item.part_number, :fparentrev => item.revision }
-    }
+  scope :with_parent_item, -> (item) {
+    where :fparent => item.part_number, :fparentrev => item.revision
   }
-  scope :with_parent, lambda { |part_number, revision|
-    {
-      :conditions => { :fparent => part_number, :fparentrev => revision }
-    }
+  scope :with_parent, -> (part_number, revision) {
+    where :fparent => part_number, :fparentrev => revision
   }
-  scope :with_child_item, lambda { |item|
-    {
-      :conditions => { :fcomponent => item.part_number, :fcomprev => item.revision }
-    }
+  scope :with_child_item, -> (item) {
+    where :fcomponent => item.part_number, :fcomprev => item.revision
   }
-  scope :with_parent_part_numbers, lambda { |part_numbers|
-    {
-      :conditions => ['inboms.fparent in (?)', part_numbers]
-    }
+  scope :with_parent_part_numbers, -> (part_numbers) {
+    where ['inboms.fparent in (?)', part_numbers]
   }
   # scope :current, {
   #   :joins => 'invcur on fcpartno = inboms.'

@@ -6,7 +6,7 @@ class M2mhub::SalesOrderTriggerRunner < M2mhub::TriggerRunnerBase
     sales_order_releases = M2m::SalesOrderRelease.part_number_starts_with(@trigger.part_number).ordered_since(earliest_time)
     recent_events = @trigger.events.since(earliest_time).all
     if recent_events.size > 0
-      sales_order_releases = sales_order_releases.scoped(:conditions => ["#{M2m::SalesOrderRelease.table_name}.fsono not in (?)", recent_events.map(&:erp_number)])
+      sales_order_releases = sales_order_releases.where(["#{M2m::SalesOrderRelease.table_name}.fsono not in (?)", recent_events.map(&:erp_number)])
     end
     sales_orders = sales_order_releases.inject({}) { |sales_orders,release|
       (sales_orders[release.sales_order_number] ||= []).push(release)
@@ -46,7 +46,7 @@ class M2mhub::SalesOrderTriggerRunner < M2mhub::TriggerRunnerBase
     # sales_order_items = M2m::SalesOrderItem.scoped(:conditions => ['soitem.fpartno like ?', @trigger.part_number + '%']).ordered_since(earliest_time)
     recent_events = @trigger.events.since(earliest_time).all
     if recent_events.size > 0
-      sales_order_items = sales_order_items.scoped(:joins => :sales_order, :conditions => ["#{M2m::SalesOrderItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
+      sales_order_items = sales_order_items.joins(:sales_order).where(["#{M2m::SalesOrderItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
     end
     sales_order_items.each do |soi|
       log "Creating event for sales order #{soi.order_number}"

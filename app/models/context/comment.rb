@@ -19,7 +19,6 @@ class Context::Comment < M2mhub::Base
   belongs_to :creator, :class_name => 'User'
   
   attr_accessor :subject
-  attr_protected :creator_id
   
   def self.not_deleted
     where('context_comments.deleted is null or context_comments.deleted = false')

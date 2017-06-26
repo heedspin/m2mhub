@@ -18,15 +18,11 @@ class Sales::BacklogReport < M2mhub::Base
   include Plutolib::ToXls
   self.table_name = 'backlog_reports'
   belongs_to_active_hash :report_time_period
-  scope :date, lambda { |date|
-    {
-      :conditions => { :date => date }
-    }
+  scope :date, -> (date) {
+    where :date => date
   }
-  scope :time_period, lambda { |report_time_period|
-    {
-      :conditions => { :report_time_period_id => report_time_period.id }
-    }
+  scope :time_period, -> (report_time_period) {
+    where :report_time_period_id => report_time_period.id
   }
   scope :by_date_desc, -> { order('backlog_reports.date desc') }
 
@@ -61,7 +57,7 @@ class Sales::BacklogReport < M2mhub::Base
     end
   end
   def releases
-    @releases ||= M2m::SalesOrderRelease.ids(self.sales_release_memos.map(&:first)).includes(:sales_order => :customer)
+    @releases ||= M2m::SalesOrderRelease.with_ids(self.sales_release_memos.map(&:first)).includes(:sales_order => :customer)
   end
   def sales_release_summaries
     if @sales_release_summaries.nil?
@@ -70,7 +66,7 @@ class Sales::BacklogReport < M2mhub::Base
         releasemap[r.id] = r
       end
       @sales_release_summaries = self.sales_release_memos.map do |sales_release_id, backlog_price, due_date|
-        SalesReleaseSummary.new releasemap[sales_release_id], backlog_price.to_f, Date.parse(due_date), self.date
+        SalesReleaseSummary.new releasemap[sales_release_id], backlog_price.to_f, DateParser.parse(due_date), self.date
       end.sort_by(&:due_date)
     end
     @sales_release_summaries

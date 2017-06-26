@@ -17,7 +17,7 @@ class Production::VendorsController < M2mhubController
   end
   
   def autocomplete_index
-    @vendors = model_class.name_like(@search_term).by_name.all(:select => 'apvend.fcompany', :limit => 20)
+    @vendors = model_class.name_like(@search_term).by_name.select('apvend.fcompany').limit(20)
     names = @vendors.map { |v| { :label => v.name, :value => v.name } }
     if names.size == 0
       names.push({:label => 'No Results', :value => 'No Results'})
