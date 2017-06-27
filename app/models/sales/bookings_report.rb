@@ -37,7 +37,7 @@ class Sales::BookingsReport < M2mhub::Base
   def run!
     next_month = self.date.advance(:months => 1)
     releases = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).status_not_cancelled.includes(:sales_order)
-    self.bookings = releases.sum(&:total_price)
+    self.bookings = releases.sum(:total_price)
     self.ytd_bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date.beginning_of_year, next_month).status_not_cancelled.sum(:fnetprice)
     
     sales_orders = {}
