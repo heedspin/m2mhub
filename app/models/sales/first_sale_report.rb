@@ -7,9 +7,10 @@ class Sales::FirstSaleReport
     'First Sale Report'
   end
 
-  def xls_clean_string(txt)
-    txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
-  end
+  # Should not be needed for Ruby 2.x.
+  # def xls_clean_string(txt)
+  #   txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
+  # end
 
   def xls_initialize
     # Windows friendly encoding

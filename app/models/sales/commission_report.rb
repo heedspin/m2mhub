@@ -26,14 +26,15 @@ class Sales::CommissionReport
     'Commission Report'
   end
 
-  def xls_clean_string(txt)
-    if RUBY_VERSION >= "1.9.3"
-      txt
-    else
-      # \326
-      txt.try :tr, "\x91-\x94\x9c\x9d\x80\212\326", "''\"\"\"\"'S"
-    end
-  end
+  # Should not be needed for Ruby 2.x.
+  # def xls_clean_string(txt)
+  #   if RUBY_VERSION >= "1.9.3"
+  #     txt
+  #   else
+  #     # \326
+  #     txt.try :tr, "\x91-\x94\x9c\x9d\x80\212\326", "''\"\"\"\"'S"
+  #   end
+  # end
 
   def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
