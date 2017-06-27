@@ -1,7 +1,7 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
 
 class Sales::RepReportRunner
-  include Plutolib::StatelessDelayedReport
+  include Plutolib::LoggerUtils
 
   # Sales::RepReportRunner.new.run_report
   def run_report
@@ -11,7 +11,6 @@ class Sales::RepReportRunner
     run_year(Date.current)
   end
 
-  # Sales::RepReportRunner.new.run_in_background!
   # Sales::RepReportRunner.new.run_year(DateParser.parse('2013-01-01'))
   def run_year(date)
     log "Running #{date.year}"

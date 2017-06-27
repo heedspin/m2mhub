@@ -1,7 +1,7 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
 
 class Sales::SalesOrderAssigner
-  include Plutolib::StatelessDelayedReport
+  include Plutolib::LoggerUtils
   def initialize(args={})
     @start_date = args[:start_date] || Date.current.advance(:months => -1)
     @start_date = DateParser.parse(@start_date) if @start_date.is_a?(String)

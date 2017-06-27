@@ -50,7 +50,7 @@ class M2mhub::Cronjobs
     Doogle::Display.sync_all_to_erp
     log "Updating inspection task tickets"
     if M2mhub::Feature.enabled?(:inspection_tasks)
-      tasks = Quality::InspectionTask.status_open.all
+      tasks = Quality::InspectionTask.status_open
       # THIS CAN TRIP OUR RATE LIMIT WITH LH.
       tasks.each do |t|
         t.update_lighthouse_status!
