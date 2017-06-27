@@ -137,13 +137,14 @@ class M2m::Rma < M2m::Base
     def ticket
       if @ticket.nil?
         begin
-          if @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => AppConfig.lighthouse_rma_project_id })
-            # Convert to time objects.
-            @ticket.created_at = Time.parse(@ticket.created_at)
-            @ticket.versions.each do |v|
-              v.created_at = Time.parse(v.created_at)
-            end
-          end
+          @ticket = Lighthouse::Ticket.find(@ticket_id, :params => { :project_id => AppConfig.lighthouse_rma_project_id })
+          # No longer necessary
+          #   # Convert to time objects.
+          #   @ticket.created_at = @ticket.created_at.is_a?(Time) ? @ticket.created_at : Time.parse(@ticket.created_at)
+          #   @ticket.versions.each do |v|
+          #     v.created_at = Time.parse(v.created_at)
+          #   end
+          # end
         rescue ActiveResource::ResourceNotFound
           # Bad link...
         end
