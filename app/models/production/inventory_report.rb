@@ -19,17 +19,18 @@
 #  total_committed_cost            :decimal(12, 2)
 #
 
-require 'plutolib/stateful_delayed_report'
 require 'plutolib/to_xls'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
+# Cronhint:
+# 00 3 * * 2-6 /var/www/lxdhub/script/runner.sh 'Production::InventoryReport.create.delay.run_report'
+
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   self.table_name = 'inventory_reports'
   include Plutolib::ToXls
-  include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy
