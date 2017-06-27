@@ -87,7 +87,7 @@ class Sales::OpportunityComment < M2mhub::Base
   scope :tooling_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.tooling_order.id) }
   scope :production_orders, -> { where(:comment_type_id => Sales::OpportunityCommentType.sales_order.id, :win_type_id => Sales::OpportunityWinType.production_order.id) }
   def self.reminder_on(date)
-    includes(:opportunity).where([ 
+    joins(:opportunity).where([ 
       'sales_opportunities.status_id in (?) and sales_opportunity_comments.status_id = ? and sales_opportunity_comments.reminder = ? and sales_opportunity_comments.reminder_sent = false', 
       Sales::OpportunityStatus.all_open, Sales::OpportunityStatus.active, date 
     ])
