@@ -4,4 +4,5 @@ if AppConfig.lighthouse_account
   require 'lighthouse_project'
   require 'lighthouse_ticket'
   require 'lighthouse_user'
+  require 'patch_active_resource'
 end
