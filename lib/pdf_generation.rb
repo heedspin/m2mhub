@@ -11,7 +11,10 @@ module PdfGeneration
       if Rails.env.development?
         # Log xml for debug purposes.
         File.open(File.join(Rails.root, 'log/last_pdf.xml'), 'w+') do |f|
-          f.write(xml)
+          f.write(xml.encode('utf-8', 
+                             invalid: :replace, 
+                             undef: :replace,
+                             replace: "?"))
         end
       end
       pdf = PdfGenerator.new(xml)
@@ -40,7 +43,10 @@ class PdfGenerator
 
   def initialize(xml)
     tempfile = Tempfile.new('pdfgenerator_')
-    tempfile.print xml
+    tempfile.print(xml.encode('utf-8', 
+                             invalid: :replace, 
+                             undef: :replace,
+                             replace: "?"))
     tempfile.close
     source = tempfile.path + '.html'
     logfile = tempfile.path + '.log'
