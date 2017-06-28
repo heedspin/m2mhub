@@ -6,7 +6,7 @@ class Production::PurchaseOrderItemsController < M2mhubController
   end
 
   def index
-    @search = Search.new(params[:search])
+    @search = Search.new(params.fetch(:search, nil).permit!)
     unless params.member?(:search)
       @search.status_id = M2m::Status.open.id
     end

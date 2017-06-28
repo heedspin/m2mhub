@@ -6,7 +6,7 @@ class Sales::CommissionRatesController < M2mhubController
       raise "Need to implement item autocomplete with revisions"
     end
 
-    @search = Sales::CommissionRate.new(params[:search])
+    @search = Sales::CommissionRate.new(params.fetch(:search, nil).try(:permit!))
     s = Sales::CommissionRate
     if @search.sales_person_id.present?
       s = s.sales_person(@search.sales_person_id)
@@ -51,7 +51,7 @@ class Sales::CommissionRatesController < M2mhubController
 
   def update
     @commission_rate = current_object
-    if @commission_rate.update_attributes(params[:sales_commission_rate])
+    if @commission_rate.update_attributes(params.require(:sales_commission_rate).permit!)
       redirect_to commission_rates_url
     else
       render :action => 'edit'

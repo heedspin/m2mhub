@@ -41,7 +41,7 @@ class Sales::Customer < M2mhub::Base
   end
 
   scope :name_like, -> (txt) {
-    where [ 'sales_customers.name like ?', "%#{txt}%" ]
+    where [ 'sales_customers.name ilike ?', "%#{txt}%" ]
   }
   scope :with_name, -> (txt) {
     where [ 'sales_customers.name = ?', txt ]
@@ -87,7 +87,7 @@ class Sales::Customer < M2mhub::Base
   end
   
   def destroy
-    Sales::Opportunity.update_all({:sales_customer_id => nil}, {:sales_customer_id => self.id})
+    Sales::Opportunity.where(sales_customer_id: self.id).update_all(:sales_customer_id => nil)
     super
   end
   

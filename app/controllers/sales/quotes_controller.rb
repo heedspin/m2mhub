@@ -52,7 +52,7 @@ class Sales::QuotesController < M2mhubController
 
   def update
     @quote = current_object
-    if @quote.update_attributes(params[model_name])
+    if @quote.update_attributes(params.require(model_name).permit!)
       redirect_back_or_default sales_quote_url(@quote)
     else
       render :action => 'edit'
@@ -100,7 +100,7 @@ class Sales::QuotesController < M2mhubController
     
     def build_object
       if @current_object.nil?
-        @current_object = Sales::Quote.new(params[model_name])
+        @current_object = Sales::Quote.new(params.fetch(model_name, nil).permit!)
         if @current_object.customer_name.blank?
           @current_object.customer_name = @current_object.sales_customer.try(:name)
         end

@@ -8,7 +8,7 @@ class Sales::OpportunitiesController < M2mhubController
   end
 
   def index
-    @search = Search.new(params[:search])
+    @search = Search.new(params.fetch(:search, nil).try(:permit!))
     if params.member?(:search)
       s = Sales::Opportunity
       @search.xnumber = @search.xnumber.strip.upcase if @search.xnumber.present?
@@ -108,7 +108,7 @@ class Sales::OpportunitiesController < M2mhubController
 
   def destroy
     @opportunity = current_object
-    if opportunity_params = params[model_name]
+    if opportunity_params = params.require(model_name).permit!
       @opportunity.delete_permanently = value_to_bool(opportunity_params[:delete_permanently])
     end
     @opportunity.destroy

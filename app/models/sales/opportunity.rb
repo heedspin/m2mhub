@@ -103,8 +103,8 @@ class Sales::Opportunity < M2mhub::Base
   scope :by_amount_desc, -> { order('sales_opportunities.amount desc') }
   scope :customer_name_like, -> (text) {
     text = '%' + (text || '') + '%'
-    includes(:sales_customer).
-    where([ 'sales_opportunities.customer_name like ? or sales_customers.name like ?', text, text ])
+    joins(:sales_customer).
+    where([ 'sales_opportunities.customer_name ilike ? or sales_customers.name ilike ?', text, text ])
   }
   scope :not_deleted, -> { where([ 'sales_opportunities.status_id != ?', Sales::OpportunityStatus.deleted.id ]) }
   def self.start_dates(start_date, end_date)

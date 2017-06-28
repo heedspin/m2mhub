@@ -29,7 +29,7 @@ class Sales::TerritoriesController < M2mhubController
 
   def update
     @territory = current_object
-    if @territory.update_attributes(params[:sales_territory])
+    if @territory.update_attributes(params.require(:sales_territory).permit!)
       redirect_to sales_territories_url
     else
       render :action => 'edit'

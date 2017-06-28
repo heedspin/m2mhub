@@ -43,7 +43,7 @@ class Context::CommentsController < M2mhubController
     logger.info("UPDATE")
     respond_to do |format|
       format.json {
-        if @comment.update_attributes(params[model_name])
+        if @comment.update_attributes(params.require(model_name).permit!)
           render :json => { :result => 'success' }
         else
           render :json => @comment.errors, :status => :unprocessable_entity

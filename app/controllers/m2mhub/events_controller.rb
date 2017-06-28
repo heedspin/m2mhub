@@ -24,7 +24,7 @@ class M2mhub::EventsController < M2mhubController
 
   def update
     @event = current_object
-    if @event.update_attributes(params[:m2mhub_event])
+    if @event.update_attributes(params.require(:m2mhub_event).permit!)
       redirect_to m2mhub_events_url
     else
       render :action => 'edit'

@@ -34,7 +34,7 @@ class Sales::QuoteItemsController < M2mhubController
     @quote_item = current_object
     respond_to do |format|
       format.js {
-        if @quote_item.update_attributes(params[model_name])
+        if @quote_item.update_attributes(params.require(model_name).permit!)
           render :action => 'show'
         else
           render :action => 'error'
@@ -69,7 +69,7 @@ class Sales::QuoteItemsController < M2mhubController
     end
     
     def build_object
-      self.parent_object.items.build(params[model_name])
+      self.parent_object.items.build(params.fetch(model_name, nil).permit!)
     end
 
 end

@@ -41,7 +41,7 @@ class M2mCustomersController < M2mhubController
 
   def update
     @customer = current_object
-    if @customer.update_attributes(params[:m2m_customer])
+    if @customer.update_attributes(params.require(:m2m_customer).permit!)
       redirect_to m2m_customer_contacts_url(@customer)
     else
       render :action => 'edit'
@@ -61,7 +61,7 @@ class M2mCustomersController < M2mhubController
   end
 
   def search_index
-    @search = M2m::Customer.new(params[:search])
+    @search = M2m::Customer.new(params.fetch(:search, nil).try(:permit!))
     # For who knows what reason, a new customer comes out with a name = " ".
     if @search.fcompany
       @search.fcompany = @search.fcompany.strip

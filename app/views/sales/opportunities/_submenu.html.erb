@@ -1,36 +1,30 @@
 <div class="submenu">
-	<ul>
-		<li class="<%= menu_selected 'sales/opportunities' %>">
-			<%= link_to 'Opportunities', opportunities_url %>
-		</li>
+  <ul>
+    <li class="<%= menu_selected 'sales/opportunities' %>">
+      <%= link_to 'Opportunities', opportunities_url %>
+    </li>
 
-		<li class="<%= menu_selected 'sales/sales_events' %>">
-			<%= link_to 'Events', sales_events_url %>
-		</li>
+    <li class="<%= menu_selected 'sales/sales_events' %>">
+      <%= link_to 'Events', sales_events_url %>
+    </li>
 
-		<li class="<%= menu_selected 'sales/opportunity_reports' %>">
-			<%= link_to 'Scoreboard', sales_scoreboard_url %>
-		</li>
+    <li class="<%= menu_selected 'sales/opportunity_reports' %>">
+      <%= link_to 'Scoreboard', sales_scoreboard_url %>
+    </li>
 
-		<li class="<%= menu_selected 'sales/quotes' %>">
-			<%= link_to 'Quotes', sales_quotes_url %>
-		</li>
+    <li class="<%= menu_selected 'sales/quotes' %>">
+      <%= link_to 'Quotes', sales_quotes_url %>
+    </li>
 
-		<% if M2mhub::Feature.enabled?(:customers) and permitted_to?(:read, :sales_customers) %>
-		<li class="<%= menu_selected 'sales_customers' %>">
-			<%= link_to 'Customers', sales_customers_url %>
-		</li>
+    <% if M2mhub::Feature.enabled?(:customers) and permitted_to?(:read, :sales_customers) %>
+    <li class="<%= menu_selected 'sales_customers' %>">
+      <%= link_to 'Customers', sales_customers_url %>
+    </li>
 
-		<li class="<%= menu_selected 'sales/territories' %>">
-			<%= link_to 'Territories', sales_territories_url %>
-		</li>
-		<% end %>
-		
-		<% if M2mhub::Feature.enabled?(:contexts) %>
-		<li class="<%= menu_selected 'context/contexts' %>">
-			<%= link_to 'Contexts', contexts_url %>
-		</li>
-		<% end %>
-	</ul>
+    <li class="<%= menu_selected 'sales/territories' %>">
+      <%= link_to 'Territories', sales_territories_url %>
+    </li>
+    <% end %>
+  </ul>
 </div>
 <br />

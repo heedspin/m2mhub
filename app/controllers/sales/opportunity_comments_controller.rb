@@ -26,7 +26,7 @@ class Sales::OpportunityCommentsController < M2mhubController
   def update
     @comment = current_object
     @opportunity = @comment.opportunity
-    if @comment.update_attributes(params[model_name])
+    if @comment.update_attributes(params.require(model_name).permit!)
       redirect_to opportunity_url(@opportunity)
     else
       render :action => 'edit'
@@ -35,7 +35,7 @@ class Sales::OpportunityCommentsController < M2mhubController
 
   def destroy
     @comment = current_object
-    # if comment_params = params[model_name]
+    # if comment_params = params.require(model_name).permit!
     #   @comment.delete_lighthouse_ticket = value_to_bool(comment_params[:delete_lighthouse_ticket])
     # end
     @comment.destroy

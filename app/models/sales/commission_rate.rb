@@ -37,7 +37,7 @@ class Sales::CommissionRate < M2mhub::Base
   }
 
   def self.matching_item(item)
-    where ['commission_rates.part_number like ?', self.get_base_part_number(item.part_number) + '%']
+    where ['commission_rates.part_number ilike ?', self.get_base_part_number(item.part_number) + '%']
   end
 
   def revision

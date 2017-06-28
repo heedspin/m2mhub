@@ -9,7 +9,7 @@ class Quality::InspectionTasksController < M2mhubController
       end
       redirect_to inspection_task_url(task)
     else
-      @search = Quality::InspectionTask.new(params[:search])
+      @search = Quality::InspectionTask.new(params.fetch(:search, nil).try(:permit!))
       unless params.member?(:search)
         @search.status = Quality::InspectionTaskStatus.all_open
       end
@@ -50,7 +50,7 @@ class Quality::InspectionTasksController < M2mhubController
 
   def update
     @task = current_object
-    if @task.update_attributes(params[model_name])
+    if @task.update_attributes(params.require(model_name).permit!)
       redirect_to inspection_task_url(@task)
     else
       render :action => 'edit'
@@ -64,7 +64,7 @@ class Quality::InspectionTasksController < M2mhubController
   
   def destroy
     @task = current_object
-    if task_params = params[model_name]
+    if task_params = params.require(model_name).permit!
       @task.delete_lighthouse_ticket = value_to_bool(task_params[:delete_lighthouse_ticket])
     end
     @task.destroy
