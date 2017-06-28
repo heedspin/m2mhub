@@ -83,7 +83,7 @@ class Sales::OpportunitiesController < M2mhubController
 
   def update
     @opportunity = current_object
-    if @opportunity.update_attributes(params[model_name])
+    if @opportunity.update_attributes(params.require(model_name).permit!)
       redirect_to opportunity_url(@opportunity)
     else
       render :action => 'edit'
