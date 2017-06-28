@@ -2,17 +2,19 @@
 #
 # Table name: commission_rates
 #
-#  id                    :integer          not null, primary key
-#  customer_id           :integer
-#  customer_name         :string(255)
-#  customer_number       :string(255)
-#  sales_person_id       :integer
-#  sales_person_name     :string(255)
-#  item_id               :integer
-#  part_number           :string(255)
-#  commission_percentage :decimal(12, 4)
-#  created_at            :datetime
-#  updated_at            :datetime
+#  id                           :integer          not null, primary key
+#  customer_id                  :integer
+#  customer_name                :string(255)
+#  customer_number              :string(255)
+#  sales_person_id              :integer
+#  sales_person_name            :string(255)
+#  item_id                      :integer
+#  part_number                  :string(255)
+#  commission_percentage        :decimal(12, 4)
+#  created_at                   :datetime
+#  updated_at                   :datetime
+#  second_sales_person_id       :integer
+#  second_commission_percentage :decimal(12, 4)
 #
 
 class Sales::CommissionRate < M2mhub::Base
