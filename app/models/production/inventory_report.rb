@@ -3,9 +3,6 @@
 # Table name: inventory_reports
 #
 #  id                              :integer          not null, primary key
-#  delayed_job_id                  :integer
-#  delayed_job_status_id           :integer
-#  delayed_job_log                 :text
 #  created_at                      :datetime
 #  updated_at                      :datetime
 #  inventory_report_cost_method_id :integer

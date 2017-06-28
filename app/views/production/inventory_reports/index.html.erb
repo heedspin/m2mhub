@@ -2,12 +2,12 @@
 
 <% if permitted_to?(:make, :production_inventory_reports) %>
 <%= semantic_form_for :inventory_report, :url => inventory_reports_path do |f| %>
-	<%= f.inputs do %>
-	 	<%= f.input :report_date, :as => :calendar %>
-	<% end %>
-	<%= f.actions do %>
-		<%= f.action :submit, :label => 'Create' %>
-	<% end %>
+  <%= f.inputs do %>
+    <%= f.input :report_date, :as => :calendar %>
+  <% end %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => 'Create' %>
+  <% end %>
 <% end %>
 <% end %>
 
@@ -15,39 +15,35 @@
 <%= will_paginate @reports %>
 
 <table class="data">
-	<thead>
-		<tr>
-			<th>Date</th>
-			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<th><%= quantity.name %></th>
-			<% end %>
-			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
-			<th><%= ttype.short_name %></th>
-			<% end %>
-		</tr>
-	</thead>
-	<tbody>
-	<% @reports.each do |report| %>
-		<tr>
-			<td><%= link_to report.report_date.try(:to_s, :report_date) || report.created_at.to_s(:report_date), inventory_report_customer_reports_url(report) %></td>
-			<% Production::InventoryReportQuantity.all.each do |quantity| %>
-			<td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
-			<% end %>
-			<% Production::InventoryMovementData::TTYPES.each do |ttype| %>
-			<td class="right"><%= cm report.movements.cost_for(ttype), :rounded_dollars %></td>
-			<% end %>
-			<% if permitted_to?(:destroy, :production_inventory_reports) %>
-			<td>
-				<% if report.delayed_job_status.try(:in_progress?) %>
-				<%= link_to 'in progress', inventory_report_url(report) %>
-				<% else %>
-				<%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %>				
-				<% end %>
-			</td>
-			<% end %>
-		</tr>
-	<% end %>
-	</tbody>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <% Production::InventoryReportQuantity.all.each do |quantity| %>
+      <th><%= quantity.name %></th>
+      <% end %>
+      <% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+      <th><%= ttype.short_name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+  <% @reports.each do |report| %>
+    <tr>
+      <td><%= link_to report.report_date.try(:to_s, :report_date) || report.created_at.to_s(:report_date), inventory_report_customer_reports_url(report) %></td>
+      <% Production::InventoryReportQuantity.all.each do |quantity| %>
+      <td class="right"><%= cm report.send(quantity.total_cost_key), :rounded_dollars %></td>
+      <% end %>
+      <% Production::InventoryMovementData::TTYPES.each do |ttype| %>
+      <td class="right"><%= cm report.movements.cost_for(ttype), :rounded_dollars %></td>
+      <% end %>
+      <% if permitted_to?(:destroy, :production_inventory_reports) %>
+      <td>
+        <%= link_to 'delete', inventory_report_url(report), :method => :delete, :confirm => 'Are you sure?' %>        
+      </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
 </table>
 
 <%= will_paginate @reports %>

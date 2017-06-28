@@ -20,16 +20,6 @@ class Production::InventoryReportsController < M2mhubController
     @customer_reports = @report.customer_reports.by_on_hand_desc.paginate(:page => params[:page], :per_page => 1)
     respond_to do |format|
       format.html
-      format.json {
-        result = if @report.delayed_job_status.in_progress?
-          { :inprogress => true }
-        else
-          { :inprogress => false,
-            :html => render_to_string(:partial => 'show.html.erb',
-                                      :layout => false) }
-        end
-        render :json => result.to_json
-      }
       format.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
