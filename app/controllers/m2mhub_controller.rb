@@ -49,7 +49,7 @@ class M2mhubController < ApplicationController
     end
 
     def build_object
-      @build_object ||= model_class.new(params[model_name])
+      @build_object ||= model_class.new(params.require(model_name).permit!)
     end
 
     def current_object

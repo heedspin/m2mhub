@@ -24,7 +24,7 @@ class M2mhub::TriggersController < M2mhubController
 
   def update
     @trigger = current_object
-    if @trigger.update_attributes(params[:m2mhub_trigger])
+    if @trigger.update_attributes(params.require(:m2mhub_trigger).permit!)
       redirect_to m2mhub_triggers_url
     else
       render :action => 'edit'
