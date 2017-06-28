@@ -3,7 +3,7 @@
 # Table name: apitem
 #
 #  fapp_by          :string(3)        default(""), not null
-#  fapp_dt          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fapp_dt          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fccredit         :string(25)       default(""), not null
 #  fcdebit          :string(25)       default(""), not null
 #  fcinvkey         :string(26)       default(""), not null

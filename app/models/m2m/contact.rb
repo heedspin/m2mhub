@@ -33,8 +33,8 @@
 #  PostalCode       :string(10)       default(""), not null
 #  URL              :string(100)      default(""), not null
 #  IsPrimary        :boolean          default(FALSE), not null
-#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flEdited         :boolean          default(FALSE), not null
 #
 

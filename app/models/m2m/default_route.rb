@@ -44,7 +44,7 @@
 #  fqty10           :decimal(15, 5)   default(0.0), not null
 #  fqty11           :decimal(15, 5)   default(0.0), not null
 #  fqty12           :decimal(15, 5)   default(0.0), not null
-#  frev_date        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frev_date        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fsetuplabc       :decimal(17, 5)   default(0.0), not null
 #  fsetupovrc       :decimal(17, 5)   default(0.0), not null
 #  fsetuptime       :decimal(14, 5)   default(0.0), not null

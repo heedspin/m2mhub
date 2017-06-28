@@ -18,19 +18,19 @@
 #  flstcost         :decimal(17, 5)   default(0.0), not null
 #  fstdcost         :decimal(17, 5)   default(0.0), not null
 #  fleadtime        :decimal(5, 1)    default(0.0), not null
-#  forgpdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  flstpdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  forgpdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  flstpdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fmultirls        :string(1)        default(""), not null
 #  fnextrels        :integer          default(0), not null
 #  fnqtydm          :decimal(15, 5)   default(0.0), not null
-#  freqdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  freqdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fretqty          :decimal(15, 5)   default(0.0), not null
 #  fordqty          :decimal(15, 5)   default(0.0), not null
 #  fqtyutol         :decimal(6, 2)    default(0.0), not null
 #  fqtyltol         :decimal(6, 2)    default(0.0), not null
 #  fbkordqty        :decimal(15, 5)   default(0.0), not null
-#  flstsdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  frcpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flstsdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  frcpdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  frcpqty          :decimal(15, 5)   default(0.0), not null
 #  fshpqty          :decimal(15, 5)   default(0.0), not null
 #  finvqty          :decimal(15, 5)   default(0.0), not null
@@ -52,7 +52,7 @@
 #  fvconvfact       :decimal(13, 9)   default(0.0), not null
 #  fvucost          :decimal(17, 5)   default(0.0), not null
 #  fqtyshipr        :decimal(15, 5)   default(0.0), not null
-#  fdateship        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdateship        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fparentpo        :string(6)        default(""), not null
 #  frmano           :string(25)       default(""), not null
 #  fdebitmemo       :string(1)        default(""), not null
@@ -83,12 +83,12 @@
 #  fcudrev          :string(3)        default(""), not null
 #  fndbrmod         :integer          default(0), not null
 #  blanketPO        :boolean          default(FALSE), not null
-#  PlaceDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  PlaceDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  DockTime         :integer          default(0), not null
 #  PurchBuf         :integer          default(0), not null
 #  Final            :boolean          default(FALSE), not null
-#  AvailDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  AvailDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  SchedDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #
 
 class M2m::PurchaseOrderItem < M2m::Base

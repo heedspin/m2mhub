@@ -22,16 +22,16 @@
 #  fctermsid        :string(4)        default(""), not null
 #  fczip            :string(10)       default(""), not null
 #  fdebit           :decimal(, )      default(0.0), not null
-#  fdfactdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdfactdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdiscamt         :decimal(, )      default(0.0), not null
-#  fdiscdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdiscdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdisctake        :decimal(, )      default(0.0), not null
-#  fduedate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ffreight         :decimal(, )      default(0.0), not null
-#  fgldisdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  finvdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fgldisdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  finvdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  finvtype         :string(2)        default(""), not null
-#  flpaydate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flpaydate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpayment        :decimal(, )      default(0.0), not null
 #  fltxnpaymt       :decimal(, )      default(0.0), not null
 #  fleurpaymt       :decimal(, )      default(0.0), not null
@@ -50,7 +50,7 @@
 #  furgency         :integer          default(0), not null
 #  fappeurpay       :decimal(, )      default(0.0), not null
 #  fapptxnpay       :decimal(, )      default(0.0), not null
-#  fdeurodate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdeurodate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
 #  feuradjamt       :decimal(, )      default(0.0), not null
 #  feurapadj        :decimal(, )      default(0.0), not null
@@ -63,10 +63,10 @@
 #  ftxndistk        :decimal(, )      default(0.0), not null
 #  ftxnpaid         :decimal(, )      default(0.0), not null
 #  fcurrpaid        :string(1)        default(""), not null
-#  fdvoiddate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdvoiddate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flduechng        :boolean          default(FALSE), not null
 #  flpremcv         :boolean          default(FALSE), not null
-#  fdtaxpoint       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdtaxpoint       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key
 #  fmnotes          :text             default(""), not null

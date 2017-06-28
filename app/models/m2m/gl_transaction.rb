@@ -4,13 +4,13 @@
 #
 #  fcacctnum        :string(25)       default(""), not null
 #  fcrefclass       :string(2)        default(""), not null
-#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcuserid         :string(4)        default(""), not null
-#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddate           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftrsamt          :decimal(, )      default(0.0), not null
 #  ftrsdes          :string(30)       default(""), not null
 #  ftrsref          :string(10)       default(""), not null
-#  ftrsdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftrsdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fccurid          :string(3)        default(""), not null
 #  fcfactor         :decimal(17, 5)   default(0.0), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null

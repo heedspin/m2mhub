@@ -13,14 +13,14 @@
 #  fbook            :decimal(15, 5)   default(0.0), not null
 #  fbqty            :decimal(15, 5)   default(0.0), not null
 #  fdiscount        :decimal(17, 5)   default(0.0), not null
-#  fduedate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  finvamount       :decimal(17, 5)   default(0.0), not null
 #  finvqty          :decimal(15, 5)   default(0.0), not null
 #  fjob             :boolean          default(FALSE), not null
 #  fjoqty           :decimal(15, 5)   default(0.0), not null
 #  flabcost         :decimal(17, 5)   default(0.0), not null
 #  flngth           :decimal(15, 5)   default(0.0), not null
-#  flshipdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flshipdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fmasterrel       :boolean          default(FALSE), not null
 #  fmatlcost        :decimal(17, 5)   default(0.0), not null
 #  fmaxqty          :decimal(15, 5)   default(0.0), not null
@@ -69,7 +69,7 @@
 #  fcudrev          :string(3)        default(""), not null
 #  fndbrmod         :integer          default(0), not null
 #  fpriority        :integer          default(4), not null
-#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  SchedDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flInvcPoss       :boolean          default(FALSE), not null
 #  fmatlpadj        :decimal(16, 5)   default(0.0), not null
 #  ftoolpadj        :decimal(16, 5)   default(0.0), not null

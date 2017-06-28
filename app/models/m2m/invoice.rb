@@ -18,14 +18,14 @@
 #  fcsource         :string(1)        default(""), not null
 #  fcstatus         :string(1)        default(""), not null
 #  fctermsid        :string(4)        default(""), not null
-#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcustno          :string(6)        default(""), not null
-#  fdfactdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdgldate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fduedate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdfactdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdgldate         :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ffreight         :decimal(, )      default(0.0), not null
 #  ffob             :string(20)       default(""), not null
-#  finvdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  finvdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fliscod          :boolean          default(FALSE), not null
 #  flishand         :boolean          default(FALSE), not null
 #  flisprint        :boolean          default(FALSE), not null
@@ -42,19 +42,19 @@
 #  fnumber          :string(25)       default("")
 #  fpaidref         :string(20)       default(""), not null
 #  fpono            :string(20)       default(""), not null
-#  fretrndate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fretrndate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fsalespn         :string(3)        default(""), not null
-#  fshipdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fshipdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fshipvia         :string(10)       default(""), not null
 #  fsono            :string(6)        default(""), not null
 #  ftaxamt          :decimal(, )      default(0.0), not null
 #  ftaxcode         :string(3)        default(""), not null
 #  fsalcompct       :decimal(8, 3)    default(0.0), not null
-#  fdeurodate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdeurodate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
-#  fdvoiddate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdvoiddate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpremcv         :boolean          default(FALSE), not null
-#  fdtaxpoint       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdtaxpoint       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fldifmsg         :boolean          default(FALSE), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null

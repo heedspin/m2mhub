@@ -2,7 +2,7 @@
 #
 # Table name: intran
 #
-#  fdate            :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdate            :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fpartno          :string(25)       default(""), not null
 #  fcpartrev        :string(3)        default(""), not null
 #  ftype            :string(1)        default(""), not null
@@ -10,7 +10,7 @@
 #  fcode            :string(4)        default(""), not null
 #  fcost            :decimal(17, 5)   default(0.0), not null
 #  ffrombin         :string(14)       default(""), not null
-#  ffromexpdt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ffromexpdt       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ffromjob         :string(10)       default(""), not null
 #  ffromloc         :string(14)       default(""), not null
 #  ffromlot         :string(20)       default(""), not null
@@ -21,12 +21,12 @@
 #  fovrhd           :decimal(17, 5)   default(0.0), not null
 #  fqty             :decimal(15, 5)   default(0.0), not null
 #  ftobin           :string(14)       default(""), not null
-#  ftoexpdt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftoexpdt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftojob           :string(10)       default(""), not null
 #  ftoloc           :string(14)       default(""), not null
 #  ftolot           :string(20)       default(""), not null
 #  ftoso            :string(12)       default(""), not null
-#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnnewonhd        :decimal(17, 5)   default(0.0), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key

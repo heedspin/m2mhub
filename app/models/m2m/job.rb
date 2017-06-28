@@ -7,9 +7,9 @@
 #  fpartrev         :string(3)        default(""), not null
 #  fsono            :string(6)        default(""), not null
 #  fstatus          :string(10)       default(""), not null
-#  factschdfn       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  factschdst       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fact_rel         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  factschdfn       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  factschdst       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fact_rel         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fassy_comp       :integer          default(0), not null
 #  fassy_req        :integer          default(0), not null
 #  fbilljob         :string(8)        default(""), not null
@@ -22,22 +22,22 @@
 #  fconfirm         :boolean          default(FALSE), not null
 #  fcus_id          :string(6)        default(""), not null
 #  fdduedtime       :integer          default(0), not null
-#  fddue_date       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddue_date       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdesc            :boolean          default(FALSE), not null
 #  fdescript        :string(70)       default(""), not null
 #  fdet_bom         :boolean          default(FALSE), not null
 #  fdet_rtg         :boolean          default(FALSE), not null
-#  fdstart          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdfnshdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdstart          :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdfnshdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ffst_job         :boolean          default(FALSE), not null
 #  fglacct          :string(25)       default(""), not null
 #  fhold_by         :string(23)       default(""), not null
-#  fhold_dt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fhold_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fitems           :integer          default(0), not null
 #  fitype           :string(1)        default(""), not null
 #  fjob_name        :string(86)       default(""), not null
 #  fkey             :string(6)        default(""), not null
-#  flastlab         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flastlab         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fmatlpcnt        :integer          default(0), not null
 #  fmeasure         :string(3)        default(""), not null
 #  fmethod          :string(1)        default(""), not null
@@ -50,48 +50,48 @@
 #  fnpct_idle       :decimal(6, 1)    default(0.0), not null
 #  fnrel_time       :integer          default(0), not null
 #  fnshft           :integer          default(0), not null
-#  fopen_dt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fopen_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fpartdesc        :string(40)       default(""), not null
-#  fpick_dt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fpick_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fpick_st         :boolean          default(FALSE), not null
 #  fpo_comp         :string(1)        default(""), not null
-#  ftrave_dt        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftrave_dt        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftrave_st        :boolean          default(FALSE), not null
 #  fpriority        :string(11)       default(""), not null
 #  fprocessby       :string(12)       default(""), not null
 #  fprodcl          :string(2)        default(""), not null
 #  fpro_plan        :boolean          default(FALSE), not null
 #  fquantity        :decimal(15, 5)   default(0.0), not null
-#  frel_dt          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frel_dt          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fremtime         :integer          default(0), not null
 #  fresponse        :string(1)        default(""), not null
 #  fresu_by         :string(19)       default(""), not null
-#  fresu_dt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fresu_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  frouting         :decimal(17, 5)   default(0.0), not null
-#  fr_dt            :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fr_dt            :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fr_rev           :string(2)        default(""), not null
 #  fr_type          :string(1)        default(""), not null
 #  fschbefjob       :string(10)       default(""), not null
 #  fschdflag        :string(1)        default(""), not null
 #  fschdprior       :string(1)        default(""), not null
-#  fschresdt        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fschresdt        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fsign_off        :boolean          default(FALSE), not null
 #  fsplit           :boolean          default(FALSE), not null
 #  fsplitfrom       :string(10)       default(""), not null
 #  fsplitinfo       :string(12)       default(""), not null
 #  fstandpart       :boolean          default(FALSE), not null
 #  fstarted         :boolean          default(FALSE), not null
-#  fstrt_date       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fstrt_date       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fstrt_time       :integer          default(0), not null
 #  fsub_from        :string(10)       default(""), not null
 #  fsub_rel         :boolean          default(FALSE), not null
 #  fsummary         :boolean          default(FALSE), not null
-#  ftduedate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftduedate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftfnshdate       :string(15)       default(""), not null
 #  ftfnshtime       :integer          default(0), not null
 #  ftot_assy        :integer          default(0), not null
-#  ftreldt          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ftschresdt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftreldt          :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ftschresdt       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftstrtdate       :string(15)       default(""), not null
 #  ftstrttime       :integer          default(0), not null
 #  ftype            :string(1)        default(""), not null
@@ -100,7 +100,7 @@
 #  fcusrchr3        :string(40)       default(""), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
-#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnlastopno       :integer          default(0), not null
 #  fcdncfile        :string(80)       default(""), not null
 #  fccadfile1       :string(250)      default(""), not null
@@ -109,7 +109,7 @@
 #  fllotreqd        :boolean          default(FALSE), not null
 #  fclotext         :string(1)        default(""), not null
 #  flresync         :boolean          default(FALSE), not null
-#  fdorgduedt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdorgduedt       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flquick          :boolean          default(FALSE), not null
 #  flfreeze         :boolean          default(FALSE), not null
 #  flchgpnd         :boolean          default(FALSE), not null
@@ -129,11 +129,11 @@
 #  flplanfreeze     :boolean          default(FALSE), not null
 #  fcsyncmisc       :string(20)       default(""), not null
 #  UseBuffer        :boolean          default(FALSE), not null
-#  BufferStrt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  BufferEnd        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  BufferStrt       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  BufferEnd        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  DemandCat        :string(1)        default(""), not null
-#  createddate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModDate          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  createddate      :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ModDate          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fYield           :decimal(15, 5)   default(0.0), not null
 #  fSetYield        :decimal(8, 2)    default(0.0), not null
 #  fcrmano          :string(25)       default(""), not null

@@ -8,7 +8,7 @@
 #  fvendno          :string(6)        default(""), not null
 #  fvconvfact       :decimal(13, 9)   default(0.0), not null
 #  fvlastpc         :decimal(17, 5)   default(0.0), not null
-#  fvlastpd         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fvlastpd         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fvlastpq         :decimal(15, 5)   default(0.0), not null
 #  fvleadtime       :decimal(7, 1)    default(0.0), not null
 #  fvmeasure        :string(3)        default(""), not null

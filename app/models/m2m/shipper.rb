@@ -18,13 +18,13 @@
 #  ffrtinvcd        :boolean          default(FALSE), not null
 #  flisinv          :boolean          default(FALSE), not null
 #  fno_boxes        :integer          default(0), not null
-#  fshipdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fshipdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fshipno          :string(6)        default(""), not null, primary key
 #  fshipvia         :string(20)       default(""), not null
 #  fshipwght        :decimal(12, 4)   default(0.0), not null
 #  fshptoaddr       :string(4)        default(""), not null
 #  ftype            :string(2)        default(""), not null
-#  start            :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  start            :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpickprin       :boolean          default(FALSE), not null
 #  flshipprin       :boolean          default(FALSE), not null
 #  fcfname          :string(15)       default(""), not null
@@ -48,7 +48,7 @@
 #  fmstreet         :text             default(""), not null
 #  fmtrckno         :text             default(""), not null
 #  fshipmemo        :text             default(""), not null
-#  upsdate          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  upsdate          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  upsaddr2         :text             default(""), not null
 #  upsaddr3         :text             default(""), not null
 #

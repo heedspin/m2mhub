@@ -60,8 +60,8 @@
 #  ITCCOST          :decimal(17, 5)   default(0.0), not null
 #  fcudrev          :string(3)        default(""), not null
 #  fndbrmod         :integer          default(0), not null
-#  fctpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fctptrans        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctpdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fctptrans        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ContractNu       :string(10)       default(""), not null
 #  Flrfqreqd        :boolean          default(FALSE), not null
 #  Fcostfrom        :string(9)        default(""), not null

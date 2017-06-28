@@ -30,8 +30,8 @@
 #  PhoneHome        :string(20)       default(""), not null
 #  PhoneMoblie      :string(20)       default(""), not null
 #  ContactNum       :string(6)        default(""), not null
-#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
 #
 
 class M2m::Address < M2m::Base

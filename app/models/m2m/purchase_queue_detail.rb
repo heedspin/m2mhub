@@ -21,8 +21,8 @@
 #  fcsupdem         :string(1)        default(""), not null
 #  fctype           :string(2)        default(""), not null
 #  fcwcid           :string(7)        default(""), not null
-#  fdactdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdduedate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdactdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdduedate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flactreqd        :boolean          default(FALSE), not null
 #  flactsel         :boolean          default(FALSE), not null
 #  flvendsel        :boolean          default(FALSE), not null
