@@ -2,24 +2,20 @@
 #
 # Table name: m2mhub_external_events
 #
-#  id                    :integer          not null, primary key
-#  status_id             :integer
-#  source                :string(255)
-#  json_data             :text
-#  request_header        :text
-#  delayed_job_id        :integer
-#  delayed_job_status_id :integer
-#  delayed_job_log       :text
-#  delayed_job_method    :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
-#  guid                  :string(255)
+#  id             :integer          not null, primary key
+#  status_id      :integer
+#  source         :string(255)
+#  json_data      :text
+#  request_header :text
+#  created_at     :datetime
+#  updated_at     :datetime
+#  guid           :string(255)
 #
 
-require 'plutolib/stateful_delayed_report'
+require 'plutolib/logger_utils'
 
 class M2mhub::ExternalEvent < M2mhub::Base
-  include Plutolib::StatefulDelayedReport
+  include Plutolib::LoggerUtils
   self.table_name = 'm2mhub_external_events'
   belongs_to_active_hash :status, :class_name => 'M2mhub::ExternalEventStatus'
   scope :error, -> { where(:status_id => M2mhub::ExternalEventStatus.error.id) }
@@ -58,7 +54,7 @@ class M2mhub::ExternalEvent < M2mhub::Base
   def queue_to_run!
     self.status = M2mhub::ExternalEventStatus.queued
     self.save! if self.changed?
-    self.run_in_background!
+    self.delay.run_report
   end
   
   def run_report
