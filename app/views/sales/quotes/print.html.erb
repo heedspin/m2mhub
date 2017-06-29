@@ -1,97 +1,97 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title><%= AppConfig.short_name %> Quote <%= @quote.quote_number %></title>
-		<%= stylesheet_link_tag 'quote', :media => 'all' %>
-		<link rel="license" href="http://www.opensource.org/licenses/mit-license/">
-	  <%#= javascript_include_tag :defaults %>
-	  <%= javascript_include_tag :application %>
-		<script type="text/javascript">
-		$(function() {
-			window.print();
-		});
-		</script>
-	</head>
-	<body>
-	<% pages = [[]] %>
-	<% current_page = pages.last %>
-	<% @quote.items.by_position.each do |item| %>
-		<% if (item.part_number.blank? and current_page.size > 0) or (current_page.size == 12) %>
-			<% current_page = [] ; pages.push(current_page) %>
-		<% end %>
-		<% current_page.push item if item.part_number.present? %>
-	<% end %>
-	<% pages.each do |page| %>
-		<% if pages.size > 1 and page != pages.first %>
-			<% page_break = 'page-break' %>
-		<% end %>
-		<div class="page <%= page_break %>">
-			<header>
-				<h1>Quote</h1>
-				<address>
-					<%= simple_format @quote.foreword %>
-				</address>
-				<span><%= image_tag(AppConfig.quote_logo_image) %></span>
-			</header>
-			<article>
-				<h1>Recipient</h1>
-				<address>
-					<%= simple_format @quote.recipient %>
-				</address>
-				<table class="meta">
-					<tr>
-						<th><span><%= Sales::Quote.human_attribute_name(:quote_number) %></span></th>
-						<td><span><%= @quote.quote_number %></span></td>
-					</tr>
-					<tr>
-						<th><span><%= Sales::Quote.human_attribute_name(:date) %></span></th>
-						<td><span><%= @quote.date.to_s(:human_date) %></span></td>
-					</tr>
-					<% if @quote.terms_string.present? %>
-					<tr>
-						<th><span><%= Sales::Quote.human_attribute_name(:terms) %></span></th>
-						<td><span><%= @quote.terms_string %></span></td>
-					</tr>
-					<% end %>
-				</table>
-				<table class="inventory">
-					<thead>
-						<tr>
-							<th><span>Item / Description</span></th>
-							<th><span>Quantity</span></th>
-							<th><span>Unit Price</span></th>
-						</tr>
-					</thead>
-					<tbody>
-						<% page.each do |item| %>
-							<tr>
-								<td>
-									<span><%= item.part_number %></span>
-									<div class="description">
-										<%= simple_format item.description %>
-										<% if item.customer_part_number.present? %>
-										Customer P/N: <%= item.customer_part_number %>
-										<% end %>
-									</div>
-								</td>
-								<td><span><%= cm item.quantity, :item_quantity %></span></td>
-								<td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
-							</tr>
-						<% end %>
-					</tbody>
-				</table>
-			</article>
-			<% if pages.last == page %>
-			<aside>
-				<h1><span>Additional Notes</span></h1>
-				<div>
-					<%= simple_format @quote.postfix %>
-				</div>
-			</aside>
-			<% end %>
-		</div>
-	<% end %>
-	</body>
+  <head>
+    <meta charset="utf-8">
+    <title><%= AppConfig.short_name %> Quote <%= @quote.quote_number %></title>
+    <%= stylesheet_link_tag 'm2mhub/quote', :media => 'all' %>
+    <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
+    <%#= javascript_include_tag :defaults %>
+    <%= javascript_include_tag :application %>
+    <script type="text/javascript">
+    $(function() {
+      window.print();
+    });
+    </script>
+  </head>
+  <body>
+  <% pages = [[]] %>
+  <% current_page = pages.last %>
+  <% @quote.items.by_position.each do |item| %>
+    <% if (item.part_number.blank? and current_page.size > 0) or (current_page.size == 12) %>
+      <% current_page = [] ; pages.push(current_page) %>
+    <% end %>
+    <% current_page.push item if item.part_number.present? %>
+  <% end %>
+  <% pages.each do |page| %>
+    <% if pages.size > 1 and page != pages.first %>
+      <% page_break = 'page-break' %>
+    <% end %>
+    <div class="page <%= page_break %>">
+      <header>
+        <h1>Quote</h1>
+        <address>
+          <%= simple_format @quote.foreword %>
+        </address>
+        <span><%= image_tag(AppConfig.quote_logo_image) %></span>
+      </header>
+      <article>
+        <h1>Recipient</h1>
+        <address>
+          <%= simple_format @quote.recipient %>
+        </address>
+        <table class="meta">
+          <tr>
+            <th><span><%= Sales::Quote.human_attribute_name(:quote_number) %></span></th>
+            <td><span><%= @quote.quote_number %></span></td>
+          </tr>
+          <tr>
+            <th><span><%= Sales::Quote.human_attribute_name(:date) %></span></th>
+            <td><span><%= @quote.date.to_s(:human_date) %></span></td>
+          </tr>
+          <% if @quote.terms_string.present? %>
+          <tr>
+            <th><span><%= Sales::Quote.human_attribute_name(:terms) %></span></th>
+            <td><span><%= @quote.terms_string %></span></td>
+          </tr>
+          <% end %>
+        </table>
+        <table class="inventory">
+          <thead>
+            <tr>
+              <th><span>Item / Description</span></th>
+              <th><span>Quantity</span></th>
+              <th><span>Unit Price</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% page.each do |item| %>
+              <tr>
+                <td>
+                  <span><%= item.part_number %></span>
+                  <div class="description">
+                    <%= simple_format item.description %>
+                    <% if item.customer_part_number.present? %>
+                    Customer P/N: <%= item.customer_part_number %>
+                    <% end %>
+                  </div>
+                </td>
+                <td><span><%= cm item.quantity, :item_quantity %></span></td>
+                <td><span data-prefix>$</span><span><%= cm item.price, :two_decimals %></span></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </article>
+      <% if pages.last == page %>
+      <aside>
+        <h1><span>Additional Notes</span></h1>
+        <div>
+          <%= simple_format @quote.postfix %>
+        </div>
+      </aside>
+      <% end %>
+    </div>
+  <% end %>
+  </body>
 </html>
 
