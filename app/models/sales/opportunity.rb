@@ -356,7 +356,7 @@ class Sales::Opportunity < M2mhub::Base
 
   after_create :send_new_opportunity_notification
   def send_new_opportunity_notification
-    Sales::OpportunityNotifier.new_opportunity_notifier(self).deliver
+    # Sales::OpportunityNotifier.new_opportunity_notifier(self).deliver
   end
   
 end
