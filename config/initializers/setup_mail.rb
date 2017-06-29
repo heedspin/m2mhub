@@ -11,8 +11,6 @@
 # }
 
 ActionMailer::Base.delivery_method = :smtp
-context = Net::SMTP.default_ssl_context
-context.verify_mode = OpenSSL::SSL::VERIFY_NONE
 ActionMailer::Base.smtp_settings = {  
   :address              => "smtp.gmail.com",  
   :port                 => 587,  
@@ -20,7 +18,5 @@ ActionMailer::Base.smtp_settings = {
   :user_name            => ENV['email_address'] || AppConfig.email_address,
   :password             => ENV['email_password'] || AppConfig.email_password,
   :authentication       => "plain", 
-  :enable_starttls_auto => true,
-  :raise_delivery_errors => Rails.env.development?,
-  :openssl_verify_mode => context
+  :raise_delivery_errors => true
 }

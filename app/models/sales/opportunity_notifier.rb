@@ -26,10 +26,10 @@ class Sales::OpportunityNotifier < ApplicationMailer
     @opportunity = opportunity
     @opportunity_url = opportunity_url(@opportunity, :host => AppConfig.hostname)
     if @opportunity.owner
-      mail( :subject => "#{@opportunity.safe_title}. Ticket #{@opportunity.xnumber}",
-            :from => AppConfig.email_address,
-            :to => [@opportunity.owner.email, AppConfig.new_opportunity_email_addresses.split(',')].flatten.compact.uniq.join(','),
-            :date => Time.now )
+      mail( subject: "#{@opportunity.safe_title}. Ticket #{@opportunity.xnumber}",
+            from: AppConfig.email_address,
+            to: [@opportunity.owner.email, AppConfig.new_opportunity_email_addresses.split(',')].flatten.compact.uniq.join(','),
+            date: Time.now )
     end
   end
 
