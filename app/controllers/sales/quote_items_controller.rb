@@ -69,7 +69,7 @@ class Sales::QuoteItemsController < M2mhubController
     end
     
     def build_object
-      self.parent_object.items.build(params.fetch(model_name, nil).permit!)
+      self.parent_object.items.build(params.fetch(model_name, nil).try(:permit!))
     end
 
 end

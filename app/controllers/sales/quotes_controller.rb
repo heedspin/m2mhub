@@ -100,7 +100,7 @@ class Sales::QuotesController < M2mhubController
     
     def build_object
       if @current_object.nil?
-        @current_object = Sales::Quote.new(params.fetch(model_name, nil).permit!)
+        @current_object = Sales::Quote.new(params.fetch(model_name, nil).try(:permit!))
         if @current_object.customer_name.blank?
           @current_object.customer_name = @current_object.sales_customer.try(:name)
         end
