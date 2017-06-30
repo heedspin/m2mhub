@@ -1,8 +1,8 @@
-require 'plutolib/stateless_delayed_job'
+require 'plutolib/logger_utils'
 require 'quality/rma_inspection_runner'
 
 class M2mhub::Cronjobs
-  include Plutolib::StatelessDelayedJob
+  include Plutolib::LoggerUtils
 
   # require 'm2mhub/cronjobs' ; M2mhub::Cronjobs.new.delay.high_frequency
   def high_frequency
