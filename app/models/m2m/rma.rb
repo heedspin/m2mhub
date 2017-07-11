@@ -77,7 +77,7 @@ class M2m::Rma < M2m::Base
   # select * from syrmama where fcrmano = N'85'
   def self.find(*args)
     if (args.size == 1) and (id = args.first) and (id.is_a?(Fixnum) or id.is_a?(String))
-      self.find(:first, :conditions => { :fcrmano => id.to_i })
+      self.where(:fcrmano => id.to_i).first
     else
       super
     end
