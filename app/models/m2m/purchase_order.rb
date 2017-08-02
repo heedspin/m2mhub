@@ -101,6 +101,10 @@ class M2m::PurchaseOrder < M2m::Base
   def closed?
     self.status.try(:closed?)
   end
+
+  def open?
+    self.status.try(:open?)
+  end
   
   def self.pad_purchase_order_number(number)
     "%06d" % number.to_i

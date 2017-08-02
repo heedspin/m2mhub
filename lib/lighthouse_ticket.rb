@@ -46,6 +46,20 @@ module Lighthouse
     def versions
       attributes['versions'] || []
     end
+
+    def length_of_time
+      open_time = self.versions.first.try(:created_at)
+      close_time = self.versions.last.try(:created_at)
+      if open_time.nil?
+        nil
+      else
+        close_time - open_time
+      end
+    end
+
+    def length_days
+      (self.length_of_time / (24 * 60 * 60)).to_i
+    end
     
     ######################################
     # Trick formtastic:

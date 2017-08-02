@@ -67,7 +67,15 @@ class Quality::InspectionTask < M2mhub::Base
   scope :task_type, -> (task_type) {
     where :task_type_id => task_type.id
   }
-  scope :status_open, -> { where([ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ]) }
+  def self.rma_inspection
+    where task_type_id: Quality::InspectionTaskType.rma_inspection.id
+  end
+  def self.status_open
+    where([ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ])
+  end
+  def self.status_closed
+    where status_id: Quality::InspectionTaskStatus.closed.id
+  end
   scope :purchase_order_number, -> (ponums) {
     where [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
   }
@@ -87,6 +95,12 @@ class Quality::InspectionTask < M2mhub::Base
   }
   def self.part_number(txt)
     where(:part_number => txt)
+  end
+  def self.created_after(date)
+    where ['inspection_tasks.created_at > ?', date]
+  end
+  def self.created_before(date)
+    where ['inspection_tasks.created_at < ?', date]
   end
   
   before_save :fill_in_details
