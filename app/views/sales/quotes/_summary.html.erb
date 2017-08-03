@@ -2,45 +2,45 @@
 
 <% if quote.items.size > 0 %>
 <table class="data">
-	<thead>
-		<tr>
-			<th>
-				<%= Sales::QuoteItem.human_attribute_name(:part_number) %>
-			</th>
-			<th>
-				<%= Sales::QuoteItem.human_attribute_name(:expected_cost) %> 
-			</th>
-			<th>
-				<%= Sales::QuoteItem.human_attribute_name(:quantity) %> 
-			</th>
-			<th>
-				<%= Sales::QuoteItem.human_attribute_name(:price) %> 
-			</th>
-			<th>
-				Margin
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% quote.items.by_position.each do |item| %>
-			<tr>
-				<td>
-					<% if item.part_number.include?('/') %>
-						<%= item.part_number %>
-					<% else %>
-						<%= link_to item.part_number, doogle_display_url(item.part_number) %>
-					<% end %>
-				</td>
-				<td><%= cm item.expected_cost, :dollars %></td>
-				<td><%= cm item.quantity.to_i %></td>
-				<td><%= cm item.price, :dollars %></td>
-				<td>
-					<% if item.margin %>
-						<%= percent0 item.margin %>%
-					<% end %>
-				</td>
-			</tr>
-		<% end %>
-	</tbody>
+  <thead>
+    <tr>
+      <th>
+        <%= Sales::QuoteItem.human_attribute_name(:part_number) %>
+      </th>
+      <th>
+        <%= Sales::QuoteItem.human_attribute_name(:expected_cost) %> 
+      </th>
+      <th>
+        <%= Sales::QuoteItem.human_attribute_name(:quantity) %> 
+      </th>
+      <th>
+        <%= Sales::QuoteItem.human_attribute_name(:price) %> 
+      </th>
+      <th>
+        Margin
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% quote.items.by_position.each do |item| %>
+      <tr>
+        <td>
+          <% if item.part_number.include?('/') %>
+            <%= item.part_number %>
+          <% else %>
+            <%= link_to item.part_number, doogle_display_url(id: item.part_number) %>
+          <% end %>
+        </td>
+        <td><%= cm item.expected_cost, :dollars %></td>
+        <td><%= cm item.quantity.to_i %></td>
+        <td><%= cm item.price, :dollars %></td>
+        <td>
+          <% if item.margin %>
+            <%= percent0 item.margin %>%
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 <% end %>
