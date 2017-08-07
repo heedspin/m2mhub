@@ -136,7 +136,7 @@ class Sales::Opportunity < M2mhub::Base
     where [ 'sales_opportunities.updated_at < ?', date ]
   end
   def self.win_type_search(win_type_search_id)
-    includes(:comments).where([ 'sales_opportunity_comments.status_id = ? and sales_opportunity_comments.win_type_id in (?)', 
+    joins(:comments).where([ 'sales_opportunity_comments.status_id = ? and sales_opportunity_comments.win_type_id in (?)', 
       Sales::OpportunityStatus.won, 
       Sales::OpportunityWinTypeSearch.find(win_type_search_id).win_type_ids])
   end
