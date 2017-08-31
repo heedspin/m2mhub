@@ -97,6 +97,10 @@ class M2m::PurchaseOrder < M2m::Base
   def status
     M2m::PurchaseOrderStatus.find_by_m2mname(self.fstatus.strip)
   end
+
+  def cancelled?
+    self.status.try(:cancelled?)
+  end
   
   def closed?
     self.status.try(:closed?)
