@@ -239,6 +239,13 @@ class Sales::Opportunity < M2mhub::Base
         end
       end
     end
+    def self.extract(string)
+      if string =~ /X?([A-Z][A-Z])(\d+)/
+        "X#{$1}#{$2}"
+      else
+        nil
+      end
+    end
     Alph = ("A".."Z").to_a
     def initialize(thing)
       if thing.nil?
