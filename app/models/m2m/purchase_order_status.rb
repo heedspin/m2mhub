@@ -5,7 +5,7 @@ class M2m::PurchaseOrderStatus < ActiveHash::Base
     {:id => 2, :m2mname => 'CLOSED',    :char => 'C', :name => 'Closed'},
     {:id => 3, :m2mname => 'CANCELLED', :char => 'X', :name => 'Cancelled'},
     {:id => 4, :m2mname => 'STARTED',   :char => 'S', :name => 'Started'},
-    {:id => 5, :m2mname => 'HOLD',      :char => 'H', :name => 'Hold'}
+    {:id => 5, :m2mname => 'ON HOLD',   :char => 'H', :name => 'Hold'}
   ]
   include Plutolib::ActiveHashMethods
 end
