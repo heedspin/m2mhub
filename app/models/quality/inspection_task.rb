@@ -79,6 +79,9 @@ class Quality::InspectionTask < M2mhub::Base
   scope :purchase_order_number, -> (ponums) {
     where [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
   }
+  def self.has_ticket
+    where 'lighthouse_ticket_id is not null'
+  end
   def self.friendly_purchase_order_number(ponum)
     padded = M2m::PurchaseOrder.pad_purchase_order_number(ponum)
     non_padded = ponum.to_i.to_s

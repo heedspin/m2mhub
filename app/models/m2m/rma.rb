@@ -60,6 +60,10 @@ class M2m::Rma < M2m::Base
     where [ 'syrmama.fcrmano in (?)', rma_numbers ]
   }
 
+  def self.closed
+    where fcstatus: 'CLOSED'
+  end
+
   attr_accessor :inspection_task
   def inspection_task
     if @inspection_task.nil?
