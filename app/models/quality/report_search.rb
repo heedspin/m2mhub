@@ -10,7 +10,7 @@ class Quality::ReportSearch
     Date.new(self.year.to_i, 1, 1)
   end
   def end_date
-    Date.parse(@end_date)
+    @end_date.nil? ? nil : Date.parse(@end_date)
   end
 
   def self.year_options
