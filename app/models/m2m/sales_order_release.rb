@@ -102,6 +102,10 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :status_closed,    -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.closed.name}) }
   scope :status_cancelled, -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.cancelled.name}) }
   scope :status_not_cancelled, -> { joins(:sales_order).where(['somast.fstatus != ?', M2m::Status.cancelled.name]) }
+  def self.status_open_or_hold
+    joins(:sales_order).where(['somast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.on_hold.name]])
+  end
+
   scope :by_due_date, -> { order('sorels.fduedate') }
   scope :by_due_date_desc, -> { order('sorels.fduedate desc') }
   scope :by_last_ship_date_desc, -> { order('sorels.flshipdate desc') }

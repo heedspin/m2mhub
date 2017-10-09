@@ -29,7 +29,7 @@ class Sales::BacklogReport < M2mhub::Base
   def run!
     memos = []
     self.total_backlog = late = 0.0
-    M2m::SalesOrderRelease.filtered.status_open.not_filled.includes(:sales_order => :customer).each do |r|
+    M2m::SalesOrderRelease.filtered.status_open_or_hold.not_filled.includes(:sales_order => :customer).each do |r|
       memos.push [r.id, r.backlog_price, r.due_date.to_date]
       self.total_backlog += r.backlog_price
       if r.due_date < self.date
