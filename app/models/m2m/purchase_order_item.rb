@@ -132,6 +132,9 @@ class M2m::PurchaseOrderItem < M2m::Base
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
     where :pomast => { :fstatus => status_name.upcase }
   }
+  def self.not_cancelled
+    where ['pomast.fstatus != ?', M2m::PurchaseOrderStatus.cancelled.name]
+  end
   scope :rev_order, -> { order('poitem.fpono desc, poitem.fitemno') }
   scope :filtered, -> { where(['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]) }
   scope :vendor, -> (vendor) {
