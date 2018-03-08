@@ -1,8 +1,4 @@
-require 'plutolib/stateless_delayed_report'
-
 class Sales::CommissionReportRunner
-  include Plutolib::StatelessDelayedReport
-
   # Sales::CommissionReportRunner.new.run_report
   def run_report
     if Date.current.month <= 6
