@@ -24,6 +24,7 @@
           <strong>Credit Hold</strong><br />
         <% end %>
         <%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %><br />
+        Ship To: <%= r.sales_order.customer.addresses.ship_to.where(:fcaddrkey => r.fshptoaddr).first.try(:fccompany) %><br />
         SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
         Ship: <%= r.due_date.to_s(:sales_date) %>
       </td>
