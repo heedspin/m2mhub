@@ -27,6 +27,9 @@
         Ship To: <%= r.sales_order.customer.addresses.ship_to.where(:fcaddrkey => r.fshptoaddr).first.try(:fccompany) %><br />
         SO: <%= link_to r.sales_order_number, sales_order_url(r.sales_order_number) %><br />
         Ship: <%= r.due_date.to_s(:sales_date) %>
+        <% if r.item.fdescmemo.present? %>
+        <br />Memo: <%=h r.item.fdescmemo %>
+        <% end %>
       </td>
       <td class="centered <%= sbl_shippable(r, 'top') %>"><%= r.sales_order.customer_po %></td>
       <td class="centered <%= sbl_shippable(r, 'top') %>">
