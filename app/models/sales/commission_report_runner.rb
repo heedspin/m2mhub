@@ -1,7 +1,7 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
 
 class Sales::CommissionReportRunner
-  include Plutolib::StatelessDelayedReport
+  include Plutolib::LoggerUtils
 
   # Sales::CommissionReportRunner.new.run_report
   def run_report

@@ -1,9 +1,10 @@
 require 'plutolib/to_xls'
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
 
 # Finance::VendorPaymentsReport.new(:start_date => '2012-01-01', :end_date => '2013-12-31').to_xls('2012_2013_smt_vendor_payments.xls')
 class Finance::VendorPaymentsReport
   include Plutolib::ToXls
+  include Plutolib::LoggerUtils
   attr_accessor :start_date, :end_date
 
   def initialize(args)
@@ -37,10 +38,9 @@ class Finance::VendorPaymentsReport
     xls_field('Amount', xls_dollar_format) { |i| i.amount }
   end
 
-  # Finance::VendorPaymentsReport::Runner.new.run_report
-  # Finance::VendorPaymentsReport::Runner.new.run_in_background!
+  # Finance::VendorPaymentsReport::Runner.new.delay.run_report
   class Runner
-    include Plutolib::StatelessDelayedReport
+    include Plutolib::LoggerUtils
 
     def run_report
       if Date.current.month <= 3

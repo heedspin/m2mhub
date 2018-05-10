@@ -1,8 +1,7 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
 
 class Finance::InvoiceDiscrepancyReportRunner
-  include Plutolib::StatelessDelayedReport
-
+  include Plutolib::LoggerUtils
   # Finance::InvoiceDiscrepancyReportRunner.new.run_report
   def run_report
     if Date.current.month <= 3
