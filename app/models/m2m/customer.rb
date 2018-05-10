@@ -227,8 +227,6 @@ class M2m::Customer < M2m::Base
     end
     result
   end
-
-
 end
 
 

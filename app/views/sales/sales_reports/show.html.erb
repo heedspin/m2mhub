@@ -26,10 +26,10 @@
       <td>
         <% if ard.ref_invoice? %>
         Invoice <%= ard.ref_id.to_i %>
-        <% if ard.invoice.sales_order_number.present? %>
+        <% if ard.invoice.try(:sales_order_number).present? %>
           for <%= link_to "SO #{ard.invoice.sales_order_number.to_i}", sales_order_url(ard.invoice.sales_order_number) %>
         <% end %>
-        <% if ard.invoice.number.present? %>
+        <% if ard.invoice.try(:number).present? %>
           shipper <%= ard.invoice.number.to_i %>
         <% end %>
         <% else %>

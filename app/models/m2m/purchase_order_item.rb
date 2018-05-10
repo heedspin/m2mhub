@@ -97,6 +97,11 @@ class M2m::PurchaseOrderItem < M2m::Base
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono
   belongs_to_item :fpartno, :frev
   has_many :inspection_tasks, :class_name => 'Quality::InspectionTask', :foreign_key => :purchase_order_item_id
+  
+  attr_accessor :invoice_items
+  def invoice_items
+    @invoice_items ||= M2m::VendorInvoiceItem.poitem(self)
+  end
 
   alias_attribute :purchase_order_number, :fpono
   alias_attribute :ship_date, :fdateship

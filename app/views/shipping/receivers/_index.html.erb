@@ -7,11 +7,9 @@
 			<th>By</th>
 			<th>PO</th>
 			<th><%= AppConfig.short_name %> Part #</th>
-			<th>Vendor</th>
-			<th>Vendor Part #</th>
+			<th>PO Vendor Part #</th>
 			<th>Qty Received</th>
 			<th>Location</th>
-			<th>Customers</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,18 +22,9 @@
 			<td><%= receiver.received_by %></td>
 			<td><%= receiver.purchase_order_number %></td>
 			<td><%= link_to_item i.item, i.part_number %></td>
-			<td><%= i.purchase_order_item.try(:purchase_order).try(:vendor_name) %></td>
 			<td><%= i.po_vendor_part_number %></td>
 			<td><%= cm i.quantity, :sales_order_quantity %></td>
 			<td><%= i.flocation %></td>
-			<td>
-				<% sales_orders = M2m::SalesOrderRelease.for_item(i).due_after(date).map(&:sales_order) %>
-				<% if sales_orders.size < 10 %>
-					<% sales_orders.map { |so| [so.customer_name, so.customer_number] }.uniq.sort_by(&:first).each do |customer_name, customer_number| %>
-						<%= link_to customer_name, m2m_customer_number_url(customer_number) %>
-					<% end %>
-				<% end %>
-			</td>
 		</tr>
 <% end %>
 <% end %>

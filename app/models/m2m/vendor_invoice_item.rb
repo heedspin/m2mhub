@@ -75,10 +75,16 @@ class M2m::VendorInvoiceItem < M2m::Base
     where :fcinvkey => ik
   }
   alias_attribute :invoice_key, :fcinvkey
+  alias_attribute :invoice_quantity, :finvqty
+  alias_attribute :price, :fprice
   def invoice_number
     @invoice_number ||= self.invoice_key[6..25]
   end
   def purchase_order_number
     @purchase_order_number ||= self.invoice_key[0..5]
+  end
+
+  def self.poitem(poitem)
+    where(:fpokey => poitem.fpono + poitem.fitemno + poitem.frelsno)
   end
 end

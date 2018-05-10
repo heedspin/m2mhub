@@ -106,12 +106,21 @@ class M2m::JobDetailRouting < M2m::Base
   
   scope :by_operation_number, -> { order(:foperno) }
 
+  
+  alias_attribute :job_number, :fjobno
   alias_attribute :operation_number, :foperno
   alias_attribute :quantity_complete, :fnqty_comp
   alias_attribute :percentage_complete, :fnpct_comp
   alias_attribute :quantity, :foperqty
   alias_attribute :operation_memo, :fopermemo
   alias_attribute :work_center_id, :fpro_id
+  alias_attribute :labor_unit_cost, :fulabcost
+  alias_attribute :production_unit_time, :fuprodtime
+  alias_attribute :fixed_cost, :ffixcost
+  alias_attribute :other_cost, :fothrcost
+  alias_attribute :setup_time, :fsetuptime
+  alias_attribute :sub_unit_cost, :fusubcost
+  alias_attribute :overhead_unit_cost, :fuovrhdcos
   
   def start_date
     M2m::Constants.sanitize_date(self.fstrtdate)
@@ -122,5 +131,37 @@ class M2m::JobDetailRouting < M2m::Base
     result = M2m::WorkCenter.cached_lookup(self.work_center_id)
     self.work_center_id = result.id
     result
+  end
+
+  def labor_cost
+    (self.labor_unit_cost * self.production_unit_time * self.quantity) + (self.labor_unit_cost * self.setup_time)
+  end
+
+  def sub_cost
+    self.sub_unit_cost * self.quantity
+  end
+
+  def production_time
+    self.production_unit_time * self.quantity
+  end
+
+  def overhead_cost
+    self.overhead_unit_cost * (self.production_time + self.setup_time)
+  end
+
+  def total_cost
+    self.labor_cost + self.fixed_cost + self.sub_cost + self.other_cost + self.overhead_cost
+  end
+
+  def fraction_complete
+    self.percentage_complete / 100
+  end
+
+  def progressive_total_cost
+    (self.labor_cost * self.fraction_complete) + self.fixed_cost + (self.sub_cost * self.fraction_complete) + self.other_cost + (self.overhead_cost * self.fraction_complete)
+  end
+
+  def self.attach(map)
+    self.where(:fjobno => map.keys).each { |d| map[d.job_number].add_cached_detail_routing(d) }
   end
 end

@@ -15,12 +15,4 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.mdown"]
   s.test_files = Dir["test/**/*"]
-
-  # s.add_dependency 'json'#, '1.6.6'
-  # s.add_dependency 'daemons', '1.1.8'
-  # s.add_dependency 'declarative_authorization', '0.5.7'
-  # # s.add_dependency 'will_paginate', '~> 3.0.4'
-  # s.add_dependency 'addressable', '2.2.6'
-  # s.add_dependency 'amatch', '0.2.11'
-  # s.add_dependency 'hominid', '3.0.4'
 end

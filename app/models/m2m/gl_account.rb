@@ -23,6 +23,7 @@
 class M2m::GlAccount < M2m::Base
   self.table_name = 'glmast'
   belongs_to :gl_category, :class_name => 'M2m::GlCategory', :foreign_key => 'fccode', :primary_key => 'fccode'
+  has_many :items, :class_name => 'M2m::GlItem', :foreign_key => 'fcacctnum'
   alias_attribute :category_code, :fccode
   alias_attribute :account_number, :fcacctnum
   alias_attribute :parent_account_number, :fcparentid

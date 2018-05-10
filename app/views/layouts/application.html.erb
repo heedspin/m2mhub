@@ -20,7 +20,6 @@
         <% links.push link_to('Log Out', logout_path) %>
         <% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
         <% links.push link_to_unless_current('History', history_index_url) if permitted_to?(:read, :m2mhub_user_activities) %>
-        <% links.push link_to('Events', m2mhub_events_url) if permitted_to?(:read, :m2mhub_events) %>
         <div class="usermenu"><%= raw links.join(' | ') %></div>
       <% end %>
       <div class="banner">

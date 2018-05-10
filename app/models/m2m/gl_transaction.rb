@@ -41,6 +41,9 @@ class M2m::GlTransaction < M2m::Base
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
       where ['gltran.fddate >= ? and gltran.fddate < ?', start_date, end_date ]
   }
+  def self.account_number(n)
+    where :fcacctnum => n
+  end
   REFKEY_JOURNAL_ENTRY='JE'
   scope :journal_entries, -> { where(:fcrefclass => REFKEY_JOURNAL_ENTRY) }
   scope :gl_category, -> (category_code) {
