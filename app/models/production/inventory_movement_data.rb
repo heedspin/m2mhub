@@ -83,10 +83,10 @@ class Production::InventoryMovementData
   end
 
   def cost_for(ttype)
-    self.send("#{ttype.cmethod}_cost")
+    self.send("#{ttype.cmethod}_cost").try(:to_f)
   end
 
   def set_cost_for(ttype, val)
-    send("#{ttype.cmethod}_cost=", val)
+    send("#{ttype.cmethod}_cost=", val.try(:to_f))
   end
 end
