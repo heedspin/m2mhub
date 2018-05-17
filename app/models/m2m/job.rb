@@ -299,28 +299,28 @@ class M2m::Job < M2m::Base
   end
 
   def cached_detail_routings
-    @cached_detail_routings ||= self.detail_routings.all
+    @cached_detail_routings ||= self.detail_routings.all.to_a
   end
   def add_cached_detail_routing(v)
     (@cached_detail_routings ||= []).push(v)
   end
 
   def cached_labor_details
-    @cached_labor_details ||= self.labor_details.all
+    @cached_labor_details ||= self.labor_details.all.to_a
   end
   def add_cached_labor_detail(v)
     (@cached_labor_details ||= []).push(v)
   end
 
   def cached_detail_boms
-    @cached_detail_boms ||= self.detail_boms.all
+    @cached_detail_boms ||= self.detail_boms.all.to_a
   end
   def add_cached_detail_bom(v)
     (@cached_detail_boms ||= []).push(v)
   end
 
   def cached_inventory_transactions
-    @cached_inventory_transactions ||= M2m::InventoryTransaction.to_or_from(self).select([:ftype, :fqty, :flabor, :fovrhd]).all
+    @cached_inventory_transactions ||= M2m::InventoryTransaction.to_or_from(self).select([:ftype, :fqty, :flabor, :fovrhd]).all.to_a
   end
   # def add_cached_inventory_transactions(v)
   #   (@cached_inventory_transactions ||= []).push(v)
