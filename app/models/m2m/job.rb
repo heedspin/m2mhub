@@ -280,7 +280,7 @@ class M2m::Job < M2m::Base
   end
 
   def actual_sub_cost
-    @actual_sub_cost ||= self.purchase_order_items.sum do |poi|
+    @actual_sub_cost ||= self.purchase_order_items.to_a.sum do |poi|
       poi.invoice_items.sum(:price)
     end
   end
