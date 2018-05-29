@@ -6,7 +6,7 @@
 #  fcitemno         :string(3)        default(""), not null
 #  fcpartno         :string(25)       default(""), not null
 #  fcpartrev        :string(3)        default(""), not null
-#  fdinspdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdinspdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcinspby         :string(3)        default(""), not null
 #  fcinspcode       :string(4)        default(""), not null
 #  fnqtypass        :decimal(15, 5)   default(0.0), not null

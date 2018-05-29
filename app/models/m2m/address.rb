@@ -19,19 +19,19 @@
 #  fczip            :string(10)       default(""), not null
 #  fcjrdict         :string(10)       default(""), not null
 #  fcemail          :string(60)       default(""), not null
-#  fcloc            :string(14)       default(""), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key
 #  fmnotes          :text             default(""), not null
 #  fmstreet         :text             default(""), not null
+#  fac              :string(20)       default(""), not null
 #  fncrmmod         :integer          default(0), not null
 #  fccrmaddrs       :string(12)       default(""), not null
-#  fac              :string(20)       default(""), not null
+#  fcloc            :string(14)       default(""), not null
 #  PhoneHome        :string(20)       default(""), not null
 #  PhoneMoblie      :string(20)       default(""), not null
 #  ContactNum       :string(6)        default(""), not null
-#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
 #
 
 class M2m::Address < M2m::Base

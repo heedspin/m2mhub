@@ -3,7 +3,7 @@
 # Table name: gljemast
 #
 #  fcentry          :string(10)       default(""), not null
-#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddate           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flreverse        :boolean          default(FALSE), not null
 #  fcstatus         :string(1)        default(""), not null
 #  flrecur          :boolean          default(FALSE), not null

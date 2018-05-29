@@ -6,10 +6,10 @@
 #  fname            :string(20)       default(""), not null
 #  ffname           :string(20)       default(""), not null
 #  fmi              :string(1)        default(""), not null
-#  fbirthdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fbirthdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcity            :string(35)       default(""), not null
 #  fdept            :string(2)        default(""), not null
-#  fendate          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fendate          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnshift          :integer          default(0), not null
 #  fpaytype         :string(2)        default(""), not null
 #  fphone           :string(20)       default(""), not null
@@ -25,7 +25,7 @@
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key
 #  faddress         :text             default(""), not null
-#  fhiredate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fhiredate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #
 
 class M2m::Employee < M2m::Base

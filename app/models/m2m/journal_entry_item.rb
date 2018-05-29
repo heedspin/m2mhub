@@ -3,7 +3,7 @@
 # Table name: gljeitem
 #
 #  fcentry          :string(10)       default(""), not null
-#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddate           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnorder          :integer          default(0), not null
 #  fcacctno         :string(25)       default(""), not null
 #  fctrsdes         :string(30)       default(""), not null

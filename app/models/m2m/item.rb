@@ -57,7 +57,7 @@
 #  finspect         :string(1)        default(""), not null
 #  flabcost         :decimal(17, 5)   default(0.0), not null
 #  flasteoc         :string(25)       default(""), not null
-#  flct             :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flct             :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fllotreqd        :boolean          default(FALSE), not null
 #  fmatlcost        :decimal(17, 5)   default(0.0), not null
 #  fmeasure2        :string(3)        default(""), not null
@@ -65,7 +65,7 @@
 #  fovhdcost        :decimal(17, 5)   default(0.0), not null
 #  fprodcl          :string(2)        default(""), not null
 #  freordqty        :decimal(15, 5)   default(0.0), not null
-#  frevdt           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  frevdt           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  frolledup        :string(1)        default(""), not null
 #  fsafety          :decimal(15, 5)   default(0.0), not null
 #  fschecode        :string(6)        default(""), not null
@@ -78,17 +78,17 @@
 #  fcusrchr3        :string(40)       default(""), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
-#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcdncfile        :string(80)       default(""), not null
 #  fccadfile1       :string(250)      default(""), not null
 #  fccadfile2       :string(250)      default(""), not null
 #  fccadfile3       :string(250)      default(""), not null
 #  fclotext         :string(1)        default(""), not null
 #  flexpreqd        :boolean          default(FALSE), not null
-#  fdlastpc         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdlastpc         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fschedtype       :string(1)        default(""), not null
 #  fldctracke       :boolean          default(FALSE), not null
-#  fddcrefdat       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddcrefdat       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fndctax          :decimal(17, 5)   default(0.0), not null
 #  fndcduty         :decimal(17, 5)   default(0.0), not null
 #  fndcfreigh       :decimal(17, 5)   default(0.0), not null
@@ -102,7 +102,6 @@
 #  fnfanaglvl       :integer          default(0), not null
 #  fcplnclass       :string(1)        default(""), not null
 #  fcclass          :string(12)       default(""), not null
-#  fidims           :integer          default(0), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key
 #  fcomment         :text             default(""), not null
@@ -114,10 +113,11 @@
 #  itcunit          :decimal(17, 5)   default(0.0)
 #  fnPOnHand        :decimal(16, 5)   default(0.0), not null
 #  fnLndToMfg       :decimal(16, 5)   default(0.0), not null
+#  fiPcsOnHd        :integer          default(0), not null
 #  fcudrev          :string(3)        default(""), not null
+#  fidims           :integer          default(0), not null
 #  fluseudrev       :boolean          default(FALSE), not null
 #  fndbrmod         :integer          default(0), not null
-#  fiPcsOnHd        :integer          default(0), not null
 #  flSendSLX        :boolean          default(FALSE), not null
 #  fcSLXProd        :string(12)       default(""), not null
 #  flFSRtn          :boolean          default(FALSE), not null
@@ -125,14 +125,14 @@
 #  fnsobuf          :integer          default(0), not null
 #  fnpurbuf         :integer          default(0), not null
 #  flcnstrpur       :boolean          default(FALSE), not null
-#  fdvenfence       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdvenfence       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flLatefact       :boolean          default(FALSE), not null
 #  flSOBuf          :boolean          default(FALSE), not null
 #  flPurBuf         :boolean          default(FALSE), not null
 #  flHoldStoc       :boolean          default(FALSE), not null
 #  fnHoldStoc       :decimal(4, 2)    default(0.0), not null
 #  ManualPlan       :boolean          default(FALSE), not null
-#  SchedDate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  SchedDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flocbfdef        :string(14)       default(""), not null
 #  fbinbfdef        :string(14)       default(""), not null
 #  DockTime         :integer          default(0), not null

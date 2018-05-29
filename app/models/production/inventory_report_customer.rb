@@ -7,11 +7,11 @@
 #  customer_name        :string(255)
 #  customer_number      :string(255)
 #  m2m_identity_column  :integer
-#  total_on_hand_cost   :float
-#  total_on_order_cost  :float
-#  total_available_cost :float
-#  total_committed_cost :float
 #  movement_data        :text
+#  total_on_hand_cost   :decimal(12, 2)
+#  total_on_order_cost  :decimal(12, 2)
+#  total_available_cost :decimal(12, 2)
+#  total_committed_cost :decimal(12, 2)
 #
 
 require 'production/inventory_report_quantity'

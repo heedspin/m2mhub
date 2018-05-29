@@ -16,7 +16,7 @@
 #  fcustptrev       :string(3)        default(""), not null
 #  fdet_bom         :boolean          default(FALSE), not null
 #  fdet_rtg         :boolean          default(FALSE), not null
-#  fduedate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fenumber         :string(3)        default(""), not null
 #  ffixact          :decimal(17, 5)   default(0.0), not null
 #  fgroup           :string(6)        default(""), not null
@@ -65,10 +65,10 @@
 #  fac              :string(20)       default(""), not null
 #  sfac             :string(20)       default(""), not null
 #  ITCCOST          :decimal(17, 5)   default(0.0), not null
-#  fcudrev          :string(3)        default(""), not null
-#  fndbrmod         :integer          default(0), not null
 #  FcAltUM          :string(3)        default(""), not null
 #  FnAltQty         :decimal(17, 5)   default(0.0), not null
+#  fcudrev          :string(3)        default(""), not null
+#  fndbrmod         :integer          default(0), not null
 #  fnlatefact       :decimal(4, 2)    default(0.0), not null
 #  fnsobuf          :integer          default(0), not null
 #  ManualPlan       :boolean          default(FALSE), not null

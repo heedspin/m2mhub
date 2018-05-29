@@ -4,7 +4,7 @@
 #
 #  fcompany         :string(35)       default(""), not null
 #  fquoteno         :string(6)        default(""), not null, primary key
-#  fackdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fackdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fccurid          :string(3)        default(""), not null
 #  fcfactor         :decimal(17, 5)   default(0.0), not null
 #  fcfname          :string(15)       default(""), not null
@@ -12,10 +12,10 @@
 #  fcfromtype       :string(5)        default(""), not null
 #  fcity            :string(20)       default(""), not null
 #  fcountry         :string(25)       default(""), not null
-#  fdatedue         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdaterecvd       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdcurdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fdexpired        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdatedue         :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdaterecvd       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdcurdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdexpired        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdistno          :string(6)        default(""), not null
 #  fdsalespn        :string(25)       default(""), not null
 #  fduplicate       :boolean          default(FALSE), not null
@@ -29,10 +29,10 @@
 #  fordpotent       :string(1)        default(""), not null
 #  fordtime         :string(1)        default(""), not null
 #  fphone           :string(20)       default(""), not null
-#  fprint_dt        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fprint_dt        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fprinted         :boolean          default(FALSE), not null
 #  fquotecopy       :string(1)        default(""), not null
-#  fquotedate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fquotedate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fquoteto         :string(20)       default(""), not null
 #  frequestno       :string(15)       default(""), not null
 #  frevno           :string(2)        default(""), not null
@@ -46,11 +46,11 @@
 #  fcusrchr3        :string(40)       default(""), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
-#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdisrate         :decimal(15, 5)   default(0.0), not null
 #  fterm            :string(4)        default(""), not null
 #  fpaytype         :string(1)        default(""), not null
-#  fdeurodate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdeurodate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
 #  fusercode        :string(7)        default(""), not null
 #  fcshipto         :string(4)        default(""), not null
@@ -61,14 +61,14 @@
 #  fmstreet         :text             default(""), not null
 #  fmusermemo       :text             default(""), not null
 #  fsalumemo        :text             default(""), not null
+#  fndbrmod         :integer          default(0), not null
 #  fccontkey        :string(10)       default(""), not null
 #  flcontract       :boolean          default(FALSE), not null
-#  fndbrmod         :integer          default(0), not null
 #  ContractNu       :string(10)       default(""), not null
 #  OpportunNum      :string(6)        default(""), not null
-#  ModifiedDate     :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  OppCrType        :string(3)        default(""), not null
-#  CreatedDate      :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fbilladdr        :string(4)        default(""), not null
 #
 

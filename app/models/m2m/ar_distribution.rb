@@ -7,9 +7,9 @@
 #  fcstatus         :string(1)        default(""), not null
 #  fcrefclass       :string(1)        default(""), not null
 #  fcrefname        :string(4)        default(""), not null
-#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcuserid         :string(4)        default(""), not null
-#  fddate           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fddate           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnamount         :decimal(, )      default(0.0), not null
 #  fccashnum        :string(20)       default(""), not null
 #  fccurid          :string(3)        default(""), not null

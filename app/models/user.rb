@@ -17,8 +17,8 @@
 #  persistence_token       :string(255)
 #  single_access_token     :string(255)
 #  perishable_token        :string(255)
-#  login_count             :integer          default(0)
-#  failed_login_count      :integer          default(0)
+#  login_count             :integer
+#  failed_login_count      :integer
 #  last_request_at         :datetime
 #  current_login_at        :datetime
 #  last_login_at           :datetime
@@ -27,6 +27,8 @@
 #  created_at              :datetime
 #  updated_at              :datetime
 #  lighthouse_user_id      :string(255)
+#  oauth_uid               :string(255)
+#  oauth_token             :text
 #
 
 class User < M2mhub::Base

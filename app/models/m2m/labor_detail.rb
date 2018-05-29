@@ -8,8 +8,8 @@
 #  fcode1           :string(1)        default(""), not null
 #  fcode2           :string(1)        default(""), not null
 #  fcompqty         :decimal(15, 5)   default(0.0), not null
-#  fdate            :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fedatetime       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdate            :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fedatetime       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fempno           :string(9)        default(""), not null
 #  fendseries       :string(1)        default(""), not null
 #  ferrbc           :integer          default(0), not null
@@ -27,7 +27,7 @@
 #  fposted          :string(1)        default(""), not null
 #  fpro_id          :string(7)        default(""), not null
 #  fscrpqty         :decimal(15, 5)   default(0.0), not null
-#  fsdatetime       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fsdatetime       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fseries          :integer          default(0), not null
 #  fshift           :string(1)        default(""), not null
 #  fstatus          :string(1)        default(""), not null
@@ -41,10 +41,10 @@
 #  fnflatamnt       :decimal(17, 5)   default(0.0), not null
 #  flchrtojob       :boolean          default(FALSE), not null
 #  fccustom         :string(25)       default(""), not null
-#  fcdept           :string(2)        default(""), not null
 #  identity_column  :integer          not null, primary key
 #  timestamp_column :binary
 #  fac              :string(20)       default("")
+#  fcdept           :string(2)        default(""), not null
 #
 
 class M2m::LaborDetail < M2m::Base

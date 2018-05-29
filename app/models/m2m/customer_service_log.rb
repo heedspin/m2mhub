@@ -6,7 +6,7 @@
 #  fcsono           :string(6)        default(""), not null
 #  fcpartno         :string(25)       default(""), not null
 #  fcpartrev        :string(3)        default(""), not null
-#  fdinqdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdinqdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fctype           :string(1)        default(""), not null
 #  fcstatus         :string(20)       default(""), not null
 #  fcenterby        :string(3)        default(""), not null
@@ -16,18 +16,18 @@
 #  fcphone          :string(20)       default(""), not null
 #  fcrmano          :string(25)       default(""), not null
 #  fcassignto       :string(3)        default(""), not null
-#  fdestdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdestdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcreslvby        :string(3)        default(""), not null
-#  fdreslvdat       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdreslvdat       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcrevwby         :string(3)        default(""), not null
-#  fdrevwdate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdrevwdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcusrchr1        :string(40)       default(""), not null
 #  fcusrchr2        :string(40)       default(""), not null
 #  fcusrchr3        :string(40)       default(""), not null
 #  fcusrchr4        :string(40)       default(""), not null
 #  fnusrqty1        :decimal(17, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
-#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fccustno         :string(6)        default(""), not null
 #  fcvendno         :string(6)        default(""), not null
 #  fcseverity       :string(1)        default(""), not null
@@ -48,7 +48,7 @@
 #  fcmeasure        :string(3)        default(""), not null
 #  fcother2         :string(20)       default(""), not null
 #  fclot            :string(20)       default(""), not null
-#  fdincidate       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdincidate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcwlitem         :string(6)        default(""), not null
 #  finumber         :string(3)        default(""), not null
 #  frelsno          :string(3)        default(""), not null

@@ -6,7 +6,7 @@
 #  fpartrev         :string(3)        default(""), not null
 #  fbinno           :string(14)       default(""), not null
 #  flocation        :string(14)       default(""), not null
-#  fexpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fexpdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flot             :string(20)       default(""), not null
 #  fonhand          :decimal(15, 5)   default(0.0), not null
 #  identity_column  :integer          not null, primary key

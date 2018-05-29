@@ -5,26 +5,26 @@
 #  fnlflushqty      :decimal(15, 5)   default(0.0), not null
 #  fjobno           :string(10)       default(""), not null
 #  foperno          :integer          default(0), not null
-#  factschdfn       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  factschdst       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  factschdfn       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  factschdst       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fbominum         :string(4)        default(""), not null
 #  fchngrates       :string(1)        default(""), not null
-#  fcomp_date       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcomp_date       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcstat           :string(1)        default(""), not null
-#  fstrtdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  fddue_date       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fstrtdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fddue_date       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdescnum         :string(4)        default(""), not null
-#  fdrel_date       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdrel_date       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  felpstime        :decimal(8, 2)    default(0.0), not null
 #  ffixcost         :decimal(17, 5)   default(0.0), not null
 #  fflushed         :string(1)        default(""), not null
 #  finumber         :string(3)        default(""), not null
-#  flastlab         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  flastlab         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flschedule       :boolean          default(FALSE), not null
 #  fmovetime        :decimal(8, 2)    default(0.0), not null
 #  fndelay          :integer          default(0), not null
 #  fndue_time       :integer          default(0), not null
-#  fneed_dt         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fneed_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnnext_evt       :integer          default(0), not null
 #  fnpct_comp       :integer          default(0), not null
 #  fnqty_comp       :decimal(15, 5)   default(0.0), not null
@@ -33,7 +33,7 @@
 #  fnque_time       :integer          default(0), not null
 #  fnrel_time       :integer          default(0), not null
 #  fnshft           :integer          default(0), not null
-#  fnsh_date        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fnsh_date        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnsh_time        :integer          default(0), not null
 #  fnstrttime       :integer          default(0), not null
 #  foperqty         :decimal(15, 5)   default(0.0), not null
@@ -55,7 +55,7 @@
 #  fsource          :string(1)        default(""), not null
 #  fsplit           :boolean          default(FALSE), not null
 #  fsubcont         :string(1)        default(""), not null
-#  ftduedate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftduedate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftfnshdate       :string(15)       default(""), not null
 #  ftfnshtime       :integer          default(0), not null
 #  ftimetogo        :decimal(10, 2)   default(0.0), not null
@@ -63,7 +63,7 @@
 #  ftot_rew         :decimal(15, 5)   default(0.0), not null
 #  ftot_scr         :decimal(15, 5)   default(0.0), not null
 #  ftquetime        :integer          default(0), not null
-#  ftreldate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ftreldate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ftstrtdate       :string(15)       default(""), not null
 #  ftstrttime       :integer          default(0), not null
 #  fulabcost        :decimal(17, 5)   default(0.0), not null
@@ -76,7 +76,7 @@
 #  flfreeze         :boolean          default(FALSE), not null
 #  fnsimulops       :integer          default(0), not null
 #  fccharcode       :string(10)       default(""), not null
-#  fdplanstdt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdplanstdt       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null, primary key
 #  fopermemo        :text             default(""), not null
@@ -91,9 +91,9 @@
 #  fcsyncmisc       :string(20)       default(""), not null
 #  UseBuffer        :boolean          default(FALSE), not null
 #  NextBuffOp       :integer          default(0), not null
-#  BufferStrt       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  BufferEnd        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
-#  ArriveTime       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  BufferStrt       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  BufferEnd        :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  ArriveTime       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flBFLabor        :boolean          default(FALSE), not null
 #  CycleUnits       :decimal(13, 3)   default(0.0), not null
 #  UnitSize         :decimal(13, 3)   default(0.0), not null

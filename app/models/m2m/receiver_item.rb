@@ -19,7 +19,7 @@
 #  frelsno          :string(3)        default(""), not null
 #  fvendno          :string(6)        default(""), not null
 #  fbinno           :string(14)       default(""), not null
-#  fexpdate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fexpdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  finspect         :string(1)        default(""), not null
 #  finvqty          :decimal(15, 5)   default(0.0), not null
 #  flocation        :string(14)       default(""), not null
@@ -46,11 +46,11 @@
 #  identity_column  :integer          not null, primary key
 #  fcomments        :text             default(""), not null
 #  fdescript        :text             default(""), not null
+#  fac              :string(20)       default(""), not null
+#  sfac             :string(20)       default(""), not null
 #  FCORIGUM         :string(3)        default(""), not null
 #  fcudrev          :string(3)        default(""), not null
 #  FNORIGQTY        :decimal(18, 5)   default(0.0), not null
-#  fac              :string(20)       default(""), not null
-#  sfac             :string(20)       default(""), not null
 #  Iso              :string(10)       default(""), not null
 #  Ship_Link        :integer          default(0), not null
 #  ShsrceLink       :integer          default(0), not null

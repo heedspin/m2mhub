@@ -12,7 +12,7 @@
 #  fcfname          :string(15)       default(""), not null
 #  fcontact         :string(20)       default(""), not null
 #  fcountry         :string(25)       default(""), not null
-#  fcreated         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fcreated         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcrlimit         :integer          default(0), not null
 #  fcshipto         :string(4)        default(""), not null
 #  fcsoldto         :string(4)        default(""), not null
@@ -20,11 +20,11 @@
 #  fcusrchr1        :string(20)       default(""), not null
 #  fcusrchr2        :string(40)       default(""), not null
 #  fcusrchr3        :string(40)       default(""), not null
-#  fdbdate          :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdbdate          :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdbrate          :string(4)        default(""), not null
 #  fdisrate         :decimal(8, 3)    default(0.0), not null
 #  fdistno          :string(6)        default(""), not null
-#  fdusrdate1       :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fllongdist       :boolean          default(FALSE), not null
 #  ffax             :string(20)       default(""), not null
 #  ffincharge       :boolean          default(FALSE), not null
@@ -43,7 +43,7 @@
 #  fsicno1          :string(4)        default(""), not null
 #  fsicno2          :string(4)        default(""), not null
 #  fshipvia         :string(20)       default(""), not null
-#  fsince           :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fsince           :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fstate           :string(20)       default(""), not null
 #  ftaxcode         :string(10)       default(""), not null
 #  ftaxexempt       :string(15)       default(""), not null

@@ -8,7 +8,7 @@
 #  fdisctrinv       :boolean          default(FALSE), not null
 #  fdueoffset       :integer          default(0), not null
 #  fexptax          :string(1)        default(""), not null
-#  ffindate         :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  ffindate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ffinrate         :decimal(5, 1)    default(0.0), not null
 #  fgladjust        :string(25)       default(""), not null
 #  fglcashact       :string(25)       default(""), not null
@@ -30,7 +30,7 @@
 #  fccustcred       :string(25)       default(""), not null
 #  ftaxfrt          :boolean          default(FALSE), not null
 #  flnewarfct       :boolean          default(FALSE), not null
-#  fdvatdate        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdvatdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fltaxdisct       :boolean          default(FALSE), not null
 #  flvrpost         :boolean          default(FALSE), not null
 #  timestamp_column :binary

@@ -7,9 +7,9 @@
 #  fcrefclass       :string(1)        default(""), not null
 #  fcrefname        :string(4)        default(""), not null
 #  fcstatus         :string(1)        default(""), not null
-#  fctime_ts        :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcuser_id        :string(4)        default(""), not null
-#  fdate            :datetime         default(Mon Jan 01 00:00:00 UTC 1900), not null
+#  fdate            :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fjob_so          :string(15)       default(""), not null
 #  fnamount         :decimal(17, 5)   default(0.0), not null
 #  fpartno          :string(25)       default(""), not null
@@ -26,7 +26,6 @@
 #  fac              :string(20)       default(""), not null
 #  fcudrev          :string(3)        default(""), not null
 #
-
 
 class M2m::GlProductionPosting < M2m::Base
   self.table_name = 'ocdist'
