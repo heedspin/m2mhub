@@ -21,7 +21,7 @@
 
 class Sales::Customer < M2mhub::Base
   self.table_name = 'sales_customers'
-  belongs_to :parent_company, :class_name => 'Sales::ParentCompany'
+  belongs_to :parent_company, class_name: 'Sales::Customer'
   belongs_to :erp_customer, :class_name => 'M2m::Customer', :foreign_key => 'erp_customer_id'
   belongs_to :sales_territory, :class_name => 'Sales::Territory'
   validates_uniqueness_of :name
@@ -38,6 +38,9 @@ class Sales::Customer < M2mhub::Base
   attr_accessor :erp_customer_name
   def erp_customer_name
     @erp_customer_name ||= self.erp_customer.try(:name)
+  end
+  def parent_company_name
+    @parent_company_name ||= self.parent_company.try(:name)
   end
 
   scope :name_like, -> (txt) {
@@ -64,9 +67,23 @@ class Sales::Customer < M2mhub::Base
   
   before_save :set_erp_customer
   def set_erp_customer
-    if self.erp_customer_name.present? and (self.erp_customer_id.nil? or self.erp_customer.nil? or (self.erp_customer.name != self.erp_customer_name))
-      if (found = M2m::Customer.with_name(self.erp_customer_name)) and (found.size == 1)
-        self.erp_customer = found.first
+    if self.erp_customer_name.present?
+      if self.erp_customer_id.nil? or self.erp_customer.nil? or (self.erp_customer.name != self.erp_customer_name)
+        if (found = M2m::Customer.with_name(self.erp_customer_name)) and (found.size == 1)
+          self.erp_customer = found.first
+        end
+      elsif self.erp_customer_name == ''
+        self.erp_customer_id = nil
+      end
+    end
+    true
+  end
+
+  before_save :set_parent_company
+  def set_parent_company
+    if self.parent_company_name.present? and (self.parent_company_id.nil? or self.parent_company.nil? or (self.parent_company.name != self.parent_company_name))
+      if (found = Sales::Customer.with_name(self.parent_company_name)) and (found.size == 1)
+        self.parent_company = found.first
       end
     end
     true

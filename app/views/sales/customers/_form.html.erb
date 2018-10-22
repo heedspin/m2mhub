@@ -1,56 +1,80 @@
 <% content_for :javascripts do %>
 <script type="text/javascript">
 $(function() {
-	$("input#sales_customer_name").autocomplete({
-		source: "<%= sales_customers_url %>",
-		search: function(event, ui) {
-			$("input#sales_customer_name").autocomplete("close");
-			$("#sales_customer_inprogress").show();
-		},
-		open: function(event, ui) { 
-			$("#sales_customer_inprogress").hide();
-		},
-	});
-	
-	$("input#sales_customer_erp_customer_name").autocomplete({
-		source: "<%= m2m_customers_url %>",
-		search: function(event, ui) { 
-			$("input#sales_customer_erp_customer_name").autocomplete("close");
-			$("#customer_inprogress").show();
-		},
-		open: function(event, ui) { 
-			$("#customer_inprogress").hide();
-		},
-		select: function(event, ui) { 
-			if (ui.item.value == "No Results") {
-				$(this).val( "" ); 
-				// Do nothing.
-			}	else {
-				$(this).val( ui.item.value ); 
-			}
-			return false; 
-		}		
-	});
+  $("input#sales_customer_name").autocomplete({
+    source: "<%= sales_customers_url %>",
+    search: function(event, ui) {
+      $("input#sales_customer_name").autocomplete("close");
+      $("#sales_customer_inprogress").show();
+    },
+    open: function(event, ui) { 
+      $("#sales_customer_inprogress").hide();
+    },
+  });
+
+  $("input#sales_customer_parent_company_name").autocomplete({
+    source: "<%= sales_customers_url %>",
+    search: function(event, ui) {
+      $("input#sales_customer_parent_company_name").autocomplete("close");
+      $("#sales_customer_parent_inprogress").show();
+    },
+    open: function(event, ui) { 
+      $("#sales_customer_parent_inprogress").hide();
+    },
+  });
+  
+  $("input#sales_customer_erp_customer_name").autocomplete({
+    source: "<%= m2m_customers_url %>",
+    search: function(event, ui) { 
+      $("input#sales_customer_erp_customer_name").autocomplete("close");
+      $("#customer_inprogress").show();
+    },
+    open: function(event, ui) { 
+      $("#customer_inprogress").hide();
+    },
+    select: function(event, ui) { 
+      if (ui.item.value == "No Results") {
+        $(this).val( "" ); 
+        // Do nothing.
+      } else {
+        $(this).val( ui.item.value ); 
+      }
+      return false; 
+    }   
+  });
 })
 </script>
 <% end %>
 <%= f.semantic_errors :base %>
 
 <%= f.inputs do %>
-	<%= f.input :name %>
-	<li class="flat string input optional stringish" id="sales_customer_erp_customer_name_input">
-		<label class=" label" for="sales_customer_erp_customer_name"><%= Sales::Customer.human_attribute_name(:erp_customer_name) %></label>
-		<%= f.text_field :erp_customer_name %>
-		<span id="customer_inprogress" class="hide">
-		<%= image_tag AppConfig.in_progress_image %>
-		</span>
-	</li>
-	<%= f.input :location %>
-	<%= f.input :sales_territory, :member_label => :rep_and_description, :collection => Sales::Territory.all.sort_by(&:rep_and_description) %>
-	<%= f.input :business_type, :collection => Sales::BusinessType.by_name %>
-	<%= f.input :website, :as => :string %>
-	<%#= f.input :lead_level, :collection => Sales::LeadLevel.all, :include_blank => false %>
-	<%= f.input :rep_status, :collection => Sales::RepStatus.all, :include_blank => false %>
-	<%= f.input :notes, :wrapper_html => { :class => 'medium_textarea' } %>
+  <%= f.input :name %>
+  <li class="flat string input optional stringish" id="sales_customer_erp_customer_name_input">
+    <label class=" label" for="sales_customer_erp_customer_name"><%= Sales::Customer.human_attribute_name(:erp_customer_name) %></label>
+    <%= f.text_field :erp_customer_name %>
+    <span id="customer_inprogress" class="hide">
+    <%= image_tag AppConfig.in_progress_image %>
+    </span>
+    <% if messages = @customer.errors.full_messages_for(:erp_customer_id) %>
+    <p class="inline-errors"><%= messages.join(', ') %></p>
+    <% end %>
+  </li>
+  <li class="flat string input optional stringish" id="sales_customer_parent_company_name_input">
+    <label class=" label" for="sales_customer_parent_company_name">Parent Company</label>
+    <%= f.text_field :parent_company_name %>
+    <span id="sales_customer_parent_inprogress" class="hide">
+    <%= image_tag AppConfig.in_progress_image %>
+    </span>
+    <% if messages = @customer.errors.full_messages_for(:parent_company_id) %>
+    <p class="inline-errors"><%= messages.join(', ') %></p>
+    <% end %>
+  </li>
+  <%= f.input :location %>
+  <%= f.input :sales_territory, :member_label => :rep_and_description, :collection => Sales::Territory.all.sort_by(&:rep_and_description) %>
+  <%= f.input :business_type, :collection => Sales::BusinessType.by_name %>
+  <%= f.input :website, :as => :string %>
+  <%#= f.input :lead_level, :collection => Sales::LeadLevel.all, :include_blank => false %>
+  <%= f.input :rep_status, :collection => Sales::RepStatus.all, :include_blank => false %>
+  <%= f.input :notes, :wrapper_html => { :class => 'medium_textarea' } %>
 <% end %>
 

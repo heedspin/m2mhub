@@ -8,6 +8,7 @@
 #  updated_at :datetime
 #
 
+# TODO: Delete me
 class Sales::ParentCompany < M2mhub::Base
   has_many :customers, :class_name => 'Sales::Customer'
 end
