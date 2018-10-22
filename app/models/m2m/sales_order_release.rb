@@ -153,8 +153,17 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :with_number, -> (num) {
     where :finumber => num
   }
+  scope :shipped, -> {
+    where 'flshipdate is not null'
+  }
   scope :shipped_after, -> (date) {
     where [ 'flshipdate >= ?', date ]
+  }
+  scope :shipped_before, -> (date) {
+    where [ 'flshipdate < ?', date ]    
+  }
+  scope :ship_year, -> (year) {
+    where [ 'flshipdate >= ? and flshipdate < ?', Date.new(year, 1, 1), Date.new(year+1, 1, 1)]
   }
   scope :order_dates, -> (start_date, end_date) {
     joins(:sales_order).
