@@ -74,7 +74,7 @@ class Sales::Customer < M2mhub::Base
         end
       end
     else
-      self.erp_customer_id = nil
+      self.erp_customer = nil
     end
     true
   end
