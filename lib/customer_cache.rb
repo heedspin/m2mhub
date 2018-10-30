@@ -1,7 +1,7 @@
 class CustomerCache
   def sales_customer(erp_customer)
     if erp_customer
-      self.sales_customers_by_erp_customer_id[erp_customer.fcustno]
+      self.sales_customers_by_erp_customer_id[erp_customer.fcustno.to_i]
     else
       nil
     end
