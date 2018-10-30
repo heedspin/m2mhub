@@ -65,7 +65,7 @@ class Sales::Customer < M2mhub::Base
     where erp_customer_id: erp_customer_id.to_s
   end
   
-  before_save :set_erp_customer
+  before_validation :set_erp_customer
   def set_erp_customer
     if self.erp_customer_name.present?
       if self.erp_customer_id.nil? or self.erp_customer.nil? or (self.erp_customer.name != self.erp_customer_name)
@@ -74,7 +74,7 @@ class Sales::Customer < M2mhub::Base
         end
       end
     else
-      self.erp_customer = nil
+      self.erp_customer_id = nil
     end
     true
   end
