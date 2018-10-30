@@ -72,9 +72,9 @@ class Sales::Customer < M2mhub::Base
         if (found = M2m::Customer.with_name(self.erp_customer_name)) and (found.size == 1)
           self.erp_customer = found.first
         end
-      elsif self.erp_customer_name == ''
-        self.erp_customer_id = nil
       end
+    else
+      self.erp_customer_id = nil
     end
     true
   end
