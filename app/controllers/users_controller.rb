@@ -97,7 +97,7 @@ class UsersController < M2mhubController
 
     def get_user_object(method)
       if @current_object.nil?
-        user_params = params.require(:user).permit! || {}
+        user_params = params.member?(:user) ? params.require(:user).permit! : {}
         user_role_id = user_params.delete(:user_role_id)
         user_state_id = user_params.delete(:user_state_id)
         user_password = user_params.delete(:password)
