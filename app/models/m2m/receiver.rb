@@ -39,6 +39,7 @@ class M2m::Receiver < M2m::Base
   
   has_many :items, :class_name => 'M2m::ReceiverItem', :foreign_key => :freceiver, :primary_key => :freceiver
   belongs_to :purchase_order, :class_name => 'M2m::PurchaseOrder', :foreign_key => :fpono, :primary_key => :fpono
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => 'fvendno', :primary_key => 'fvendno'
   
   alias_attribute :time_received, :fdaterecv  
   alias_attribute :purchase_order_number, :fpono
