@@ -86,5 +86,12 @@ class M2m::ReceiverItem < M2m::Base
     joins(:receiver).
     where([ 'rcmast.fdaterecv >= ?', date ])
   }
+  scope :date_received, -> (start_date, end_date) {
+    start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
+    joins(:receiver).where(['rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', start_date, end_date])
+  }
+  scope :invoiced, -> { where(fcategory: 'INV') }
+  scope :closed, -> { where(fcstatus: 'C') }
 end
 

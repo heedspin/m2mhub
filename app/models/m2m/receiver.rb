@@ -54,11 +54,16 @@ class M2m::Receiver < M2m::Base
 
   scope :with_date_received, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
-    where([ 'rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date.to_s(:database), date.advance(:days => 1).to_s(:database) ])
+    where(['rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', date, date.advance(:days => 1)])
+  }
+  scope :date_received, -> (start_date, end_date) {
+    start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
+    where(['rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', start_date, end_date])
   }
   scope :for_next_day, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
-    where([ 'rcmast.fdaterecv >= ?', date.advance(:days => 1).to_s(:database) ]).
+    where(['rcmast.fdaterecv >= ?', date.advance(:days => 1)]).
     order(:fdaterecv)
   }
   scope :for_previous_day, -> (date) {
@@ -82,6 +87,7 @@ class M2m::Receiver < M2m::Base
     end
   }
   scope :by_time_received_desc, -> { order('rcmast.fdaterecv desc') }
+  scope :has_purchase_order, -> { where('rcmast.fpono <> \'\'')}
     
   def status
     # fcstatus are 'C' and 'I' but always show up received.
