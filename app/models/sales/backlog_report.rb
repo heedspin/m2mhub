@@ -173,7 +173,7 @@ class Sales::BacklogReport < M2mhub::Base
   def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Due Date') { |r| r.due_date }
-    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name) }
+    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
