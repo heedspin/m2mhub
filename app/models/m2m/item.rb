@@ -251,6 +251,14 @@ class M2m::Item < M2m::Base
   def total_cost
     self.send AppConfig.cost_method
   end
+
+  def allow_standard_cost_rollup?
+    self.fcostcode == 'R'
+  end
+
+  def allow_current_rolled_cost_rollup?
+    self.f2costcode == 'R'
+  end
   
   # def self.check
   #   errors = []
