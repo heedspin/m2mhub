@@ -1,0 +1,24 @@
+<table class="data">
+  <thead>
+    <tr>
+      <th><%= AppConfig.short_name %> Part</th>
+      <% if AppConfig.use_item_revisions? %>
+      <th>Rev</th>
+      <% end %>
+      <th>Quantity</th>
+      <th>Memo</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% items.each do |i| %>
+    <tr>
+      <td><%= link_to_item direction == :parent ? i.parent_item : i.item %></td>
+      <% if AppConfig.use_item_revisions? %>
+      <td><%= i.revision %></td>
+      <% end %>
+      <td><%= cm i.quantity %></td>
+      <td><%= h i.fbommemo %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

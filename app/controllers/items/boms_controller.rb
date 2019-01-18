@@ -7,7 +7,7 @@ class Items::BomsController < M2mhubController
     @bom_parents = parent_scope.by_parent_part_rev.limit(20)
     @total_bom_parents = parent_scope.count
     child_scope = M2m::BomItem.with_parent_item(@item)
-    @bom_children = child_scope.by_child_part_rev.limit(20)
+    @bom_children = child_scope.by_child_part_rev.limit(50)
     @total_bom_children = child_scope.count
   end
 
