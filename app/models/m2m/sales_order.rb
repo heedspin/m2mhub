@@ -180,5 +180,8 @@ class M2m::SalesOrder < M2m::Base
   def ship_to_address
     @ship_to_address ||= self.customer.addresses.key(self.fshptoaddr).first
   end
+  def bill_to_address
+    @bill_to_address ||= self.customer.addresses.key(self.fbilladdr).first
+  end
 end
 
