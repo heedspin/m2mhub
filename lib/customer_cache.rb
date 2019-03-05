@@ -3,18 +3,9 @@ class CustomerCache
     @last_purchased = {}
   end    
 
-  def sales_customer(customer)
-    erp_customer_id = if customer.is_a?(Sales::Customer)
-      customer.erp_customer_id
-    elsif customer.is_a?(M2m::Customer)
-      customer.id
-    elsif customer.is_a?(Fixnum) or customer.is_a?(String)
-      customer
-    else
-      nil
-    end
-    if erp_customer_id
-      self.sales_customers_by_erp_customer_id[erp_customer_id]
+  def sales_customer(erp_customer)
+    if erp_customer
+      self.sales_customers_by_erp_customer_id[erp_customer.id]
     else
       nil
     end
