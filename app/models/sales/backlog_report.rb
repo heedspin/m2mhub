@@ -171,9 +171,12 @@ class Sales::BacklogReport < M2mhub::Base
   end
   
   def xls_initialize
+    @customer_cache = CustomerCache.new
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Due Date') { |r| r.due_date }
     xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
+    xls_field('Parent') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) }
+    xls_field('Name') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) || rs.release.try(:sales_order).try(:customer).try(:company_name) }
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
