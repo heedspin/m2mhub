@@ -115,6 +115,9 @@ class M2m::VendorInvoice < M2m::Base
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
   scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
+  def not_void?
+    self.fcstatus != 'V'
+  end
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"

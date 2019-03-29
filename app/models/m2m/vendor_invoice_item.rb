@@ -61,6 +61,8 @@ class M2m::VendorInvoiceItem < M2m::Base
   self.table_name = 'apitem'
   # This does not work because of the evil M2M fcinvkey terribleness...
   # belongs_to :invoice, :class_name => 'M2m::VendorInvoice', :foreign_key => 'fcinvkey'
+
+  alias_attribute :unit_cost, :fvucost
   
   def invoice
     @invoice ||= M2m::VendorInvoice.invoice_number(self.invoice_number).first # .purchase_order_number(self.purchase_order_number)
@@ -75,7 +77,7 @@ class M2m::VendorInvoiceItem < M2m::Base
     end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
     joins(:invoice).where(['apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date])
   end
-  scope :not_void, -> { joins(:invoice).where([ 'apmast.fcstatus != ? ', 'V' ]) }
+  # scope :not_void, -> { joins(:invoice).where([ 'apmast.fcstatus != ? ', 'V' ]) }
 
   belongs_to_item :fpartno, :frev
   scope :part_number, -> (pn) { where(:fpartno => pn) }
