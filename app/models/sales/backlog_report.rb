@@ -169,6 +169,20 @@ class Sales::BacklogReport < M2mhub::Base
   def xls_sheet_name
     'Backlog'
   end
+
+  def get_first_due_date(part_number)
+    @fdd_cache ||= {}
+    if @fdd_cache.member?(part_number)
+      @fdd_cache[part_number]
+    else
+      result = nil
+      if arev = Sales::CommissionRate.get_arev_part_number(part_number) 
+        result = M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(arev).by_due_date.first.try(:due_date) 
+        result ||= M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(part_number).by_due_date.first.try(:due_date) 
+      end
+      @fdd_cache[part_number] = result
+    end
+  end
   
   def xls_initialize
     @customer_cache = CustomerCache.new
@@ -180,6 +194,9 @@ class Sales::BacklogReport < M2mhub::Base
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
+    xls_field('First Due Date') { |r| 
+      get_first_due_date(r.release.try(:item).try(:part_number_and_revision))
+    }
   end  
   
   def all_data

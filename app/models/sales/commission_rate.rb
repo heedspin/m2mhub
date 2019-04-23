@@ -57,6 +57,13 @@ class Sales::CommissionRate < M2mhub::Base
       part_number
     end
   end
+  def self.get_arev_part_number(part_number)
+    if base = get_base_part_number(part_number) 
+      base + 'A'
+    else
+      nil
+    end
+  end
 
   protected
 
