@@ -149,7 +149,7 @@ class Sales::BacklogReport < M2mhub::Base
         end
       end
       sorted_buckets = buckets.values.sort_by(&:month)
-      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 }
+      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 } || 0
       # Chop off trailing buckets with 0 backlog.
       @backlog_buckets = sorted_buckets[0..(sorted_buckets.size - trailing_zero_buckets - 1)]
     end
