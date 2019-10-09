@@ -46,6 +46,9 @@ class M2m::Address < M2m::Base
   def ship_to?
     self.fcaddrtype == 'S'
   end
+  def bill_to?
+    self.fcaddrtype == 'B'
+  end
 
   def self.key(key)
     where [ 'syaddr.fcaddrkey = ?', key ]
@@ -67,6 +70,9 @@ class M2m::Address < M2m::Base
   def address_type
     M2m::CsPopup.cached_lookup('SYADDR.FCADDRTYPE', self.fcaddrtype).try(:text)
   end
+  def vendor_address_type
+    M2m::CsPopup.cached_lookup('SYADDR.FCADDR1', self.fcaddrtype).try(:text)
+  end
   
   m2m_id_setter :fcaddrkey, 4
   
@@ -78,14 +84,20 @@ class M2m::Address < M2m::Base
     true
   end
   
-  def address_type
-    case self.fcaddrtype
-    when 'O'
-      'Sold To'
-    when 'S'
-      'Ship To'
-    else
-      self.fcaddrtype
-    end
+  # def address_type
+  #   case self.fcaddrtype
+  #   when 'O'
+  #     'Sold To'
+  #   when 'S'
+  #     'Ship To'
+  #   else
+  #     self.fcaddrtype
+  #   end
+  # end
+
+  # For NS export
+  def address_line(index1, index2=nil, default='')
+    index2 ||= index1+1
+    (self.work_address.split("\n")[index1..index2] || [default]).join("\n")
   end
 end

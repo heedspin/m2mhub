@@ -44,4 +44,33 @@ class M2m::ProductClass < M2m::Base
   def self.product_class_key(fpc_number)
     where(:fpc_number => fpc_number)
   end
+
+  #     ["ACCESSORIES ",
+ # "DO NOT USE  ",
+ # "RAW MATERIAL",
+ # "MODULES     ",
+ # "OLEDS       ",
+ # "TFTS        ",
+ # "NRE/TOOLING ",
+ # "GLASS       ",
+ # "SHIPPING    ",
+ # "TAX         "
+
+  def ns_name
+    stripped_name = self.name.strip
+    case stripped_name
+    when 'RAW MATERIAL'
+      'Raw Materials'
+    when 'NRE/TOOLING'
+      'NRE/Tooling'
+    when 'TAX'
+      'Tariffs'
+    when 'OLEDS'
+      'OLEDS'
+    when 'TFTS'
+      'TFTS'
+    else
+      stripped_name.titleize
+    end
+  end
 end

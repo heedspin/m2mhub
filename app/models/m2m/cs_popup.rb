@@ -23,7 +23,7 @@ class M2m::CsPopup < M2m::Base
     self.fcpopval.strip
   end
   def text
-    self.fcpoptext.strip.titleize
+    self.fcpoptext.strip #.titleize
   end
   
   @@cache = {}

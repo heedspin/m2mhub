@@ -79,6 +79,7 @@
 #
 
 class M2m::Customer < M2m::Base
+  include M2m::CachedAddresses
   self.table_name = 'slcdpmx'
 
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno, :primary_key => 'fcustno'
@@ -227,8 +228,6 @@ class M2m::Customer < M2m::Base
     end
     result
   end
-
-
 end
 
 

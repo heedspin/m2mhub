@@ -149,7 +149,7 @@ class Sales::BacklogReport < M2mhub::Base
         end
       end
       sorted_buckets = buckets.values.sort_by(&:month)
-      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 }
+      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 } || 0
       # Chop off trailing buckets with 0 backlog.
       @backlog_buckets = sorted_buckets[0..(sorted_buckets.size - trailing_zero_buckets - 1)]
     end
@@ -194,9 +194,9 @@ class Sales::BacklogReport < M2mhub::Base
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
-    xls_field('First Due Date') { |r| 
-      get_first_due_date(r.release.try(:item).try(:part_number_and_revision))
-    }
+    # xls_field('First Due Date') { |r| 
+    #   get_first_due_date(r.release.try(:item).try(:part_number_and_revision))
+    # }
   end  
   
   def all_data
