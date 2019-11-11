@@ -164,7 +164,7 @@ class M2m::Item < M2m::Base
   end
   
   def vendors
-    @vendors ||= M2m::InventoryVendor.for_item(self)
+    @vendors ||= M2m::InventoryVendor.for_item(self).order(:fpriority)
   end
   
   def part_number_revision
@@ -308,6 +308,12 @@ class M2m::Item < M2m::Base
   scope :id_in, -> (id_array) {
     where [ 'inmastx.identity_column in (?)', id_array ]
   }
+  scope :inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_inventory_item_class_keys
+  }
+  scope :non_inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_non_inventory_item_class_keys
+  }
   
   def self.latest(part_number)
     self.with_part_number(part_number).by_rev_desc.first
@@ -400,5 +406,26 @@ class M2m::Item < M2m::Base
   #   end
   #   @bom_parents
   # end
+
+  # For NS export
+  def preferred_location
+    if self.flocate1.present?
+      self.flocate1.strip
+    elsif first_location = self.locations.first
+      first_location.flocation.strip
+    else
+      nil
+    end
+  end
+
+  def preferred_bin
+    if self.fbin1.present?
+      self.fbin1.strip
+    elsif first_location = self.locations.first
+      first_location.fbinno.strip
+    else
+      nil
+    end
+  end
 end
 

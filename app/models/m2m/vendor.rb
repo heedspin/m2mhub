@@ -58,6 +58,7 @@ class M2m::Vendor < M2m::Base
   has_many :inventory_vendors, :class_name => 'M2m::InventoryVendor', :foreign_key => :fvendno, :primary_key => :fvendno
   belongs_to :gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fcacctnum', :primary_key => 'fcacctnum'
   has_many :addresses, -> { where(fcalias: 'APVEND') }, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fvendno'
+  has_many :contacts, -> { where(fcs_alias: 'APVEND') }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fvendno'
   
   scope :with_vendor_numbers, -> (vendor_numbers) {
     where [ 'apvend.fvendno in (?)', vendor_numbers ]

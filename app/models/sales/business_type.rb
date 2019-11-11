@@ -28,4 +28,12 @@ class Sales::BusinessType < ActiveHash::Base
   def self.by_name
     all.sort_by(&:name)
   end
+
+  def ns_name
+    if self.ignore?
+      'Other'
+    else
+      self.name
+    end
+  end
 end

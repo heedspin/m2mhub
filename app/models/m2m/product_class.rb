@@ -46,15 +46,19 @@ class M2m::ProductClass < M2m::Base
   end
 
   #     ["ACCESSORIES ",
- # "DO NOT USE  ",
- # "RAW MATERIAL",
- # "MODULES     ",
- # "OLEDS       ",
- # "TFTS        ",
- # "NRE/TOOLING ",
- # "GLASS       ",
- # "SHIPPING    ",
- # "TAX         "
+   # "DO NOT USE  ",
+   # "RAW MATERIAL",
+   # "MODULES     ",
+   # "OLEDS       ",
+   # "TFTS        ",
+   # "NRE/TOOLING ",
+   # "GLASS       ",
+   # "SHIPPING    ",
+   # "TAX         "
+
+   def inventory_item?
+    !['NRE/TOOLING', 'TAX', 'SHIPPING'].include?(self.fpc_name.strip)
+   end
 
   def ns_name
     stripped_name = self.name.strip
@@ -72,5 +76,12 @@ class M2m::ProductClass < M2m::Base
     else
       stripped_name.titleize
     end
+  end
+
+  def self.all_inventory_item_class_keys
+    @@all_inventory_class_keys ||= self.all.select { |pc| pc.inventory_item? }.map(&:fpc_number)
+  end
+  def self.all_non_inventory_item_class_keys
+    @@all_non_inventory_class_keys ||= self.all.select { |pc| !pc.inventory_item? }.map(&:fpc_number)
   end
 end

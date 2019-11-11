@@ -94,10 +94,5 @@ class M2m::Address < M2m::Base
   #     self.fcaddrtype
   #   end
   # end
-
-  # For NS export
-  def address_line(index1, index2=nil, default='')
-    index2 ||= index1+1
-    (self.work_address.split("\n")[index1..index2] || [default]).join("\n")
-  end
+  include M2m::ParsedWorkAddress
 end
