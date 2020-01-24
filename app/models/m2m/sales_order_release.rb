@@ -327,6 +327,10 @@ class M2m::SalesOrderRelease < M2m::Base
     @vendors ||= M2m::InventoryVendor.for_item(self).map(&:vendor)
   end
 
+  def ship_to_address
+    @ship_to_address ||= self.sales_order.customer.addresses.key(self.fshptoaddr).first
+  end
+
 end
 
 

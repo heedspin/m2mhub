@@ -4,7 +4,11 @@ class DateParser
       val.is_a?(String) ? Date.parse(val) : val
     rescue ArgumentError
       begin
-        Date.strptime(val, '%m/%d/%Y') 
+        result = Date.strptime(val, '%m/%d/%Y') 
+        if result.year < 1000
+          result = Date.new(2000 + result.year, result.month, result.day)
+        end
+        result
       rescue ArgumentError
         raise "#{val} is an invalid date"
       end

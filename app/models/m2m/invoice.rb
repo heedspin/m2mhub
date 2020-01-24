@@ -77,6 +77,7 @@ class M2m::Invoice < M2m::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => 'fsono', :primary_key => 'fsono'
   has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fcsourceid, :primary_key => :fcustno
 
   alias_attribute :invoice_source_code, :fcsource
   alias_attribute :invoice_type_code, :finvtype

@@ -135,6 +135,7 @@ class M2m::PurchaseOrderItem < M2m::Base
   def self.not_cancelled
     where ['pomast.fstatus != ?', M2m::PurchaseOrderStatus.cancelled.name]
   end
+  scope :backordered, -> { where('poitem.fordqty > poitem.frcpqty') }
   scope :rev_order, -> { order('poitem.fpono desc, poitem.fitemno') }
   scope :filtered, -> { where(['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]) }
   scope :vendor, -> (vendor) {

@@ -23,6 +23,8 @@
 
 class M2m::Location < M2m::Base
   self.table_name = 'location'
+
+  alias_attribute :name, :flocation
   
   scope :inspection, -> { where(:fcinspect => 'Y') }
   

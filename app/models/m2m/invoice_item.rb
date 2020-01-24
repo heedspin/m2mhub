@@ -97,6 +97,7 @@ class M2m::InvoiceItem < M2m::Base
   end
   # TODO: Replace 'V' with something intelligent?
   scope :not_void, -> { joins(:invoice).where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid_or_partial, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
   scope :gl_category, -> (code) {
     joins(:sales_gl_account).
     where(:glmast => { :fccode => code })

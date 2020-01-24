@@ -114,6 +114,7 @@ class M2m::VendorInvoice < M2m::Base
   def self.vendor_account_number(num)
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
+  scope :unpaid_or_partial, -> { where([ 'apmast.fcstatus in (?)', ['U', 'P'] ]) }
   scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
   def not_void?
     self.fcstatus != 'V'
@@ -125,5 +126,21 @@ class M2m::VendorInvoice < M2m::Base
   
   def items
     M2m::VendorInvoiceItem.invoice_key(self.item_invoice_key)
+  end
+
+  def paid?
+    self.fcstatus == 'F'
+  end
+
+  def void?
+    self.fcstatus == 'V'
+  end  
+
+  def partial?
+    self.fcstatus == 'P'
+  end
+
+  def unpaid?
+    self.fcstatus == 'U'
   end
 end
