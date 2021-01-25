@@ -25,4 +25,14 @@ class Sales::OpportunityStatus < ActiveHash::Base
     end
   end
   include Plutolib::ActiveHashMethods
+
+  def ns_status
+    if self.open?
+      'In Discussion'
+    elsif self.won?
+      'Closed Won'
+    elsif self.closed? or self.lost?
+      'Closed Lost'
+    end
+  end
 end

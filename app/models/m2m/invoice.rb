@@ -128,6 +128,9 @@ class M2m::Invoice < M2m::Base
     where :fcinvoice => n
   }
   scope :normal_type, -> { where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :credit_memo, -> { where([ 'armast.finvtype = ?', 'C' ]) }
+  scope :prepayment, -> { where([ 'armast.finvtype = ?', 'P' ]) }
+
   def self.invoice_numbers(numbers)
     where ['armast.fcinvoice in (?)', numbers]
   end

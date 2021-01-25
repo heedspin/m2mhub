@@ -115,7 +115,14 @@ class M2m::VendorInvoice < M2m::Base
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
   scope :unpaid_or_partial, -> { where([ 'apmast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :partial, -> { where([ 'apmast.fcstatus in (?)', ['P'] ]) }
+  scope :unpaid, -> { where([ 'apmast.fcstatus in (?)', ['U'] ]) }
   scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
+
+  scope :normal, -> { where('apmast.finvtype = ?', 'N')}
+  scope :miscellaneous, -> { where('apmast.finvtype = ?', 'M')}
+  scope :debit_memo, -> { where('apmast.finvtype = ?', 'DM')}
+
   def not_void?
     self.fcstatus != 'V'
   end
