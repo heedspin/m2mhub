@@ -63,8 +63,8 @@ class Quality::InspectionTasksController < M2mhubController
   
   def destroy
     @task = current_object
-    if task_params = params[model_name]
-      @task.delete_lighthouse_ticket = value_to_bool(task_params[:delete_lighthouse_ticket])
+    if task_params = params.require(model_name).permit!
+      # @task.delete_lighthouse_ticket = value_to_bool(task_params[:delete_lighthouse_ticket])
     end
     @task.destroy
     respond_to do |format|

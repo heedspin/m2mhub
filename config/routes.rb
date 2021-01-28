@@ -46,16 +46,11 @@ Rails.application.routes.draw do
   resources :sales_territories, :controller => 'sales/territories'
   resources :parent_companies, :controller => 'sales/parent_companies'
   resources :sales_backlog_reports, :only => [:index, :show], :controller => 'sales/backlog_reports'
-  resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
-  resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
-  resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
-  resources :inspection_tasks, :controller => 'quality/inspection_tasks'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
   resources :commission_rates, :controller => 'sales/commission_rates'
   resources :commission_reports, :controller => 'sales/commission_reports'
   resources :commission_backlog_reports, :controller => 'sales/commission_backlog_reports'
-  match 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
   
@@ -82,7 +77,6 @@ Rails.application.routes.draw do
   resources :purchase_orders, :only => [:show], :controller => 'production/purchase_orders'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
-  resources :m2mhub_events, :controller => 'm2mhub/events'
   
   # Specify thing regular expression because the routes use '.' as separator.
   match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
