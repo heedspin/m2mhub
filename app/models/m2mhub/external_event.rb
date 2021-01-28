@@ -15,7 +15,7 @@
 require 'plutolib/stateful_delayed_report'
 
 class M2mhub::ExternalEvent < M2mhub::Base
-  include Plutolib::StatefulDelayedReport
+  # include Plutolib::StatefulDelayedReport
   self.table_name = 'm2mhub_external_events'
   belongs_to_active_hash :status, :class_name => 'M2mhub::ExternalEventStatus'
   scope :error, :conditions => { :status_id => M2mhub::ExternalEventStatus.error.id }

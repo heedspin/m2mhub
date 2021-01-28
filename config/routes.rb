@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resource :user_session
   root :to => 'home#index'
-  match 'login' => 'user_sessions#new', :as => :login
-  match 'logout' => 'user_sessions#destroy', :as => :logout
+  match 'login' => 'user_sessions#new', :as => :login, via: [:get, :post]
+  match 'logout' => 'user_sessions#destroy', :as => :logout, via: [:get, :post]
   resource :user_session
   resources :users do
     member do
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   
   resources :rmas, :only => [:show], :controller => 'quality/rmas'
 
-  match 'production' => 'production/production_dashboard#index'
+  get 'production' => 'production/production_dashboard#index'
   resources :work_center_load_reports, :only => [:new], :controller => 'production/work_center_load_reports'
   resources :inventory_reports, :controller => 'production/inventory_reports' do
     resources :customer_reports, :only => [:index, :show], :controller => 'production/inventory_reports/customer_reports'
@@ -79,5 +79,5 @@ Rails.application.routes.draw do
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
   
   # Specify thing regular expression because the routes use '.' as separator.
-  match 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
+  get 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end

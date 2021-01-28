@@ -16,7 +16,7 @@
 #  total_committed_cost            :decimal(12, 2)
 #
 
-require 'plutolib/stateful_delayed_report'
+# require 'plutolib/stateful_delayed_report'
 require 'plutolib/to_xls'
 require 'bom_children_cache'
 require 'production/inventory_report_quantity'
@@ -26,7 +26,7 @@ class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   self.table_name = 'inventory_reports'
   include Plutolib::ToXls
-  include Plutolib::StatefulDelayedReport
+  # include Plutolib::StatefulDelayedReport
   include Production::InventoryReportQuantity::Helper
   include Production::InventoryMovementData::Helper
   has_many :customer_reports, :class_name => '::Production::InventoryReportCustomer', :dependent => :destroy
@@ -34,7 +34,7 @@ class Production::InventoryReport < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => '::Production::InventoryReportCostMethod'
 
-  scope :by_date_desc, :order => 'inventory_reports.report_date desc, inventory_reports.created_at desc'
+  scope :by_date_desc, lambda { order('inventory_reports.report_date desc, inventory_reports.created_at desc') }
 
   def run_report
     report_start_time = Time.now.to_i
