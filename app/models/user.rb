@@ -35,7 +35,8 @@ class User < M2mhub::Base
   # model_stamper
   acts_as_authentic do |c|
     c.validate_password_field = true
-    c.maintain_sessions = false
+    # sqlite edit:
+    # c.maintain_sessions = false
     c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
     c.crypto_provider = Authlogic::CryptoProviders::SCrypt
   end
