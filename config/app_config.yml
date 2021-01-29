@@ -1,9 +1,0 @@
-# Override values from m2mhub_config.yml or add application-specific configs.
-app_config:
-  shared: &shared
-  development:
-    <<: *shared
-  production:
-    <<: *shared
-  test:
-    <<: *shared
