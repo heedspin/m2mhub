@@ -7,11 +7,14 @@ class Sales::FirstSaleReport
     'First Sale Report'
   end
 
-  def xls_clean_string(txt)
-    txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
-  end
+  # Should not be needed for Ruby 2.x.
+  # def xls_clean_string(txt)
+  #   txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
+  # end
 
   def xls_initialize
+    # Windows friendly encoding
+    Spreadsheet.client_encoding = 'ISO-8859-1'
     xls_field('Customer') { |d| d.sales_order.customer_name }
     xls_field('Order Date') { |d| d.sales_order.order_date }
     xls_field('Sales Order') { |d| d.sales_order.order_number }
@@ -29,11 +32,12 @@ class Sales::FirstSaleReport
     result = []
     results = M2m::SalesOrderItem.connection.select_rows <<-SQL
       select somast.fcustno as customer_number,
-      	min(somast.forderdate) as order_date,
-      	soitem.fpartno as part_number
+        min(somast.forderdate) as order_date,
+        soitem.fpartno as part_number
       from somast
       left join soitem on somast.fsono = soitem.fsono
       where soitem.fquantity >= 100
+        and somast.fstatus not like '%CANCELLED%'
       group by somast.fcustno, soitem.fpartno
       order by order_date desc, customer_number, part_number
     SQL

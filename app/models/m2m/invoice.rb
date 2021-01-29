@@ -55,6 +55,7 @@
 #  fdvoiddate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpremcv         :boolean          default(FALSE), not null
 #  fdtaxpoint       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fldifmsg         :boolean          default(FALSE), not null
 #  timestamp_column :binary
 #  identity_column  :integer          not null
 #  fmbstreet        :text             default(""), not null
@@ -77,6 +78,7 @@ class M2m::Invoice < M2m::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => 'fsono', :primary_key => 'fsono'
   has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fcsourceid, :primary_key => :fcustno
 
   alias_attribute :invoice_source_code, :fcsource
   alias_attribute :invoice_type_code, :finvtype
@@ -92,40 +94,47 @@ class M2m::Invoice < M2m::Base
   alias_attribute :sales_order_number, :fsono
   alias_attribute :number, :fnumber
 
-  scope :customer, lambda { |customer|
+  scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :conditions => { :fcustno => custno }
-    }
+    where :fcustno => custno
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
+  scope :invoice_dates, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
   }
-  scope :before, lambda { |end_date|
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate < ?', end_date ]
-    }
+  scope :before, -> (end_date) {
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate < ?', end_date ]
+  }
+  scope :after, -> (start_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    where [ 'armast.finvdate >= ?', start_date ]
   }
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
-  scope :by_date, :order => :finvdate
-  scope :for_date, lambda { |date|
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
-    }
+  scope :not_void, -> { where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid, -> { where([ 'armast.fcstatus = ?', ['U'] ]) }
+  scope :unpaid_or_partial, -> { where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :not_paid_before, -> (date) {
+    date = DateParser.parse(date) if date.is_a?(String)
+    where [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
   }
-  scope :invoice_number, lambda { |n|
+  scope :by_date, -> { order(:finvdate) }
+  scope :for_date, -> (date) {
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
+  }
+  scope :invoice_number, -> (n) {
     # Zero pad.
     n = "%010d" % n if n.is_a?(Fixnum)
-    {
-      :conditions => { :fcinvoice => n }
-    }
+    where :fcinvoice => n
   }
+  scope :normal_type, -> { where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :credit_memo, -> { where([ 'armast.finvtype = ?', 'C' ]) }
+  scope :prepayment, -> { where([ 'armast.finvtype = ?', 'P' ]) }
+
+  def self.invoice_numbers(numbers)
+    where ['armast.fcinvoice in (?)', numbers]
+  end
   def self.part_number_like(part_number)
     joins(:items).where(['aritem.fpartno like ?', '%' + part_number + '%'])
   end
@@ -171,5 +180,22 @@ class M2m::Invoice < M2m::Base
   def customer_name
     M2m::Customer.customer_name(self.fbcompany)
   end
+
+  def self.attach_invoices(objects, invoices=nil)
+    invoices ||= M2m::Invoice.invoice_numbers(objects.map(&:invoice_number).uniq)
+    invoice_hash = {}
+    invoices.each { |i| invoice_hash[i.invoice_number] = i }
+    result = []
+    objects.each do |o|
+      if found = invoice_hash[o.invoice_number]
+        result.push o.invoice = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.invoice = nil
+      end
+    end
+    result
+  end
+
 
 end

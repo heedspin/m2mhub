@@ -1,0 +1,17 @@
+<% title 'Quotes' %>
+
+<%= render 'sales/customers/summary' %>
+
+<h3>Quotes for <%= @customer.name %></h3>
+
+<% if @quotes.size == 0 %>
+<p>No quotes!  Create one!</p>
+<% else %>
+<%= will_paginate @quotes %>
+<%= render 'sales/quotes/list', :quotes => @quotes %>
+<%= will_paginate @quotes %>
+<% end %>
+
+<p>
+<%= link_to 'Create New Quote', new_sales_quote_url(:sales_quote => {:customer_id => @customer.id}) %>
+</p>

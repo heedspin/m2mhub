@@ -1,0 +1,19 @@
+<%= semantic_form_for @comment, :url => opportunity_comments_url do |f| %>
+  <%= f.semantic_errors :base %>
+	<%= f.inputs do %>
+		<%= f.input :opportunity_id, :as => :hidden %>
+		<%= f.input :comment %>
+	<% end %>
+	<%= render 'sales/opportunity_comments/status_form', :f => f %>
+	<div class="clear"></div>
+	<%= f.actions do %>
+	  <%= f.action :submit, :label => 'Add Comment' %>
+		<li>
+			<% if @opportunity.sales_customer %>
+				<%= link_to 'Create Quote', new_sales_quote_url(:sales_quote => { :link_opportunity_id => @opportunity.id }) %>
+			<% else %>
+				Create Quote<br />(Must create customer record first)
+			<% end %>
+		</li>
+	<% end %>
+<% end %>

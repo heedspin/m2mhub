@@ -1,0 +1,21 @@
+var row = $("table.quote").find("tr.add_row");
+row.removeClass("add_row");
+// if (row.length > 0) {
+// 	console.log("Found add row row");
+// } else {
+// 	console.log("Failed to find add row row");
+// }
+var quote_item_id = row.find("input[name='quote_item[id]']");
+// if (quote_item_id.length > 0) {
+// 	console.log("Found quote item id input");
+// } else {
+// 	console.log("Failed to find quote item id input");	
+// }
+quote_item_id.val(<%= @quote_item.id %>);
+// console.log("Set quote item id to " + quote_item_id.val());
+<% if @quote_item.margin %>
+	row.find("td.margin").html("<%= percent0 @quote_item.margin %>%");
+<% end %>
+<% if @quote_item.price_set_by_margin %>
+	row.find("input#quote_item_price").val("<%= @quote_item.price %>");
+<% end %>

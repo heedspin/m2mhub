@@ -41,7 +41,10 @@
 class M2m::Contact < M2m::Base
   self.table_name = 'syphon'
   include ActionView::Helpers::NumberHelper
-  
+
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fcsourceid, :primary_key => :fcustno
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fcsourceid, :primary_key => :fvendno
+
   alias_attribute :primary, :IsPrimary
   alias_attribute :work_phone, :PhoneWork
   alias_attribute :work_fax, :fcfax
@@ -61,7 +64,10 @@ class M2m::Contact < M2m::Base
     self.fcfname.titleize.strip
   end
   def last_name
-    self.fcontact.titleize.strip
+    self.fcontact.strip.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').titleize
+  end
+  def title
+    self.fctitle.titleize.strip
   end
   def name
     [self.first_name, self.last_name].join(' ').strip
@@ -81,7 +87,7 @@ class M2m::Contact < M2m::Base
     self.save
   end
   
-  scope :primary, :conditions => { :IsPrimary => true }
+  scope :primary, -> { where(IsPrimary: true) }
 
   def phone_number_array
     result = []
@@ -104,4 +110,15 @@ class M2m::Contact < M2m::Base
   m2m_id_setter :fcsourceid, 6  
   validates_presence_of :first_name, :last_name
   
+  scope :valid, -> {
+    where ['fcsourceid != ?', '']
+  }
+  scope :customer_contact, -> { 
+    where fcs_alias: 'SLCDPM'
+  }
+  scope :vendor_contact, -> { 
+    where fcs_alias: 'APVEND' 
+  }
+
+  include M2m::ParsedWorkAddress
 end

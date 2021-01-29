@@ -20,7 +20,7 @@
 				<% if t.task_type.rma_inspection? %>
 				RMA <%= t.rma_number %>
 				<% else %>
-				<%= link_to "PO #{t.purchase_order_number}", purchase_order_url(t.purchase_order_number) %>
+				<%= link_to "PO #{t.purchase_order_number}", purchase_order_url(t.padded_purchase_order_number) %>
 				<% end %>
 			</td>
 			<td>

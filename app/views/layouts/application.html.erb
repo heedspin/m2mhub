@@ -1,57 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<%= stylesheet_link_tag :application %>
-	<%= javascript_include_tag :application %>
-	<%= yield :stylesheets %>
+  <%= stylesheet_link_tag :application %>
+  <%= javascript_include_tag :application %>
+  <%= yield :stylesheets %>
   <%= csrf_meta_tag %>
   <%= yield :javascripts -%>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="author" content="heedspin" />
   <title><%= get_meta_title %></title>
-	<link rel="shortcut icon" type="image/png" href="<%= asset_path 'favicon.ico' %>" />
+  <link rel="shortcut icon" type="image/png" href="<%= asset_path 'favicon.ico' %>" />
 </head>
 <body>
-	<div id="wrapper">
-		<div id="header">
-			<% if current_user %>
-				<% links = [] %>
-				<% links.push link_to(current_user.first_name, user_path(current_user.id)) %>
-				<% links.push link_to('Log Out', logout_path) %>
-				<% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
-				<% links.push link_to_unless_current('History', history_index_url) if permitted_to?(:read, :m2mhub_user_activities) %>
-				<% links.push link_to('Events', m2mhub_events_url) if permitted_to?(:read, :m2mhub_events) %>
-				<div class="usermenu"><%= raw links.join(' | ') %></div>
-			<% end %>
-			<div class="banner">
-				<div class="logo">
-					<%= link_to image_tag(AppConfig.logo_image, :alt => AppConfig.long_name, :title => 'Home'), root_url %>
-					<%= image_tag AppConfig.m2m_logo_image, :alt => 'm2m', :title => 'm2m rocks' %>
-				</div> 
-				<div class="tagline"><%= AppConfig.short_name.upcase %>'s Made2Manage Hub</div>				
-			</div><!-- banner -->
-			<div class="clear"></div>  
-			<%= render 'layouts/top_menu' %>
-		</div><!-- header -->
-		<div class="clear"></div>
-		<div id="main">
+  <div id="wrapper">
+    <div id="header">
+      <% if current_user %>
+        <% links = [] %>
+        <% links.push link_to(current_user.first_name, user_path(current_user.id)) %>
+        <% links.push link_to('Log Out', logout_path) %>
+        <% links.push link_to_unless_current('Users', users_url) if permitted_to? :manage, :users %>
+        <% links.push link_to_unless_current('History', history_index_url) if permitted_to?(:read, :m2mhub_user_activities) %>
+        <% links.push link_to('Events', m2mhub_events_url) if permitted_to?(:read, :m2mhub_events) %>
+        <div class="usermenu"><%= raw links.join(' | ') %></div>
+      <% end %>
+      <div class="banner">
+        <div class="logo">
+          <%= link_to image_tag(AppConfig.logo_image, :alt => AppConfig.long_name, :title => 'Home'), root_url %>
+          <%= image_tag AppConfig.m2m_logo_image, :alt => 'm2m', :title => 'm2m rocks' %>
+        </div> 
+        <div class="tagline"><%= AppConfig.short_name.upcase %>'s M2M Hub</div>       
+      </div><!-- banner -->
+      <div class="clear"></div>  
+      <%= render 'layouts/top_menu' %>
+    </div><!-- header -->
+    <div class="clear"></div>
+    <div id="main">
       <% unless flash[:notice].blank? %>
         <div class="flash_notice"><%= h flash[:notice] %></div>
       <% end %>
       <% unless flash[:error].blank? %>
         <div class="flash_error"><%= h flash[:error] %></div>
       <% end %>
-			<%= yield %>
-		</div><!-- main -->
+      <%= yield %>
+    </div><!-- main -->
     <div class="clear"></div>
-		<% if post_main = yield(:post_main) %>
-		<%= raw post_main %>
-		<% end %>
-		<div id="footer">
-			<p><%= raw AppConfig.long_name %> <%= link_to AppConfig.website, "http://#{AppConfig.website}"%></p>
-			<%= request_route_info.inspect if Rails.env.development? %>
-		</div><!-- footer -->
-	</div><!-- end wrapper -->
+    <% if post_main = yield(:post_main) %>
+    <%= raw post_main %>
+    <% end %>
+    <div id="footer">
+      <p><%= raw AppConfig.long_name %> <%= link_to AppConfig.website, "http://#{AppConfig.website}"%></p>
+      <%= request_route_info.inspect if Rails.env.development? %>
+    </div><!-- footer -->
+  </div><!-- end wrapper -->
 </body>
 <% if Rails.env.production? and AppConfig.google_analytics_key.present? %>
 <script type="text/javascript">

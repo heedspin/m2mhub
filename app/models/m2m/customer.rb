@@ -79,13 +79,14 @@
 #
 
 class M2m::Customer < M2m::Base
+  include M2m::CachedAddresses
   self.table_name = 'slcdpmx'
 
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno, :primary_key => 'fcustno'
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno, :primary_key => 'fcustno'
-  has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM' }
-  has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
-  has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
+  has_many :contacts, -> { where(fcs_alias: 'SLCDPM') }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_one :primary_contact, -> { where(fcs_alias: 'SLCDPM', IsPrimary: true) }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_many :addresses, -> { where(fcalias: 'SLCDPM') }, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
 
   alias_attribute :notes, :fmnotes
@@ -120,39 +121,27 @@ class M2m::Customer < M2m::Base
       # Ignore this exception.  Probably because we used a :select.
     end
   end
-  scope :name_like, lambda { |text|
-    {
-      :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
-    }
+  scope :name_like, -> (text) {
+    where [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
   }
-  scope :with_names, lambda { |names|
-    {
-      :conditions => [ 'slcdpmx.fcompany in (?)', names ]
-    }
+  scope :with_names, -> (names) {
+    where [ 'slcdpmx.fcompany in (?)', names ]
   }
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => [ 'slcdpmx.fcompany = ?', txt ]
-    }
+  scope :with_name, -> (txt) {
+    where [ 'slcdpmx.fcompany = ?', txt ]
   }
-  scope :by_name, :order => 'fcompany'
+  scope :by_name, -> { order(:fcompany) }
 
-  scope :with_customer_numbers, lambda { |customer_numbers|
-    {
-      :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
-    }
+  scope :with_customer_numbers, -> (customer_numbers) {
+    where [ 'slcdpmx.fcustno in (?)', customer_numbers ]
   }
-  scope :with_customer_number, lambda { |custno|
-    {
-      :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
-    }
+  scope :with_customer_number, -> (custno) {
+    where :fcustno => M2m::Customer.fcustno_for(custno)
   }
-  scope :created_between, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
-    }
+  scope :created_between, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
   }
 
   def status
@@ -175,8 +164,8 @@ class M2m::Customer < M2m::Base
     self.ffob.strip
   end
 
-  validates_uniqueness_of :fcompany
-  validates_presence_of :first_name, :last_name, :fcompany
+  # validates_uniqueness_of :fcompany
+  # validates_presence_of :first_name, :last_name, :fcompany
 
   before_save :update_timestamps
   def update_timestamps
@@ -194,60 +183,6 @@ class M2m::Customer < M2m::Base
   
   def sales_territory
     @sales_territory ||= M2m::SalesTerritory.cached_lookup(self.territory_code)
-  end
-
-  after_save :after_save_madness
-  def after_save_madness
-    unless @running_after_save_madness
-      begin
-        @running_after_save_madness = true
-        need_to_save_self = false
-        if self.fcustno.blank?
-          self.fcustno = self.id
-          need_to_save_self = true
-        end
-        contact = self.primary_contact || self.contacts.primary.new
-        soldto = self.addresses.sold_to.first
-        if soldto.nil?
-          soldto = self.addresses.sold_to.new
-          soldto.set_fcaddrkey
-        end
-        shipto = self.addresses.ship_to.first
-        if shipto.nil?
-          shipto = self.addresses.ship_to.new
-          shipto.set_fcaddrkey
-        end
-        # self.addresses << address
-        %w(first_name last_name work_email work_phone notes work_fax work_address work_city work_state work_postal_code work_country_name).each do |a|
-          contact.send("#{a}=", self.send(a))
-          soldto.send("#{a}=", self.send(a))
-          shipto.send("#{a}=", self.send(a))
-        end
-        soldto.company_name = self.company_name
-        shipto.company_name = self.company_name
-        unless self.fcsoldto.present?
-          self.fcsoldto = soldto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.fcshipto.present?
-          self.fcshipto = shipto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.contact_number.present?
-          self.contact_number = contact.contact_number
-          need_to_save_self = true
-        end
-        contact.save! if contact.changed?
-        soldto.save! if soldto.changed?
-        shipto.save! if shipto.changed?
-        self.save! if need_to_save_self
-      rescue
-        raise $!
-      ensure
-        @running_after_save_madness = false
-      end
-    end
-    true
   end
 
   def self.data_to_params(data, params)
@@ -278,6 +213,21 @@ class M2m::Customer < M2m::Base
     "%06d" % txt.to_i
   end
 
+  def self.attach_customers(objects, customers=nil)
+    customers ||= M2m::Customer.with_customer_numbers(objects.map(&:customer_number).uniq)
+    customers_hash = {}
+    customers.each { |c| customers_hash[c.customer_number] = c }
+    result = []
+    objects.each do |o|
+      if found = customers_hash[o.customer_number]
+        result.push o.customer = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.customer = nil
+      end
+    end
+    result
+  end
 end
 
 

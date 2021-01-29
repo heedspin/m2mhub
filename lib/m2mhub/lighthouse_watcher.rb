@@ -1,11 +1,14 @@
 module M2mhub::LighthouseWatcher
-  def lighthouse_watcher_create(title, body, assigned_user_id=nil, milestone_id=nil)
+  def lighthouse_watcher_create(title, body, assigned_user_id=nil, milestone_id=nil, watcher_ids=nil)
     log "Creating ticket with project_id = #{self.lighthouse_project_id}, title=#{title}, assigned_user_id=#{assigned_user_id}, and body=#{body}"
     self.lighthouse_ticket = Lighthouse::Ticket.new(:project_id => self.lighthouse_project_id)
     self.lighthouse_ticket.title = title
     self.lighthouse_ticket.body = body
     self.lighthouse_ticket.assigned_user_id = assigned_user_id if assigned_user_id
     self.lighthouse_ticket.milestone_id = milestone_id if milestone_id
+    if watcher_ids #and Rails.env.production?
+      self.lighthouse_ticket.watcher_ids = watcher_ids.select(&:present?)
+    end
     if self.lighthouse_ticket.save
       self.lighthouse_ticket_id = self.lighthouse_ticket.id
       self.lighthouse_watcher_update
@@ -16,6 +19,7 @@ module M2mhub::LighthouseWatcher
 
   def lighthouse_watcher_update
     if self.lighthouse_ticket
+      log "lighthouse_watcher_update"
       self.lighthouse_closed       = self.lighthouse_ticket.closed?
       self.lighthouse_status       = self.lighthouse_ticket.state
       self.lighthouse_url          = self.lighthouse_ticket.url

@@ -7,7 +7,7 @@ class Sales::SalesOrderItemsController < M2mhubController
   end
 
   def index
-    @search = SearchItem.new(params[:search])
+    @search = SearchItem.new(params.fetch(:search, nil).try(:permit!))
     @sales_order_items = if @search.order_number.present?
       M2m::SalesOrderItem.order_number_like(@search.order_number)
     end

@@ -38,10 +38,8 @@ class M2m::ProductClass < M2m::Base
   alias_attribute :name, :fpc_name
   alias_attribute :number, :fpc_number
   
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => { :fpc_name => txt.upcase }
-    }
+  scope :with_name, -> (txt) {
+    where :fpc_name => txt.upcase
   }
   def self.product_class_key(fpc_number)
     where(:fpc_number => fpc_number)
@@ -49,5 +47,44 @@ class M2m::ProductClass < M2m::Base
 
   def self.material_account_numbers
     @material_account_numbers ||= self.connection.select_rows('SELECT DISTINCT inprod.fmatlacc FROM inprod').map(&:first)
+  end
+  #     ["ACCESSORIES ",
+   # "DO NOT USE  ",
+   # "RAW MATERIAL",
+   # "MODULES     ",
+   # "OLEDS       ",
+   # "TFTS        ",
+   # "NRE/TOOLING ",
+   # "GLASS       ",
+   # "SHIPPING    ",
+   # "TAX         "
+
+   def inventory_item?
+    !['NRE/TOOLING', 'TAX', 'SHIPPING'].include?(self.fpc_name.strip)
+   end
+
+  def ns_name
+    stripped_name = self.name.strip
+    case stripped_name
+    when 'RAW MATERIAL'
+      'Raw Materials'
+    when 'NRE/TOOLING'
+      'NRE/Tooling'
+    when 'TAX'
+      'Tariffs'
+    when 'OLEDS'
+      'OLEDS'
+    when 'TFTS'
+      'TFTS'
+    else
+      stripped_name.titleize
+    end
+  end
+
+  def self.all_inventory_item_class_keys
+    @@all_inventory_class_keys ||= self.all.select { |pc| pc.inventory_item? }.map(&:fpc_number)
+  end
+  def self.all_non_inventory_item_class_keys
+    @@all_non_inventory_class_keys ||= self.all.select { |pc| !pc.inventory_item? }.map(&:fpc_number)
   end
 end

@@ -36,6 +36,12 @@ en:
         page_per_customer: Page Per Customer
       m2m/customer:
         fcompany: Company Name
+      sales/customer:
+        erp_customer_name: M2M Customer
+        sales_territory: Sales Territory
+        business_type: Business Type
+        lead_level: Lead Level
+        rep_status: Sales Rep Status
       m2m/contact:
         fcfname: First Name
         fcontact: Last Name
@@ -59,6 +65,16 @@ en:
       sales/bookings_report:
         bookings: Bookings
         ytd_bookings: YTD Bookings
+      sales/opportunity:
+        amount: Potential Revenue
+        customer_name: Customer
+        sales_territory_id: Sales Territory
+        xnumber: X Number
+      sales/opportunity_comment:
+        lighthouse_title: Ticket Title
+        lighthouse_body: Ticket Body
+        lighthouse_assigned_user_id: Assigned To
+        lighthouse_project_id: Project
       quality/inspection_task:
         lighthouse_title: Ticket Title
         lighthouse_body: Ticket Body
@@ -69,4 +85,14 @@ en:
         rma_number: RMA Number
         purchase_order_number: PO Number
         part_number: Part Number
-        
+      sales/territory:
+        sales_rep_name: Sales Rep
+      sales/quote:
+        quote_number: Quote Number
+      sales/quote_item:
+        customer_part_number: Customer P/N
+        part_number: Part Number
+        expected_cost: Cost
+      sales/territory:
+        erp_vendor_id: Sales Rep Name
+

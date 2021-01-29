@@ -1,0 +1,116 @@
+<% unless defined?(view_all_for_customer) %>
+<% view_all_for_customer = nil %>
+<% end %>
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	// http://jsfiddle.net/hQkFH/3/
+	$(".expand_on_hover").click(function() {
+		var showme = $(this).find(".hide_until_hover");
+		var height = showme.height();
+		var pad = height + 5;
+		var height2 = showme[0].scrollHeight;
+		if (height == height2) {
+			showme.stop(true, false).animate({ height: 0 }, 150);
+		} else {
+			showme.animate({ height: height2 }, 300);			
+		}
+	})
+})
+</script>
+<% end %>
+
+<% lighthouse_comment_columns = 6 + (show_won ? 1 : 0) + (show_hold ? 1 : 0) %>
+<% if @opportunities and @opportunities.size > 0 %>
+<h3>
+	<%= comma @opportunities.total_entries %> Opportunities
+	<% if view_all_for_customer %>
+	(<%= link_to 'View All', opportunities_url(:search => { :customer_name => view_all_for_customer }) %>)
+	<% end %>
+</h3>
+<%= will_paginate @opportunities %>
+<table class="data opportunities">
+	<thead>
+		<tr>
+			<th class="fixname">Title & Customer</th>
+			<th>Source</th>
+			<th>Territory</th>
+			<th>Potential</th>
+			<th>Sales Orders</th>
+			<th>Owner</th>
+		</tr>
+	</thead>
+	<% @opportunities.each do |o| %>
+	<tbody class="expand_on_hover">
+		<tr>
+			<td>
+				<%= o.xnumber %> - <%= link_to limit_string(o.safe_title, 32), opportunity_url(o), {:target=>'_blank', :title => o.safe_title} %><br />
+				<% if o.sales_customer.present? %>
+					<%= link_to(o.customer_name, sales_customer_url(o.sales_customer), {:target=>'_blank'}) %>
+				<% else %>
+					<%= limit_string o.customer_name, 24 %>
+				<% end %>
+			</td>
+			<td>
+				<%= o.source.try(:name) %>
+				<% if o.sales_person_name %>
+				<br /><%= o.sales_person_name %>
+				<% end %>
+			</td>
+			<td>
+				<% if sales_territory = o.sales_customer.try(:sales_territory) %>
+					<%= sales_territory.name %>
+					<% if sales_territory.sales_rep_name.present? %>
+						<br /><%= sales_territory.sales_rep_name %>
+					<% end %>
+				<% else %>
+					<span class="subtle">No territory</span>
+				<% end %>
+			</td>
+			<td>
+				<% if o.amount %>
+					<%= cm o.amount, :rounded_dollars %>
+				<% else %>
+					<span class="subtle">No value</span>
+				<% end %>
+			</td>
+			<td>
+				<% if o.total_sales_orders > 0 %>
+					<%= cm o.total_sales_orders, :rounded_dollars %>
+				<% else %>
+					<span class="subtle">No sales orders</span>
+				<% end %>
+			</td>
+			<td><%= o.owner.try(:first_name) %></td>
+		</tr>
+		<tr>
+			<td colspan="<%= lighthouse_comment_columns + 1%>" class="nopad">
+				<div class="hide_until_hover">
+					<div class="one_of_two">
+						<%= render 'sales/opportunities/sales_order_summary', :opportunity => o %>
+						<% if o.last_comment %>
+							<% if o.last_comment.comment_type.try(:ticket?) %>
+							<div class="opportunity_ticket <%= o.last_comment.lighthouse_ticket.try(:closed) ? 'lighthouse_ticket_closed' : '' %>">
+								<%= render 'sales/opportunity_comments/show_ticket', :comment => o.last_comment %>
+							</div>
+							<% elsif o.last_comment.comment_type.comment? or o.last_comment.comment_type.lost? or o.last_comment.comment_type.sales_order? %>
+							<div class="opportunity_comment">
+								<%= render 'sales/opportunity_comments/show_header', :comment => o.last_comment %>
+								<%= render 'sales/opportunity_comments/show_body', :comment => o.last_comment %>
+							</div>
+							<% end %>
+						<% end %>
+					</div>
+					<% if o.last_quote.try(:quote) %>
+					<div class="one_of_two">
+						<%= render 'sales/quotes/summary', :quote => o.last_quote.quote %>
+					</div>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+	<% end %>
+</table>			
+<%= will_paginate @opportunities %>
+<% end %>

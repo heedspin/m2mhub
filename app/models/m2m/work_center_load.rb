@@ -28,13 +28,11 @@ class M2m::WorkCenterLoad < M2m::Base
   alias_attribute :work_center_id, :fcpro_id
   alias_attribute :work_load, :req_load
   
-  scope :for_batch, lambda { |batch_name|
-    {
-      :conditions => { :cbatchname => batch_name },
-      :include => 'work_center'
-    }
+  scope :for_batch, -> (batch_name) {
+    where(:cbatchname => batch_name).
+    includes('work_center')
   }
-  scope :with_load, :conditions => 'dbrrlrp.req_load > 0'
+  scope :with_load, -> { where('dbrrlrp.req_load > 0') }
   
   def date
     @date ||= Date.new(self.sortdate.year, self.sortdate.month, self.sortdate.day)

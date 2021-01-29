@@ -5,6 +5,7 @@ class PasswordResetsController < M2mhubController
   before_filter :load_user_using_perishable_token, :only => [:edit,:update]
 
   def new
+    @user = User.new
     render
   end
 

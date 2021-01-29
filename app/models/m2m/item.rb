@@ -164,7 +164,7 @@ class M2m::Item < M2m::Base
   end
   
   def vendors
-    @vendors ||= M2m::InventoryVendor.for_item(self)
+    @vendors ||= M2m::InventoryVendor.for_item(self).order(:fpriority)
   end
   
   def part_number_revision
@@ -251,6 +251,14 @@ class M2m::Item < M2m::Base
   def total_cost
     self.send AppConfig.cost_method
   end
+
+  def allow_standard_cost_rollup?
+    self.fcostcode == 'R'
+  end
+
+  def allow_current_rolled_cost_rollup?
+    self.f2costcode == 'R'
+  end
   
   # def self.check
   #   errors = []
@@ -273,42 +281,38 @@ class M2m::Item < M2m::Base
     @revision ||= self.frev.strip
   end
 
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :revision, lambda { |r| where(:frev => r) }
-  scope :with_part_number, lambda { |pn| 
-    {
-      :conditions => { :fpartno => pn }
-    } 
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :revision, -> (r) { where(:frev => r) }
+  scope :with_part_number, -> (pn) {
+    where :fpartno => pn
   }
-  scope :with_part_numbers, lambda { |part_numbers| 
-    {
-      :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq ]
-    } 
+  scope :with_part_numbers, -> (part_numbers) {
+    where [ 'inmastx.fpartno in (?)', part_numbers.uniq]
   }
-  scope :by_rev_desc, :order => 'inmastx.frev desc'
-  scope :by_part_number, :order => 'inmastx.fpartno'
-  scope :by_part_rev_desc, :order => 'inmastx.fpartno, inmastx.frev desc'
-  scope :company_or_vendor_part_number_like, lambda { |text|
-    text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
-    {
-      :joins => <<-SQL
+  scope :by_rev_desc, -> { order('inmastx.frev').reverse_order }
+  scope :by_part_number, -> { order('inmastx.fpartno') }
+  scope :by_part_rev_desc, -> { order('inmastx.fpartno, inmastx.frev desc') }
+  scope :company_or_vendor_part_number_like, -> (text) {
+    text = M2m::Item.connection.quote('%' + (text.strip || '') + '%')
+    joins <<-SQL
       INNER JOIN
       ( SELECT distinct [inmastx].identity_column FROM [inmastx] 
         LEFT JOIN [invend] ON invend.fpartno = inmastx.fpartno 
-        WHERE (inmastx.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
+        WHERE (inmastx.fpartno like #{text} OR invend.fvpartno like #{text}) ) as tmp1
       on inmastx.identity_column = tmp1.identity_column
       SQL
-    }
   }
-  scope :part_number_like, lambda { |text|
-    {
-      :conditions => [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
-    }
+  scope :part_number_like, -> (text) {
+    where [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
   }
-  scope :id_in, lambda { |id_array|
-    {
-      :conditions => [ 'inmastx.identity_column in (?)', id_array ]
-    }
+  scope :id_in, -> (id_array) {
+    where [ 'inmastx.identity_column in (?)', id_array ]
+  }
+  scope :inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_inventory_item_class_keys
+  }
+  scope :non_inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_non_inventory_item_class_keys
   }
   
   def self.latest(part_number)
@@ -402,5 +406,26 @@ class M2m::Item < M2m::Base
   #   end
   #   @bom_parents
   # end
+
+  # For NS export
+  def preferred_location
+    if self.flocate1.present?
+      self.flocate1.strip
+    elsif first_location = self.locations.first
+      first_location.flocation.strip
+    else
+      nil
+    end
+  end
+
+  def preferred_bin
+    if self.fbin1.present?
+      self.fbin1.strip
+    elsif first_location = self.locations.first
+      first_location.fbinno.strip
+    else
+      nil
+    end
+  end
 end
 

@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resource :user_session
   root :to => 'home#index'
-  match 'login' => 'user_sessions#new', :as => :login, via: [:get, :post]
-  match 'logout' => 'user_sessions#destroy', :as => :logout, via: [:get, :post]
+  get 'login' => 'user_sessions#new', :as => :login
+  get 'logout' => 'user_sessions#destroy', :as => :logout
   resource :user_session
   resources :users do
     member do
@@ -42,6 +42,10 @@ Rails.application.routes.draw do
     resources :invoiced_sales_reports, :controller => 'm2m_customers/invoiced_sales_reports'
     resources :sales_backlog_reports, :controller => 'm2m_customers/sales_backlog_reports'
   end
+  resources :sales_customers, :controller => 'sales/customers' do
+    resources :opportunities, :controller => 'sales/customers/opportunities'
+    resources :quotes, :controller => 'sales/customers/quotes'
+  end
   resources :m2m_customer_exports, :controller => 'm2m_customers/exports', :only => :index
   resources :sales_territories, :controller => 'sales/territories'
   resources :parent_companies, :controller => 'sales/parent_companies'
@@ -51,8 +55,13 @@ Rails.application.routes.draw do
   resources :commission_rates, :controller => 'sales/commission_rates'
   resources :commission_reports, :controller => 'sales/commission_reports'
   resources :commission_backlog_reports, :controller => 'sales/commission_backlog_reports'
+  get 'quality' => 'quality/quality_dashboard#index'
   resources :sales_reports, :only => [:index, :show], :controller => 'sales/sales_reports'
   resources :bookings_reports, :only => :show, :controller => 'sales/bookings_reports'
+  resources :opportunities, :controller => 'sales/opportunities'
+  resources :opportunity_comments, :controller => 'sales/opportunity_comments'
+  get 'sales_scoreboard' => 'sales/opportunity_reports#index'
+  resources :sales_events, :only => [:index], :controller => 'sales/sales_events'
   
   resources :shipping_backlog_reports, :only => [:index, :show], :controller => 'shipping/backlog_reports'
   resources :shipping_daily_reports, :only => [:index], :controller => 'shipping/daily_reports'
@@ -77,7 +86,13 @@ Rails.application.routes.draw do
   resources :purchase_orders, :only => [:show], :controller => 'production/purchase_orders'
   
   resources :m2mhub_triggers, :controller => 'm2mhub/triggers'
+  resources :m2mhub_events, :controller => 'm2mhub/events'
+  resources :external_event_resources, :controller => 'm2mhub/external_event_resources', :only => [:create]
   
+  resources :contexts, :controller => 'context/contexts'
+  resources :context_chrome_extensions, :controller => 'context/chrome_extensions'
+  resources :context_comments, :controller => 'context/comments'
+
   # Specify thing regular expression because the routes use '.' as separator.
   get 'switch/:thing' => 'switch#switch', :thing => /.+/, :as => 'switch'
 end

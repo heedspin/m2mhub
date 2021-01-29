@@ -1,0 +1,32 @@
+<% if quote_items.size > 0 %>
+<table class="data">
+	<thead>
+		<tr>
+			<th><%= Sales::QuoteItem.human_attribute_name(:part_number) %></th>
+			<th><%= Sales::QuoteItem.human_attribute_name(:customer_part_number) %></th>
+			<th><%= Sales::QuoteItem.human_attribute_name(:quantity) %></th>
+			<th><%= Sales::QuoteItem.human_attribute_name(:expected_cost) %></th>
+			<th><%= Sales::QuoteItem.human_attribute_name(:price) %></th>
+		</tr>
+	</thead>
+	<tbody>
+	<% quote_items.each do |i| %>
+		<% so_style = cycle('odd', 'even') %>
+		<tr class="<%= so_style %>">
+			<td><%= i.part_number %></td>
+			<td><%= i.customer_part_number %></td>
+			<td><%= cm i.quantity, :item_quantity %></td>
+			<td rowspan="2"><%= cm i.expected_cost, :dollars %></td>
+			<td rowspan="2"><%= cm i.price, :dollars %></td>
+		</tr>
+		<tr class="<%= so_style %>">
+			<td colspan="3"><%= simple_format i.description %></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+<% end %>
+
+<% if permitted_to? :edit, :sales_quotes %>
+<%= render 'sales/quote_items/new', :quote_item => quote_items.build %>
+<% end %>

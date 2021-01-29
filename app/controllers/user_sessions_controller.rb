@@ -7,7 +7,7 @@ class UserSessionsController < M2mhubController
   end
   
   def create
-    @user_session = UserSession.new(params[:user_session])
+    @user_session = UserSession.new(user_session_params)
     if @user_session.save
       flash[:notice] = "Login successful"
       redirect_back_or_default root_url
@@ -21,6 +21,14 @@ class UserSessionsController < M2mhubController
     current_user_session.destroy
     flash[:notice] = "Logout successful!"
     redirect_back_or_default login_url
+  end
+
+  private
+
+  def user_session_params
+    params.require(:user_session).permit(:email,
+                                         :password,
+                                         :remember_me)
   end
 
 end

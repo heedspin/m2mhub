@@ -2,32 +2,32 @@
 <br />
 
 <div class="submenu">
-	<ul>
-		<li class="datenav">
-			<% if @next_date %>
-			<%= link_to "<< #{@next_date.to_s(:shipper_date)}", shipping_daily_reports_url(:date => @next_date.to_s(:database)) %>
-			<% else %>
-			&lt;&lt;
-			<% end %>
-		</li>
-		<li class="datenav">
-			<%= @date.to_s(:shipper_date) %>
-		</li>
-		<li class="datenav">
-			<% if @previous_date %>
-			<%= link_to "#{@previous_date.to_s(:shipper_date)} >>", shipping_daily_reports_url(:date => @previous_date.to_s(:database)) %>
-			<% else %>
-			&gt;&gt;
-			<% end %>
-		</li>
-	</ul>
+  <ul>
+    <li class="datenav">
+      <% if @next_date %>
+      <%= link_to "<< #{@next_date.to_s(:shipper_date)}", shipping_daily_reports_url(:date => @next_date.to_s(:database)) %>
+      <% else %>
+      &lt;&lt;
+      <% end %>
+    </li>
+    <li class="datenav">
+      <%= @date.to_s(:shipper_date) %>
+    </li>
+    <li class="datenav">
+      <% if @previous_date %>
+      <%= link_to "#{@previous_date.to_s(:shipper_date)} >>", shipping_daily_reports_url(:date => @previous_date.to_s(:database)) %>
+      <% else %>
+      &gt;&gt;
+      <% end %>
+    </li>
+  </ul>
 </div>
 <br />
 
 <h2>Shipping Report for <%= @date.to_s(:shipper_date) %></h2>
 
 <h3>Receivers</h3>
-<%= render 'shipping/receivers/index', :receivers => @receivers %>
+<%= render 'shipping/receivers/index', :receivers => @receivers, :date => @date %>
 
 <h3>Shippers</h3>
 <%= render 'shipping/shippers/index', :shippers => @shippers %>

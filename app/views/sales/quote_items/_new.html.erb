@@ -1,0 +1,10 @@
+
+<div id="quote_item_new" class="inplace_container">
+	<div class="inplace_show">
+		<p>Add Item to Quote</p>
+	</div>
+
+  <%= semantic_form_for quote_item, :url => sales_quote_items_url(@quote), :html => { :class => 'inplace_form' } do |f| %>
+    <%= render :partial => "sales/quote_items/form", :locals => {:f => f} %>
+  <% end %>
+</div>

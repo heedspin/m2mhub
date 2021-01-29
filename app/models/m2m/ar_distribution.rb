@@ -31,26 +31,23 @@ class M2m::ArDistribution < M2m::Base
   alias_attribute :ref_key, :fcrefname
   alias_attribute :status, :fcstatus
 
-  scope :dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'ardist.fddate >= ? and ardist.fddate < ?', start_date, end_date ]
-    }
+  scope :dates, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where([ 'ardist.fddate >= ? and ardist.fddate < ?', start_date, end_date ])
   }
-  scope :gl_category, lambda { |category_code|
-    {
-      :joins => :gl_account,
-      :conditions => { :glmast => { :fccode => category_code } }
-    }
+  scope :gl_category, -> (category_code) {
+    joins(:gl_account).
+    where({ :glmast => { :fccode => category_code } })
   }
-  scope :not_cash, :conditions => 'ardist.fcrefname <> \'CSH\''
-  scope :non_zero, :conditions => 'ardist.fnamount != 0'
-  scope :ids, lambda { |ids|
-    {
-      :conditions => [ 'ardist.identity_column in (?)', ids ]
-    }
+  scope :not_cash, -> { where('ardist.fcrefname <> \'CSH\'') }
+  scope :non_zero, -> { where('ardist.fnamount != 0') }
+  scope :with_ids, -> (ids) {
+    where [ 'ardist.identity_column in (?)', ids ]
   }
+  def self.gl_description_like(text)
+    joins(:gl_account).where(['glmast.fcdescr like ?', '%' + text + '%'])
+  end
   
   def posted?
     self.status == 'P'
@@ -68,15 +65,20 @@ class M2m::ArDistribution < M2m::Base
   def ref_invoice?
     self.ref_key.strip == 'INV'
   end
+  attr_accessor :invoice
   def invoice
     @invoice ||= self.ref_invoice? && M2m::Invoice.invoice_number(self.ref_id).first
   end
+  def invoice_number
+    self.ref_invoice? ? self.ref_id : nil
+  end
   
-  def customer_id
+  def customer_number
     self.fccashid[1..6]
   end
+  attr_accessor :customer
   def customer
-    @customer ||= M2m::Customer.with_customer_number(self.customer_id).first
+    @customer ||= M2m::Customer.with_customer_number(self.customer_number).first
   end
   def value
     self.never_posted? ? 0 : (self.amount * self.gl_account.value_multiplier)

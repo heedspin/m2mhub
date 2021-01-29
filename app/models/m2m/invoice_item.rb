@@ -67,48 +67,50 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :invoice_item_type, :fctype
   alias_attribute :sales_gl_account_number, :fincacc
 
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :revision, lambda { |r| where(:frev => r) }
-  scope :for_rma_item, lambda { |rma_item|
-    {
-      :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
-    }
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :revision, -> (r) { where(:frev => r) }
+  scope :for_rma_item, -> (rma_item) {
+    where :fcrmakey => M2m::InvoiceItem.rma_key(rma_item)
   }
-  scope :for_rma_items, lambda { |rma_items|
-    {
-      :conditions => [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
-    }
+  scope :for_rma_items, -> (rma_items) {
+    where [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
   }
-  scope :customer, lambda { |customer|
+  scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :joins => :invoice,
-      :conditions => { :armast => {:fcustno => custno} }
-    }
+    joins(:invoice).
+    where(:armast => {:fcustno => custno})
   }
-  scope :customers, lambda { |customer_numbers|
+  scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
-    {
-      :joins => :invoice,
-      :conditions => [ 'armast.fcustno in (?)', customer_numbers ]
-    }
+    joins(:invoice).
+    where([ 'armast.fcustno in (?)', customer_numbers ])
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) unless start_date.is_a?(Date)
-    end_date = Date.parse(end_date) unless end_date.is_a?(Date)
-    {
-      :joins => :invoice,
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
-  }
+  def self.invoice_dates(start_date, end_date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date])
+  end
+  def self.post_dates(start_date, end_date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['armast.fdgldate >= ? and armast.fdgldate < ?', start_date, end_date])
+  end
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, :joins => :invoice, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
-  scope :gl_category, lambda { |code|
-    {
-      :joins => :sales_gl_account,
-      :conditions => { :glmast => { :fccode => code } }
-    }
+  scope :not_void, -> { joins(:invoice).where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid_or_partial, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :unpaid, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['U'] ]) }
+  scope :partial, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['P'] ]) }
+  scope :normal_type, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :credit_memo, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'C' ]) }
+  scope :prepayment, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'P' ]) }
+  scope :gl_category, -> (code) {
+    joins(:sales_gl_account).
+    where(:glmast => { :fccode => code })
   }
+  # S - Sales, F - Freight, P - Proforma
+  def self.item_types(*types)
+    where 'aritem.fctype in (?)', types
+  end
 
   def invoice_number
     self.fcinvoice.strip
@@ -187,5 +189,9 @@ class M2m::InvoiceItem < M2m::Base
   end
   def for_rma_item?(rma_item)
     self.rma_key.strip == M2m::InvoiceItem.rma_key(rma_item)
+  end
+
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self)
   end
 end

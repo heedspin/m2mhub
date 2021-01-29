@@ -3,7 +3,7 @@ class Production::InventoryReports::ObsoleteReportsController < M2mhubController
 
   def index
     @inventory_report = parent_object
-    @item_reports = @inventory_report.item_reports.by_latest_activity.scoped(:include => :customer_report).paginate(:page => params[:page], :per_page => 50)
+    @item_reports = @inventory_report.item_reports.by_latest_activity.includes(:customer_report).paginate(:page => params[:page], :per_page => 50)
   end
   
   protected

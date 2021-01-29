@@ -18,22 +18,18 @@ class Sales::BacklogReport < M2mhub::Base
   include Plutolib::ToXls
   self.table_name = 'backlog_reports'
   belongs_to_active_hash :report_time_period
-  scope :date, lambda { |date|
-    {
-      :conditions => { :date => date }
-    }
+  scope :date, -> (date) {
+    where :date => date
   }
-  scope :time_period, lambda { |report_time_period|
-    {
-      :conditions => { :report_time_period_id => report_time_period.id }
-    }
+  scope :time_period, -> (report_time_period) {
+    where :report_time_period_id => report_time_period.id
   }
-  scope :by_date_desc, :order => 'backlog_reports.date desc'
+  scope :by_date_desc, -> { order('backlog_reports.date desc') }
 
   def run!
     memos = []
     self.total_backlog = late = 0.0
-    M2m::SalesOrderRelease.filtered.status_open.not_filled.due_after(Date.today.advance(years: -2).includes(:sales_order => :customer).each do |r|
+    M2m::SalesOrderRelease.filtered.status_open_or_hold.not_filled.includes(:sales_order => :customer).each do |r|
       memos.push [r.id, r.backlog_price, r.due_date.to_date]
       self.total_backlog += r.backlog_price
       if r.due_date < self.date
@@ -61,7 +57,7 @@ class Sales::BacklogReport < M2mhub::Base
     end
   end
   def releases
-    @releases ||= M2m::SalesOrderRelease.ids(self.sales_release_memos.map(&:first)).includes(:sales_order => :customer)
+    @releases ||= M2m::SalesOrderRelease.with_ids(self.sales_release_memos.map(&:first)).includes(:sales_order => :customer)
   end
   def sales_release_summaries
     if @sales_release_summaries.nil?
@@ -70,7 +66,7 @@ class Sales::BacklogReport < M2mhub::Base
         releasemap[r.id] = r
       end
       @sales_release_summaries = self.sales_release_memos.map do |sales_release_id, backlog_price, due_date|
-        SalesReleaseSummary.new releasemap[sales_release_id], backlog_price.to_f, Date.parse(due_date), self.date
+        SalesReleaseSummary.new releasemap[sales_release_id], backlog_price.to_f, DateParser.parse(due_date), self.date
       end.sort_by(&:due_date)
     end
     @sales_release_summaries
@@ -153,7 +149,7 @@ class Sales::BacklogReport < M2mhub::Base
         end
       end
       sorted_buckets = buckets.values.sort_by(&:month)
-      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 }
+      trailing_zero_buckets = sorted_buckets.reverse.index { |bb| bb.total_backlog > 0 } || 0
       # Chop off trailing buckets with 0 backlog.
       @backlog_buckets = sorted_buckets[0..(sorted_buckets.size - trailing_zero_buckets - 1)]
     end
@@ -173,14 +169,34 @@ class Sales::BacklogReport < M2mhub::Base
   def xls_sheet_name
     'Backlog'
   end
+
+  def get_first_due_date(part_number)
+    @fdd_cache ||= {}
+    if @fdd_cache.member?(part_number)
+      @fdd_cache[part_number]
+    else
+      result = nil
+      if arev = Sales::CommissionRate.get_arev_part_number(part_number) 
+        result = M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(arev).by_due_date.first.try(:due_date) 
+        result ||= M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(part_number).by_due_date.first.try(:due_date) 
+      end
+      @fdd_cache[part_number] = result
+    end
+  end
   
   def xls_initialize
+    @customer_cache = CustomerCache.new
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Due Date') { |r| r.due_date }
-    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name) }
+    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
+    xls_field('Parent') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) }
+    xls_field('Name') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) || rs.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
+    # xls_field('First Due Date') { |r| 
+    #   get_first_due_date(r.release.try(:item).try(:part_number_and_revision))
+    # }
   end  
   
   def all_data

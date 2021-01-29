@@ -78,7 +78,7 @@
 #
 
 class M2m::SalesOrderItem < M2m::Base
-  default_scope :order => 'soitem.fenumber'
+  default_scope -> { order('soitem.fenumber') }
   self.table_name = 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   # has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
@@ -94,67 +94,53 @@ class M2m::SalesOrderItem < M2m::Base
   alias_attribute :description, :fdesc
   alias_attribute :product_class, :fprodcl
 
-  scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
-  scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
-  scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
+  scope :status_open,      -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.open.name}) }
+  scope :status_closed,    -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.closed.name}) }
+  scope :status_cancelled, -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.cancelled.name}) }
 
-  scope :part_number_like, lambda { |text|
+  scope :part_number_like, -> (text) {
     text = '%' + (text || '') + '%'
-    {
-      :conditions => [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
-    }
+    where [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
   }
-  scope :order_number_like, lambda { |text|
+  scope :order_number_like, -> (text) {
     text = '%' + (text || '') + '%'
-    {
-      :joins => :sales_order,
-      :conditions => [ 'somast.fcustpono like ? OR somast.fsono like ?', text, text]
-    }
+    joins(:sales_order).
+    where([ 'somast.fcustpono like ? OR somast.fsono like ?', text, text])
   }
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  scope :for_releases, lambda { |sales_order_releases|
-    {
-      :conditions => ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
-    }
+  scope :for_releases, -> (sales_order_releases) {
+    where ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
   }
-  scope :for_release, lambda { |release|
-    {
-      :conditions => { :fsono => release.fsono, :fenumber => release.fenumber }
-    }
+  scope :for_release, -> (release) {
+    where :fsono => release.fsono, :fenumber => release.fenumber
   }
-  scope :by_sales_order_date_desc, { :joins => :sales_order, :order => 'somast.forderdate desc' }
+  scope :by_sales_order_date_desc, -> { joins(:sales_order).order('somast.forderdate desc') }
   def self.customer(t)
     customer_number = M2m::Customer.fcustno_for(t)
     joins(:sales_order).where([ 'somast.fcustno = ?', customer_number ])
   end
-  scope :customers, lambda { |customer_numbers|
+  scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
-    {
-      :joins => :sales_order,
-      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
-    }
+    joins(:sales_order).
+    where([ 'somast.fcustno in (?)', customer_numbers ])
   }
-  scope :order_dates, lambda { |start_date, end_date|
-    start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
-    end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
-    {
-      :joins => :sales_order,
-      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
-    }
+  scope :order_dates, -> (start_date, end_date) {
+    start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
+    joins(:sales_order).
+    where([ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ])
   }
   def self.order_date(order_date)
-    order_date = order_date.is_a?(String) ? Date.parse(order_date) : order_date
+    order_date = order_date.is_a?(String) ? DateParser.parse(order_date) : order_date
     joins(:sales_order).where('somast.forderdate = ?', order_date)
   end
   def self.product_class(txt)
     where(:fprodcl => txt)
   end
   def self.ordered_since(date)
-    date = Date.parse(date) if date.is_a?(String)
+    date = DateParser.parse(date) if date.is_a?(String)
     joins(:sales_order).where('somast.forderdate >= ?', date)
   end
 
@@ -175,7 +161,7 @@ class M2m::SalesOrderItem < M2m::Base
 
   def self.attach_to_releases_with_item(sales_order_releases, item)
     if sales_order_releases.size > 0
-      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).all(:include => :sales_order)
+      sales_order_items = M2m::SalesOrderItem.for_releases(sales_order_releases).includes(:sales_order)
       sales_order_releases.each do |r|
         if i = sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }
           r.item = i

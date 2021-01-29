@@ -9,11 +9,13 @@
 	There are <%= @similar_customers.size %> existing accounts that have similar names:
 	<% end %>
 	</h3>
+	<% if @similar_customers %>
 	<ul>
 	<% @similar_customers.each do |customer| %>
 		<li><%= link_to customer.company_name, m2m_customer_url(customer) %></li>
 	<% end %>
 	</ul>
+	<% end %>
 	<p>
 		Click on an account name above to use an existing account.
 	</p>

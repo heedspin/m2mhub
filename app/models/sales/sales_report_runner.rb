@@ -1,7 +1,11 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
+# Cronhint
+# */10 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.delay.update_month'
+# */15 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.delay.update_day_report'
+# 02 1 * * * /var/www/lxdhub/script/runner.sh 'Sales::SalesReportRunner.new.delay.update_nightly'
 
 class Sales::SalesReportRunner
-  include Plutolib::StatelessDelayedReport
+  include Plutolib::LoggerUtils
 
   # Sales::SalesReportRunner.new.recreate_all
   def recreate_all
@@ -11,7 +15,6 @@ class Sales::SalesReportRunner
     self.update_month
   end
 
-  # Sales::SalesReportRunner.new.run_in_background!(:update_nightly)
   def update_nightly
     self.update_month
     self.update_12_months
@@ -19,7 +22,6 @@ class Sales::SalesReportRunner
     self.update_customer_reports
   end
   
-  # Sales::SalesReportRunner.new.run_in_background!(:update_month)
   def update_month
     [Sales::SalesReport, Sales::BookingsReport].each do |klass|
       @klass = klass
@@ -34,7 +36,6 @@ class Sales::SalesReportRunner
     self
   end
 
-  # Sales::SalesReportRunner.new.update_12_months
   def update_12_months
     end_date = Date.current.beginning_of_month.advance(:months => -2) # update_month handles recent months.
     [Sales::SalesReport, Sales::BookingsReport].each do |klass|
@@ -54,7 +55,6 @@ class Sales::SalesReportRunner
     self
   end
   
-  # Sales::SalesReportRunner.new.run_in_background!(:update_day_report)
   def update_day_report
     date = if Time.now.hour <= 6
       Date.current.advance(:days => -1)

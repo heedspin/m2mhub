@@ -68,31 +68,27 @@
 #
 
 class M2m::QuoteItem < M2m::Base
-  default_scope :order => 'qtitem.fenumber'
+  default_scope -> { order('qtitem.fenumber') }
   self.table_name = 'qtitem'
   belongs_to :quote, :class_name => 'M2m::Quote', :foreign_key => :fquoteno, :primary_key => :fquoteno
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono, :primary_key => :fsono
   belongs_to_item :fpartno, :fpartrev
   
-  scope :status_open,      :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.open.name }}
-  scope :status_closed,    :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.closed.name }}
-  scope :status_cancelled, :joins => :quote, :conditions => {:qtmast => { :fstatus => M2m::Status.cancelled.name }}
+  scope :status_open,      -> { joins(:quote).where(:qtmast => { :fstatus => M2m::Status.open.name }) }
+  scope :status_closed,    -> { joins(:quote).where(:qtmast => { :fstatus => M2m::Status.closed.name }) }
+  scope :status_cancelled, -> { joins(:quote).where(:qtmast => { :fstatus => M2m::Status.cancelled.name }) }
   
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision } 
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
 
-  scope :with_status, lambda { |status|
+  scope :with_status, -> (status) {
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
-    {
-      :joins => :quote, 
-      :conditions => { :qtmast => { :fstatus => status_name.upcase } }
-    }
+    joins(:quote).
+    where(:qtmast => { :fstatus => status_name.upcase })
   }
   
-  scope :reverse_order, :order => 'fsono desc, fenumber'
+  scope :rev_order, -> { order('qtitem.fsono desc, qtitem.fenumber') }
 
 
   alias_attribute :quantity, :festqty

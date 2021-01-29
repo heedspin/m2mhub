@@ -13,7 +13,7 @@
 
 Get CSV of all customers in past 12 months.  This format is for SurveyMonkey.
 
-puts M2m::SalesOrder.ordered_since(Date.current.advance(:years => -1)).status_closed.scoped(:include => :customer).map(&:customer).uniq.map { |c| ['"' + c.work_email.downcase.strip + '"', '"' + c.first_name.strip.titleize + '"', '"' + c.last_name.strip.titleize + '"', '"' + c.company_name.strip.titleize + '"'].join(',') }.join("\n")
+puts M2m::SalesOrder.ordered_since(Date.current.advance(:years => -1)).status_closed.includes(:customer).map(&:customer).uniq.map { |c| ['"' + c.work_email.downcase.strip + '"', '"' + c.first_name.strip.titleize + '"', '"' + c.last_name.strip.titleize + '"', '"' + c.company_name.strip.titleize + '"'].join(',') }.join("\n")
 
 =======
 

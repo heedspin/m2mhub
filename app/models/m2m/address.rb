@@ -38,13 +38,20 @@ class M2m::Address < M2m::Base
   self.table_name = 'syaddr'
   
   # Magic number.  But I don't know the logic the M2M uses to choose this.
-  scope :sold_to, :conditions => { :fcaddrtype => 'O' }
-  scope :ship_to, :conditions => { :fcaddrtype => 'S' }
+  scope :sold_to, -> { where(fcaddrtype: 'O') }
+  scope :ship_to, -> { where(fcaddrtype: 'S') }
   def sold_to?
     self.fcaddrtype == 'O'
   end
   def ship_to?
     self.fcaddrtype == 'S'
+  end
+  def bill_to?
+    self.fcaddrtype == 'B'
+  end
+
+  def self.key(key)
+    where [ 'syaddr.fcaddrkey = ?', key ]
   end
   
   alias_attribute :first_name, :fcfname
@@ -63,6 +70,9 @@ class M2m::Address < M2m::Base
   def address_type
     M2m::CsPopup.cached_lookup('SYADDR.FCADDRTYPE', self.fcaddrtype).try(:text)
   end
+  def vendor_address_type
+    M2m::CsPopup.cached_lookup('SYADDR.FCADDR1', self.fcaddrtype).try(:text)
+  end
   
   m2m_id_setter :fcaddrkey, 4
   
@@ -74,14 +84,15 @@ class M2m::Address < M2m::Base
     true
   end
   
-  def address_type
-    case self.fcaddrtype
-    when 'O'
-      'Sold To'
-    when 'S'
-      'Ship To'
-    else
-      self.fcaddrtype
-    end
-  end
+  # def address_type
+  #   case self.fcaddrtype
+  #   when 'O'
+  #     'Sold To'
+  #   when 'S'
+  #     'Ship To'
+  #   else
+  #     self.fcaddrtype
+  #   end
+  # end
+  include M2m::ParsedWorkAddress
 end

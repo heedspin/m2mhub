@@ -13,19 +13,17 @@
 
 class M2m::CsPopup < M2m::Base
   self.table_name = 'cspopup'
-  scope :for_key, lambda { |key|
-    {
-      :conditions => { :fcpopkey => key }
-    }
+  scope :for_key, -> (key) {
+    where :fcpopkey => key
   }
-  scope :with_code, lambda { |code|
+  scope :with_code, -> (code) {
     where(:fcpopval => code)
   }
   def code
     self.fcpopval.strip
   end
   def text
-    self.fcpoptext.strip.titleize
+    self.fcpoptext.strip #.titleize
   end
   
   @@cache = {}

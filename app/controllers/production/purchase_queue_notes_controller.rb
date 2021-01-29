@@ -38,14 +38,14 @@ class Production::PurchaseQueueNotesController < M2mhubController
     @note = current_object
     respond_to do |format|
       format.html {
-        if @note.update_attributes(params[:purchase_queue_note])
+        if @note.update_attributes(params.require(:purchase_queue_note).permit!)
           redirect_to purchase_queue_note_url(@note)
         else
           render :action => 'new'
         end        
       }
       format.js {
-        @note.update_attributes(params[:purchase_queue_note])
+        @note.update_attributes(params.require(:purchase_queue_note).permit!)
         render :action => 'show'
       }
     end

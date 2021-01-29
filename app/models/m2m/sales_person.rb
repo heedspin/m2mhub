@@ -29,7 +29,7 @@ class M2m::SalesPerson < M2m::Base
   alias_attribute :vendor_number, :fvendno
   belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => 'fvendno', :primary_key => 'fvendno'
   
-  scope :by_name, :order => :flastname
+  scope :by_name, -> { order(:flastname) }
   
   def short_name
     self.flastname.strip
@@ -45,5 +45,9 @@ class M2m::SalesPerson < M2m::Base
   
   def initials
     self.fsalespn.strip
+  end
+
+  def self.active
+    where ['slspns.flastname not like ?', 'DO NOT USE%']
   end
 end

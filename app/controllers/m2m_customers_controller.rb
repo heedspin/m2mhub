@@ -17,7 +17,7 @@ class M2mCustomersController < M2mhubController
     end
     @customer = M2m::Customer.new(params[:m2m_customer])
     similar_customers = Amatcher.find_similar( :match => @customer.company_name, :method => :company_name,
-                                               :objects => M2m::Customer.scoped(:select => 'slcdpmx.identity_column, slcdpmx.fcompany'),
+                                               :objects => M2m::Customer.select('slcdpmx.identity_column, slcdpmx.fcompany'),
                                                :limit => 10, :threshold => 0.7 )
     if similar_customers.size > 0
       @similar_customers = similar_customers.map(&:object)
@@ -41,7 +41,7 @@ class M2mCustomersController < M2mhubController
 
   def update
     @customer = current_object
-    if @customer.update_attributes(params[:m2m_customer])
+    if @customer.update_attributes(params.require(:m2m_customer).permit!)
       redirect_to m2m_customer_contacts_url(@customer)
     else
       render :action => 'edit'
@@ -50,7 +50,7 @@ class M2mCustomersController < M2mhubController
 
   def autocomplete_index
     # Autocomplete path.
-    @customers = M2m::Customer.name_like(@search_term).by_name.all(:select => 'slcdpmx.fcompany', :limit => 20)
+    @customers = M2m::Customer.name_like(@search_term).by_name.select('slcdpmx.fcompany').limit(20)
     names = @customers.map { |c| { :label => c.name, :value => c.name } } 
     if params[:new_prompt] == '1'
       names.push( { :label => "Create New: #{@search_term}", :value => "Create New: #{@search_term}" })
@@ -61,7 +61,7 @@ class M2mCustomersController < M2mhubController
   end
 
   def search_index
-    @search = M2m::Customer.new(params[:search])
+    @search = M2m::Customer.new(params.fetch(:search, nil).try(:permit!))
     # For who knows what reason, a new customer comes out with a name = " ".
     if @search.fcompany
       @search.fcompany = @search.fcompany.strip
@@ -81,7 +81,7 @@ class M2mCustomersController < M2mhubController
     M2m::SalesOrderRelease.attach_to_sales_orders(@sales_orders)
     M2m::SalesOrderItem.attach_to_releases(@sales_orders.map(&:releases).flatten)
     @total_quotes = @customer.quotes.count
-    @quotes = @customer.quotes.by_quote_number_desc.all(:include => :items, :limit => 1)
+    @quotes = @customer.quotes.by_quote_number_desc.includes(:items).limit(1)
     # @previous_customer = M2m::Customer.find(:first, :conditions => ['fcompany < ?', current_object.fcompany], :order => 'fcompany desc')
     # @next_customer = M2m::Customer.find(:first, :conditions => ['fcompany > ?', current_object.fcompany], :order => 'fcompany')
   end

@@ -10,11 +10,12 @@ module BelongsToLighthouse
           begin
             Plutolib::WithRetries.with_retries do
               if @lighthouse_ticket = Lighthouse::Ticket.find(self.lighthouse_ticket_id, :params => { :project_id => self.lighthouse_project_id })
+                # No longer necessary!
                 # Convert to time objects.
-                @lighthouse_ticket.created_at = Time.parse(@lighthouse_ticket.created_at)
-                @lighthouse_ticket.versions.each do |v|
-                  v.created_at = Time.parse(v.created_at)
-                end
+                # @lighthouse_ticket.created_at = Time.parse(@ticket.created_at)
+                # @lighthouse_ticket.versions.each do |v|
+                #   v.created_at = Time.parse(v.created_at)
+                # end
               end
             end
           rescue ActiveResource::ResourceNotFound

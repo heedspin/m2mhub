@@ -27,21 +27,15 @@ class M2mhub::Event < M2mhub::Base
   belongs_to :user
   belongs_to_lighthouse_ticket
   
-  scope :since, lambda { |date|
-    {
-      :conditions => [ 'created_at >= ?', date ]
-    }
+  scope :since, -> (date) {
+    where [ 'created_at >= ?', date ]
   }
-  scope :latest_first, :order => 'm2mhub_events.created_at desc'
-  scope :open_or_recently_closed, lambda {
-    {
-      :conditions => [ 'm2mhub_events.closed = false or m2mhub_events.closed is null or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
-    }
+  scope :latest_first, -> { order('m2mhub_events.created_at desc') }
+  scope :open_or_recently_closed, -> {
+    where [ 'm2mhub_events.closed = false or m2mhub_events.closed is null or m2mhub_events.updated_at >= ?', Time.now.advance(:hours => -24) ]
   }
-  scope :valid, lambda {
-    {
-      :conditions => ['m2mhub_events.ticket_status != ?', Lighthouse::Ticket::STATE_INVALID]
-    }
+  scope :valid, -> {
+    where ['m2mhub_events.ticket_status != ?', Lighthouse::Ticket::STATE_INVALID]
   }
 
   def create_ticket(title, body)

@@ -14,10 +14,8 @@
 class M2m::CurrentItem < M2m::Base
   self.table_name = 'invcur'
   belongs_to_item :fcpartno, :fcpartrev
-  scope :for_part_number, lambda { |pn| 
-    {
-      :conditions => { :fcpartno => pn.strip, :flanycur => true }
-    } 
+  scope :for_part_number, -> (pn) {
+    where :fcpartno => pn.strip, :flanycur => true
   }
   def is_item?(item)
     item.revision.strip == self.revision

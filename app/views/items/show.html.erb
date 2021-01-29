@@ -5,12 +5,12 @@
 
 <h3>Purchase Orders:</h3>
 <div id="purchase_order_items">
-	<%= render 'items/purchase_order_items/list', :include_browse_all => true %>
+  <%= render 'items/purchase_order_items/list', :include_browse_all => true %>
 </div>
 
 <h3>Sales Orders</h3>
 <div id="sales_order_releases">
-	<%= render 'items/sales_order_releases/list' %>
+  <%= render 'items/sales_order_releases/list' %>
 </div>
 
 <% if @quote_items.size > 0 %>
@@ -20,3 +20,7 @@
 </div>
 <% end %>
 
+<h3>Commissions</h3>
+<div id="commissions">
+<%= render 'sales/commission_rates/list', :commission_rates => Sales::CommissionRate.matching_item(@item) %>
+</div>

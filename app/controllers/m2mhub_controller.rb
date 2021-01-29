@@ -49,7 +49,7 @@ class M2mhubController < ApplicationController
     end
 
     def build_object
-      @build_object ||= model_class.new(params[model_name])
+      @build_object ||= model_class.new(params.fetch(model_name, nil).try(:permit!))
     end
 
     def current_object
@@ -68,11 +68,11 @@ class M2mhubController < ApplicationController
     rescue_from Exception, :with => :server_error unless Rails.env.development?
     def server_error(exception)
       begin
-        notify_airbrake(exception)
+        Honeybadger.notify(exception)
       rescue => hoptoad_exc
-        Rails.logger.error "Failed to notify airbrake: #{hoptoad_exc.class.name} #{hoptoad_exc.message}"
+        Rails.logger.error "Failed to notify honeybadger: #{hoptoad_exc.class.name} #{hoptoad_exc.message}"
       ensure
-        Rails.logger.error "Notified airbrake: #{exception.class.name} #{exception.message}" + exception.backtrace.join("\n")
+        Rails.logger.error "Notified honeybadger: #{exception.class.name} #{exception.message}" + exception.backtrace.join("\n")
       end
 
       request.format = :html

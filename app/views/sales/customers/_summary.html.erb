@@ -1,0 +1,63 @@
+<%= render 'sales/opportunities/submenu' %>
+
+<h2><%= @customer.name %></h2>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>M2M Record</th>
+      <th>Parent</th>
+      <th>Website</th>
+      <th>Location</th>
+      <th>Territory</th>
+      <th>Business</th>
+      <th><%= Sales::Customer.human_attribute_name(:lead_level) %></th>
+      <th><%= Sales::Customer.human_attribute_name(:rep_status) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <% if @customer.erp_customer %>
+        <%= link_to @customer.erp_customer.customer_number, m2m_customer_url(@customer.erp_customer) %>
+        <% else %>
+        None
+        <% end %>
+      </td>
+      <td>
+        <% if @customer.parent_company %>
+        <%= link_to @customer.parent_company.name, sales_customer_url(@customer.parent_company_id) %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(@customer.website, @customer.website_url, :target => '_blank') if @customer.website.present? %>
+      </td>
+      <td>
+        <%= simple_format @customer.location %>
+      </td>
+      <td>
+        <%= @customer.sales_territory.try(:name_and_sales_rep) || 'None' %>
+      </td>
+      <td>
+        <%= @customer.business_type.try(:name) %>
+      </td>
+      <td>
+        <%= @customer.lead_level.try(:name) %>
+      </td>
+      <td>
+        <%= @customer.rep_status.try(:name) %>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_sales_customer_url(@customer) %>
+      </td>
+    </tr>
+    <% if @customer.notes.present? %>
+    <tr>
+      <td colspan="4">
+        <%= simple_format @customer.notes %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -40,19 +40,22 @@ class Sales::CommissionBacklogReport
       backlog_price = (cd.release.unit_price * cd.release.backorder_quantity).to_f.round(2)
       cd.commission_percentage.present? ? ((cd.commission_percentage / 100) * backlog_price).to_f.round(2) : 0.0
     }
+    xls_field('Reason') { |cd| cd.reason }
   end
 
-  CommissionData = Struct.new(:release, :sales_person_name, :commission_percentage)
+  CommissionData = Struct.new(:release, :sales_person_name, :commission_percentage, :reason)
 
   def xls_data
     @backlog_report = Sales::BacklogReport.by_date_desc.first
     @finder = Sales::CommissionRateFinder.new
     @backlog_report.releases.map do |release|
-      name, percentage, reason = @finder.get_rate( :customer => release.sales_order.customer,
+      rates = @finder.get_rates( :customer => release.sales_order.customer,
                                                    :part_number => release.part_number,
                                                    :revision => release.revision,
                                                    :sales_order => release.sales_order )
-      CommissionData.new(release, name, percentage)
-    end
+      rates.map do |name, percentage, reason|
+        CommissionData.new(release, name, percentage, reason)
+      end
+    end.flatten
   end
 end

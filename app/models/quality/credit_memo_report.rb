@@ -98,7 +98,7 @@ class Quality::CreditMemoReport
     customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).to_a
     rma_items = rmas.map(&:items).flatten
     M2m::Item.attach_items(rma_items)
-    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).scoped(:include => :invoice).to_a
+    invoice_items = M2m::InvoiceItem.for_rma_items(rma_items).includes(:invoice).to_a
     @vendor_for_item = {}
     if rma_items.size > 0
       results = M2m::InventoryVendor.connection.select_rows <<-SQL
@@ -112,7 +112,7 @@ class Quality::CreditMemoReport
       end
     end
     rmas.each do |rma|
-      next unless rma.severity.nil? || AppConfig.credit_memo_report_severity_names.include?(rma.severity_name)
+      next unless rma.severity.nil? || AppConfig.credit_memo_report_severity_names.include?(rma.severity_name.try(:titleize))
       rma.items.each do |rma_item|
         rma_item.rma = rma
         # Rails.logger.debug "Looking for #{M2m::InvoiceItem.rma_key(rma_item)} in " + invoice_items.map(&:rma_key).sort.join(', ')

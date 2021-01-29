@@ -6,7 +6,7 @@ class Lighthouse::User
   def self.users_cache
     if @users_cache.nil?
       @users_cache = {}
-      Lighthouse::Project.first.memberships.each do |membership|
+      Lighthouse::Project.find(AppConfig.default_lighthouse_project).memberships.each do |membership|
         user = Lighthouse::User.find(membership.user_id)
         @users_cache[user.name] = user
       end

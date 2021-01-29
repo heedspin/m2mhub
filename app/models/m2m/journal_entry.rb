@@ -17,5 +17,5 @@ class M2m::JournalEntry < M2m::Base
   has_many :items, :class_name => 'M2m::JournalEntryItem', :foreign_key => 'fcentry', :primary_key => 'fcentry'
   
   alias_attribute :entry_id, :fcentry
-  scope :entry_id, lambda { |ei| { :conditions => { :fcentry => ei } } }
+  scope :entry_id, -> (ei) { where(:fcentry => ei) }
 end

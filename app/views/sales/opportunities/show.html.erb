@@ -1,0 +1,102 @@
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	$(".opportunity,.opportunity_comment,.opportunity_ticket").hover(
+	  function () {
+	    $(this).find(".hiddenedit").show();
+	  }, 
+	  function () {
+	    $(this).find(".hiddenedit").hide();
+	  }
+	);
+})
+</script>
+<% end %>
+
+<% title @opportunity.safe_title %>
+
+<%= render 'sales/opportunities/submenu' %>
+<br />
+
+<% if @opportunity.errors.size > 0 %>
+<div class="flash_error">Errors: <%= @opportunity.errors.full_messages.join("<br />\n") %></div>
+<% end %>
+
+<div class="opportunity">
+	<% if permitted_to?(:edit, :sales_opportunities) %>
+	<div class="hiddenedit">
+		<%= link_to 'Edit', edit_opportunity_url(@opportunity) %>
+	</div>
+	<% end %>
+	<h2><%= @opportunity.xnumber %> - <%= @opportunity.safe_title %></h2>
+	<% if @opportunity.sales_customer.present? %>
+		<h2>
+			<%= link_to(@opportunity.customer_name, sales_customer_url(@opportunity.sales_customer)) %>
+		</h2>
+	<% else %> 
+		<p>
+			<strong><%= Sales::Opportunity.human_attribute_name(:customer) %>:</strong>
+			<%= @opportunity.customer_name %>
+			<ul>
+			<% if @similar_customers %>
+			<% @similar_customers.each do |sc| %>
+				<li>Link to: <%= link_to sc.object.name, opportunity_url(@opportunity, :sales_opportunity => {:customer_name => sc.object.name}), :method => :put %></li>
+			<% end %>
+			<% end %>
+				<li><%= link_to 'Create Customer', new_sales_customer_url(:sales_customer => { :name => @opportunity.customer_name, :opportunity_id => @opportunity.id, :website => @opportunity.guess_website }) %></li>
+	 			
+			</ul>
+		</p>
+	<% end %>
+	
+	<div class="opportunity_header">
+		<p>
+			<strong><%= Sales::Opportunity.human_attribute_name(:owner) %>:</strong> <%= @opportunity.owner.try(:full_name) %>
+			<% if @opportunity.sales_person_name %>
+			<br /><strong>Sales Rep:</strong>
+			<%= @opportunity.sales_person_name %>
+			<% end %>			
+			<br /><strong><%= Sales::Opportunity.human_attribute_name(:status) %>:</strong>
+			<%= @opportunity.status.try(:name) %>
+			<% if @opportunity.status.try(:hold?) and @opportunity.wakeup %>
+			- Wakeup: <%= @opportunity.wakeup.to_s(:short_human_date) %>
+			<% end %>
+
+			<% if @opportunity.source %>
+			<br />	
+			<strong><%= Sales::Opportunity.human_attribute_name(:source) %>:</strong>
+			<%= @opportunity.source.name %>
+			<% end %>
+
+			<% if @opportunity.sales_customer %>
+			<br /> <strong>Territory:</strong> <%= @opportunity.sales_customer.try(:sales_territory).try(:name_and_sales_rep) %>
+			<% end %>
+			
+			<br />	
+			<strong><%= Sales::Opportunity.human_attribute_name(:start_date) %>:</strong>
+			<%= @opportunity.start_date.try(:to_s, :short_human_date) %>
+			
+			<% @opportunity.displays.each do |display| %>
+			<br />
+			<strong>Product:</strong>
+			<%= link_to display.model_number, doogle_display_url(display) %>
+			<% end %>
+		</p>
+	</div>
+	<div class="opportunity_header">
+		<p>
+			<%= render 'sales/opportunities/sales_order_summary', :opportunity => @opportunity %>
+		</p>
+	</div>
+	<div class="clear"></div>
+	<%= simple_format @opportunity.body if @opportunity.body.present? %>
+</div>
+
+<% @comments.each do |comment| %>
+<%= render 'sales/opportunity_comments/show', :comment => comment %>
+<hr />
+<% end %>
+
+<% if permitted_to?(:create, :sales_opportunity_comments) %>
+	<%= render 'sales/opportunity_comments/new' %>
+<% end %>

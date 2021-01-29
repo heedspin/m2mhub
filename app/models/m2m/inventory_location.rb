@@ -23,24 +23,16 @@ class M2m::InventoryLocation < M2m::Base
   alias_attribute :quantity_on_hand, :fonhand
   alias_attribute :bin, :fbinno
 
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision } 
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  scope :with_part_numbers, lambda { |part_numbers|
-    {
-      :conditions => [ 'inonhd.fpartno in (?)', part_numbers]
-    }
+  scope :with_part_numbers, -> (part_numbers) {
+    where [ 'inonhd.fpartno in (?)', part_numbers]
   }
-  scope :with_quantity_on_hand, :conditions => 'inonhd.fonhand > 0'
+  scope :with_quantity_on_hand, -> { where 'inonhd.fonhand > 0' }
   
   def location_description
-    if self.bin.present?
-      self.bin
-    else
-      self.flocation.titleize
-    end
+    [self.flocation, self.bin].select(&:present?).join('-').titleize
   end
 
   def self.attach_to_items(locations, items)

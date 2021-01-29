@@ -18,7 +18,7 @@
       <td colspan="4">Total</td>
       <th class="right"><%= cm @sales_report.invoiced_sales, :rounded_dollars %></th>
     </tr>
-    <% @sales_report.ar_distributions.sort_by { |ard| ard.customer.try(:company_name) || '' }.each do |ard| %>
+    <% @sales_report.ar_distributions.sort_by { |ard| [ard.date, ard.customer.try(:company_name) || ''] }.each do |ard| %>
     <tr>
       <td><%= ard.date.to_s(:invoice_date) %></td>
       <td><%= link_to(ard.customer.company_name, m2m_customer_url(ard.customer)) if ard.customer %></td>

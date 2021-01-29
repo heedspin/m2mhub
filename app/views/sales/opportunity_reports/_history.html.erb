@@ -1,0 +1,155 @@
+<% content_for :javascripts do %>
+	<script type="text/javascript">
+	$(function() {
+		$(".report_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %>', '<%= image_tag(AppConfig.arrow_expand_image) %>');
+	});
+	</script>
+<% end %>
+
+<table class="data">
+	<thead>
+		<tr>
+			<th></th>
+			<% reports.time_periods.each do |time_period| %>
+				<th colspan="3">
+					<% if reports.period == :month %>
+					<%= time_period.to_s(:month_year) %>
+					<% elsif reports.period == :year %>
+					<%= time_period.year %>
+					<% else %>
+					Week of <%= time_period.strftime('%b %d') %>
+					<% end %>
+				</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% reports.territory_reports.each do |territory_report| %>
+			<% territory_report.opportunity_buckets.each do |opportunity_bucket| %>
+				<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+					<tr>
+						<% if source_bucket == opportunity_bucket.sorted_sources.first %>
+							<td rowspan="<%= opportunity_bucket.sorted_sources.size %>">
+								<%= territory_report.name %>
+							</td>
+						<% end %>
+						<td><%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %></td>
+						<td class="right"><%= cm source_bucket.total_sales_orders, :rounded_dollars %></td>
+						<td class="right"><%= cm source_bucket.total_value, :rounded_dollars %></td>
+					</tr>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if reports.homeless_report.has_opportunities? %>
+		<tr>
+			<td>
+				<a href="#homeless_<%= reports.period %>" class="report_details" id="report_details_homeless_<%= reports.period %>">
+					<span class="replace_report_details_homeless_<%= reports.period %>"><%= image_tag(AppConfig.arrow_collapse_image) %></span>
+					Homeless
+				</a>
+			</td>
+			<% reports.homeless_report.opportunity_buckets.each do |opportunity_bucket| %>
+				<td class="split_results">
+					<% if opportunity_bucket.total_quoted_opportunities > 0 %>
+						<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+							<span class="left">
+								<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+							</span>
+							<span class="right">
+								<%= cm source_bucket.total_sales_orders, :rounded_dollars, 0 %> /
+								<%= cm source_bucket.total_value, :rounded_dollars, 0 %>
+							</span>
+							<br />
+						<% end %>
+					<% end %>
+				</td>
+			<% end %>
+		</tr>
+		<tr class="hide xreport_details_homeless_<%= reports.period %>">
+			<td colspan="<%= reports.territory_reports.size + 1 %>">
+				<ul>
+					<% reports.homeless_report.opportunities.each do |opportunity| %>
+						<li><%= opportunity.xnumber %> - <%= link_to opportunity.safe_title, opportunity_url(opportunity) %></li>
+					<% end %>
+				</ul>
+			</td>
+		</tr>
+		<% end %>
+		<% reports.total_report.opportunity_buckets.each do |opportunity_bucket| %>
+			<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+				<tr>
+					<% if source_bucket == opportunity_bucket.sorted_sources.first %>
+						<th rowspan="<%= opportunity_bucket.sorted_sources.size + 1 %>">
+							Totals
+						</th>
+					<% end %>
+					<th class="left"><%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %></th>
+					<th class="right"><%= cm source_bucket.total_sales_orders, :rounded_dollars %></th>
+					<th class="right"><%= cm source_bucket.total_value, :rounded_dollars %></th>
+				</tr>
+			<% end %>
+			<tr>
+				<th><%= cm opportunity_bucket.total_quoted_opportunities %> - Total</th>
+				<th class="right"><%= cm opportunity_bucket.total_sales_orders, :rounded_dollars %></th>
+				<th class="right"><%= cm opportunity_bucket.total_value, :rounded_dollars %></th>
+			</tr>
+		<% end %>
+		
+		<tr class="opportunity_spacer">
+			<td colspan="<%= reports.territory_reports.size + 1 %>">
+			</td>
+		</tr>
+		
+		<% reports.owner_reports.each do |owner_report| %>
+			<% owner_report.opportunity_buckets.each do |opportunity_bucket| %>
+				<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+					<tr>
+						<% if source_bucket == opportunity_bucket.sorted_sources.first %>
+							<td rowspan="<%= opportunity_bucket.sorted_sources.size + 1 %>">
+								<%= owner_report.name %>
+							</td>
+						<% end %>
+						<td><%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %></td>
+						<td class="right"><%= cm source_bucket.total_sales_orders, :rounded_dollars %></td>
+						<td class="right"><%= cm source_bucket.total_value, :rounded_dollars %></td>
+					</tr>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if reports.ownerless_report.has_opportunities? %>
+		<tr>
+			<td>
+				<a href="#ownerless" class="report_details" id="report_details_ownerless_<%= reports.period %>">
+					<span class="replace_report_details_ownerless_<%= reports.period %>"><%= image_tag(AppConfig.arrow_collapse_image) %></span>
+					Ownerless
+				</a>
+			</td>
+			<% reports.ownerless_report.opportunity_buckets.each do |opportunity_bucket| %>
+				<td>
+					<% if opportunity_bucket.total_quoted_opportunities > 0 %>
+						<% opportunity_bucket.sorted_sources.each do |source_bucket| %>
+							<span class="left">
+								<%= cm source_bucket.total_quoted_opportunities %> - <%= source_bucket.name %>
+							</span>
+							<span class="right">
+								<%= cm source_bucket.total_sales_orders, :rounded_dollars, 0 %> /
+								<%= cm source_bucket.total_value, :rounded_dollars, 0 %>
+							</span>
+							<br />
+						<% end %>
+					<% end %>
+				</td>
+			<% end %>
+		</tr>
+		<tr class="hide xreport_details_ownerless_<%= reports.period %>">
+			<td colspan="<%= reports.territory_reports.size + 1 %>">
+				<ul>
+					<% reports.ownerless_report.opportunities.each do |opportunity| %>
+						<li><%= opportunity.xnumber %> - <%= link_to opportunity.safe_title, opportunity_url(opportunity) %></li>
+					<% end %>
+				</ul>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

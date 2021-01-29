@@ -1,0 +1,12 @@
+<strong><%= Sales::Opportunity.human_attribute_name(:amount) %>:</strong>
+<%= cm opportunity.amount, :rounded_dollars %>
+<% %w(sample_order tooling_order production_order).each do |key| %>
+	<% if order = opportunity.send("last_#{key}") %>
+	<br /><strong><%= key.to_s.titleize %>:</strong>
+	<%= order.date.to_s(:number_date) if order.date %>
+	<% end %>
+<% end %>
+<% if opportunity.total_sales_orders > 0 %>
+	<br />
+	<strong>Total Sales Orders:</strong> <%= cm opportunity.total_sales_orders, :rounded_dollars %>
+<% end %>

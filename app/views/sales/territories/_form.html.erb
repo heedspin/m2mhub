@@ -1,0 +1,9 @@
+<%= f.semantic_errors :base %>
+
+<%= f.inputs do %>
+  <%= f.input :name %> 
+  <%= f.input :description %> 
+  <%= f.input :erp_vendor_id, :as => 'select', :collection => sales_rep_options, :member_value => 'vendor_number' %> 
+<% end %>
+
+<%= set_focus('#sales_territory_name') %>

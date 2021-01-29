@@ -1,0 +1,22 @@
+<p>
+	<em><%= comment.created_at.to_s(:short_human_date_time) %></em>
+	<% if full_name = comment.creator.try(:full_name) %>
+	by <strong><%= full_name %></strong>
+	<% end %>
+	<br />
+	<% if comment.status.hold? %>
+		<% if comment.wakeup %>
+		Wakeup: <%= comment.wakeup.to_s(:short_human_date) %>
+		<% end %>
+	<% elsif comment.status.active? and comment.reminder.present? %>
+		Reminder: <%= comment.reminder.to_s(:short_human_date) %>
+		<% if comment.reminder_sent %>
+		(sent)
+		<% end %>
+	<% end %>
+	<% if comment.comment_type.sales_order? %>
+		<br />Won <%= comment.win_type.try(:name) %>
+	<% elsif comment.status_change? and comment.previous_status.try(:name) %>
+		<br /><%= comment.previous_status.try(:name) %> &rarr; <%= comment.status.try(:name) %>
+	<% end %>
+</p>

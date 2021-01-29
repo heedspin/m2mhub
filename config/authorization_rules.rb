@@ -27,6 +27,8 @@ authorization do
   role :sales do
     includes :shipping
     has_permission_on :m2m_quotes, :to => :manage
+    has_permission_on :sales_quotes, :to => :manage
+    has_permission_on :sales_quote_items, :to => :manage
     has_permission_on :sales_orders, :to => :read
     has_permission_on :sales_order_items, :to => :read
     has_permission_on :customers_sales_orders, :to => :read
@@ -35,6 +37,11 @@ authorization do
     has_permission_on :customers_contacts, :to => :manage
     has_permission_on :customers_invoiced_sales_reports, :to => :manage
     has_permission_on :customers_sales_backlog_reports, :to => :manage
+    has_permission_on :sales_customers, :to => :manage
+    has_permission_on :sales_customers_opportunities, :to => :manage
+    has_permission_on :sales_customers_quotes, :to => :manage
+    has_permission_on :sales_territories, :to => :manage
+    has_permission_on :parent_companies, :to => :manage
     has_permission_on :items_sales_order_releases, :to => :read
     has_permission_on :items_m2m_quote_items, :to => :read
     has_permission_on :items_purchase_order_items, :to => :read
@@ -55,8 +62,14 @@ authorization do
     has_permission_on :sales_reports, :to => :read
     has_permission_on :bookings_reports, :to => :read
     has_permission_on :backlog_reports, :to => :read
+    has_permission_on :sales_opportunities, :to => :manage
+    has_permission_on :sales_opportunity_comments, :to => :manage
+    has_permission_on :sales_opportunity_reports, :to => :manage
+    has_permission_on :sales_events, :to => :read
     has_permission_on :production_vendors, :to => :read
     has_permission_on :m2mhub_context_assistants, :to => :manage
+    has_permission_on :production_purchase_order_items, :to => :read
+    has_permission_on :production_purchase_orders, :to => :read
   end
   
   role :production do
@@ -88,6 +101,7 @@ authorization do
     has_permission_on :users, :to => [:manage, :set_role, :switch, :verify, :delete, :message]
     has_permission_on :m2mhub_user_activities, :to => :manage
     has_permission_on :production_inventory_reports, :to => :manage
+    has_permission_on :sales_opportunities, :to => :delete_permanently
   end
 end
  

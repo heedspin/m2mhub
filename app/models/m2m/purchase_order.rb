@@ -82,10 +82,10 @@ class M2m::PurchaseOrder < M2m::Base
   has_many :receivers, :class_name => 'M2m::Receiver', :foreign_key => :fpono, :primary_key => :fpono
   has_many :inspection_tasks, :class_name => 'Quality::InspectionTask', :foreign_key => :purchase_order_number
 
-  scope :status_open,      :conditions => { :fstatus => M2m::PurchaseOrderStatus.open.name }
-  scope :status_closed,    :conditions => { :fstatus => M2m::PurchaseOrderStatus.closed.name }
-  scope :status_cancelled, :conditions => { :fstatus => M2m::PurchaseOrderStatus.cancelled.name }
-  scope :inventory, :include => :items, :conditions => { :poitem => { :fcategory => 'INV     '} }
+  scope :status_open,      -> { where(:fstatus => M2m::PurchaseOrderStatus.open.name) }
+  scope :status_closed,    -> { where(:fstatus => M2m::PurchaseOrderStatus.closed.name) }
+  scope :status_cancelled, -> { where(:fstatus => M2m::PurchaseOrderStatus.cancelled.name) }
+  scope :inventory, -> { includes(:items).where(:poitem => { :fcategory => 'INV     '}) }
   
   alias_attribute :vendor_name, :fcompany
   alias_attribute :change_date, :fcngdate
@@ -97,9 +97,17 @@ class M2m::PurchaseOrder < M2m::Base
   def status
     M2m::PurchaseOrderStatus.find_by_m2mname(self.fstatus.strip)
   end
+
+  def cancelled?
+    self.status.try(:cancelled?)
+  end
   
   def closed?
     self.status.try(:closed?)
+  end
+
+  def open?
+    self.status.try(:open?)
   end
   
   def self.pad_purchase_order_number(number)

@@ -36,10 +36,11 @@ class User < M2mhub::Base
   acts_as_authentic do |c|
     c.validate_password_field = true
     c.maintain_sessions = false
+    c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
+    c.crypto_provider = Authlogic::CryptoProviders::SCrypt
   end
   belongs_to_active_hash :user_role
   belongs_to_active_hash :user_state
-  attr_protected :password, :password_confirmation, :user_role, :user_state
   validates_presence_of :first_name, :last_name, :email, :user_state, :user_role
   has_many :user_messages, :dependent => :delete_all
   has_many :messages, :through => :user_messages
@@ -50,6 +51,7 @@ class User < M2mhub::Base
   attr_accessor :current_password
   scope :active, -> { where(user_state_id: UserState.active.id) }
   scope :by_name, -> { order(:first_name, :last_name) }
+  # scope :with_lighthouse_account, -> { where('users.lighthouse_user_id is not null and users.lighthouse_user_id != \'\'') }
   
   # This method is necessary method for declarative_authorization to determine roles
   # Roles returns e.g. [:admin]

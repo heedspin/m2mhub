@@ -155,39 +155,27 @@ class M2m::Job < M2m::Base
   has_many :gl_production_postings, :class_name => 'M2m::GlProductionPosting', :foreign_key => :fjob_so, :primary_key => 'fjobno'
   has_many :to_inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :ftojob, :primary_key => 'fjobno'
 
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.try(:part_number), :fpartrev => item.try(:revision) }
-    }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  def self.job_number(jobno)
+  scope :with_job_number, -> (jobno) {
     where :fjobno => jobno
-  end
-  def self.job_family(jobno_prefix)
-    where ['jomast.fjobno like ?', jobno_prefix + '-%']
-  end
-  def self.job_number_not(job_numbers)
-    where ['jomast.fjobno not in (?)', job_numbers]
-  end
-  scope :released, :conditions => { :fstatus => M2m::Status.released.name }
-  scope :status_open, :conditions => [ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ] 
+  }
+  scope :released, -> { where(:fstatus => M2m::Status.released.name) }
+  scope :status_open, -> { where([ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ]) }
   def self.status(statuses)
     where ['jomast.fstatus in (?)', statuses ] 
   end
-  scope :by_date_desc, :order => 'jomast.fhold_dt desc'
-  scope :customers, lambda { |customers|
+  scope :by_date_desc, -> { order('jomast.fhold_dt desc') }
+  scope :customers, -> (customers) {
     customer_numbers = customers.map(&:customer_number)
-    {
-      :conditions => [ 'jomast.fcus_id in (?)', customer_numbers ]
-    }
+    where [ 'jomast.fcus_id in (?)', customer_numbers ]
   }
-  scope :released_since, lambda { |date|
-    date = Date.parse(date) if date.is_a?(String)
-    {
-      :conditions => [ 'jomast.fact_rel >= ?', date ]
-    }
+  scope :released_since, -> (date) {
+    date = DateParser.parse(date) if date.is_a?(String)
+    where [ 'jomast.fact_rel >= ?', date ]
   }
-  scope :by_part_number, :order => 'jobmast.fpartno'
+  scope :by_part_number, -> { order('jobmast.fpartno') }
   
   def status
     M2m::Status.find_by_name(self.fstatus)

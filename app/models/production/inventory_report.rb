@@ -22,6 +22,9 @@ require 'bom_children_cache'
 require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
+# Cronhint:
+# 00 3 * * 2-6 /var/www/lxdhub/script/runner.sh 'Production::InventoryReport.create.delay.run_report'
+
 class Production::InventoryReport < ActiveRecord::Base
   TEST_MODE=false # Setting to true reduces sales order release cache size.
   self.table_name = 'inventory_reports'
@@ -34,7 +37,7 @@ class Production::InventoryReport < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :inventory_report_cost_method, :class_name => '::Production::InventoryReportCostMethod'
 
-  scope :by_date_desc, lambda { order('inventory_reports.report_date desc, inventory_reports.created_at desc') }
+  scope :by_date_desc, -> { order('inventory_reports.report_date desc, inventory_reports.created_at desc') }
 
   def run_report
     report_start_time = Time.now.to_i
@@ -138,7 +141,7 @@ class Production::InventoryReport < ActiveRecord::Base
     offset = 0
     while offset < MAX_PAST_RELEASES
       # find_in_batches breaks sorting
-      releases = M2m::SalesOrderRelease.scoped(:include => { :sales_order => :customer }).limit(1000).offset(offset)
+      releases = M2m::SalesOrderRelease.includes(:sales_order => :customer).limit(1000).offset(offset)
       break if releases.size == 0
       offset += releases.size
       @bom_children.for_releases(releases).each do |release, bom_children|
@@ -170,7 +173,7 @@ class Production::InventoryReport < ActiveRecord::Base
     xls_field("Part Number") { |r| r.part_number_and_revision }
     xls_field('Part Description') { |r| r.item.try(:description) }
     xls_field('Group') { |r| r.item.try(:short_group_name) }
-    never = Date.parse('1901-01-01')
+    never = DateParser.parse('1901-01-01')
     xls_field('Latest Activity Date') { |r| r.latest_activity || never }
     xls_field('On Hand Cost', dollar_format) { |r| r.total_on_hand_cost }
     xls_field('Last Customer') { |r| r.customer_report.try(:customer_name) }

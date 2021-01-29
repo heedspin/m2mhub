@@ -96,27 +96,36 @@ class M2m::VendorInvoice < M2m::Base
   def self.invoice_number(num)
     where :fcinvoice => num
   end
-  scope :purchase_order_number, lambda { |num|
-    {
-      :conditions => { :fpono => num }
-    }
+  scope :purchase_order_number, -> (num) {
+    where :fpono => num
   }
   def self.invoice_dates(start_date, end_date)
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
     where [ 'apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date ]
   end
   def self.invoice_number_like(text)
     where ['apmast.fcinvoice like ?', '%' + text + '%']
   end
-  scope :by_date_desc, :order => 'apmast.finvdate desc'
+  scope :by_date_desc, -> { order('apmast.finvdate desc') }
   def self.vendor_number(num)
     where :fvendno => M2m::Vendor.pad_vendor_number(num)
   end
   def self.vendor_account_number(num)
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
-  scope :not_void, where('apmast.fcstatus != ?', 'V')
+  scope :unpaid_or_partial, -> { where([ 'apmast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :partial, -> { where([ 'apmast.fcstatus in (?)', ['P'] ]) }
+  scope :unpaid, -> { where([ 'apmast.fcstatus in (?)', ['U'] ]) }
+  scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
+
+  scope :normal, -> { where('apmast.finvtype = ?', 'N')}
+  scope :miscellaneous, -> { where('apmast.finvtype = ?', 'M')}
+  scope :debit_memo, -> { where('apmast.finvtype = ?', 'DM')}
+
+  def not_void?
+    self.fcstatus != 'V'
+  end
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"
@@ -124,5 +133,21 @@ class M2m::VendorInvoice < M2m::Base
   
   def items
     M2m::VendorInvoiceItem.invoice_key(self.item_invoice_key)
+  end
+
+  def paid?
+    self.fcstatus == 'F'
+  end
+
+  def void?
+    self.fcstatus == 'V'
+  end  
+
+  def partial?
+    self.fcstatus == 'P'
+  end
+
+  def unpaid?
+    self.fcstatus == 'U'
   end
 end

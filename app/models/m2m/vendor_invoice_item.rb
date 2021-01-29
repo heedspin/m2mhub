@@ -59,24 +59,34 @@
 
 class M2m::VendorInvoiceItem < M2m::Base
   self.table_name = 'apitem'
-  belongs_to :invoice, :class_name => 'M2m::VendorInvoice', :foreign_key => 'fcinvkey'
+  # This does not work because of the evil M2M fcinvkey terribleness...
+  # belongs_to :invoice, :class_name => 'M2m::VendorInvoice', :foreign_key => 'fcinvkey'
+
+  alias_attribute :unit_cost, :fvucost
   
   def invoice
     @invoice ||= M2m::VendorInvoice.invoice_number(self.invoice_number).first # .purchase_order_number(self.purchase_order_number)
   end
-  
+  # This is for caching, not actual assignment, fools...
+  def invoice=(v)
+    @invoice = v
+  end
+
+  def self.invoice_dates(start_date, end_date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date])
+  end
+  # scope :not_void, -> { joins(:invoice).where([ 'apmast.fcstatus != ? ', 'V' ]) }
+
   belongs_to_item :fpartno, :frev
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :vendor, lambda { |v|
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :vendor, -> (v) {
     v = v.vendor_number if v.is_a?(M2m::Vendor)
-    {
-      :conditions => [ 'SUBSTRING(apitem.fcinvkey,1,6) = ?', v.to_s]
-    }
+    where [ 'SUBSTRING(apitem.fcinvkey,1,6) = ?', v.to_s]
   }
-  scope :invoice_key, lambda { |ik|
-    {
-      :conditions => { :fcinvkey => ik }
-    }
+  scope :invoice_key, -> (ik) {
+    where :fcinvkey => ik
   }
   alias_attribute :invoice_key, :fcinvkey
   alias_attribute :invoice_quantity, :finvqty

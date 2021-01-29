@@ -1,0 +1,103 @@
+<%= render 'sales/opportunities/submenu' %>
+
+<% content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+	new_company_matcher = /^Create New: (.+)$/;
+	$("input#search_name").autocomplete({
+		source: "<%= sales_customers_url(:new_prompt => 1) %>",
+		search: function(event, ui) {
+			$("input#search_name").autocomplete("close");
+			$("#inprogress").show();
+		},
+		open: function(event, ui) { 
+			$("#inprogress").hide();
+		},
+		select: function(event, ui) { 
+			$("#inprogress").show();
+			var matches = ui.item.value.match(new_company_matcher);
+			if (matches && (matches.length > 1)) {
+				window.location.href = "<%= new_sales_customer_url %>?sales_customer[name]=" + matches[1];
+			}	else {
+				$(this).val( ui.item.value ); 
+				$("form.search").submit(); 				
+			}
+			return false; 
+		}
+	});
+})
+</script>
+<% end %>
+
+<%= semantic_form_for @search, :as => :search, :url => sales_customers_url, :html => {:method => :get} do |f| %>
+<table class="flatform">
+	<tbody>
+		<tr>
+			<td>				
+				<%= f.inputs do %>
+			  	<%= f.input :name, :label => 'Name', :wrapper_html => { :class => 'widestring' } %>
+					<li>
+						<span id="inprogress" class="hide">
+						<%= image_tag AppConfig.in_progress_image %>
+						</span>
+					</li>
+					<%#= f.input :lead_level, :collection => Sales::LeadLevel::Search.all, :include_blank => false %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.inputs do %>
+					<%= f.input :sales_territory, :collection => Sales::Territory.all.sort_by(&:rep_and_description), :prompt => 'All', :member_label => :rep_and_description %>
+					<%= f.input :rep_status, :collection => Sales::RepStatus.all, :prompt => 'All' %>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			  <%= f.actions do %>
+				  <%= f.action :submit, :label => 'Search' %>
+					<li>
+						<%= link_to 'New Customer', new_sales_customer_url %>
+					</li>
+				<% end %>
+			</td>
+		</tr>
+	</tbody>
+</table>			
+<% end %>
+
+<%= set_focus('#search_name') %>
+
+<% if @customers %>
+<% if @customers.size > 0 %>
+<h3><%= comma @customers.total_entries %> Customers</h3>
+<%= will_paginate @customers %>
+<table class="data">
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<th>Territory</th>
+			<th>Type</th>
+			<th>Lead</th>
+			<th>Rep Status</th>
+			<th>Location</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @customers.each do |c| %>
+		<tr>
+			<td><%= link_to c.name, sales_customer_url(c), {:target=>'_blank'} %></td>
+			<td><%= c.sales_territory.try(:name_and_sales_rep) %></td>
+			<td><%= c.business_type %></td>
+			<td><%= c.lead_level %></td>
+			<td><%= c.rep_status %></td>
+			<td><%= c.location %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<% else %>
+<h3>No matches</h3>
+<% end %>
+<% end %>

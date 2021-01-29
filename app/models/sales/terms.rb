@@ -1,6 +1,7 @@
 require 'plutolib/active_hash_methods'
 class Sales::Terms < ActiveHash::Base
   self.data = [
+    {:id => 7, :name => 'Pending (Net 30)'},
     {:id => 1, :name => 'Net 30' },
     {:id => 2, :name => 'Net 60' },
     {:id => 3, :name => 'Net 90' },

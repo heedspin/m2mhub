@@ -1,0 +1,11 @@
+<%= simple_format(comment.comment) if comment.comment.present? %>
+<% if comment.comment_type.sales_order? and comment.sales_order.present? %>
+<p>
+	<%= link_to 'Sales Order ' + comment.sales_order_id, sales_order_url(comment.sales_order_id) %>
+	for <%= link_to comment.sales_order.customer_name, m2m_customer_number_url(comment.sales_order.fcustno) %>
+</p>
+<% elsif comment.status.lost? %>
+<p>
+	<strong>Loss Reason: <%= comment.loss_reason.try(:name) %></strong>
+</p>
+<% end %>

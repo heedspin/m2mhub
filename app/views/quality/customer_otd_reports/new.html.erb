@@ -1,58 +1,78 @@
 <% content_for :javascripts do %>
-	<script type="text/javascript">
-	$(function() {
-		$(".closed_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %> Show Details', '<%= image_tag(AppConfig.arrow_expand_image) %> Hide Details');
-	});
-	</script>
+  <script type="text/javascript">
+  $(function() {
+    $(".closed_details").toggle_visibility('<%= image_tag(AppConfig.arrow_collapse_image) %> Show Details', '<%= image_tag(AppConfig.arrow_expand_image) %> Hide Details');
+  });
+  </script>
 <% end %>
 <%= render 'quality/submenu' %>
 <br />
 
 
 <div class="noticeContainer notice">
-	<strong>On Time Delivery Policy:</strong>
-	<ul>
-		<li>Lead Time: <%= AppConfig.otd_lead_time %> days</li>
-		<li>Business Days Grace Period: <%= AppConfig.otd_grace_period_days %> days</li>
-	</ul>
+  <strong>On Time Delivery Policy:</strong>
+  <ul>
+    <li>Lead Time: <%= AppConfig.otd_lead_time %> days</li>
+    <li>Business Days Grace Period: <%= AppConfig.otd_grace_period_days %> days</li>
+  </ul>
 </div>
-	
+  
 <%= render 'quality/year_search', :search_url => new_customer_otd_report_url %>
 
 <% count = 0 %>
 <table class="data fullsize">
-	<thead>
-		<tr>
-			<th class="fixnum">Date</th>
-			<th class="fixdouble">Percent Late</th>
-			<th>Details</th>
-		</tr>
-	</thead>
-	<tbody>
+  <thead>
+    <tr>
+      <th class="fixnum">Date</th>
+      <th class="fixdouble">Percent Late</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
 <% @report.ordered_months.each do |month| %>
-	<% count += 1 %>
-	<tr>
-		<td class="fixnum"><%= month.date.to_s(:month_year) %></td>
-		<td class="right fixdouble"><%= cm month.percent_late, :on_time_delivery_report %>% Late (<%= month.num_late_releases %> / <%= cm month.num_releases %>)</td>
-		<td>
-			<% if month.num_late_releases > 0 %>
-			<a href="#" class="closed_details" id="closed_details_<%= count %>">
-				<span class="replace_closed_details_<%= count %>">
-					<%= image_tag(AppConfig.arrow_collapse_image) %>
-					Show Details
-				</span>
-			</a>
-			<% end %>
-		</td>
-	</tr>
-	<tr class="hide xclosed_details_<%= count %>">
-		<td colspan="3">
-			<%= render 'otd_details', :releases => month.late_releases.sort_by(&:due_date) %>
-		</td>
-	</tr>
+  <% count += 1 %>
+  <tr>
+    <td class="fixnum"><%= month.date.to_s(:month_year) %></td>
+    <td class="right fixdouble"><%= cm month.percent_late, :on_time_delivery_report %>% Late (<%= month.num_late_releases %> / <%= cm month.num_releases %>)</td>
+    <td>
+      <% if month.num_late_releases > 0 %>
+      <a href="#" class="closed_details" id="closed_details_<%= count %>">
+        <span class="replace_closed_details_<%= count %>">
+          <%= image_tag(AppConfig.arrow_collapse_image) %>
+          Show Details
+        </span>
+      </a>
+      <% end %>
+    </td>
+  </tr>
+  <tr class="hide xclosed_details_<%= count %>">
+    <td colspan="3">
+      <%= render 'otd_details', :releases => month.late_releases.sort_by(&:due_date), :vendor_lates => month.vendor_lates %>
+    </td>
+  </tr>
 <% end %>
-	<tr>
-		<th>Total</th>
-		<th><%= cm @report.percent_late, :on_time_delivery_report %>% Late (<%= @report.num_late_releases %> / <%= cm @report.num_releases %>)</th>
-	</tr>
+  <tr>
+    <th>Total</th>
+    <th><%= cm @report.percent_late, :on_time_delivery_report %>% Late (<%= @report.num_late_releases %> / <%= cm @report.num_releases %>)</th>
+  </tr>
+</table>
+
+<table class="details">
+  <thead>
+    <tr>
+      <th>Vendor</th>
+      <th>Late</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @report.vendor_lates.each do |vendor_late| %>
+      <tr>
+        <td><%= vendor_late.name %></td>
+        <td>
+          <%= cm vendor_late.percent_late, :on_time_delivery_report %>%
+          (<%= cm vendor_late.num_late_releases %> / <%= cm vendor_late.num_releases %>)
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

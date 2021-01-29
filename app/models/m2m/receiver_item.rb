@@ -81,12 +81,17 @@ class M2m::ReceiverItem < M2m::Base
     self.purchase_order_item.try(:vendor_part_number)
   end
 
-  scope :by_time_received_desc, { :joins => :receiver, :order => 'rcmast.fdaterecv desc, rcitem.fitemno' }  
-  scope :received_since, lambda { |date|
-    { 
-      :joins => :receiver, 
-      :conditions => [ 'rcmast.fdaterecv >= ?', date ]
-    }
+  scope :by_time_received_desc, -> { joins(:receiver).order('rcmast.fdaterecv desc, rcitem.fitemno') }
+  scope :received_since, -> (date) {
+    joins(:receiver).
+    where([ 'rcmast.fdaterecv >= ?', date ])
   }
+  scope :date_received, -> (start_date, end_date) {
+    start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
+    joins(:receiver).where(['rcmast.fdaterecv >= ? and rcmast.fdaterecv < ?', start_date, end_date])
+  }
+  scope :invoiced, -> { where(fcategory: 'INV') }
+  scope :closed, -> { where(fcstatus: 'C') }
 end
 

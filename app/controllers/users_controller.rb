@@ -52,7 +52,7 @@ class UsersController < M2mhubController
   # PUT /users/1
   def update
     @user = current_object
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(params.require(:user).permit!)
       flash[:notice] = 'User was successfully updated.'
       redirect_to(@user)
     else
@@ -97,7 +97,7 @@ class UsersController < M2mhubController
 
     def get_user_object(method)
       if @current_object.nil?
-        user_params = params[:user] || {}
+        user_params = params.member?(:user) ? params.require(:user).permit! : {}
         user_role_id = user_params.delete(:user_role_id)
         user_state_id = user_params.delete(:user_state_id)
         user_password = user_params.delete(:password)

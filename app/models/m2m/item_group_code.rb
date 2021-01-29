@@ -43,10 +43,8 @@
 
 class M2m::ItemGroupCode < M2m::Base
   self.table_name = 'ingrpc'
-  scope :for_key, lambda { |key|
-    {
-      :conditions => { :fgc_number => key }
-    }
+  scope :for_key, -> (key) {
+    where :fgc_number => key
   }
   def text
     @text ||= self.fgc_desc.strip.titleize

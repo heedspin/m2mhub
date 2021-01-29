@@ -1,0 +1,5 @@
+<p>Wakeup Notification. Opportunity is now open:</p>
+
+<h3><%= link_to @opportunity.safe_title, @opportunity_url %></h3>
+
+<%= simple_format @opportunity.comments.on_hold.by_id.last.try(:comment) %>

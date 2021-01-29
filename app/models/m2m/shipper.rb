@@ -76,49 +76,40 @@ class M2m::Shipper < M2m::Base
     self.fconfirm ? 'Shipped' : 'Not Shipped'
   end
   
-  scope :with_ship_date, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate = ?', date.to_s(:database) ],
-    }
+  scope :with_ship_date, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate = ?', date.to_s(:database) ])
   }  
-  scope :for_next_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate > ?', date.to_s(:database) ],
-      :order => :fshipdate
-    }
+  scope :for_next_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate > ?', date.to_s(:database) ]).
+    order(:fshipdate)
   }
-  scope :for_previous_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate < ?', date.to_s(:database) ],
-      :order => 'shmast.fshipdate desc'
-    }
+  scope :for_previous_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate < ?', date.to_s(:database) ]).
+    order('shmast.fshipdate desc')
   }
-  scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
-  scope :next_shipper, lambda { |shipper| 
-    {
-      :conditions => ['fshipno > ?', shipper.fsono], 
-      :order => 'fshipno',
-      :limit => 1
-    }
+  scope :by_shipper_number_desc, -> { order('shmast.fshipno desc') }
+  scope :next_shipper, -> (shipper) {
+    where(['fshipno > ?', shipper.fsono]).
+    order('fshipno').
+    limit(1)
   }
-  scope :previous_shipper, lambda { |shipper| 
-    {
-      :conditions => ['fshipno < ?', shipper.fsono], 
-      :order => 'fshipno desc',
-      :limit => 1
-    }
+  scope :previous_shipper, -> (shipper) {
+    where(['fshipno < ?', shipper.fsono]).
+    order('fshipno desc').limit(1)
   }
-  scope :for_item, lambda { |item|
-    {
-      # Using include vs joins eliminates duplicates.
-      :include => :items,
-      :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
-    }
+  scope :for_item, -> (item) {
+    includes(:items).
+    where(:shitem => { :fpartno => item.fpartno, :frev => item.frev })
   }
-  scope :by_ship_date_desc, :order => 'shmast.fshipdate desc'
+  scope :for_item_with_duplicates, -> (item) {
+    # Using include vs joins eliminates duplicates.
+    joins(:items).
+    where(:shitem => { :fpartno => item.fpartno, :frev => item.frev })
+  }
+  scope :by_ship_date_desc, -> { order('shmast.fshipdate desc') }
   
   def self.monthly_quantity_shipped(start_date, end_date)
     results = connection.select_rows <<-SQL
@@ -134,7 +125,8 @@ class M2m::Shipper < M2m::Base
     SQL
     months = {}
     results.each do |month, quantity_shipped|
-      months[Date.parse(month)] = quantity_shipped
+      month = DateParser.parse(month) unless month.is_a?(Date)
+      months[month] = quantity_shipped
     end
     months
   end

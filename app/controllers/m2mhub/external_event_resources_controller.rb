@@ -33,6 +33,6 @@ class M2mhub::ExternalEventResourcesController < M2mhubController
     end
 
     def build_object
-      @current_object ||= model_class.new(params[model_name])
+      @current_object ||= model_class.new(params.fetch(model_name, nil).try(:permit!))
     end
 end

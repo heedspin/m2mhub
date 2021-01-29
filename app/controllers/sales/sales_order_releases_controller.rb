@@ -12,8 +12,8 @@ class Sales::SalesOrderReleasesController < M2mhubController
     if @search.filter_status.present?
       @sales_order_releases = @sales_order_releases.with_status(@search.filter_status)
     end
-    @sales_order_releases = @sales_order_releases.all(:include => [:sales_order])
-    @sales_order_items = M2m::SalesOrderItem.for_item(@search.part_number).all(:include => :item)
+    @sales_order_releases = @sales_order_releases.includes(:sales_order)
+    @sales_order_items = M2m::SalesOrderItem.for_item(@search.part_number).includes(:item)
     # OPTIMIZATION: eager load
     @sales_order_releases.each do |r|
       if i = @sales_order_items.detect { |i| (i.fsono == r.fsono) && (i.fenumber == r.fenumber) }

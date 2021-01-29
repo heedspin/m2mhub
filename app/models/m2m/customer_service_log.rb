@@ -68,13 +68,11 @@ class M2m::CustomerServiceLog < M2m::Base
   belongs_to_item :fcpartno, :fcpartrev
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
 
-  scope :status_open,      :conditions => { :fcstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
-  scope :between, lambda { |start_date, end_date|
-    { 
-      :conditions => [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
-    }
+  scope :status_open,      -> { where(:fcstatus => M2m::Status.open.name) }
+  scope :status_closed,    -> { where(:fcstatus => M2m::Status.closed.name) }
+  scope :status_cancelled, -> { where(:fcstatus => M2m::Status.cancelled.name) }
+  scope :between, -> (start_date, end_date) {
+    where [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
   }
 
   def status

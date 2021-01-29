@@ -1,0 +1,52 @@
+<% if false #content_for :javascripts do %>
+<script type="text/javascript">
+$(function() {
+  $("input#sales_quote_customer_name").autocomplete({
+    source: "<%= sales_customers_url %>",
+    search: function(event, ui) { 
+      $("input#sales_quote_customer_name").autocomplete("close");
+      $("#customer_inprogress").show();
+    },
+    open: function(event, ui) { 
+      $("#customer_inprogress").hide();
+    },
+    select: function(event, ui) { 
+      if (ui.item.value == "No Results") {
+        $(this).val( "" ); 
+        // Do nothing.
+      } else {
+        $(this).val( ui.item.value ); 
+      }
+      return false; 
+    }   
+  });
+})
+</script>
+<% end %>
+
+<%= f.semantic_errors :base %>
+
+<%= f.inputs :class => 'horizontal' do %>
+  <%= f.input :customer_name, :input_html => { :readonly => 'readonly' } %>
+  <li>
+    <div id="customer_inprogress" class="hide">
+      <%= image_tag AppConfig.in_progress_image %>
+    </div>
+  </li>
+<% end %>
+<%= f.inputs do %>
+  <%#= f.input :date, :as => :calendar %>
+  <%= f.input :recipient, :wrapper_html => { :class => 'small_textarea' } %>
+  <%= f.input :foreword, :wrapper_html => { :class => 'medium_textarea' } %>
+  <%= f.input :postfix, :wrapper_html => { :class => 'medium_textarea' } %>
+<% end %>
+<%= f.inputs :class => 'horizontal' do %>
+  <%= f.input :terms, :collection => Sales::Terms.all %>
+  <%= f.input :other_terms %>
+<% end %>
+<%= f.inputs do %>
+  <%= f.input :private_notes, :wrapper_html => { :class => 'medium_textarea' } %>
+  <%= f.input :link_opportunity_id, :as => :hidden %>
+<% end %>
+
+<%= set_focus('#sales_quote_customer_name') %>

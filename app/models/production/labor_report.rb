@@ -58,14 +58,14 @@ class Production::LaborReport
   
   def initialize(params)
     params ||= {}
-    @start_date = (txt = params[:start_date]) && (Date.parse(txt))
-    @end_date = (txt = params[:end_date]) && (Date.parse(txt))
+    @start_date = (txt = params[:start_date]) && (DateParser.parse(txt))
+    @end_date = (txt = params[:end_date]) && (DateParser.parse(txt))
     @department_id = params[:department_id]
     @days = {}
   end
   
   def run
-    s = M2m::LaborDetail.between(@start_date, @end_date).by_date.scoped(:include => :employee)
+    s = M2m::LaborDetail.between(@start_date, @end_date).by_date.includes(:employee)
     s = s.department(@department_id) if @department_id.present?
     s.each do |labor_detail|
       # next unless labor_detail.employee.present?
