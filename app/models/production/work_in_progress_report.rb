@@ -2,7 +2,6 @@
 # Production::WorkInProgressReport::Runner.new.delay.run_report
 require 'plutolib/active_hash_transient_belongs_to'
 require 'plutolib/to_xls'
-require 'plutolib/stateless_delayed_report'
 
 class Production::WorkInProgressReport
   include Plutolib::ActiveHashTransientBelongsTo
@@ -75,8 +74,6 @@ class Production::WorkInProgressReport
   end
 
   class Runner
-    include Plutolib::StatelessDelayedReport
-
     def run_report
       report = Production::WorkInProgressReport.new
       report.include_jobs ||= Shipping::IncludeJobs.open

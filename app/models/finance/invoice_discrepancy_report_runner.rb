@@ -10,7 +10,7 @@ class Finance::InvoiceDiscrepancyReportRunner
     run_year(Date.current)
   end
 
-  # Finance::InvoiceDiscrepancyReportRunner.new.run_in_background!
+  # Finance::InvoiceDiscrepancyReportRunner.new.delay.run_report
   # Finance::InvoiceDiscrepancyReportRunner.new.run_year(DateParser.parse('2013-01-01'))
   def run_year(date)
     log "Running #{date.year}"

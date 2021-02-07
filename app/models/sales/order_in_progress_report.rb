@@ -2,7 +2,6 @@
 # Sales::OrderInProgressReportRunner.new.run_in_backgroun!
 require 'plutolib/active_hash_transient_belongs_to'
 require 'plutolib/to_xls'
-require 'plutolib/stateless_delayed_report'
 
 class Sales::OrderInProgressReport
   include Plutolib::ActiveHashTransientBelongsTo
@@ -118,8 +117,6 @@ class Sales::OrderInProgressReport
   end
 
   class Runner
-    include Plutolib::StatelessDelayedReport
-
     def run_report
       report = Sales::OrderInProgressReport.new
       report.due_date ||= Date.current.next_week

@@ -8,7 +8,7 @@ class Production::InventoryReportsController < M2mhubController
   def create
     @report = build_object
     if @report.save
-      @report.run_in_background!
+      @report.delay.run_report
       redirect_to inventory_report_url(@report)
     else
       render :action => 'new'
