@@ -24,9 +24,6 @@ class Quality::RmaReport
   
   def run
     rmas = M2m::Rma.between(@start_date, @end_date).includes(:items).all
-    if M2mhub::Feature.enabled?(:inspection_tasks)
-      Quality::InspectionTask.attach_to_rmas(rmas)
-    end
     customers = M2m::Customer.with_customer_numbers(rmas.map(&:customer_number)).all
     items = M2m::Item.with_part_numbers(rmas.map(&:items).flatten.map(&:part_number)).all
     total_shipments = M2m::Shipper.monthly_quantity_shipped(@start_date, @end_date)

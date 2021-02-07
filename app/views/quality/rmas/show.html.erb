@@ -15,38 +15,27 @@ Sales Order: <%= link_to @rma.sales_order_number, sales_order_url(@rma.sales_ord
 <% end %>
 
 <table class="data">
-	<thead>
-		<tr>
-			<th>Quantity</th>
-			<th>Part</th>
-			<th>Reason</th>
-		</tr>
-	</thead>
-	<tbody>
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Part</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
 <% @rma.items.each do |rma_item| %>
-		<tr>
-			<td>
-				<%= cm rma_item.quantity, :rma_quantity %>
-			</td>
-			<td>
-				<%= link_to_item rma_item.item, rma_item.part_number %>
-			</td>
-			<td>
-				<%= h simple_format(rma_item.reason.strip) %>
-			</td>
-		</tr>
+    <tr>
+      <td>
+        <%= cm rma_item.quantity, :rma_quantity %>
+      </td>
+      <td>
+        <%= link_to_item rma_item.item, rma_item.part_number %>
+      </td>
+      <td>
+        <%= h simple_format(rma_item.reason.strip) %>
+      </td>
+    </tr>
 <% end %>
-	</tbody>
+  </tbody>
 </table>
-
-<% if M2mhub::Feature.enabled?(:inspection_tasks) %>
-<% if @rma.inspection_task %>
-	<hr />
-	<h2><%= link_to "Inspection Task: #{@rma.inspection_task.title}", inspection_task_url(@rma.inspection_task) %></h2>
-	<%= render 'quality/inspection_tasks/show', :task => @rma.inspection_task %>
-<% else %>
-	<p><%= link_to 'Create Inspection Task', @new_inspection_task_url %></p>
-<% end %>
-<% end %>
-
 

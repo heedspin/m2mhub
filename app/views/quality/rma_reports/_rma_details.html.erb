@@ -1,37 +1,34 @@
 <table class="details">
-	<thead>
-		<tr>
-			<th>RMA Number</th>
-			<th>Status</th>
-			<th>Category</th>
-			<th class="date">Date</th>
-			<th>Qty</th>
-			<th>Customer</th>
-			<th>Part</th>
-			<th>Inquiry</th>
-			<th>SO</th>
-		</tr>
-	</thead>
-	<tbody>
+  <thead>
+    <tr>
+      <th>RMA Number</th>
+      <th>Status</th>
+      <th>Category</th>
+      <th class="date">Date</th>
+      <th>Qty</th>
+      <th>Customer</th>
+      <th>Part</th>
+      <th>Inquiry</th>
+      <th>SO</th>
+    </tr>
+  </thead>
+  <tbody>
 <% rmas.each do |rma| %>
 <% rma.items.each do |rma_item| %>
-		<tr>
-			<td>
-				<%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
-				<% if M2mhub::Feature.enabled?(:inspection_tasks) and rma.inspection_task %>
-				<%= link_to image_tag(AppConfig.lighthouse_image, :width => 16), rma_url(rma.rma_number) %>
-				<% end %>
-			</td>
-			<td><%= rma.status.try(:name) %></td>
-			<td><%= rma.severity_name %></td>
-			<td><%= rma.date.to_s(:rma_date) %></td>
-			<td class="right"><%= cm rma_item.quantity, :rma_quantity %></td>
-			<td><%= link_to rma.customer.name, m2m_customer_number_url(rma.customer_number) %></td>
-			<td><%= link_to_item rma_item.item, rma_item.part_number %></td>
-			<td class="fixed_width_text"><%= h simple_format(rma_item.reason.strip) %></td>
-			<td><%= link_to rma.sales_order_number, sales_order_url(rma.sales_order_number) if rma.sales_order_number.present? %></td>
-		</tr>
+    <tr>
+      <td>
+        <%= link_to rma.company_rma_number, rma_url(rma.rma_number) %>
+      </td>
+      <td><%= rma.status.try(:name) %></td>
+      <td><%= rma.severity_name %></td>
+      <td><%= rma.date.to_s(:rma_date) %></td>
+      <td class="right"><%= cm rma_item.quantity, :rma_quantity %></td>
+      <td><%= link_to rma.customer.name, m2m_customer_number_url(rma.customer_number) %></td>
+      <td><%= link_to_item rma_item.item, rma_item.part_number %></td>
+      <td class="fixed_width_text"><%= h simple_format(rma_item.reason.strip) %></td>
+      <td><%= link_to rma.sales_order_number, sales_order_url(rma.sales_order_number) if rma.sales_order_number.present? %></td>
+    </tr>
 <% end %>
 <% end %>
-	</tbody>
+  </tbody>
 </table>
