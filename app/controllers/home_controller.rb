@@ -22,7 +22,7 @@ class HomeController < M2mhubController
     elsif current_user.user_role.shipping?
       redirect_to shipping_backlog_reports_url
     else
-      redirect_to doogle_displays_url
+      redirect_to root_url
     end
   end
 end
