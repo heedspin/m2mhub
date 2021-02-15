@@ -49,10 +49,10 @@ class M2m::DefaultRouteOperation < M2m::Base
     where :fpartno => item.part_number, :fcpartrev => item.revision
   }
   scope :work_center_ids, -> (work_centers) {
-    where [ 'inrtgs.fpro_id in (?)', work_centers ]
+    where [ '[inrtgs].[fpro_id] in (?)', work_centers ]
   }
   scope :work_centers, -> (work_centers) {
     work_center_ids = work_centers.map(&:work_center_id)
-    where [ 'inrtgs.fpro_id in (?)', work_center_ids ]
+    where [ '[inrtgs].[fpro_id] in (?)', work_center_ids ]
   }
 end

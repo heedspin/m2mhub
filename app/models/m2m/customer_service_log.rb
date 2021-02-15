@@ -72,7 +72,7 @@ class M2m::CustomerServiceLog < M2m::Base
   scope :status_closed,    -> { where(:fcstatus => M2m::Status.closed.name) }
   scope :status_cancelled, -> { where(:fcstatus => M2m::Status.cancelled.name) }
   scope :between, -> (start_date, end_date) {
-    where [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
+    where [ '[sycslm].[fdinqdate] >= ? and [sycslm].[fdinqdate] < ?', start_date, end_date ]
   }
 
   def status

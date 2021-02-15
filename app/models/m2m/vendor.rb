@@ -58,14 +58,14 @@ class M2m::Vendor < M2m::Base
   belongs_to :gl_account, :class_name => 'M2m::GlAccount', :foreign_key => 'fcacctnum', :primary_key => 'fcacctnum'
   
   scope :with_vendor_numbers, -> (vendor_numbers) {
-    where [ 'apvend.fvendno in (?)', vendor_numbers ]
+    where [ '[apvend].[fvendno] in (?)', vendor_numbers ]
   }
   scope :by_name, -> { order(:fcompany) }
   scope :name_like, -> (txt) {
-    where [ 'apvend.fcompany like ?', '%' + (txt || '') + '%' ]
+    where [ '[apvend].[fcompany] like ?', '%' + (txt || '') + '%' ]
   }
   scope :with_name, -> (txt) {
-    where [ 'apvend.fcompany = ?', txt.ljust(35) ]
+    where [ '[apvend].[fcompany] = ?', txt.ljust(35) ]
   }
   
   def name

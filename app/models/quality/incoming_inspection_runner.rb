@@ -13,7 +13,7 @@ class Quality::IncomingInspectionRunner < Quality::BaseInspectionRunner
     new_pos = open_inspection_required - existing_tasks
     if new_pos.size > 0
       log 'Creating incoming inspection tasks for ' + new_pos.join(', ')
-      M2m::PurchaseOrderItem.where(['fpono in (?)', new_pos]).inspection_required(true).includes(:purchase_order).each do |poi|
+      M2m::PurchaseOrderItem.where(['[fpono] in (?)', new_pos]).inspection_required(true).includes(:purchase_order).each do |poi|
         task = Quality::InspectionTask.new
         task.initialize_from_purchase_order_item(poi)
         task.save!

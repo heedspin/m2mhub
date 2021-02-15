@@ -95,31 +95,31 @@ class M2m::SalesOrderRelease < M2m::Base
     if shipper_items.is_a?(M2m::ShipperItem)
       shipper_items = [shipper_items]
     end
-    joins('inner join shitem on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)').
-    where(['shitem.identity_column in (?)', shipper_items.map(&:id)])
+    joins('inner join [shitem] on [sorels].[fsono] = SUBSTRING([shitem].[fsokey],1,6) AND [sorels].[finumber] = SUBSTRING([shitem].[fsokey],7,3) AND [sorels].[frelease] = SUBSTRING([shitem].[fsokey],10,3)').
+    where(['[shitem].[identity_column] in (?)', shipper_items.map(&:id)])
   }
   scope :status_open,      -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.open.name}) }
   scope :status_closed,    -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.closed.name}) }
   scope :status_cancelled, -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.cancelled.name}) }
   scope :status_not_cancelled, -> { joins(:sales_order).where(['somast.fstatus != ?', M2m::Status.cancelled.name]) }
   def self.status_open_or_hold
-    joins(:sales_order).where(['somast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.on_hold.name]])
+    joins(:sales_order).where(['[somast].[fstatus] in (?)', [M2m::Status.open.name, M2m::Status.on_hold.name]])
   end
 
-  scope :by_due_date, -> { order('sorels.fduedate') }
-  scope :by_due_date_desc, -> { order('sorels.fduedate desc') }
-  scope :by_last_ship_date_desc, -> { order('sorels.flshipdate desc') }
+  scope :by_due_date, -> { order(:fduedate) }
+  scope :by_due_date_desc, -> { order(:fduedate).reverse_order }
+  scope :by_last_ship_date_desc, -> { order(:flshipdate).reverse_order }
   scope :due_by, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
-    where [ 'sorels.fduedate <= ?', date ]
+    where [ '[sorels].[fduedate] <= ?', date ]
   }
   scope :due_after, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
-    where [ 'sorels.fduedate >= ?', date ]
+    where [ '[sorels].[fduedate] >= ?', date ]
   }
-  scope :not_filled, -> { where([ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]) }
-  scope :some_filled, -> { where([ '(sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake) > 0' ]) }
-  scope :filtered, -> { joins('left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('soitem.fmultiple = 0 OR sorels.frelease != \'000\'') }
+  scope :not_filled, -> { where([ '[sorels].[forderqty] > ([sorels].[fshipbook] + [sorels].[fshipbuy] + [sorels].[fshipmake])' ]) }
+  scope :some_filled, -> { where([ '([sorels].[fshipbook] + [sorels].[fshipbuy] + [sorels].[fshipmake]) > 0' ]) }
+  scope :filtered, -> { joins('left join [soitem] on [soitem].[fsono] = [sorels].[fsono] and [soitem].[fenumber] = [sorels].[fenumber]').where('[soitem].[fmultiple] = 0 OR [sorels].[frelease] != \'000\'') }
   scope :for_item, -> (item) {
     where :fpartno => item.part_number, :fpartrev => item.revision
   }
@@ -128,7 +128,7 @@ class M2m::SalesOrderRelease < M2m::Base
     where :fpartno => fpartno.strip
   }
   scope :part_number_starts_with, -> (part_number) {
-    where [ 'sorels.fpartno like ?', part_number + '%' ]
+    where [ '[sorels].[fpartno] like ?', part_number + '%' ]
   }
   scope :with_status, -> (status) {
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
@@ -141,31 +141,31 @@ class M2m::SalesOrderRelease < M2m::Base
   scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
     joins(:sales_order).
-    where([ 'somast.fcustno in (?)', customer_numbers ])
+    where([ '[somast].[fcustno] in (?)', customer_numbers ])
   }
   scope :for_sales_order, -> (sono) {
     where :fsono => sono
   }
   scope :sales_order_numbers, -> (so_numbers) {
     so_numbers = so_numbers.map { |n| M2m::SalesOrder.pad_sales_order_number(n) }
-    where [ 'sorels.fsono in (?)', so_numbers ]
+    where [ '[sorels].[fsono] in (?)', so_numbers ]
   }
   scope :with_number, -> (num) {
     where :finumber => num
   }
   scope :shipped_after, -> (date) {
-    where [ 'flshipdate >= ?', date ]
+    where [ '[flshipdate] >= ?', date ]
   }
   scope :order_dates, -> (start_date, end_date) {
     joins(:sales_order).
-    where([ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ])
+    where([ '[somast].[forderdate] >= ? and [somast].[forderdate] < ?', start_date, end_date ])
   }
   scope :ordered_since, -> (date) {
     joins(:sales_order).
-    where(['somast.forderdate >= ?', date])
+    where(['[somast].[forderdate] >= ?', date])
   }
   scope :master, -> { where(:fmasterrel => true) }
-  scope :master_or_single, -> { joins('inner join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('(soitem.fmultiple = ? and sorels.fmasterrel = ?) or (soitem.fmultiple = ?)', true, true, false) }
+  scope :master_or_single, -> { joins('inner join [soitem] on [soitem].[fsono] = [sorels].[fsono] and [soitem].[fenumber] = [sorels].[fenumber]').where('([soitem].[fmultiple] = ? and [sorels].[fmasterrel] = ?) or ([soitem].[fmultiple] = ?)', true, true, false) }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -208,28 +208,28 @@ class M2m::SalesOrderRelease < M2m::Base
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
   scope :shipped_late, -> {
     select_sql = <<-SQL
-    sorels.*, ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
-    DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) - 
-    case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
-    case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) as business_days_late
+    [sorels].*, ((DATEDIFF(day, [sorels].[fduedate], [sorels].[flshipdate]) -
+    DATEDIFF(wk, [sorels].[fduedate], [sorels].[flshipdate]) * 2) - 
+    case when DATEPART(dw, [sorels].[fduedate]) = 1 then 1 else 0 end +
+    case when DATEPART(dw, [sorels].[flshipdate]) = 1 then 1 else 0 end) as business_days_late
     SQL
     conditions_sql = <<-SQL
-    (DATEDIFF(day, somast.forderdate, sorels.fduedate) > ?)
-    AND (sorels.flshipdate > sorels.fduedate)
-    AND (((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
-           DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) -
-          case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
-          case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > ?)
+    (DATEDIFF(day, [somast].[forderdate], [sorels].[fduedate]) > ?)
+    AND ([sorels].[flshipdate] > [sorels].[fduedate])
+    AND (((DATEDIFF(day, [sorels].[fduedate], [sorels].[flshipdate]) -
+           DATEDIFF(wk, [sorels].[fduedate], [sorels].[flshipdate]) * 2) -
+          case when DATEPART(dw, [sorels].[fduedate]) = 1 then 1 else 0 end +
+          case when DATEPART(dw, [sorels].[flshipdate]) = 1 then 1 else 0 end) > ?)
     SQL
     joins(:sales_order).
     select(select_sql).
     where([ conditions_sql, AppConfig.otd_lead_time, AppConfig.otd_grace_period_days ])
   }
   scope :due, -> (start_date, end_date) {
-    where ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
+    where ['[sorels].[fduedate] >= ? and [sorels].[fduedate] < ?', start_date, end_date]
   }
   scope :with_ids, -> (ids) {
-    where ['sorels.identity_column in (?)', ids]
+    where ['[sorels].[identity_column] in (?)', ids]
   }
 
   def days_late(date=nil)

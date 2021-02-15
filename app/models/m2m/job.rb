@@ -167,24 +167,24 @@ class M2m::Job < M2m::Base
   scope :released, -> { where(:fstatus => M2m::Status.released.name) }
   scope :status_open, -> { where([ 'jomast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.released.name, M2m::Status.completed.name] ]) }
   def self.job_family(jobno_prefix)
-    where ['jomast.fjobno like ?', jobno_prefix + '-%']
+    where ['[jomast].[fjobno] like ?', jobno_prefix + '-%']
   end
   def self.job_number_not(job_numbers)
-    where ['jomast.fjobno not in (?)', job_numbers]
+    where ['[jomast].[fjobno] not in (?)', job_numbers]
   end
   def self.status(statuses)
-    where ['jomast.fstatus in (?)', statuses ] 
+    where ['[jomast].[fstatus] in (?)', statuses ] 
   end
-  scope :by_date_desc, -> { order('jomast.fhold_dt desc') }
+  scope :by_date_desc, -> { order(:fhold_dt).reverse_order }
   scope :customers, -> (customers) {
     customer_numbers = customers.map(&:customer_number)
-    where [ 'jomast.fcus_id in (?)', customer_numbers ]
+    where [ '[jomast].[fcus_id] in (?)', customer_numbers ]
   }
   scope :released_since, -> (date) {
     date = DateParser.parse(date) if date.is_a?(String)
-    where [ 'jomast.fact_rel >= ?', date ]
+    where [ '[jomast].[fact_rel] >= ?', date ]
   }
-  scope :by_part_number, -> { order('jobmast.fpartno') }
+  scope :by_part_number, -> { order(:fpartno) }
   
   def status
     M2m::Status.find_by_name(self.fstatus)

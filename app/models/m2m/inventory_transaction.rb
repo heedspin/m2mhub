@@ -72,12 +72,12 @@ class M2m::InventoryTransaction < M2m::Base
   alias_attribute :to_bin, :ftobin
   alias_attribute :job_number, :ftojob
   scope :by_time, -> { order(:fctime_ts) }
-  scope :by_time_desc, -> { order('intran.fctime_ts desc') }
-  scope :outgoing, -> { where(['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]) }
-  scope :incoming, -> { where(['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]) }
-  scope :to_sales, -> { where('intran.ftoso != \'\'') }
+  scope :by_time_desc, -> { order('[intran].[fctime_ts] desc') }
+  scope :outgoing, -> { where(['[intran].[ftype] in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]) }
+  scope :incoming, -> { where(['[intran].[ftype] in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]) }
+  scope :to_sales, -> { where('[intran].[ftoso] != \'\'') }
   scope :between, -> (from_date, to_date) {
-    where [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
+    where [ '[intran].[fctime_ts] >= ? and [intran].[fctime_ts] < ?', from_date, to_date ]
   }
   scope :part_number, -> (part_number) {
     where :fpartno => part_number
@@ -90,7 +90,7 @@ class M2m::InventoryTransaction < M2m::Base
   }
 
   def self.to_or_from(job)
-    where ['intran.ftojob = ? or intran.ffromjob = ?', job.job_number, job.job_number]
+    where ['[intran].[ftojob] = ? or [intran].[ffromjob] = ?', job.job_number, job.job_number]
   end
 
   def type_transfer?

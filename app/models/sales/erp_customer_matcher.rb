@@ -10,7 +10,7 @@ class Sales::ErpCustomerMatcher
     @already_matched = 
       Sales::Customer.connection.select_rows('select distinct(erp_customer_id) from sales_customers').select(&:present?).map { |x| M2m::Customer.pad_customer_number(x.first) }
     @unmatched_erp = 
-      M2m::Customer.select('slcdpmx.identity_column, slcdpmx.fcustno, slcdpmx.fcompany').where(['slcdpmx.identity_column not in (?)', @already_matched]).to_a
+      M2m::Customer.select('[slcdpmx].[identity_column], [slcdpmx].[fcustno], [slcdpmx].[fcompany]').where(['[slcdpmx].[identity_column] not in (?)', @already_matched]).to_a
     log "Found #{@unmatched_erp.size} customer records."
     if @unmatched_erp.size > 0
       Sales::Customer.where('erp_customer_id = \'\' or erp_customer_id is null').each do |sales_customer|

@@ -138,10 +138,10 @@ class M2m::PurchaseOrderItem < M2m::Base
     where :pomast => { :fstatus => status_name.upcase }
   }
   def self.not_cancelled
-    where ['pomast.fstatus != ?', M2m::PurchaseOrderStatus.cancelled.name]
+    where ['[pomast].[fstatus] != ?', M2m::PurchaseOrderStatus.cancelled.name]
   end
-  scope :rev_order, -> { order('poitem.fpono desc, poitem.fitemno') }
-  scope :filtered, -> { where(['poitem.fmultirls != ? or poitem.frelsno != ?', 'Y', 0]) }
+  scope :rev_order, -> { order('[poitem].[fpono] desc, [poitem].[fitemno]') }
+  scope :filtered, -> { where(['[poitem].[fmultirls] != ? or [poitem].[frelsno] != ?', 'Y', 0]) }
   scope :vendor, -> (vendor) {
     vendor_number = vendor.is_a?(M2m::Vendor) ? vendor.vendor_number : vendor
     joins(:purchase_order).
@@ -149,11 +149,11 @@ class M2m::PurchaseOrderItem < M2m::Base
   }
   scope :last_promised_after, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
-    where [ 'poitem.flstpdate >= ?', date ]
+    where [ '[poitem].[flstpdate] >= ?', date ]
   }
   scope :by_last_promised, -> { order(:flstpdate) }
-  scope :by_date_received_desc, -> { order('poitem.frcpdate').reverse_order }
-  scope :by_po_date_desc, -> { order('pomast.forddate').reverse_order }
+  scope :by_date_received_desc, -> { order(:frcpdate).reverse_order }
+  scope :by_po_date_desc, -> { order(:forddate).reverse_order }
   scope :inspection_required, -> (ch) {
     if ch.is_a?(TrueClass)
       ch = 'Y'

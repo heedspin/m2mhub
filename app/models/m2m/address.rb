@@ -48,7 +48,7 @@ class M2m::Address < M2m::Base
   end
 
   def self.key(key)
-    where [ 'syaddr.fcaddrkey = ?', key ]
+    where [ '[syaddr].[fcaddrkey] = ?', key ]
   end
   
   alias_attribute :first_name, :fcfname

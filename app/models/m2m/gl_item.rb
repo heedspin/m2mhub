@@ -22,7 +22,7 @@ class M2m::GlItem < M2m::Base
   def self.post_dates(start_date, end_date)
     start_date = Date.parse(start_date) if start_date.is_a?(String)
     end_date = Date.parse(end_date) if end_date.is_a?(String)
-    where ['glitem.fddate >= ? and glitem.fddate < ?', start_date, end_date]
+    where ['[glitem].[fddate] >= ? and [glitem].[fddate] < ?', start_date, end_date]
   end
   scope :class_date, where(:fcclass => 'D')
   alias_attribute :date, :fddate

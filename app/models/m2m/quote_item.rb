@@ -68,7 +68,7 @@
 #
 
 class M2m::QuoteItem < M2m::Base
-  default_scope -> { order('qtitem.fenumber') }
+  default_scope -> { order(:fenumber) }
   self.table_name = 'qtitem'
   belongs_to :quote, :class_name => 'M2m::Quote', :foreign_key => :fquoteno, :primary_key => :fquoteno
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono, :primary_key => :fsono
@@ -88,7 +88,7 @@ class M2m::QuoteItem < M2m::Base
     where(:qtmast => { :fstatus => status_name.upcase })
   }
   
-  scope :rev_order, -> { order('qtitem.fsono desc, qtitem.fenumber') }
+  scope :rev_order, -> { order(:fsono).reverse_order }
 
 
   alias_attribute :quantity, :festqty

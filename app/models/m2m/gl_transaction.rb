@@ -39,7 +39,7 @@ class M2m::GlTransaction < M2m::Base
   scope :post_dates, -> (start_date, end_date) {
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-      where ['gltran.fddate >= ? and gltran.fddate < ?', start_date, end_date ]
+      where ['[gltran].[fddate] >= ? and [gltran].[fddate] < ?', start_date, end_date ]
   }
   def self.account_number(n)
     where :fcacctnum => n
@@ -51,20 +51,20 @@ class M2m::GlTransaction < M2m::Base
     where(:glmast => { :fccode => category_code })
   }
   # These are a bit of a mystery.  Could be "not_credit" and filter out M2m::AccountsReceivableSetup.customer_credit.
-  scope :not_balance_entries, -> { where(['gltran.ftrsdes != ?', 'BALANCE A/R']) }
+  scope :not_balance_entries, -> { where(['[gltran].[ftrsdes] != ?', 'BALANCE A/R']) }
   scope :not_receivables_or_credits, -> {
-    where ['gltran.fcacctnum not in (?)', [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
+    where ['[gltran].[fcacctnum] not in (?)', [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ]
   }
   scope :revenue_receivables_and_credits, -> {
     joins(:gl_account).
-    where(['glmast.fccode = ? or gltran.fcacctnum in (?)', 'R', [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ])
+    where(['[glmast].[fccode] = ? or [gltran].[fcacctnum] in (?)', 'R', [M2m::AccountsReceivableSetup.customer_credit, M2m::AccountsReceivableSetup.receivables] ])
   }
   scope :not_adjustments, -> {
     joins(:gl_account).
-    where(['gltran.fcacctnum != ?', M2m::AccountsReceivableSetup.adjustment])
+    where(['[gltran].[fcacctnum] != ?', M2m::AccountsReceivableSetup.adjustment])
   }
   scope :with_ids, -> (ids) {
-    where [ 'gltran.identity_column in (?)', ids ]
+    where [ '[gltran].[identity_column] in (?)', ids ]
   }
   
   def ref_object

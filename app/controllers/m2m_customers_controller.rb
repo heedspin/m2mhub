@@ -67,7 +67,7 @@ class M2mCustomersController < M2mhubController
       @search.fcompany = @search.fcompany.strip
     end
     if @search.fcompany.present?
-      @customers = M2m::Customer.name_like(@search.fcompany.strip).paginate(:page => params[:page], :per_page => 50).order('fcompany')
+      @customers = M2m::Customer.name_like(@search.fcompany.strip).paginate(:page => params[:page], :per_page => 50).order(:fcompany)
     end
     if @customers and (@customers.size == 1)
       redirect_to m2m_customer_url(@customers.first)

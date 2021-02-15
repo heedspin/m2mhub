@@ -20,7 +20,7 @@ class Sales::SalesOrderItemsController < M2mhubController
     end
     if @sales_order_items.present?
       @sales_order_items = @sales_order_items.paginate(:page => params[:page],
-                                                       :per_page => 20).order('soitem.fsono desc').includes(:sales_order)
+                                                       :per_page => 20).order('[soitem].[fsono] desc').includes(:sales_order)
     end
   end
 

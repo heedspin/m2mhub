@@ -48,6 +48,6 @@ class M2m::SalesPerson < M2m::Base
   end
 
   def self.active
-    where ['slspns.flastname not like ?', 'DO NOT USE%']
+    where ['[slspns].[flastname] not like ?', 'DO NOT USE%']
   end
 end

@@ -99,39 +99,39 @@ class M2m::Invoice < M2m::Base
   scope :invoice_dates, -> (start_date, end_date) {
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-    where [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
+    where [ '[armast].[finvdate] >= ? and [armast].[finvdate] < ?', start_date, end_date ]
   }
   scope :before, -> (end_date) {
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-    where [ 'armast.finvdate < ?', end_date ]
+    where [ '[armast].[finvdate] < ?', end_date ]
   }
   scope :after, -> (start_date) {
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
-    where [ 'armast.finvdate >= ?', start_date ]
+    where [ '[armast].[finvdate] >= ?', start_date ]
   }
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, -> { where([ 'armast.fcstatus != ? ', 'V' ]) }
-  scope :unpaid, -> { where([ 'armast.fcstatus = ?', ['U'] ]) }
-  scope :unpaid_or_partial, -> { where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :not_void, -> { where([ '[armast].[fcstatus] != ? ', 'V' ]) }
+  scope :unpaid, -> { where([ '[armast].[fcstatus] = ?', ['U'] ]) }
+  scope :unpaid_or_partial, -> { where([ '[armast].[fcstatus] in (?)', ['U', 'P'] ]) }
   scope :not_paid_before, -> (date) {
     date = DateParser.parse(date) if date.is_a?(String)
-    where [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
+    where [ '[armast].[fdfactdate] IS NULL or [armast].[fdfactdate] >= ?', date]
   }
   scope :by_date, -> { order(:finvdate) }
   scope :for_date, -> (date) {
-    where [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
+    where [ '[armast].[finvdate] >= ? and [armast].[finvdate] < ?', date, date.advance(:days => 1) ]
   }
   scope :invoice_number, -> (n) {
     # Zero pad.
     n = "%010d" % n if n.is_a?(Fixnum)
     where :fcinvoice => n
   }
-  scope :normal_type, -> { where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :normal_type, -> { where([ '[armast].[finvtype] = ?', 'N' ]) }
   def self.invoice_numbers(numbers)
-    where ['armast.fcinvoice in (?)', numbers]
+    where ['[armast].[fcinvoice] in (?)', numbers]
   end
   def self.part_number_like(part_number)
-    joins(:items).where(['aritem.fpartno like ?', '%' + part_number + '%'])
+    joins(:items).where(['[aritem].[fpartno] like ?', '%' + part_number + '%'])
   end
 
   def invoice_type

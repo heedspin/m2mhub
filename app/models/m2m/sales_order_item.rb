@@ -78,7 +78,7 @@
 #
 
 class M2m::SalesOrderItem < M2m::Base
-  default_scope -> { order('soitem.fenumber') }
+  default_scope -> { order(:fenumber) }
   self.table_name = 'soitem'
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => :fsono
   # has_many :releases, :class_name => 'M2m::SalesOrderRelease', :foreign_key => :fsono, :primary_key => :fsono, :conditions => 'sorels.fenumber = \'#{fenumber}\''
@@ -100,48 +100,48 @@ class M2m::SalesOrderItem < M2m::Base
 
   scope :part_number_like, -> (text) {
     text = '%' + (text || '') + '%'
-    where [ 'soitem.fcustpart like ? or soitem.fpartno like ?', text, text]
+    where [ '[soitem].[fcustpart] like ? or [soitem].[fpartno] like ?', text, text]
   }
   scope :order_number_like, -> (text) {
     text = '%' + (text || '') + '%'
     joins(:sales_order).
-    where([ 'somast.fcustpono like ? OR somast.fsono like ?', text, text])
+    where([ '[somast].[fcustpono] like ? OR [somast].[fsono] like ?', text, text])
   }
   scope :for_item, -> (item) {
     where :fpartno => item.part_number, :fpartrev => item.revision
   }
   scope :for_releases, -> (sales_order_releases) {
-    where ['soitem.fsono in (?)', sales_order_releases.map(&:sales_order_number).uniq]
+    where fsono: sales_order_releases.map(&:sales_order_number).uniq
   }
   scope :for_release, -> (release) {
     where :fsono => release.fsono, :fenumber => release.fenumber
   }
-  scope :by_sales_order_date_desc, -> { joins(:sales_order).order('somast.forderdate desc') }
+  scope :by_sales_order_date_desc, -> { joins(:sales_order).order('[somast].[forderdate] desc') }
   def self.customer(t)
     customer_number = M2m::Customer.fcustno_for(t)
-    joins(:sales_order).where([ 'somast.fcustno = ?', customer_number ])
+    joins(:sales_order).where([ '[somast].[fcustno] = ?', customer_number ])
   end
   scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
     joins(:sales_order).
-    where([ 'somast.fcustno in (?)', customer_numbers ])
+    where([ '[somast].[fcustno] in (?)', customer_numbers ])
   }
   scope :order_dates, -> (start_date, end_date) {
     start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
     end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
     joins(:sales_order).
-    where([ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ])
+    where([ '[somast].[forderdate] >= ? and [somast].[forderdate] < ?', start_date, end_date ])
   }
   def self.order_date(order_date)
     order_date = order_date.is_a?(String) ? DateParser.parse(order_date) : order_date
-    joins(:sales_order).where('somast.forderdate = ?', order_date)
+    joins(:sales_order).where('[somast].[forderdate] = ?', order_date)
   end
   def self.product_class(txt)
     where(:fprodcl => txt)
   end
   def self.ordered_since(date)
     date = DateParser.parse(date) if date.is_a?(String)
-    joins(:sales_order).where('somast.forderdate >= ?', date)
+    joins(:sales_order).where('[somast].[forderdate] >= ?', date)
   end
 
   def self.attach_to_releases(sales_order_releases)

@@ -20,11 +20,11 @@ class Sales::CommissionRatesController < M2mhubController
 
     @commission_rates = s.by_salesperson_and_customer.paginate(:page => params[:page], :per_page => 50)
     sales_person_ids = Sales::CommissionRate.connection.select_values('select distinct sales_person_id from commission_rates')
-    @sales_person_options = M2m::SalesPerson.where(['identity_column in (?)', sales_person_ids]).by_name.all
+    @sales_person_options = M2m::SalesPerson.where(['[identity_column] in (?)', sales_person_ids]).by_name.all
     customer_ids = Sales::CommissionRate.connection.select_values('select distinct customer_id from commission_rates')
-    @customer_options = M2m::Customer.where(['identity_column in (?)', customer_ids]).by_name.all
+    @customer_options = M2m::Customer.where(['[identity_column] in (?)', customer_ids]).by_name.all
     item_ids = Sales::CommissionRate.connection.select_values('select distinct item_id from commission_rates')
-    @item_options = M2m::Item.where(['identity_column in (?)', item_ids]).by_part_rev_desc.all
+    @item_options = M2m::Item.where(['[identity_column] in (?)', item_ids]).by_part_rev_desc.all
   end
 
   def new

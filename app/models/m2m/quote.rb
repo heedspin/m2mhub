@@ -82,10 +82,10 @@ class M2m::Quote < M2m::Base
   scope :status_closed,    -> { where(:fstatus => M2m::Status.closed.name) }
   scope :status_cancelled, -> { where(:fstatus => M2m::Status.cancelled.name) }
 
-  scope :by_quote_number_desc, -> { order('fquoteno desc') }
+  scope :by_quote_number_desc, -> { order(:fquoteno).reverse_order }
 
   scope :since, -> (day) {
-    where(['qtmast.fquotedate >= ?', day]).order('fquotedate desc, fquoteno desc')
+    where(['[qtmast].[fquotedate] >= ?', day]).order('[fquotedate] desc, [fquoteno] desc')
   }
 
   def terms

@@ -27,9 +27,9 @@ class M2m::InventoryLocation < M2m::Base
     where :fpartno => item.part_number, :fpartrev => item.revision
   }
   scope :with_part_numbers, -> (part_numbers) {
-    where [ 'inonhd.fpartno in (?)', part_numbers]
+    where [ '[inonhd].[fpartno] in (?)', part_numbers]
   }
-  scope :with_quantity_on_hand, -> { where 'inonhd.fonhand > 0' }
+  scope :with_quantity_on_hand, -> { where '[inonhd].[fonhand] > 0' }
   
   def location_description
     [self.flocation, self.bin].select(&:present?).join('-').titleize

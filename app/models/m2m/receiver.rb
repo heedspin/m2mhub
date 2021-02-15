@@ -64,24 +64,24 @@ class M2m::Receiver < M2m::Base
   scope :for_previous_day, -> (date) {
     date = date.is_a?(String) ? DateParser.parse(date) : date
     where([ 'rcmast.fdaterecv < ?', date.to_s(:database) ]).
-    order('rcmast.fdaterecv desc')
+    order(:fdaterecv).reverse_order
   }
-  scope :by_id_desc, -> { order('rcmast.freceiver desc') }
+  scope :by_id_desc, -> { order(:freceiver).reverse_order }
   scope :rma_number, -> (rma_number) {
     if rma_number.is_a?(Enumerable)
-      where ['rcmast.frmano in (?)', rma_number.map { |n| M2m::Rma.pad_rma_number(n) } ]
+      where ['[rcmast].[frmano] in (?)', rma_number.map { |n| M2m::Rma.pad_rma_number(n) } ]
     else
       where :frmano => M2m::Rma.pad_rma_number(rma_number)
     end
   }
   scope :purchase_order_number, -> (pono) {
     if pono.is_a?(Enumerable)
-      where ['rcmast.fpono in (?)', pono.map { |n| M2m::PurchaseOrder.pad_purchase_order_number(n) } ]
+      where ['[rcmast].[fpono] in (?)', pono.map { |n| M2m::PurchaseOrder.pad_purchase_order_number(n) } ]
     else
       where :fpono => M2m::PurchaseOrder.pad_purchase_order_number(pono)
     end
   }
-  scope :by_time_received_desc, -> { order('rcmast.fdaterecv desc') }
+  scope :by_time_received_desc, -> { order(:fdaterecv).reverse_order }
     
   def status
     # fcstatus are 'C' and 'I' but always show up received.

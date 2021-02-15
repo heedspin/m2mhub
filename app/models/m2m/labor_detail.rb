@@ -58,7 +58,7 @@ class M2m::LaborDetail < M2m::Base
   alias_attribute :end_time, :fedatetime
   
   scope :between, -> (start_date, end_date) {
-    where ['ladetail.fdate >= ? and ladetail.fdate < ?', start_date, end_date.advance(:days => 1)]
+    where ['[ladetail].[fdate] >= ? and [ladetail].[fdate] < ?', start_date, end_date.advance(:days => 1)]
   }
   scope :department, -> (department) {
     department = department.is_a?(M2m::Department) ? department : M2m::Department.find(department)

@@ -102,19 +102,19 @@ class M2m::VendorInvoice < M2m::Base
   def self.invoice_dates(start_date, end_date)
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-    where [ 'apmast.finvdate >= ? and apmast.finvdate < ?', start_date, end_date ]
+    where [ '[apmast].[finvdate] >= ? and [apmast].[finvdate] < ?', start_date, end_date ]
   end
   def self.invoice_number_like(text)
-    where ['apmast.fcinvoice like ?', '%' + text + '%']
+    where ['[apmast].[fcinvoice] like ?', '%' + text + '%']
   end
-  scope :by_date_desc, -> { order('apmast.finvdate desc') }
+  scope :by_date_desc, -> { order('[apmast].[finvdate] desc') }
   def self.vendor_number(num)
     where :fvendno => M2m::Vendor.pad_vendor_number(num)
   end
   def self.vendor_account_number(num)
     joins(:vendor).where(:apvend => { :fcacctnum => num.to_s })
   end
-  scope :not_void, -> { where('apmast.fcstatus != ?', 'V') }
+  scope :not_void, -> { where('[apmast].[fcstatus] != ?', 'V') }
   
   def item_invoice_key
     "#{self.vendor_number}#{self.invoice_number}"

@@ -69,7 +69,7 @@ class M2m::VendorInvoiceItem < M2m::Base
   scope :part_number, -> (pn) { where(:fpartno => pn) }
   scope :vendor, -> (v) {
     v = v.vendor_number if v.is_a?(M2m::Vendor)
-    where [ 'SUBSTRING(apitem.fcinvkey,1,6) = ?', v.to_s]
+    where [ 'SUBSTRING([apitem].[fcinvkey],1,6) = ?', v.to_s]
   }
   scope :invoice_key, -> (ik) {
     where :fcinvkey => ik

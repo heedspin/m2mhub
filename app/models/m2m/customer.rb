@@ -121,18 +121,18 @@ class M2m::Customer < M2m::Base
     end
   end
   scope :name_like, -> (text) {
-    where [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
+    where [ '[slcdpmx].[fcompany] like ?', '%' + (text || '') + '%' ]
   }
   scope :with_names, -> (names) {
-    where [ 'slcdpmx.fcompany in (?)', names ]
+    where [ '[slcdpmx].[fcompany] in (?)', names ]
   }
   scope :with_name, -> (txt) {
-    where [ 'slcdpmx.fcompany = ?', txt ]
+    where [ '[slcdpmx].[fcompany] = ?', txt ]
   }
   scope :by_name, -> { order(:fcompany) }
 
   scope :with_customer_numbers, -> (customer_numbers) {
-    where [ 'slcdpmx.fcustno in (?)', customer_numbers ]
+    where [ '[slcdpmx].[fcustno] in (?)', customer_numbers ]
   }
   scope :with_customer_number, -> (custno) {
     where :fcustno => M2m::Customer.fcustno_for(custno)
@@ -140,7 +140,7 @@ class M2m::Customer < M2m::Base
   scope :created_between, -> (start_date, end_date) {
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-    where [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
+    where [ '[slcdpmx].[fcreated] >= ? and [slcdpmx].[fcreated] < ?', start_date, end_date ]
   }
 
   def status

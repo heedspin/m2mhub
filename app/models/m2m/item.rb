@@ -279,26 +279,26 @@ class M2m::Item < M2m::Base
     where :fpartno => pn
   }
   scope :with_part_numbers, -> (part_numbers) {
-    where [ 'inmastx.fpartno in (?)', part_numbers.uniq]
+    where [ '[inmastx].[fpartno] in (?)', part_numbers.uniq]
   }
-  scope :by_rev_desc, -> { order('inmastx.frev').reverse_order }
-  scope :by_part_number, -> { order('inmastx.fpartno') }
-  scope :by_part_rev_desc, -> { order('inmastx.fpartno, inmastx.frev desc') }
+  scope :by_rev_desc, -> { order(:frev).reverse_order }
+  scope :by_part_number, -> { order(:fpartno) }
+  scope :by_part_rev_desc, -> { order('[inmastx].[fpartno], [inmastx].[frev] desc') }
   scope :company_or_vendor_part_number_like, -> (text) {
     text = M2m::Item.connection.quote('%' + (text.strip || '') + '%')
     joins <<-SQL
       INNER JOIN
-      ( SELECT distinct [inmastx].identity_column FROM [inmastx] 
-        LEFT JOIN [invend] ON invend.fpartno = inmastx.fpartno 
-        WHERE (inmastx.fpartno like #{text} OR invend.fvpartno like #{text}) ) as tmp1
-      on inmastx.identity_column = tmp1.identity_column
+      ( SELECT distinct [inmastx].[identity_column] FROM [inmastx] 
+        LEFT JOIN [invend] ON [invend].[fpartno] = [inmastx].[fpartno] 
+        WHERE ([inmastx].[fpartno] like #{text} OR invend.fvpartno like #{text}) ) as [tmp1]
+      on [inmastx].[identity_column] = [tmp1].[identity_column]
       SQL
   }
   scope :part_number_like, -> (text) {
-    where [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
+    where [ '[inmastx].[fpartno] like ?', '%' + (text.strip || '') + '%' ]
   }
   scope :id_in, -> (id_array) {
-    where [ 'inmastx.identity_column in (?)', id_array ]
+    where [ '[inmastx].[identity_column] in (?)', id_array ]
   }
   
   def self.latest(part_number)

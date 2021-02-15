@@ -55,11 +55,11 @@ class M2m::WorkCenter < M2m::Base
   alias_attribute :capacity_constraint, :flconstrnt
   
   scope :name_like, -> (names) {
-    likes = names.map { |n| "(inwork.fcpro_name like \'%#{n}%\')" }
+    likes = names.map { |n| "([inwork].[fcpro_name] like \'%#{n}%\')" }
     where likes.join(" OR ")
   }
   scope :work_center_ids, -> (ids) {
-    where ['inwork.fcpro_id in (?)', ids]
+    where ['[inwork].[fcpro_id] in (?)', ids]
   }
   
   def name

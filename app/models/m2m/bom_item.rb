@@ -45,7 +45,7 @@ class M2m::BomItem < M2m::Base
     where :fcomponent => item.part_number, :fcomprev => item.revision
   }
   scope :with_parent_part_numbers, -> (part_numbers) {
-    where ['inboms.fparent in (?)', part_numbers]
+    where ['[inboms].[fparent] in (?)', part_numbers]
   }
   # scope :current, {
   #   :joins => 'invcur on fcpartno = inboms.'

@@ -53,11 +53,11 @@ class M2m::Rma < M2m::Base
   alias_attribute :padded_rma_number, :fcrmano
 
   scope :between, -> (start_date, end_date) {
-    where [ 'syrmama.fdenterdate >= ? and syrmama.fdenterdate < ?', start_date, end_date ]
+    where [ '[syrmama].[fdenterdate] >= ? and [syrmama].[fdenterdate] < ?', start_date, end_date ]
   }
 
   scope :with_rma_numbers, -> (rma_numbers) {
-    where [ 'syrmama.fcrmano in (?)', rma_numbers ]
+    where [ '[syrmama].[fcrmano] in (?)', rma_numbers ]
   }
 
   def self.closed

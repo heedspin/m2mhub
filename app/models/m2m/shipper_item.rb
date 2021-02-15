@@ -29,7 +29,7 @@
 #
 
 class M2m::ShipperItem < M2m::Base
-  default_scope -> { order('shitem.fenumber') }
+  default_scope -> { order(:fenumber) }
   self.table_name = 'shitem'
 
   belongs_to :shipper, :class_name => 'M2m::Shipper', :foreign_key => :fshipno
@@ -74,18 +74,18 @@ class M2m::ShipperItem < M2m::Base
   end
   
   scope :for_sales_order, -> (sales_order) {
-    joins('inner join sorels on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)').
-    where([ 'sorels.fsono = ?', sales_order.id ])
+    joins('inner join [sorels] on [sorels].[fsono] = SUBSTRING([shitem].[fsokey],1,6) AND [sorels].[finumber] = SUBSTRING([shitem].[fsokey],7,3) AND [sorels].[frelease] = SUBSTRING([shitem].[fsokey],10,3)').
+    where([ '[sorels].[fsono] = ?', sales_order.id ])
   }
   scope :for_release, -> (release) {
-    joins('inner join sorels on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)').
-    where([ 'sorels.fsono = ? and sorels.frelease = ?', release.fsono, release.frelease ])
+    joins('inner join [sorels] on [sorels].[fsono] = SUBSTRING([shitem].[fsokey],1,6) AND [sorels].[finumber] = SUBSTRING([shitem].[fsokey],7,3) AND [sorels].[frelease] = SUBSTRING([shitem].[fsokey],10,3)').
+    where([ '[sorels].[fsono] = ? and [sorels].[frelease] = ?', release.fsono, release.frelease ])
     # 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'    
   }
-  scope :by_ship_date_desc, -> { joins(:shipper).order('shmast.fshipdate desc, shitem.fitemno') } 
+  scope :by_ship_date_desc, -> { joins(:shipper).order('[shmast].[fshipdate] desc, [shitem].[fitemno]') } 
   scope :shipped_after, -> (date) {
     joins(:shipper).
-    where([ 'shmast.fshipdate >= ?', date ])
+    where([ '[shmast].[fshipdate] >= ?', date ])
   }
 end
 

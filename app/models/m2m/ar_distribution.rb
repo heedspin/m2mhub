@@ -34,19 +34,19 @@ class M2m::ArDistribution < M2m::Base
   scope :dates, -> (start_date, end_date) {
     start_date = DateParser.parse(start_date) if start_date.is_a?(String)
     end_date = DateParser.parse(end_date) if end_date.is_a?(String)
-    where([ 'ardist.fddate >= ? and ardist.fddate < ?', start_date, end_date ])
+    where([ '[ardist].[fddate] >= ? and [ardist].[fddate] < ?', start_date, end_date ])
   }
   scope :gl_category, -> (category_code) {
     joins(:gl_account).
     where({ :glmast => { :fccode => category_code } })
   }
-  scope :not_cash, -> { where('ardist.fcrefname <> \'CSH\'') }
-  scope :non_zero, -> { where('ardist.fnamount != 0') }
+  scope :not_cash, -> { where('[ardist].[fcrefname] <> \'CSH\'') }
+  scope :non_zero, -> { where('[ardist].[fnamount] != 0') }
   scope :with_ids, -> (ids) {
-    where [ 'ardist.identity_column in (?)', ids ]
+    where [ '[ardist].[identity_column] in (?)', ids ]
   }
   def self.gl_description_like(text)
-    joins(:gl_account).where(['glmast.fcdescr like ?', '%' + text + '%'])
+    joins(:gl_account).where(['[glmast].[fcdescr] like ?', '%' + text + '%'])
   end
   
   def posted?

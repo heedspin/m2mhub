@@ -99,23 +99,23 @@ class M2m::SalesOrder < M2m::Base
   scope :status_closed, -> { where(fstatus: M2m::Status.closed.name) }
   scope :status_cancelled, -> { where(fstatus: M2m::Status.cancelled.name) }
   
-  scope :by_order_number_desc, -> { order('somast.fsono desc') }
-  scope :by_due_date, -> { order('somast.fduedate') }
-  scope :by_order_date, -> { order('somast.forderdate') }
+  scope :by_order_number_desc, -> { order(:fsono).reverse_order }
+  scope :by_due_date, -> { order(:fduedate) }
+  scope :by_order_date, -> { order(:forderdate) }
   
   scope :order_dates, -> (start_date, end_date) {
     start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
     end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
-    where [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
+    where [ '[somast].[forderdate] >= ? and [somast].[forderdate] < ?', start_date, end_date ]
   }
   scope :ordered_since, -> (day) {
-    where ['somast.forderdate >= ?', day]
+    where ['[somast].[forderdate] >= ?', day]
   }
   scope :with_order_number, -> (order_number) {
     where :fsono => order_number
   }
   scope :with_order_numbers, -> (order_numbers) {
-    where [ 'somast.fsono in (?)', order_numbers ]
+    where fsono: order_numbers
   }
   scope :prepayment_required, -> { where(flprofrqd: true) }
   scope :customer, -> (customer) {
@@ -124,7 +124,7 @@ class M2m::SalesOrder < M2m::Base
   }
   scope :customers, -> (customers) {
     customer_numbers = customers.map(&:customer_number)
-    where [ 'somast.fcustno in (?)', customer_numbers ]
+    where fcustno: customer_numbers
   }
   
   alias_attribute :order_number, :fsono

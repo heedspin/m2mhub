@@ -73,7 +73,7 @@ class M2m::InvoiceItem < M2m::Base
     where :fcrmakey => M2m::InvoiceItem.rma_key(rma_item)
   }
   scope :for_rma_items, -> (rma_items) {
-    where [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
+    where [ '[aritem].[fcrmakey] in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
   }
   scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
@@ -83,27 +83,27 @@ class M2m::InvoiceItem < M2m::Base
   scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
     joins(:invoice).
-    where([ 'armast.fcustno in (?)', customer_numbers ])
+    where([ '[armast].[fcustno] in (?)', customer_numbers ])
   }
   def self.invoice_dates(start_date, end_date)
     start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
     end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
-    joins(:invoice).where(['armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date])
+    joins(:invoice).where(['[armast].[finvdate] >= ? and [armast].[finvdate] < ?', start_date, end_date])
   end
   def self.post_dates(start_date, end_date)
     start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
     end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
-    joins(:invoice).where(['armast.fdgldate >= ? and armast.fdgldate < ?', start_date, end_date])
+    joins(:invoice).where(['[armast].[fdgldate] >= ? and [armast].[fdgldate] < ?', start_date, end_date])
   end
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, -> { joins(:invoice).where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :not_void, -> { joins(:invoice).where([ '[armast].[fcstatus] != ? ', 'V' ]) }
   scope :gl_category, -> (code) {
     joins(:sales_gl_account).
     where(:glmast => { :fccode => code })
   }
   # S - Sales, F - Freight, P - Proforma
   def self.item_types(*types)
-    where 'aritem.fctype in (?)', types
+    where '[aritem].[fctype] in (?)', types
   end
 
   def invoice_number
