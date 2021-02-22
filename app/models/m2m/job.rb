@@ -156,7 +156,11 @@ class M2m::Job < M2m::Base
   has_many :to_inventory_transactions, :class_name => 'M2m::InventoryTransaction', :foreign_key => :ftojob, :primary_key => 'fjobno'
 
   scope :for_item, -> (item) {
-    where :fpartno => item.part_number, :fpartrev => item.revision
+    if item
+      where :fpartno => item.part_number, :fpartrev => item.revision
+    else
+      where '1 = 0'
+    end
   }
   scope :with_job_number, -> (jobno) {
     where :fjobno => jobno
