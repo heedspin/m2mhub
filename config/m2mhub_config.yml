@@ -104,6 +104,8 @@ m2mhub_config: &m2mhub_config
       controllers: items/purchase_order_items
     item_boms:
       controllers: items/boms
+    item_bom_children:
+      controllers: items/bom_children
     vendor_summary:
       controllers: vendors
       action: show
