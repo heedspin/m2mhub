@@ -2,7 +2,7 @@
 
 <% if @bom_parents.size > 0 %>
 <h2>Parents (parts that include <%= item_part_number(@item) %>)</h2>
-<%= render 'items/list', :items => @bom_parents.map(&:item) %>
+<%= render 'items/list', :items => @bom_parents.map(&:parent_item) %>
 <% if @total_bom_parents > @bom_parents.size %>
 <p><%= link_to "Browse all #{cm @total_bom_parents} parents", item_bom_parents_url(@item) %></p>
 <% end %>
