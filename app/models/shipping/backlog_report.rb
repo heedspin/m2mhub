@@ -51,8 +51,8 @@ class Shipping::BacklogReport
       else
         correct_group = self.fob_group.nil? || self.fob_group.member?(r.sales_order.fob)
         correct_status = self.customer_status.nil? || (r.sales_order.customer.status == self.customer_status)
-        # debugger if Breakpoints.buc && (customer.fcstatus == 'H')
-        correct_group && correct_status
+        item_open = r.item.nil? ? true : r.item.try(:status_open?)
+        correct_group && correct_status && item_open
       end
     end
   end

@@ -37,7 +37,7 @@
       <th>Number</th>
       <th><%= M2m::SalesOrderRelease.human_attribute_name(:due_date) %></th>
       <th>Delivery<br />Committment</th>
-      <th>Status</th>
+      <th>Item Status</th>
       <th><%= AppConfig.short_name %> Part No.</th>
       <th>Description</th>
       <th>Cust Part No.</th>
@@ -53,7 +53,7 @@
       <td><%= r.sales_order_release_id %>-<%= r.sales_order_release_number %> <%= 'Master' if r.master? %></td>
       <td><%= r.due_date.to_s(:sales_date) %></td>
       <td><%= h r.fdelivery.strip %></td>
-      <td class="centered"><%= r.status %></td>
+      <td class="centered"><%= r.sales_order_item.fcItemStatus %></td>
       <% if r.item.nil? %>
       <td colspan="5"></td>
       <% else %>

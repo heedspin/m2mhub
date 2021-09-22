@@ -98,6 +98,10 @@ class M2m::SalesOrderItem < M2m::Base
   scope :status_closed,    -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.closed.name}) }
   scope :status_cancelled, -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.cancelled.name}) }
 
+  def status_open?
+    self.fcItemStatus.strip == 'Open'
+  end
+
   scope :part_number_like, -> (text) {
     text = '%' + (text || '') + '%'
     where [ '[soitem].[fcustpart] like ? or [soitem].[fpartno] like ?', text, text]
