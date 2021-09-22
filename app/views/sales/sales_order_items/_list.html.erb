@@ -18,7 +18,7 @@
 		<tr>
 			<td><%= link_to search_excerpt(i.sales_order.order_number, @search.try(:order_number)), sales_order_url(i.sales_order) %></td>
 			<td><%= cm i.quantity, :sales_order_quantity %></td>
-			<td><%= i.fcItemStatus.strip %></td>
+			<td><%= i.fcItemStatus.try(:strip) %></td>
 			<td><%= search_excerpt(i.sales_order.customer_po, @search.try(:order_number)) %></td>
 			<td><%= i.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to i.sales_order.customer_name, m2m_customer_number_url(i.sales_order.fcustno) %></td>

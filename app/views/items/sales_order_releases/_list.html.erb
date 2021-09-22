@@ -32,7 +32,7 @@
 			<td class="centered">
 				<%= cm r.quantity_shipped, :sales_order_quantity, 0 %> / <%= cm r.quantity, :sales_order_quantity %>
 			</td>
-			<td class="centered"><%= r.status %></td>
+			<td class="centered"><%= r.item.fcItemStatus.try(:strip) %></td>
 			<td class="centered"><%= r.sales_order.customer_po %></td>
 			<td><%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %></td>
 			<td><%= link_to_item r.item.item, r.item.part_number %></td>

@@ -38,7 +38,7 @@ $(function() {
 			<td><%= r.due_date.to_s(:sales_date) %></td>
 			<td><%= link_to r.sales_order.order_number, sales_order_url(r.sales_order) %></td>
 			<td><%= cm r.quantity, :sales_order_quantity %></td>
-			<td><%= r.status %></td>
+			<td><%= r.item.fcItemStatus.try(:strip) %></td>
 			<td><%= r.sales_order.customer_po %></td>
 			<td><%= link_to r.sales_order.customer_name, m2m_customer_number_url(r.sales_order.fcustno) %></td>
 			<td><%= link_to_item r.item.item., r.item.item.part_number %></td>
