@@ -95,55 +95,37 @@ class M2m::SalesOrder < M2m::Base
   has_many :invoices, :class_name => 'M2m::Invoice', :foreign_key => :fsono, :primary_key => :fsono
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => :fsoldby, :primary_key => :fsalespn
   
-  scope :status_open,      :conditions => { :fstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fstatus => M2m::Status.cancelled.name }
+  scope :status_open, -> { where(fstatus: M2m::Status.open.name) }
+  scope :status_closed, -> { where(fstatus: M2m::Status.closed.name) }
+  scope :status_cancelled, -> { where(fstatus: M2m::Status.cancelled.name) }
   
-  scope :by_order_number_desc, :order => 'somast.fsono desc'  
-  scope :by_due_date, :order => 'somast.fduedate'
-  scope :by_order_date, :order => 'somast.forderdate'
   
-  # scope :since, lambda { |day|
-  #   {
-  #     :conditions => ['somast.forderdate >= ?', day],
-  #     :include => [:releases, :items], 
-  #     :order => 'forderdate desc, fsono desc'
-  #   }
-  # }
-  scope :order_dates, lambda { |start_date, end_date|
-    start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
-    end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
-    {
-      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
-    }
+  scope :by_order_number_desc, -> { order('somast.fsono desc') }
+  scope :by_due_date, -> { order('somast.fduedate') }
+  scope :by_order_date, -> { order('somast.forderdate') }
+  
+  scope :order_dates, -> (start_date, end_date) {
+    start_date = start_date.is_a?(String) ? DateParser.parse(start_date) : start_date
+    end_date = end_date.is_a?(String) ? DateParser.parse(end_date) : end_date
+    where [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
   }
-  scope :ordered_since, lambda { |day|
-    {
-      :conditions => ['somast.forderdate >= ?', day],
-    }
+  scope :ordered_since, -> (day) {
+    where ['somast.forderdate >= ?', day]
   }
-  scope :with_order_number, lambda { |order_number|
-    {
-      :conditions => { :fsono => order_number }
-    }
+  scope :with_order_number, -> (order_number) {
+    where :fsono => order_number
   }
-  scope :with_order_numbers, lambda { |order_numbers|
-    {
-      :conditions => [ 'somast.fsono in (?)', order_numbers ]
-    }
+  scope :with_order_numbers, -> (order_numbers) {
+    where [ 'somast.fsono in (?)', order_numbers ]
   }
-  scope :prepayment_required, :conditions => { :flprofrqd => true }
-  scope :customer, lambda { |customer|
+  scope :prepayment_required, -> { where(flprofrqd: true) }
+  scope :customer, -> (customer) {
     customer_number = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :conditions => { :fcustno => customer_number }
-    }
+    where :fcustno => customer_number
   }
-  scope :customers, lambda { |customers|
+  scope :customers, -> (customers) {
     customer_numbers = customers.map(&:customer_number)
-    {
-      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
-    }
+    where [ 'somast.fcustno in (?)', customer_numbers ]
   }
   
   alias_attribute :order_number, :fsono

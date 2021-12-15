@@ -23,8 +23,8 @@
 #  fcompudrev       :string(3)        default(""), not null
 #  fcparudrev       :string(3)        default(""), not null
 #  fndbrmod         :integer          default(0), not null
-#  fOrigQty         :decimal(15, 5)   default(0.0), not null
 #  flFSSvc          :boolean          default(FALSE), not null
+#  fOrigQty         :decimal(15, 5)   default(0.0), not null
 #  fcSource         :string(10)       default(""), not null
 #
 
@@ -35,32 +35,24 @@ class M2m::BomItem < M2m::Base
 
   alias_attribute :quantity, :fqty
 
-  scope :with_parent_item, lambda { |item|
-    {
-      :conditions => { :fparent => item.part_number, :fparentrev => item.revision }
-    }
+  scope :with_parent_item, -> (item) {
+    where :fparent => item.part_number, :fparentrev => item.revision
   }
-  scope :with_parent, lambda { |part_number, revision|
-    {
-      :conditions => { :fparent => part_number, :fparentrev => revision }
-    }
+  scope :with_parent, -> (part_number, revision) {
+    where :fparent => part_number, :fparentrev => revision
   }
-  scope :with_child_item, lambda { |item|
-    {
-      :conditions => { :fcomponent => item.part_number, :fcomprev => item.revision }
-    }
+  scope :with_child_item, -> (item) {
+    where :fcomponent => item.part_number, :fcomprev => item.revision
   }
-  scope :with_parent_part_numbers, lambda { |part_numbers|
-    {
-      :conditions => ['inboms.fparent in (?)', part_numbers]
-    }
+  scope :with_parent_part_numbers, -> (part_numbers) {
+    where ['inboms.fparent in (?)', part_numbers]
   }
   # scope :current, {
   #   :joins => 'invcur on fcpartno = inboms.'
   # }
-  scope :just_item_columns, :select => [:fcomponent, :fcomprev, :fparent, :fparentrev]
-  scope :by_parent_part_rev, :order => [ :fparent, :fparentrev ]
-  scope :by_child_part_rev, :order => [ :fcomponent, :fcomprev ]
+  scope :just_item_columns, -> { select(:fcomponent, :fcomprev, :fparent, :fparentrev) }
+  scope :by_parent_part_rev, -> { order(:fparent, :fparentrev) }
+  scope :by_child_part_rev, -> { order(:fcomponent, :fcomprev) }
   
   def for_parent?(thing)
     (self.parent_part_number == thing.part_number) && (self.parent_revision == thing.revision)
