@@ -2,62 +2,64 @@
 #
 # Table name: sycslm
 #
-#  fcinqno          :string(6)        default(""), not null, primary key
-#  fcsono           :string(6)        default(""), not null
-#  fcpartno         :string(25)       default(""), not null
-#  fcpartrev        :string(3)        default(""), not null
+#  fcinqno          :varchar(10)      default(""), not null, primary key
+#  fcsono           :varchar(10)      default(""), not null
+#  fcpartno         :char(25)         default("                         "), not null
+#  fcpartrev        :char(3)          default("   "), not null
 #  fdinqdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fctype           :string(1)        default(""), not null
-#  fcstatus         :string(20)       default(""), not null
-#  fcenterby        :string(3)        default(""), not null
-#  fcauthby         :string(3)        default(""), not null
-#  fccustomer       :string(35)       default(""), not null
-#  fcvendor         :string(35)       default(""), not null
-#  fcphone          :string(20)       default(""), not null
-#  fcrmano          :string(25)       default(""), not null
-#  fcassignto       :string(3)        default(""), not null
+#  fctype           :char(1)          default(" "), not null
+#  fcstatus         :char(20)         default("                    "), not null
+#  fcenterby        :char(3)          default("   "), not null
+#  fcauthby         :char(3)          default("   "), not null
+#  fccustomer       :varchar(35)      default(""), not null
+#  fcvendor         :varchar(35)      default(""), not null
+#  fcphone          :char(20)         default("                    "), not null
+#  fcrmano          :char(25)         default("                         "), not null
+#  fcassignto       :char(3)          default("   "), not null
 #  fdestdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcreslvby        :string(3)        default(""), not null
+#  fcreslvby        :char(3)          default("   "), not null
 #  fdreslvdat       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcrevwby         :string(3)        default(""), not null
+#  fcrevwby         :char(3)          default("   "), not null
 #  fdrevwdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcusrchr1        :string(40)       default(""), not null
-#  fcusrchr2        :string(40)       default(""), not null
-#  fcusrchr3        :string(40)       default(""), not null
-#  fcusrchr4        :string(40)       default(""), not null
+#  fcusrchr1        :varchar(40)      default(""), not null
+#  fcusrchr2        :varchar(40)      default(""), not null
+#  fcusrchr3        :varchar(40)      default(""), not null
+#  fcusrchr4        :varchar(40)      default(""), not null
 #  fnusrqty1        :decimal(17, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
 #  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fccustno         :string(6)        default(""), not null
-#  fcvendno         :string(6)        default(""), not null
-#  fcseverity       :string(1)        default(""), not null
-#  fccategory       :string(1)        default(""), not null
-#  fcclass          :string(1)        default(""), not null
-#  fcrinscode       :string(4)        default(""), not null
-#  fcpono           :string(6)        default(""), not null
-#  fcfax            :string(20)       default(""), not null
-#  fcemail          :string(60)       default(""), not null
+#  fccustno         :char(6)          default("      "), not null
+#  fcvendno         :char(6)          default("      "), not null
+#  fcseverity       :char(1)          default(" "), not null
+#  fccategory       :char(1)          default(" "), not null
+#  fcclass          :char(1)          default(" "), not null
+#  fcrinscode       :char(4)          default("    "), not null
+#  fcpono           :varchar(10)      default(""), not null
+#  fcfax            :char(20)         default("                    "), not null
+#  fcemail          :varchar(60)      default(""), not null
 #  fnqty            :decimal(17, 5)   default(0.0), not null
-#  fcfname          :string(15)       default(""), not null
-#  fclname          :string(20)       default(""), not null
-#  fccustpo         :string(20)       default(""), not null
-#  fcsalecode       :string(7)        default(""), not null
-#  fccuststat       :string(1)        default(""), not null
-#  fcnextact        :string(1)        default(""), not null
-#  fcother          :string(1)        default(""), not null
-#  fcmeasure        :string(3)        default(""), not null
-#  fcother2         :string(20)       default(""), not null
-#  fclot            :string(20)       default(""), not null
+#  fcfname          :char(15)         default("               "), not null
+#  fclname          :char(20)         default("                    "), not null
+#  fccustpo         :char(20)         default("                    "), not null
+#  fcsalecode       :char(7)          default("       "), not null
+#  fcnextact        :char(1)          default(" "), not null
+#  fcother          :char(1)          default(" "), not null
+#  fcmeasure        :char(3)          default("   "), not null
+#  fcother2         :char(20)         default("                    "), not null
+#  fclot            :varchar(50)      default(""), not null
 #  fdincidate       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcwlitem         :string(6)        default(""), not null
-#  finumber         :string(3)        default(""), not null
-#  frelsno          :string(3)        default(""), not null
-#  timestamp_column :binary
+#  fcwlitem         :char(6)          default("      "), not null
+#  finumber         :char(3)          default("   "), not null
+#  frelsno          :char(3)          default("   "), not null
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null
-#  fminquiry        :text             default(""), not null
-#  fmusrmemo1       :text             default(""), not null
-#  fac              :string(20)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  fminquiry        :varchar_max(2147 default(""), not null
+#  fmusrmemo1       :varchar_max(2147 default(""), not null
+#  fac              :char(20)         default("                    "), not null
+#  fcudrev          :char(3)          default("   "), not null
+#  fccuststat       :char(1)
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::CustomerServiceLog < M2m::Base
@@ -68,13 +70,11 @@ class M2m::CustomerServiceLog < M2m::Base
   belongs_to_item :fcpartno, :fcpartrev
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
 
-  scope :status_open,      :conditions => { :fcstatus => M2m::Status.open.name }
-  scope :status_closed,    :conditions => { :fcstatus => M2m::Status.closed.name }
-  scope :status_cancelled, :conditions => { :fcstatus => M2m::Status.cancelled.name }
-  scope :between, lambda { |start_date, end_date|
-    { 
-      :conditions => [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
-    }
+  scope :status_open,      -> { where(:fcstatus => M2m::Status.open.name) }
+  scope :status_closed,    -> { where(:fcstatus => M2m::Status.closed.name) }
+  scope :status_cancelled, -> { where(:fcstatus => M2m::Status.cancelled.name) }
+  scope :between, -> (start_date, end_date) {
+    where [ 'sycslm.fdinqdate >= ? and sycslm.fdinqdate < ?', start_date, end_date ]
   }
 
   def status

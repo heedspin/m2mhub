@@ -2,23 +2,23 @@
 #
 # Table name: pqsumm
 #
-#  fcabc            :string(1)        default(""), not null
-#  fcavendno        :string(6)        default(""), not null
-#  fcavname         :string(35)       default(""), not null
-#  fcavuom          :string(3)        default(""), not null
-#  fccomment        :string(20)       default(""), not null
-#  fcgroup          :string(6)        default(""), not null
-#  fcpartdesc       :string(35)       default(""), not null
-#  fcpartno         :string(25)       default(""), not null
-#  fcpartrev        :string(3)        default(""), not null
-#  fcplanner        :string(3)        default(""), not null
-#  fcprcl           :string(2)        default(""), not null
-#  fcpvendno        :string(6)        default(""), not null
-#  fcpvname         :string(35)       default(""), not null
-#  fcpvuom          :string(3)        default(""), not null
-#  fcucdoc          :string(20)       default(""), not null
-#  fcucsrc          :string(1)        default(""), not null
-#  fcuom            :string(3)        default(""), not null
+#  fcabc            :char(1)          default(" "), not null
+#  fcavendno        :char(6)          default("      "), not null
+#  fcavname         :varchar(35)      default(""), not null
+#  fcavuom          :char(3)          default("   "), not null
+#  fccomment        :char(20)         default("                    "), not null
+#  fcgroup          :char(6)          default("      "), not null
+#  fcpartdesc       :varchar(35)      default(""), not null
+#  fcpartno         :char(25)         default("                         "), not null
+#  fcpartrev        :char(3)          default("   "), not null
+#  fcplanner        :char(3)          default("   "), not null
+#  fcprcl           :varchar(4)       default(""), not null
+#  fcpvendno        :char(6)          default("      "), not null
+#  fcpvname         :varchar(35)      default(""), not null
+#  fcpvuom          :char(3)          default("   "), not null
+#  fcucdoc          :char(20)         default("                    "), not null
+#  fcucsrc          :char(1)          default(" "), not null
+#  fcuom            :char(3)          default("   "), not null
 #  fdactdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdduedate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdgentime        :datetime         default(1900-01-01 00:00:00 UTC), not null
@@ -38,10 +38,12 @@
 #  fnunitcost       :decimal(17, 5)   default(0.0), not null
 #  fnnetavail       :decimal(17, 5)   default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
-#  fac              :string(20)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  timestamp_column :ss_timestamp
+#  fac              :char(20)         default("                    "), not null
+#  fcudrev          :char(3)          default("   "), not null
 #  fnonnetqty       :decimal(15, 5)   default(0.0), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::PurchaseQueueSummary < M2m::Base
@@ -80,11 +82,9 @@ class M2m::PurchaseQueueSummary < M2m::Base
   def build_note
     @note = Production::PurchaseQueueNote.new(:part_number => self.part_number, :revision => self.revision)
   end
-  scope :for_note, lambda { |note|
-    {
-      :conditions => { :fcpartno => note.part_number, :fcpartrev => note.revision }
-    }
+  scope :for_note, -> (note) {
+    where :fcpartno => note.part_number, :fcpartrev => note.revision
   }
   
-  scope :by_due_date, :order => :fdduedate
+  scope :by_due_date, -> { order(:fdduedate) }
 end

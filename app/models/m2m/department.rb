@@ -2,15 +2,17 @@
 #
 # Table name: prdept
 #
-#  fdeptno          :string(2)        default(""), not null
-#  fdeptdesc        :string(35)       default(""), not null
-#  fholaccno        :string(25)       default(""), not null
-#  fothaccno        :string(25)       default(""), not null
-#  fsickaccno       :string(25)       default(""), not null
-#  fvacaccno        :string(25)       default(""), not null
+#  fdeptno          :varchar(4)       default(""), not null
+#  fdeptdesc        :varchar(35)      default(""), not null
+#  fholaccno        :char(25)         default("                         "), not null
+#  fothaccno        :char(25)         default("                         "), not null
+#  fsickaccno       :char(25)         default("                         "), not null
+#  fvacaccno        :char(25)         default("                         "), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
-#  fac              :string(20)       default(""), not null
+#  timestamp_column :ss_timestamp
+#  fac              :char(20)         default("                    "), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::Department < M2m::Base

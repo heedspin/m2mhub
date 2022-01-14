@@ -2,87 +2,89 @@
 #
 # Table name: somast
 #
-#  fsono            :string(6)        default(""), not null, primary key
-#  fcustno          :string(6)        default(""), not null
-#  fcompany         :string(35)       default(""), not null
-#  fcity            :string(20)       default(""), not null
-#  fcustpono        :string(20)       default(""), not null
+#  fsono            :varchar(10)      default(""), not null, primary key
+#  fcustno          :char(6)          default("      "), not null
+#  fcompany         :varchar(35)      default(""), not null
+#  fcity            :char(20)         default("                    "), not null
+#  fcustpono        :char(20)         default("                    "), not null
 #  fackdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcanc_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fccurid          :string(3)        default(""), not null
-#  fcfactor         :decimal(17, 5)   default(0.0), not null
-#  fcfname          :string(15)       default(""), not null
-#  fcfromno         :string(25)       default("")
-#  fcfromtype       :string(5)        default(""), not null
-#  fcontact         :string(30)       default(""), not null
+#  fccurid          :char(3)          default("   "), not null
+#  fcfactor         :decimal(22, 10)  default(0.0), not null
+#  fcfname          :char(15)         default("               "), not null
+#  fcfromno         :char(25)         default("                         ")
+#  fcfromtype       :char(5)          default("     "), not null
+#  fcontact         :varchar(30)      default(""), not null
 #  fclos_dt         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcountry         :string(25)       default(""), not null
-#  fcusrchr1        :string(20)       default(""), not null
-#  fcusrchr2        :string(40)       default(""), not null
-#  fcusrchr3        :string(40)       default(""), not null
+#  fcountry         :char(25)         default("                         "), not null
+#  fcusrchr1        :char(20)         default("                    "), not null
+#  fcusrchr2        :varchar(40)      default(""), not null
+#  fcusrchr3        :varchar(40)      default(""), not null
 #  fdcurdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdisrate         :decimal(8, 3)    default(0.0), not null
-#  fdistno          :string(6)        default(""), not null
+#  fdistno          :char(6)          default("      "), not null
 #  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fduplicate       :boolean          default(FALSE), not null
 #  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  festimator       :string(3)        default(""), not null
-#  ffax             :string(20)       default(""), not null
-#  ffob             :string(20)       default(""), not null
-#  fnextenum        :string(3)        default(""), not null
-#  fnextinum        :string(3)        default(""), not null
+#  festimator       :char(3)          default("   "), not null
+#  ffax             :char(20)         default("                    "), not null
+#  ffob             :char(20)         default("                    "), not null
+#  fnextenum        :char(3)          default("   "), not null
+#  fnextinum        :char(3)          default("   "), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
 #  forderdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fordername       :string(35)       default(""), not null
+#  fordername       :varchar(65)      default(""), not null
 #  fordrevdt        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fpaytype         :string(1)        default(""), not null
-#  fphone           :string(20)       default(""), not null
+#  fpaytype         :char(1)          default(" "), not null
+#  fphone           :char(20)         default("                    "), not null
 #  fprint_dt        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fprinted         :boolean          default(FALSE), not null
 #  fsalcompct       :decimal(8, 3)    default(0.0), not null
 #  fsalecom         :boolean          default(FALSE), not null
-#  fshipvia         :string(20)       default(""), not null
-#  fshptoaddr       :string(4)        default(""), not null
-#  fsocoord         :string(3)        default(""), not null
-#  fsoldaddr        :string(4)        default(""), not null
-#  fsoldby          :string(3)        default(""), not null
-#  fsorev           :string(2)        default(""), not null
-#  fstate           :string(20)       default(""), not null
-#  fstatus          :string(20)       default(""), not null
-#  ftaxcode         :string(3)        default(""), not null
+#  fshipvia         :char(20)         default("                    "), not null
+#  fshptoaddr       :varchar(6)       default(""), not null
+#  fsocoord         :char(3)          default("   "), not null
+#  fsoldaddr        :varchar(6)       default(""), not null
+#  fsoldby          :char(3)          default("   "), not null
+#  fsorev           :char(2)          default("  "), not null
+#  fstate           :char(20)         default("                    "), not null
+#  fstatus          :char(20)         default("                    "), not null
+#  ftaxcode         :char(3)          default("   "), not null
 #  ftaxrate         :decimal(7, 3)    default(0.0), not null
-#  fterm            :string(4)        default(""), not null
-#  fterr            :string(10)       default(""), not null
-#  fzip             :string(10)       default(""), not null
+#  fterm            :char(4)          default("    "), not null
+#  fterr            :char(10)         default("          "), not null
+#  fzip             :char(10)         default("          "), not null
 #  flprofprtd       :boolean          default(FALSE), not null
 #  flprofrqd        :boolean          default(FALSE), not null
 #  fndpstrcvd       :decimal(17, 5)   default(0.0), not null
 #  fndpstrqd        :decimal(17, 5)   default(0.0), not null
 #  fdeurodate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
-#  fsalescode       :string(7)        default(""), not null
-#  fusercode        :string(7)        default(""), not null
+#  fsalescode       :char(7)          default("       "), not null
+#  fusercode        :char(7)          default("       "), not null
 #  fncancchrge      :decimal(17, 5)   default(0.0), not null
 #  flchgpnd         :boolean          default(FALSE), not null
-#  fllasteco        :string(25)       default(""), not null
-#  timestamp_column :binary
+#  fllasteco        :char(25)         default("                         "), not null
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null
-#  fackmemo         :text             default(""), not null
-#  fmstreet         :text             default(""), not null
-#  fmusrmemo1       :text             default(""), not null
-#  fccontkey        :string(10)       default(""), not null
+#  fackmemo         :varchar_max(2147 default(""), not null
+#  fmstreet         :varchar_max(2147 default(""), not null
+#  fmusrmemo1       :varchar_max(2147 default(""), not null
+#  fccontkey        :char(10)         default("          "), not null
 #  flcontract       :boolean          default(FALSE), not null
 #  fndbrmod         :integer          default(0), not null
-#  fccommcode       :string(10)       default(""), not null
+#  fccommcode       :char(10)         default("          "), not null
 #  fpriority        :integer          default(4), not null
-#  ContractNu       :string(10)       default(""), not null
-#  fbilladdr        :string(4)        default(""), not null
-#  OpportunNum      :string(6)        default(""), not null
+#  ContractNu       :varchar(10)      default(""), not null
+#  fbilladdr        :varchar(6)       default(""), not null
+#  OpportunNum      :varchar(10)      default(""), not null
 #  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  OppCrType        :string(3)        default(""), not null
-#  QuoteNumber      :string(6)        default(""), not null
+#  OppCrType        :char(3)          default("   "), not null
+#  QuoteNumber      :varchar(10)      default(""), not null
+#  contactnum       :varchar(6)       default(""), not null
+#  flpaybycc        :boolean          default(FALSE), not null
 #
 
 class M2m::SalesOrder < M2m::Base
@@ -99,8 +101,8 @@ class M2m::SalesOrder < M2m::Base
   scope :status_closed, -> { where(fstatus: M2m::Status.closed.name) }
   scope :status_cancelled, -> { where(fstatus: M2m::Status.cancelled.name) }
   
-  
   scope :by_order_number_desc, -> { order('somast.fsono desc') }
+  scope :by_order_number, -> { order :fsono }
   scope :by_due_date, -> { order('somast.fduedate') }
   scope :by_order_date, -> { order('somast.forderdate') }
   
@@ -118,6 +120,13 @@ class M2m::SalesOrder < M2m::Base
   scope :with_order_numbers, -> (order_numbers) {
     where [ 'somast.fsono in (?)', order_numbers ]
   }
+  scope :sono_before, -> (sono) {
+    where ['somast.fsono < ?', sono]
+  }
+  scope :sono_after, -> (sono) {
+    where ['somast.fsono > ?', sono]
+  }
+
   scope :prepayment_required, -> { where(flprofrqd: true) }
   scope :customer, -> (customer) {
     customer_number = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
@@ -143,7 +152,7 @@ class M2m::SalesOrder < M2m::Base
   end
   
   def total_price
-    self.items.to_a.sum { |i| i.total_price || 0.0 }
+    self.releases.to_a.sum { |i| i.total_price || 0.0 }
   end
   
   def status
@@ -160,7 +169,7 @@ class M2m::SalesOrder < M2m::Base
   end
 
   def self.attach_sales_orders(objects)
-    sales_orders = M2m::SalesOrder.with_order_numbers(objects.map(&:sales_order_number).uniq).scoped(:include => :items)
+    sales_orders = M2m::SalesOrder.with_order_numbers(objects.map(&:sales_order_number).uniq).includes(:items)
     sales_order_hash = {}
     sales_orders.each { |so| sales_order_hash[so.order_number] = so }
     objects.each do |o|
@@ -176,6 +185,13 @@ class M2m::SalesOrder < M2m::Base
   
   def self.pad_sales_order_number(txt)
     "%06d" % txt.to_i
+  end
+
+  def ship_to_address
+    @ship_to_address ||= self.customer.addresses.key(self.fshptoaddr).first
+  end
+  def bill_to_address
+    @bill_to_address ||= self.customer.addresses.key(self.fbilladdr).first
   end
 end
 

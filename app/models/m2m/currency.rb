@@ -2,37 +2,41 @@
 #
 # Table name: utcurr
 #
-#  FCCOUNTRY        :string(25)       not null
-#  FCCURID          :string(3)        not null
-#  FCCURNAME        :string(35)       not null
-#  FCDATEFOR        :string(10)       not null
-#  FCDATEMAR        :string(1)        not null
-#  FCDECCURR        :string(35)       not null
-#  FCDECSYM         :string(6)        not null
-#  FCDSEP           :string(1)        not null
-#  FCFAMOUNT        :string(20)       not null
-#  FCFCOSTPR        :string(20)       not null
-#  FCFNUMBER        :string(20)       not null
-#  FCFORDER         :string(20)       not null
-#  FCFPHONE         :string(20)       not null
-#  FCFSTATE         :string(20)       not null
-#  FCFTOTAMT        :string(25)       not null
-#  FCFTOTNUM        :string(25)       not null
-#  FCFZIP           :string(20)       not null
-#  FCLANG           :string(8)        not null
-#  FCSETCENT        :string(3)        not null
-#  FCSSN            :string(15)       not null
-#  FCSYMBOL         :string(6)        not null
-#  FCTSEP           :string(1)        not null
-#  FLEMU            :boolean          not null
-#  FNDEFAULT        :integer          not null
-#  FNNEGAMT         :integer          not null
-#  FNNEGNUM         :integer          not null
-#  FNNUMDEC         :integer          not null
-#  FNNUMUNITDEC     :integer          not null
-#  FNSYMBOL         :integer          not null
-#  identity_column  :integer          not null
-#  timestamp_column :binary
+#  flemu            :boolean
+#  fccountry        :string(25)
+#  fccurid          :string(3)
+#  fccurname        :string(35)
+#  fcfamount        :string(20)
+#  fcdatefor        :string(10)
+#  fcdatemar        :string(1)
+#  fcdsep           :string(1)
+#  fcfcostpr        :string(20)
+#  fcfnumber        :string(20)
+#  fcforder         :string(20)
+#  fcfphone         :string(20)
+#  fcfstate         :string(20)
+#  fcftotamt        :string(25)
+#  fcftotnum        :string(25)
+#  fcfzip           :string(20)
+#  fcsetcent        :string(3)
+#  fcsymbol         :nchar(6)         not null
+#  fctsep           :string(1)
+#  fndefault        :integer
+#  fnnegamt         :integer
+#  fnnegnum         :integer
+#  fnnumdec         :integer
+#  fnsymbol         :integer
+#  fcssn            :string(15)
+#  fnnumunitdec     :integer
+#  fcdeccurr        :string(35)
+#  fcdecsym         :nchar(6)         not null
+#  fclang           :string(8)
+#  identity_column  :integer          not null, primary key
+#  timestamp_column :ss_timestamp
+#  fcisocurid       :char(3)          not null
+#  flziprqd         :boolean          not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::Currency < M2m::Base

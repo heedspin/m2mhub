@@ -1,8 +1,8 @@
 class Quality::CustomerOtdReport
-  class Month
-    attr_accessor :date, :num_releases, :late_releases
-    def initialize(date)
-      @date = date
+  class VendorLates
+    attr_accessor :name, :num_releases, :late_releases
+    def initialize(name)
+      @name = name
       @num_releases = 0
       @late_releases = []
     end
@@ -20,6 +20,34 @@ class Quality::CustomerOtdReport
       end
     end
   end
+  class Month
+    attr_accessor :date, :num_releases, :late_releases
+    def initialize(date)
+      @date = date
+      @num_releases = 0
+      @late_releases = []
+      @vendor_lates = {}
+    end
+    def add_late_release(release)
+      @late_releases.push release
+      if vendor_name = release.item.vendors.first.try(:vendor).try(:name)
+        (@vendor_lates[vendor_name] ||= VendorLates.new(vendor_name)).add_late_release(release)
+      end
+    end
+    def num_late_releases
+      @late_releases.size
+    end
+    def percent_late
+      if (self.num_releases <= 0) or (self.num_releases < self.num_late_releases)
+        100
+      else
+        (self.num_late_releases.to_f / self.num_releases) * 100
+      end
+    end
+    def vendor_lates
+      @vendor_lates.values.sort_by(&:name)
+    end
+  end
 
   def initialize(args=nil)
     args ||= {}
@@ -29,9 +57,11 @@ class Quality::CustomerOtdReport
       @end_date = Date.current.advance(:days => 1)
     end
     @months = {}
+    @vendor_lates = {}
   end
   
   def run
+    # Get total releases by date.
     results = M2m::SalesOrderRelease.connection.select_rows <<-SQL
     select sorels.fduedate, count(*) 
     from sorels
@@ -44,12 +74,40 @@ class Quality::CustomerOtdReport
       due_date, count = result_row
       month_for(due_date).num_releases += count
     end
+    # Get total release by vendor
+    results = M2m::SalesOrderRelease.connection.select_rows <<-SQL
+    select apvend.fcompany, count(*) as total
+    from (
+    select sorels.identity_column, max(invend.identity_column) as invendid
+    from invend
+    left join sorels on sorels.fpartno = invend.fpartno and sorels.fpartrev = invend.fpartrev
+    where sorels.fduedate >= '#{@start_date.to_s(:db)}'
+      and sorels.fduedate < '#{@end_date.to_s(:db)}'
+    group by sorels.identity_column
+    ) subquery
+    left join invend on invend.identity_column = subquery.invendid
+    left join apvend on invend.fvendno = apvend.fvendno
+    group by apvend.fcompany
+    SQL
+    results.each do |result_row|
+      vendor_name, count = result_row
+      self.get_vendor_late(vendor_name).num_releases += count
+    end
+
     late_releases = M2m::SalesOrderRelease.shipped_late.due(@start_date, @end_date)
     M2m::SalesOrderItem.attach_to_releases(late_releases)
-    late_releases.each do |late_release|
-      month_for(late_release.due_date).add_late_release(late_release)
+    late_releases.each do |release|
+      if vendor_name = release.item.vendors.first.try(:vendor).try(:name)
+        month_for(release.due_date).add_late_release(release)
+        self.get_vendor_late(vendor_name).add_late_release(release)
+      end
     end
     true
+  end
+
+  def get_vendor_late(vendor_name)
+    vendor_name = vendor_name.try(:strip).try(:titleize) || 'No Company'
+    @vendor_lates[vendor_name] ||= VendorLates.new(vendor_name)
   end
 
   def ordered_months
@@ -79,6 +137,10 @@ class Quality::CustomerOtdReport
     else
       (self.num_late_releases.to_f / self.num_releases) * 100
     end
+  end
+
+  def vendor_lates
+    @vendor_lates.values.select { |vl| vl.num_late_releases > 0 }.sort_by(&:name)
   end
   
 end

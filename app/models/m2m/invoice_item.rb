@@ -3,50 +3,62 @@
 # Table name: aritem
 #
 #  fbkordqty        :decimal(15, 5)   default(0.0), not null
-#  fcinvoice        :string(20)       default(""), not null
-#  fcost            :decimal(, )      default(0.0), not null
-#  fctype           :string(1)        default(""), not null
-#  fcustno          :string(6)        default(""), not null
-#  fctaxcode        :string(10)       default(""), not null
-#  fcuserline       :string(10)       default(""), not null
-#  fdiscamt         :decimal(, )      default(0.0), not null
-#  fdisrate         :decimal(7, 2)    default(0.0), not null
-#  fincacc          :string(25)       default(""), not null
-#  fitem            :string(6)        default(""), not null
+#  fcinvoice        :char(20)         default("                    "), not null
+#  fcost            :money            default(0.0), not null
+#  fctype           :char(1)          default(" "), not null
+#  fcustno          :char(6)          default("      "), not null
+#  fctaxcode        :char(10)         default("          "), not null
+#  fcuserline       :char(10)         default("          "), not null
+#  fdiscamt         :money            default(0.0), not null
+#  fdisrate         :decimal(17, 5)   default(0.0), not null
+#  fincacc          :char(25)         default("                         "), not null
+#  fitem            :char(6)          default("      "), not null
 #  flcomm           :boolean          default(FALSE), not null
 #  flistaxabl       :boolean          default(FALSE), not null
-#  fmeasure         :string(3)        default(""), not null
+#  fmeasure         :char(3)          default("   "), not null
 #  fordqty          :decimal(15, 5)   default(0.0), not null
-#  fpartno          :string(25)       default(""), not null
-#  frev             :string(3)        default(""), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  frev             :char(3)          default("   "), not null
 #  fprice           :decimal(17, 5)   default(0.0), not null
-#  fprodcl          :string(2)        default(""), not null
-#  frecvkey         :string(9)        default(""), not null
-#  fsalesacc        :string(25)       default(""), not null
-#  fshipkey         :string(12)       default(""), not null
+#  fprodcl          :varchar(4)       default(""), not null
+#  frecvkey         :varchar(13)      default(""), not null
+#  fsalesacc        :char(25)         default("                         "), not null
+#  fshipkey         :varchar(16)      default(""), not null
 #  fshipqty         :decimal(15, 5)   default(0.0), not null
-#  fsokey           :string(12)       default(""), not null
-#  fsoldby          :string(3)        default(""), not null
-#  ftotprice        :decimal(, )      default(0.0), not null
-#  fdisceuramt      :decimal(, )      default(0.0), not null
-#  fdisctxnamt      :decimal(, )      default(0.0), not null
+#  fsokey           :varchar(16)      default(""), not null
+#  fsoldby          :char(3)          default("   "), not null
+#  ftotprice        :money            default(0.0), not null
+#  fdisceuramt      :money            default(0.0), not null
+#  fdisctxnamt      :money            default(0.0), not null
 #  feuroprice       :decimal(17, 5)   default(0.0), not null
-#  ftoteurprice     :decimal(, )      default(0.0), not null
-#  ftottxnprice     :decimal(, )      default(0.0), not null
+#  ftoteurprice     :money            default(0.0), not null
+#  ftottxnprice     :money            default(0.0), not null
 #  ftxnprice        :decimal(17, 5)   default(0.0), not null
 #  fljrdif          :boolean          default(FALSE), not null
 #  fncompct         :decimal(8, 3)    default(0.0), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fmdescript       :text             default(""), not null
-#  fac              :string(20)       default(""), not null
-#  fpbitem          :string(3)        default(""), not null
+#  fmdescript       :varchar_max(2147 default(""), not null
+#  fac              :char(20)         default("                    "), not null
+#  fpbitem          :char(3)          default("   "), not null
 #  fpbfinal         :boolean          default(FALSE), not null
-#  fcudrev          :string(3)        default(""), not null
-#  ContractNu       :string(10)       default(""), not null
-#  fnRestock        :decimal(, )      default(0.0), not null
-#  fnMiscamt        :decimal(, )      default(0.0), not null
-#  fcrmakey         :string(28)       default(""), not null
+#  fcudrev          :char(3)          default("   "), not null
+#  ContractNu       :varchar(10)      default(""), not null
+#  fnRestock        :money            default(0.0), not null
+#  fnMiscamt        :money            default(0.0), not null
+#  fcrmakey         :char(28)         default("                            "), not null
+#  fntxnmiscamt     :decimal(16, 5)   default(0.0), not null
+#  fntxnrestock     :decimal(16, 5)   default(0.0), not null
+#  FRECEIVER        :varchar(10)      default(""), not null
+#  FRECVITEMNO      :varchar(3)       default(""), not null
+#  FTAXITEMNO       :varchar(6)       default(""), not null
+#  FCSONO           :varchar(10)      default(""), not null
+#  FINUMBER         :varchar(3)       default(""), not null
+#  FRELEASE         :varchar(3)       default(""), not null
+#  FSHIPNO          :varchar(10)      default(""), not null
+#  FSHIPITEMNO      :varchar(6)       default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::InvoiceItem < M2m::Base
@@ -67,48 +79,50 @@ class M2m::InvoiceItem < M2m::Base
   alias_attribute :invoice_item_type, :fctype
   alias_attribute :sales_gl_account_number, :fincacc
 
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :revision, lambda { |r| where(:frev => r) }
-  scope :for_rma_item, lambda { |rma_item|
-    {
-      :conditions => { :fcrmakey => M2m::InvoiceItem.rma_key(rma_item) }
-    }
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :revision, -> (r) { where(:frev => r) }
+  scope :for_rma_item, -> (rma_item) {
+    where :fcrmakey => M2m::InvoiceItem.rma_key(rma_item)
   }
-  scope :for_rma_items, lambda { |rma_items|
-    {
-      :conditions => [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
-    }
+  scope :for_rma_items, -> (rma_items) {
+    where [ 'aritem.fcrmakey in (?)', rma_items.map { |ri| M2m::InvoiceItem.rma_key(ri) } ]
   }
-  scope :customer, lambda { |customer|
+  scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :joins => :invoice,
-      :conditions => { :armast => {:fcustno => custno} }
-    }
+    joins(:invoice).
+    where(:armast => {:fcustno => custno})
   }
-  scope :customers, lambda { |customer_numbers|
+  scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
-    {
-      :joins => :invoice,
-      :conditions => [ 'armast.fcustno in (?)', customer_numbers ]
-    }
+    joins(:invoice).
+    where([ 'armast.fcustno in (?)', customer_numbers ])
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) unless start_date.is_a?(Date)
-    end_date = Date.parse(end_date) unless end_date.is_a?(Date)
-    {
-      :joins => :invoice,
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
-  }
+  def self.invoice_dates(start_date, end_date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date])
+  end
+  def self.post_dates(start_date, end_date)
+    start_date = DateParser.parse(start_date) unless start_date.is_a?(Date)
+    end_date = DateParser.parse(end_date) unless end_date.is_a?(Date)
+    joins(:invoice).where(['armast.fdgldate >= ? and armast.fdgldate < ?', start_date, end_date])
+  end
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, :joins => :invoice, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
-  scope :gl_category, lambda { |code|
-    {
-      :joins => :sales_gl_account,
-      :conditions => { :glmast => { :fccode => code } }
-    }
+  scope :not_void, -> { joins(:invoice).where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid_or_partial, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :unpaid, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['U'] ]) }
+  scope :partial, -> { joins(:invoice).where([ 'armast.fcstatus in (?)', ['P'] ]) }
+  scope :normal_type, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :credit_memo, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'C' ]) }
+  scope :prepayment, -> { joins(:invoice).where([ 'armast.finvtype = ?', 'P' ]) }
+  scope :gl_category, -> (code) {
+    joins(:sales_gl_account).
+    where(:glmast => { :fccode => code })
   }
+  # S - Sales, F - Freight, P - Proforma
+  def self.item_types(*types)
+    where 'aritem.fctype in (?)', types
+  end
 
   def invoice_number
     self.fcinvoice.strip
@@ -187,5 +201,9 @@ class M2m::InvoiceItem < M2m::Base
   end
   def for_rma_item?(rma_item)
     self.rma_key.strip == M2m::InvoiceItem.rma_key(rma_item)
+  end
+
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self)
   end
 end

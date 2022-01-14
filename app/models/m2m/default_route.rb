@@ -2,8 +2,8 @@
 #
 # Table name: inrtgc
 #
-#  fpartno          :string(25)       default(""), not null
-#  fcpartrev        :string(3)        default(""), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  fcpartrev        :char(3)          default("   "), not null
 #  fbatch01         :integer          default(0), not null
 #  fbatch02         :integer          default(0), not null
 #  fbatch03         :integer          default(0), not null
@@ -49,14 +49,16 @@
 #  fsetupovrc       :decimal(17, 5)   default(0.0), not null
 #  fsetuptime       :decimal(14, 5)   default(0.0), not null
 #  fspq             :decimal(15, 5)   default(0.0), not null
-#  fstdrtg          :string(1)        default(""), not null
+#  fstdrtg          :char(1)          default(" "), not null
 #  fsubcost         :decimal(17, 5)   default(0.0), not null
 #  ftottime         :decimal(14, 5)   default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
-#  fac              :string(20)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  timestamp_column :ss_timestamp
+#  fac              :char(20)         default("                    "), not null
+#  fcudrev          :char(3)          default("   "), not null
 #  fndbrmod         :integer          default(0), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::DefaultRoute < M2m::Base

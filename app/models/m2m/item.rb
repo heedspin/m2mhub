@@ -2,21 +2,21 @@
 #
 # Table name: inmastx
 #
-#  fpartno          :string(25)       default(""), not null
-#  frev             :string(3)        default(""), not null
-#  fcstscode        :string(1)        default(""), not null
-#  fdescript        :string(35)       default(""), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  frev             :char(3)          default("   "), not null
+#  fcstscode        :char(1)          default(" "), not null
+#  fdescript        :varchar(35)      default(""), not null
 #  flchgpnd         :boolean          default(FALSE), not null
-#  fmeasure         :string(3)        default(""), not null
-#  fsource          :string(1)        default(""), not null
+#  fmeasure         :char(3)          default("   "), not null
+#  fsource          :char(1)          default(" "), not null
 #  fleadtime        :decimal(7, 1)    default(0.0), not null
 #  fprice           :decimal(17, 5)   default(0.0), not null
 #  fstdcost         :decimal(17, 5)   default(0.0), not null
 #  f2totcost        :decimal(17, 5)   default(0.0), not null
 #  flastcost        :decimal(17, 5)   default(0.0), not null
-#  flocate1         :string(14)       default(""), not null
-#  fbin1            :string(14)       default(""), not null
-#  f2costcode       :string(1)        default(""), not null
+#  flocate1         :char(14)         default("              "), not null
+#  fbin1            :char(14)         default("              "), not null
+#  f2costcode       :char(1)          default(" "), not null
 #  f2displcst       :decimal(17, 5)   default(0.0), not null
 #  f2dispmcst       :decimal(17, 5)   default(0.0), not null
 #  f2dispocst       :decimal(17, 5)   default(0.0), not null
@@ -25,22 +25,22 @@
 #  f2matlcost       :decimal(17, 5)   default(0.0), not null
 #  f2ovhdcost       :decimal(17, 5)   default(0.0), not null
 #  favgcost         :decimal(17, 5)   default(0.0), not null
-#  fbulkissue       :string(1)        default(""), not null
-#  fbuyer           :string(3)        default(""), not null
-#  fcalc_lead       :string(1)        default(""), not null
-#  fcbackflsh       :string(1)        default(""), not null
+#  fbulkissue       :char(1)          default(" "), not null
+#  fbuyer           :char(3)          default("   "), not null
+#  fcalc_lead       :char(1)          default(" "), not null
+#  fcbackflsh       :char(1)          default(" "), not null
 #  fcnts            :integer          default(0), not null
-#  fcopymemo        :string(1)        default(""), not null
-#  fcostcode        :string(1)        default(""), not null
-#  fcpurchase       :string(1)        default(""), not null
+#  fcopymemo        :char(1)          default(" "), not null
+#  fcostcode        :char(1)          default(" "), not null
+#  fcpurchase       :char(1)          default(" "), not null
 #  fcstperinv       :decimal(13, 9)   default(0.0), not null
 #  fdisplcost       :decimal(17, 5)   default(0.0), not null
 #  fdispmcost       :decimal(17, 5)   default(0.0), not null
 #  fdispocost       :decimal(17, 5)   default(0.0), not null
 #  fdispprice       :decimal(17, 5)   default(0.0), not null
 #  fdisptcost       :decimal(17, 5)   default(0.0), not null
-#  fdrawno          :string(25)       default(""), not null
-#  fdrawsize        :string(2)        default(""), not null
+#  fdrawno          :char(25)         default("                         "), not null
+#  fdrawsize        :char(2)          default("  "), not null
 #  fendqty1         :decimal(15, 5)   default(0.0), not null
 #  fendqty10        :decimal(17, 5)   default(0.0), not null
 #  fendqty11        :decimal(17, 5)   default(0.0), not null
@@ -53,73 +53,73 @@
 #  fendqty7         :decimal(17, 5)   default(0.0), not null
 #  fendqty8         :decimal(17, 5)   default(0.0), not null
 #  fendqty9         :decimal(17, 5)   default(0.0), not null
-#  fgroup           :string(6)        default(""), not null
-#  finspect         :string(1)        default(""), not null
+#  fgroup           :char(6)          default("      "), not null
+#  finspect         :char(1)          default(" "), not null
 #  flabcost         :decimal(17, 5)   default(0.0), not null
-#  flasteoc         :string(25)       default(""), not null
+#  flasteoc         :char(25)         default("                         "), not null
 #  flct             :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fllotreqd        :boolean          default(FALSE), not null
 #  fmatlcost        :decimal(17, 5)   default(0.0), not null
-#  fmeasure2        :string(3)        default(""), not null
+#  fmeasure2        :char(3)          default("   "), not null
 #  fnweight         :decimal(10, 3)   default(0.0), not null
 #  fovhdcost        :decimal(17, 5)   default(0.0), not null
-#  fprodcl          :string(2)        default(""), not null
+#  fprodcl          :varchar(4)       default(""), not null
 #  freordqty        :decimal(15, 5)   default(0.0), not null
 #  frevdt           :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  frolledup        :string(1)        default(""), not null
+#  frolledup        :char(1)          default(" "), not null
 #  fsafety          :decimal(15, 5)   default(0.0), not null
-#  fschecode        :string(6)        default(""), not null
+#  fschecode        :char(6)          default("      "), not null
 #  fuprodtime       :decimal(9, 3)    default(0.0), not null
 #  fyield           :decimal(8, 3)    default(0.0), not null
-#  fabccode         :string(1)        default(""), not null
+#  fabccode         :char(1)          default(" "), not null
 #  ftaxable         :boolean          default(FALSE), not null
-#  fcusrchr1        :string(20)       default(""), not null
-#  fcusrchr2        :string(40)       default(""), not null
-#  fcusrchr3        :string(40)       default(""), not null
+#  fcusrchr1        :char(20)         default("                    "), not null
+#  fcusrchr2        :varchar(40)      default(""), not null
+#  fcusrchr3        :varchar(40)      default(""), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
 #  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcdncfile        :string(80)       default(""), not null
-#  fccadfile1       :string(250)      default(""), not null
-#  fccadfile2       :string(250)      default(""), not null
-#  fccadfile3       :string(250)      default(""), not null
-#  fclotext         :string(1)        default(""), not null
+#  fcdncfile        :varchar(80)      default(""), not null
+#  fccadfile1       :varchar(250)     default(""), not null
+#  fccadfile2       :varchar(250)     default(""), not null
+#  fccadfile3       :varchar(250)     default(""), not null
+#  fclotext         :char(1)          default(" "), not null
 #  flexpreqd        :boolean          default(FALSE), not null
 #  fdlastpc         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fschedtype       :string(1)        default(""), not null
+#  fschedtype       :char(1)          default(" "), not null
 #  fldctracke       :boolean          default(FALSE), not null
 #  fddcrefdat       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fndctax          :decimal(17, 5)   default(0.0), not null
 #  fndcduty         :decimal(17, 5)   default(0.0), not null
 #  fndcfreigh       :decimal(17, 5)   default(0.0), not null
 #  fndcmisc         :decimal(17, 5)   default(0.0), not null
-#  fcratedisc       :string(1)        default(""), not null
+#  fcratedisc       :char(1)          default(" "), not null
 #  flconstrnt       :boolean          default(FALSE), not null
 #  flistaxabl       :boolean          default(FALSE), not null
-#  fcjrdict         :string(10)       default(""), not null
+#  fcjrdict         :char(10)         default("          "), not null
 #  flaplpart        :boolean          default(FALSE), not null
 #  flfanpart        :boolean          default(FALSE), not null
 #  fnfanaglvl       :integer          default(0), not null
-#  fcplnclass       :string(1)        default(""), not null
-#  fcclass          :string(12)       default(""), not null
-#  timestamp_column :binary
+#  fcplnclass       :char(1)          default(" "), not null
+#  fcclass          :char(12)         default("            "), not null
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fcomment         :text             default(""), not null
-#  fmusrmemo1       :text             default(""), not null
-#  fstdmemo         :text             default(""), not null
-#  fac              :string(20)       default("")
-#  sfac             :string(20)       default("")
+#  fcomment         :varchar_max(2147 default(""), not null
+#  fmusrmemo1       :varchar_max(2147 default(""), not null
+#  fstdmemo         :varchar_max(2147 default(""), not null
+#  fac              :char(20)         default("                    ")
+#  sfac             :char(20)         default("                    ")
 #  itcfixed         :decimal(17, 5)   default(0.0)
 #  itcunit          :decimal(17, 5)   default(0.0)
 #  fnPOnHand        :decimal(16, 5)   default(0.0), not null
 #  fnLndToMfg       :decimal(16, 5)   default(0.0), not null
 #  fiPcsOnHd        :integer          default(0), not null
-#  fcudrev          :string(3)        default(""), not null
+#  fcudrev          :char(3)          default("   "), not null
 #  fidims           :integer          default(0), not null
 #  fluseudrev       :boolean          default(FALSE), not null
 #  fndbrmod         :integer          default(0), not null
 #  flSendSLX        :boolean          default(FALSE), not null
-#  fcSLXProd        :string(12)       default(""), not null
+#  fcSLXProd        :char(12)         default("            "), not null
 #  flFSRtn          :boolean          default(FALSE), not null
 #  fnlatefact       :decimal(4, 2)    default(0.0), not null
 #  fnsobuf          :integer          default(0), not null
@@ -133,11 +133,14 @@
 #  fnHoldStoc       :decimal(4, 2)    default(0.0), not null
 #  ManualPlan       :boolean          default(FALSE), not null
 #  SchedDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  flocbfdef        :string(14)       default(""), not null
-#  fbinbfdef        :string(14)       default(""), not null
+#  flocbfdef        :char(14)         default("              "), not null
+#  fbinbfdef        :char(14)         default("              "), not null
 #  DockTime         :integer          default(0), not null
 #  fnifttime        :decimal(7, 1)    default(0.0), not null
 #  flSynchOn        :boolean          default(FALSE), not null
+#  fshipvia         :varchar(20)      default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 require 'm2m/belongs_to_item_group'
@@ -164,7 +167,7 @@ class M2m::Item < M2m::Base
   end
   
   def vendors
-    @vendors ||= M2m::InventoryVendor.for_item(self)
+    @vendors ||= M2m::InventoryVendor.for_item(self).order(:fpriority)
   end
   
   def part_number_revision
@@ -251,6 +254,14 @@ class M2m::Item < M2m::Base
   def total_cost
     self.send AppConfig.cost_method
   end
+
+  def allow_standard_cost_rollup?
+    self.fcostcode == 'R'
+  end
+
+  def allow_current_rolled_cost_rollup?
+    self.f2costcode == 'R'
+  end
   
   # def self.check
   #   errors = []
@@ -273,42 +284,38 @@ class M2m::Item < M2m::Base
     @revision ||= self.frev.strip
   end
 
-  scope :part_number, lambda { |pn| where(:fpartno => pn) }
-  scope :revision, lambda { |r| where(:frev => r) }
-  scope :with_part_number, lambda { |pn| 
-    {
-      :conditions => { :fpartno => pn }
-    } 
+  scope :part_number, -> (pn) { where(:fpartno => pn) }
+  scope :revision, -> (r) { where(:frev => r) }
+  scope :with_part_number, -> (pn) {
+    where :fpartno => pn
   }
-  scope :with_part_numbers, lambda { |part_numbers| 
-    {
-      :conditions => [ 'inmastx.fpartno in (?)', part_numbers.uniq ]
-    } 
+  scope :with_part_numbers, -> (part_numbers) {
+    where [ 'inmastx.fpartno in (?)', part_numbers.uniq]
   }
-  scope :by_rev_desc, :order => 'inmastx.frev desc'
-  scope :by_part_number, :order => 'inmastx.fpartno'
-  scope :by_part_rev_desc, :order => 'inmastx.fpartno, inmastx.frev desc'
-  scope :company_or_vendor_part_number_like, lambda { |text|
-    text = ActiveRecord::Base.quote_value('%' + (text.strip || '') + '%')
-    {
-      :joins => <<-SQL
+  scope :by_rev_desc, -> { order('inmastx.frev').reverse_order }
+  scope :by_part_number, -> { order('inmastx.fpartno') }
+  scope :by_part_rev_desc, -> { order('inmastx.fpartno, inmastx.frev desc') }
+  scope :company_or_vendor_part_number_like, -> (text) {
+    text = M2m::Item.connection.quote('%' + (text.strip || '') + '%')
+    joins <<-SQL
       INNER JOIN
       ( SELECT distinct [inmastx].identity_column FROM [inmastx] 
         LEFT JOIN [invend] ON invend.fpartno = inmastx.fpartno 
-        WHERE (inmastx.fpartno like N#{text} OR invend.fvpartno like N#{text}) ) as tmp1
+        WHERE (inmastx.fpartno like #{text} OR invend.fvpartno like #{text}) ) as tmp1
       on inmastx.identity_column = tmp1.identity_column
       SQL
-    }
   }
-  scope :part_number_like, lambda { |text|
-    {
-      :conditions => [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
-    }
+  scope :part_number_like, -> (text) {
+    where [ 'inmastx.fpartno like ?', '%' + (text.strip || '') + '%' ]
   }
-  scope :id_in, lambda { |id_array|
-    {
-      :conditions => [ 'inmastx.identity_column in (?)', id_array ]
-    }
+  scope :id_in, -> (id_array) {
+    where [ 'inmastx.identity_column in (?)', id_array ]
+  }
+  scope :inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_inventory_item_class_keys
+  }
+  scope :non_inventory_items, -> {
+    where fprodcl: M2m::ProductClass.all_non_inventory_item_class_keys
   }
   
   def self.latest(part_number)
@@ -327,7 +334,7 @@ class M2m::Item < M2m::Base
   end
 
   def self.attach_items(objects, items=nil)
-    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number))
+    items ||= M2m::Item.with_part_numbers(objects.map(&:part_number).uniq)
     items_hash = {}
     items.each { |item| items_hash[(item.part_number || '') + '-' + (item.revision || '')] = item }
     result = []
@@ -402,5 +409,26 @@ class M2m::Item < M2m::Base
   #   end
   #   @bom_parents
   # end
+
+  # For NS export
+  def preferred_location
+    if self.flocate1.present?
+      self.flocate1.strip
+    elsif first_location = self.locations.first
+      first_location.flocation.strip
+    else
+      nil
+    end
+  end
+
+  def preferred_bin
+    if self.fbin1.present?
+      self.fbin1.strip
+    elsif first_location = self.locations.first
+      first_location.fbinno.strip
+    else
+      nil
+    end
+  end
 end
 

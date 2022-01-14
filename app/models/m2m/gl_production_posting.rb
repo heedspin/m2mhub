@@ -2,29 +2,33 @@
 #
 # Table name: ocdist
 #
-#  fcacctnum        :string(25)       default(""), not null
-#  fcomment         :string(45)       default(""), not null
-#  fcrefclass       :string(1)        default(""), not null
-#  fcrefname        :string(4)        default(""), not null
-#  fcstatus         :string(1)        default(""), not null
+#  fcacctnum        :char(25)         default("                         "), not null
+#  fcomment         :varchar_max(2147 default(""), not null
+#  fcrefclass       :char(1)          default(" "), not null
+#  fcrefname        :char(4)          default("    "), not null
+#  fcstatus         :char(1)          default(" "), not null
 #  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcuser_id        :string(4)        default(""), not null
+#  fcuser_id        :varchar(35)      default(""), not null
 #  fdate            :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fjob_so          :string(15)       default(""), not null
+#  fjob_so          :varchar(20)      default(""), not null
 #  fnamount         :decimal(17, 5)   default(0.0), not null
-#  fpartno          :string(25)       default(""), not null
-#  fcpartrev        :string(3)        default(""), not null
-#  frcv_ship        :string(6)        default(""), not null
-#  fcjosplt         :string(1)        default(""), not null
-#  fccurid          :string(3)        default(""), not null
-#  fcfactor         :decimal(17, 5)   default(0.0), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  fcpartrev        :char(3)          default("   "), not null
+#  frcv_ship        :varchar(10)      default(""), not null
+#  fcjosplt         :char(1)          default(" "), not null
+#  fccurid          :char(3)          default("   "), not null
+#  fcfactor         :decimal(22, 10)  default(0.0), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
 #  fneuroamt        :decimal(17, 5)   default(0.0), not null
 #  fntxnamt         :decimal(17, 5)   default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
-#  fac              :string(20)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  timestamp_column :ss_timestamp
+#  fac              :char(20)         default("                    "), not null
+#  fcudrev          :char(3)          default("   "), not null
+#  fdtrandate       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  frcv_shipItmno   :varchar(6)       default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::GlProductionPosting < M2m::Base

@@ -3,35 +3,35 @@
 # Table name: syphon
 #
 #  fllongdist       :boolean          default(FALSE), not null
-#  fcfax            :string(25)       default(""), not null
-#  fcclass          :string(3)        default(""), not null
-#  fcemail          :string(60)       default(""), not null
-#  fcextensio       :string(6)        default(""), not null
-#  fcnumber         :string(25)       default(""), not null
-#  fcsourceid       :string(6)        default(""), not null
-#  fcs_alias        :string(10)       default(""), not null
-#  fcbesttime       :string(10)       default(""), not null
-#  fccurid          :string(3)        default(""), not null
-#  fcfname          :string(15)       default(""), not null
-#  fcontact         :string(20)       default(""), not null
-#  fcrange          :string(10)       default(""), not null
-#  fsalute          :string(5)        default(""), not null
-#  fctitle          :string(25)       default(""), not null
-#  fccountry        :string(25)       default(""), not null
-#  timestamp_column :binary
+#  fcfax            :char(25)         default("                         "), not null
+#  fcclass          :char(3)          default("   "), not null
+#  fcemail          :varchar(100)     default(""), not null
+#  fcextensio       :char(6)          default("      "), not null
+#  fcnumber         :char(25)         default("                         "), not null
+#  fcsourceid       :char(6)          default("      "), not null
+#  fcs_alias        :char(10)         default("          "), not null
+#  fcbesttime       :char(10)         default("          "), not null
+#  fccurid          :char(3)          default("   "), not null
+#  fcfname          :char(15)         default("               "), not null
+#  fcontact         :char(20)         default("                    "), not null
+#  fcrange          :char(10)         default("          "), not null
+#  fsalute          :char(5)          default("     "), not null
+#  fctitle          :char(25)         default("                         "), not null
+#  fccountry        :char(25)         default("                         "), not null
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fmnotes          :text             default(""), not null
+#  fmnotes          :varchar_max(2147 default(""), not null
 #  fncrmmod         :integer          default(0), not null
-#  fccrmcntct       :string(12)       default(""), not null
-#  Number           :string(6)        default("0"), not null
-#  PhoneWork        :string(20)       default(""), not null
-#  PhoneHome        :string(20)       default(""), not null
-#  PhoneMobile      :string(20)       default(""), not null
-#  Address          :text             default(""), not null
-#  City             :string(20)       default(""), not null
-#  State            :string(20)       default(""), not null
-#  PostalCode       :string(10)       default(""), not null
-#  URL              :string(100)      default(""), not null
+#  fccrmcntct       :varchar(12)      default(""), not null
+#  Number           :char(6)          default("0     "), not null
+#  PhoneWork        :varchar(20)      default(""), not null
+#  PhoneHome        :varchar(20)      default(""), not null
+#  PhoneMobile      :varchar(20)      default(""), not null
+#  Address          :varchar_max(2147 default(""), not null
+#  City             :varchar(20)      default(""), not null
+#  State            :varchar(20)      default(""), not null
+#  PostalCode       :varchar(10)      default(""), not null
+#  URL              :varchar(100)     default(""), not null
 #  IsPrimary        :boolean          default(FALSE), not null
 #  CreatedDate      :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  ModifiedDate     :datetime         default(1900-01-01 00:00:00 UTC), not null
@@ -41,7 +41,10 @@
 class M2m::Contact < M2m::Base
   self.table_name = 'syphon'
   include ActionView::Helpers::NumberHelper
-  
+
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fcsourceid, :primary_key => :fcustno
+  belongs_to :vendor, :class_name => 'M2m::Vendor', :foreign_key => :fcsourceid, :primary_key => :fvendno
+
   alias_attribute :primary, :IsPrimary
   alias_attribute :work_phone, :PhoneWork
   alias_attribute :work_fax, :fcfax
@@ -61,7 +64,10 @@ class M2m::Contact < M2m::Base
     self.fcfname.titleize.strip
   end
   def last_name
-    self.fcontact.titleize.strip
+    self.fcontact.strip.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').titleize
+  end
+  def title
+    self.fctitle.titleize.strip
   end
   def name
     [self.first_name, self.last_name].join(' ').strip
@@ -81,7 +87,7 @@ class M2m::Contact < M2m::Base
     self.save
   end
   
-  scope :primary, :conditions => { :IsPrimary => true }
+  scope :primary, -> { where(IsPrimary: true) }
 
   def phone_number_array
     result = []
@@ -104,4 +110,15 @@ class M2m::Contact < M2m::Base
   m2m_id_setter :fcsourceid, 6  
   validates_presence_of :first_name, :last_name
   
+  scope :valid, -> {
+    where ['fcsourceid != ?', '']
+  }
+  scope :customer_contact, -> { 
+    where fcs_alias: 'SLCDPM'
+  }
+  scope :vendor_contact, -> { 
+    where fcs_alias: 'APVEND' 
+  }
+
+  include M2m::ParsedWorkAddress
 end

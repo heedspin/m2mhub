@@ -39,7 +39,7 @@ module M2mhub::RequireLogin
 
   def self.included(base)
     base.class_eval <<-RUBY
-    before_filter :require_login
+    before_action :require_login
     RUBY
   end
   

@@ -62,5 +62,8 @@ class M2m::RmaItem < M2m::Base
   def invoice_amount
     self.invoice_items.sum(&:amount)
   end
-  
+
+  scope :for_rma, -> (rma) {
+    where fcrmano: rma.fcrmano
+  }  
 end

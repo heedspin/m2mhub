@@ -2,90 +2,96 @@
 #
 # Table name: slcdpmx
 #
-#  fcustno          :string(6)        default(""), not null
-#  fcompany         :string(35)       default(""), not null
-#  fcity            :string(20)       default(""), not null
-#  fphone           :string(20)       default(""), not null
+#  fcustno          :char(6)          default("      "), not null
+#  fcompany         :varchar(35)      default(""), not null
+#  fcity            :char(20)         default("                    "), not null
+#  fphone           :char(20)         default("                    "), not null
 #  fann_sales       :integer          default(0), not null
 #  fbacklog         :decimal(16, 4)   default(0.0), not null
 #  fbalnxt          :decimal(17, 5)   default(0.0), not null
-#  fcfname          :string(15)       default(""), not null
-#  fcontact         :string(20)       default(""), not null
-#  fcountry         :string(25)       default(""), not null
+#  fcfname          :char(15)         default("               "), not null
+#  fcontact         :char(20)         default("                    "), not null
+#  fcountry         :char(25)         default("                         "), not null
 #  fcreated         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fcrlimit         :integer          default(0), not null
-#  fcshipto         :string(4)        default(""), not null
-#  fcsoldto         :string(4)        default(""), not null
-#  fcurrency        :string(3)        default(""), not null
-#  fcusrchr1        :string(20)       default(""), not null
-#  fcusrchr2        :string(40)       default(""), not null
-#  fcusrchr3        :string(40)       default(""), not null
+#  fcshipto         :varchar(6)       default(""), not null
+#  fcsoldto         :varchar(6)       default(""), not null
+#  fcurrency        :char(3)          default("   "), not null
+#  fcusrchr1        :char(20)         default("                    "), not null
+#  fcusrchr2        :varchar(40)      default(""), not null
+#  fcusrchr3        :varchar(40)      default(""), not null
 #  fdbdate          :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fdbrate          :string(4)        default(""), not null
+#  fdbrate          :char(4)          default("    "), not null
 #  fdisrate         :decimal(8, 3)    default(0.0), not null
-#  fdistno          :string(6)        default(""), not null
+#  fdistno          :char(6)          default("      "), not null
 #  fdusrdate1       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fllongdist       :boolean          default(FALSE), not null
-#  ffax             :string(20)       default(""), not null
+#  ffax             :char(20)         default("                    "), not null
 #  ffincharge       :boolean          default(FALSE), not null
-#  ffob             :string(20)       default(""), not null
+#  ffob             :char(20)         default("                    "), not null
 #  fmtdamtnxt       :decimal(17, 5)   default(0.0), not null
 #  fmtdsamt         :decimal(17, 5)   default(0.0), not null
 #  fnardayslt       :decimal(17, 5)   default(0.0), not null
 #  fno_employ       :integer          default(0), not null
-#  fcpaydex         :string(3)        default(""), not null
+#  fcpaydex         :char(3)          default("   "), not null
 #  fnusrcur1        :decimal(17, 5)   default(0.0), not null
 #  fnusrqty1        :decimal(15, 5)   default(0.0), not null
-#  fpaytype         :string(1)        default(""), not null
-#  fpriority        :string(2)        default(""), not null
+#  fpaytype         :char(1)          default(" "), not null
+#  fpriority        :char(2)          default("  "), not null
 #  fsalcompct       :decimal(8, 3)    default(0.0), not null
-#  fsalespn         :string(3)        default(""), not null
-#  fsicno1          :string(4)        default(""), not null
-#  fsicno2          :string(4)        default(""), not null
-#  fshipvia         :string(20)       default(""), not null
+#  fsalespn         :char(3)          default("   "), not null
+#  fsicno1          :char(4)          default("    "), not null
+#  fsicno2          :char(4)          default("    "), not null
+#  fshipvia         :char(20)         default("                    "), not null
 #  fsince           :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fstate           :string(20)       default(""), not null
-#  ftaxcode         :string(10)       default(""), not null
-#  ftaxexempt       :string(15)       default(""), not null
+#  fstate           :char(20)         default("                    "), not null
+#  ftaxcode         :char(10)         default("          "), not null
+#  ftaxexempt       :char(15)         default("               "), not null
 #  ftaxrate         :decimal(7, 3)    default(0.0), not null
-#  fterm            :string(4)        default(""), not null
-#  fterr            :string(10)       default(""), not null
-#  ftype            :string(1)        default(""), not null
-#  fusercode        :string(7)        default(""), not null
+#  fterm            :char(4)          default("    "), not null
+#  fterr            :char(10)         default("          "), not null
+#  ftype            :char(1)          default(" "), not null
+#  fusercode        :char(7)          default("       "), not null
 #  fytdsamt         :decimal(16, 4)   default(0.0), not null
-#  fyr_estab        :string(4)        default(""), not null
-#  fzip             :string(10)       default(""), not null
-#  fcstatus         :string(1)        default(""), not null
+#  fyr_estab        :char(4)          default("    "), not null
+#  fzip             :char(10)         default("          "), not null
+#  fcstatus         :char(1)          default(" "), not null
 #  flistaxabl       :boolean          default(FALSE), not null
-#  fcemail          :string(60)       default(""), not null
+#  fcemail          :varchar(100)     default(""), not null
 #  flisfcast        :boolean          default(FALSE), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fbus_type        :text             default(""), not null
-#  fmnotes          :text             default(""), not null
-#  fmstreet         :text             default(""), not null
-#  fmusrmemo1       :text             default(""), not null
+#  fbus_type        :varchar_max(2147 default(""), not null
+#  fmnotes          :varchar_max(2147 default(""), not null
+#  fmstreet         :varchar_max(2147 default(""), not null
+#  fmusrmemo1       :varchar_max(2147 default(""), not null
 #  fncrmmod         :integer          default(0), not null
-#  fccrmacct        :string(12)       default(""), not null
+#  fccrmacct        :varchar(12)      default(""), not null
 #  fscmprty         :integer          default(4), not null
-#  fdisttype        :string(10)       default("Email"), not null
-#  SubType          :string(15)       default(""), not null
+#  fdisttype        :varchar(10)      default("Email"), not null
+#  SubType          :varchar(15)      default(""), not null
 #  flEdited         :boolean          default(FALSE), not null
-#  fURL             :string(255)      default(""), not null
-#  ContactNum       :string(6)        default(""), not null
-#  HomePhone        :string(20)       default(""), not null
-#  MobilePhone      :string(20)       default(""), not null
-#  NAICsCode        :string(6)        default(""), not null
+#  fURL             :varchar(255)     default(""), not null
+#  ContactNum       :varchar(6)       default(""), not null
+#  HomePhone        :varchar(20)      default(""), not null
+#  MobilePhone      :varchar(20)      default(""), not null
+#  NAICsCode        :varchar(6)       default(""), not null
+#  fchangeby        :char(25)         default("                         "), not null
+#  fcngdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fcsubstatus      :char(1)          default(" "), not null
+#  freasoncng       :varchar_max(2147 default(""), not null
+#  flpaybycc        :boolean          default(FALSE), not null
 #
 
 class M2m::Customer < M2m::Base
+  include M2m::CachedAddresses
   self.table_name = 'slcdpmx'
 
   has_many :sales_orders, :class_name => 'M2m::SalesOrder', :foreign_key => :fcustno, :primary_key => 'fcustno'
   has_many :quotes, :class_name => 'M2m::Quote', :foreign_key => :fcustno, :primary_key => 'fcustno'
-  has_many :contacts, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM' }
-  has_one :primary_contact, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno', :conditions => { :fcs_alias => 'SLCDPM', :IsPrimary => true }
-  has_many :addresses, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno', :conditions => { :fcalias => 'SLCDPM' }
+  has_many :contacts, -> { where(fcs_alias: 'SLCDPM') }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_one :primary_contact, -> { where(fcs_alias: 'SLCDPM', IsPrimary: true) }, :class_name => 'M2m::Contact', :foreign_key => :fcsourceid, :primary_key => 'fcustno'
+  has_many :addresses, -> { where(fcalias: 'SLCDPM') }, :class_name => 'M2m::Address', :foreign_key => 'fcaliaskey', :primary_key => 'fcustno'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
 
   alias_attribute :notes, :fmnotes
@@ -120,39 +126,27 @@ class M2m::Customer < M2m::Base
       # Ignore this exception.  Probably because we used a :select.
     end
   end
-  scope :name_like, lambda { |text|
-    {
-      :conditions => [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
-    }
+  scope :name_like, -> (text) {
+    where [ 'slcdpmx.fcompany like ?', '%' + (text || '') + '%' ]
   }
-  scope :with_names, lambda { |names|
-    {
-      :conditions => [ 'slcdpmx.fcompany in (?)', names ]
-    }
+  scope :with_names, -> (names) {
+    where [ 'slcdpmx.fcompany in (?)', names ]
   }
-  scope :with_name, lambda { |txt|
-    {
-      :conditions => [ 'slcdpmx.fcompany = ?', txt ]
-    }
+  scope :with_name, -> (txt) {
+    where [ 'slcdpmx.fcompany = ?', txt ]
   }
-  scope :by_name, :order => 'fcompany'
+  scope :by_name, -> { order(:fcompany) }
 
-  scope :with_customer_numbers, lambda { |customer_numbers|
-    {
-      :conditions => [ 'slcdpmx.fcustno in (?)', customer_numbers ]
-    }
+  scope :with_customer_numbers, -> (customer_numbers) {
+    where [ 'slcdpmx.fcustno in (?)', customer_numbers ]
   }
-  scope :with_customer_number, lambda { |custno|
-    {
-      :conditions => { :fcustno => M2m::Customer.fcustno_for(custno) }
-    }
+  scope :with_customer_number, -> (custno) {
+    where :fcustno => M2m::Customer.fcustno_for(custno)
   }
-  scope :created_between, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
-    }
+  scope :created_between, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'slcdpmx.fcreated >= ? and slcdpmx.fcreated < ?', start_date, end_date ]
   }
 
   def status
@@ -175,8 +169,8 @@ class M2m::Customer < M2m::Base
     self.ffob.strip
   end
 
-  validates_uniqueness_of :fcompany
-  validates_presence_of :first_name, :last_name, :fcompany
+  # validates_uniqueness_of :fcompany
+  # validates_presence_of :first_name, :last_name, :fcompany
 
   before_save :update_timestamps
   def update_timestamps
@@ -194,60 +188,6 @@ class M2m::Customer < M2m::Base
   
   def sales_territory
     @sales_territory ||= M2m::SalesTerritory.cached_lookup(self.territory_code)
-  end
-
-  after_save :after_save_madness
-  def after_save_madness
-    unless @running_after_save_madness
-      begin
-        @running_after_save_madness = true
-        need_to_save_self = false
-        if self.fcustno.blank?
-          self.fcustno = self.id
-          need_to_save_self = true
-        end
-        contact = self.primary_contact || self.contacts.primary.new
-        soldto = self.addresses.sold_to.first
-        if soldto.nil?
-          soldto = self.addresses.sold_to.new
-          soldto.set_fcaddrkey
-        end
-        shipto = self.addresses.ship_to.first
-        if shipto.nil?
-          shipto = self.addresses.ship_to.new
-          shipto.set_fcaddrkey
-        end
-        # self.addresses << address
-        %w(first_name last_name work_email work_phone notes work_fax work_address work_city work_state work_postal_code work_country_name).each do |a|
-          contact.send("#{a}=", self.send(a))
-          soldto.send("#{a}=", self.send(a))
-          shipto.send("#{a}=", self.send(a))
-        end
-        soldto.company_name = self.company_name
-        shipto.company_name = self.company_name
-        unless self.fcsoldto.present?
-          self.fcsoldto = soldto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.fcshipto.present?
-          self.fcshipto = shipto.fcaddrkey
-          need_to_save_self = true
-        end
-        unless self.contact_number.present?
-          self.contact_number = contact.contact_number
-          need_to_save_self = true
-        end
-        contact.save! if contact.changed?
-        soldto.save! if soldto.changed?
-        shipto.save! if shipto.changed?
-        self.save! if need_to_save_self
-      rescue
-        raise $!
-      ensure
-        @running_after_save_madness = false
-      end
-    end
-    true
   end
 
   def self.data_to_params(data, params)
@@ -278,6 +218,21 @@ class M2m::Customer < M2m::Base
     "%06d" % txt.to_i
   end
 
+  def self.attach_customers(objects, customers=nil)
+    customers ||= M2m::Customer.with_customer_numbers(objects.map(&:customer_number).uniq)
+    customers_hash = {}
+    customers.each { |c| customers_hash[c.customer_number] = c }
+    result = []
+    objects.each do |o|
+      if found = customers_hash[o.customer_number]
+        result.push o.customer = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.customer = nil
+      end
+    end
+    result
+  end
 end
 
 

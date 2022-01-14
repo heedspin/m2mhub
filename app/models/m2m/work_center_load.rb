@@ -2,22 +2,24 @@
 #
 # Table name: dbrrlrp
 #
-#  cbatchname       :string(15)       default(""), not null
+#  cbatchname       :char(15)         default("               "), not null
 #  noutstacum       :decimal(18, 3)   default(0.0), not null
-#  userid           :string(30)       default(""), not null
-#  perdname         :string(10)       default(""), not null
+#  userid           :varchar(30)      default(""), not null
+#  perdname         :char(10)         default("          "), not null
 #  req_load         :decimal(18, 3)   default(0.0), not null
 #  capacity         :decimal(17, 1)   default(0.0), not null
 #  nloadprcnt       :decimal(8, 1)    default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  seqno            :integer          default(0), not null
-#  fcpro_id         :string(7)        default(""), not null
+#  fcpro_id         :char(7)          default("       "), not null
 #  noutstacap       :decimal(18, 3)   default(0.0), not null
 #  ncumcapprc       :decimal(8, 1)    default(0.0), not null
-#  fcfac            :string(20)       default("")
+#  fcfac            :char(20)         default("                    ")
 #  sortdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  SortDateSt       :string(19)       default(""), not null
+#  SortDateSt       :char(19)         default("                   "), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::WorkCenterLoad < M2m::Base
@@ -28,13 +30,11 @@ class M2m::WorkCenterLoad < M2m::Base
   alias_attribute :work_center_id, :fcpro_id
   alias_attribute :work_load, :req_load
   
-  scope :for_batch, lambda { |batch_name|
-    {
-      :conditions => { :cbatchname => batch_name },
-      :include => 'work_center'
-    }
+  scope :for_batch, -> (batch_name) {
+    where(:cbatchname => batch_name).
+    includes('work_center')
   }
-  scope :with_load, :conditions => 'dbrrlrp.req_load > 0'
+  scope :with_load, -> { where('dbrrlrp.req_load > 0') }
   
   def date
     @date ||= Date.new(self.sortdate.year, self.sortdate.month, self.sortdate.day)

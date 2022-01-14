@@ -2,30 +2,32 @@
 #
 # Table name: inboms
 #
-#  fcomponent       :string(25)       default(""), not null
-#  fcomprev         :string(3)        default(""), not null
-#  fitem            :string(6)        default(""), not null
-#  fparent          :string(25)       default(""), not null
-#  fparentrev       :string(3)        default(""), not null
+#  fcomponent       :char(25)         default("                         "), not null
+#  fcomprev         :char(3)          default("   "), not null
+#  fitem            :char(6)          default("      "), not null
+#  fparent          :char(25)         default("                         "), not null
+#  fparentrev       :char(3)          default("   "), not null
 #  fend_ef_dt       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fmemoexist       :string(1)        default(""), not null
+#  fmemoexist       :char(1)          default(" "), not null
 #  fqty             :decimal(15, 5)   default(0.0), not null
-#  freqd            :string(1)        default(""), not null
+#  freqd            :char(1)          default(" "), not null
 #  fst_ef_dt        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flextend         :boolean          default(FALSE), not null
 #  fltooling        :boolean          default(FALSE), not null
 #  fnoperno         :integer          default(0), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fbommemo         :text             default(""), not null
-#  cfacilityid      :string(20)       default(""), not null
-#  pfacilityid      :string(20)       default(""), not null
-#  fcompudrev       :string(3)        default(""), not null
-#  fcparudrev       :string(3)        default(""), not null
+#  fbommemo         :varchar_max(2147 default(""), not null
+#  cfacilityid      :char(20)         default("                    "), not null
+#  pfacilityid      :char(20)         default("                    "), not null
+#  fcompudrev       :char(3)          default("   "), not null
+#  fcparudrev       :char(3)          default("   "), not null
 #  fndbrmod         :integer          default(0), not null
-#  flFSSvc          :boolean          default(FALSE), not null
 #  fOrigQty         :decimal(15, 5)   default(0.0), not null
-#  fcSource         :string(10)       default(""), not null
+#  flFSSvc          :boolean          default(FALSE), not null
+#  fcSource         :varchar(10)      default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::BomItem < M2m::Base

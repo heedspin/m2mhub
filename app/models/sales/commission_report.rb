@@ -11,11 +11,11 @@ class Sales::CommissionReport
   end
 
   def start_date=(val)
-    @start_date = val.is_a?(String) ? Date.parse(val) : val
+    @start_date = DateParser.parse(val)
   end
 
   def end_date=(val)
-    @end_date = val.is_a?(String) ? Date.parse(val) : val
+    @end_date = DateParser.parse(val)
   end
 
   def xls_filename
@@ -26,9 +26,15 @@ class Sales::CommissionReport
     'Commission Report'
   end
 
-  def xls_clean_string(txt)
-    txt.try :tr, "\x91-\x94\x9c\x9d\x80", "''\"\"\"\"'"
-  end
+  # Should not be needed for Ruby 2.x.
+  # def xls_clean_string(txt)
+  #   if RUBY_VERSION >= "1.9.3"
+  #     txt
+  #   else
+  #     # \326
+  #     txt.try :tr, "\x91-\x94\x9c\x9d\x80\212\326", "''\"\"\"\"'S"
+  #   end
+  # end
 
   def xls_initialize
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
@@ -38,6 +44,7 @@ class Sales::CommissionReport
     xls_field("#{AppConfig.short_name} Part Number") { |cd| cd.invoice_item.part_number }
     xls_field('Part Description') { |cd| cd.invoice_item.item.try(:description) }
     xls_field('Customer Part Number') { |cd| cd.invoice_item.customer_part_number }
+    xls_field('Customer PO') { |cd| cd.invoice_item.sales_order.try(:customer_po) }
     xls_field('Quantity') { |cd| cd.invoice_item.ship_quantity }
     xls_field('Unit Price', dollar_format) { |cd|
       cd.invoice_item.unit_price.to_f.round(2)
@@ -72,7 +79,7 @@ class Sales::CommissionReport
     raise ':start_date required' unless self.start_date
     raise ':end_date required' unless self.end_date
 
-    @invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date).not_void.scoped(:include => [:invoice, :customer])
+    @invoice_items = M2m::InvoiceItem.invoice_dates(self.start_date, self.end_date.advance(:days => 1)).not_void.includes([:invoice, :customer])
     M2m::Item.attach_items(@invoice_items)
     M2m::SalesOrder.attach_sales_orders(@invoice_items)
 
@@ -84,8 +91,9 @@ class Sales::CommissionReport
                                  :revision => invoice_item.revision,
                                  :invoice => invoice_item.invoice,
                                  :sales_order => invoice_item.sales_order )
-      rates.each do |name, percentage, reason|
-        result.push CommissionData.new(invoice_item, name, percentage, reason)
+      rates.each do |sales_person, percentage, reason|
+        sales_person_name = sales_person.is_a?(M2m::SalesPerson) ? sales_person.name : sales_person
+        result.push CommissionData.new(invoice_item, sales_person_name, percentage, reason)
       end
     end
     result

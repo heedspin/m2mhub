@@ -2,13 +2,13 @@
 #
 # Table name: sorels
 #
-#  fenumber         :string(3)        default(""), not null
-#  finumber         :string(3)        default(""), not null
-#  fpartno          :string(25)       default(""), not null
-#  fpartrev         :string(3)        default(""), not null
-#  frelease         :string(3)        default(""), not null
-#  fshptoaddr       :string(4)        default(""), not null
-#  fsono            :string(6)        default(""), not null
+#  fenumber         :char(3)          default("   "), not null
+#  finumber         :char(3)          default("   "), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  fpartrev         :char(3)          default("   "), not null
+#  frelease         :char(3)          default("   "), not null
+#  fshptoaddr       :varchar(6)       default(""), not null
+#  fsono            :varchar(10)      default(""), not null
 #  favailship       :boolean          default(FALSE), not null
 #  fbook            :decimal(15, 5)   default(0.0), not null
 #  fbqty            :decimal(15, 5)   default(0.0), not null
@@ -28,12 +28,12 @@
 #  fmsi             :decimal(15, 5)   default(0.0), not null
 #  fnetprice        :decimal(17, 5)   default(0.0), not null
 #  fninvship        :decimal(15, 5)   default(0.0), not null
-#  fnpurvar         :decimal(, )      default(0.0), not null
+#  fnpurvar         :money            default(0.0), not null
 #  forderqty        :decimal(15, 5)   default(0.0), not null
 #  fothrcost        :decimal(17, 5)   default(0.0), not null
 #  fovhdcost        :decimal(17, 5)   default(0.0), not null
 #  fpoqty           :decimal(15, 5)   default(0.0), not null
-#  fpostatus        :string(6)        default(""), not null
+#  fpostatus        :varchar(10)      default(""), not null
 #  fquant           :decimal(15, 5)   default(0.0), not null
 #  fsetupcost       :decimal(17, 5)   default(0.0), not null
 #  fshipbook        :decimal(15, 5)   default(0.0), not null
@@ -41,7 +41,7 @@
 #  fshipmake        :decimal(15, 5)   default(0.0), not null
 #  fshpbefdue       :boolean          default(FALSE), not null
 #  fsplitshp        :boolean          default(FALSE), not null
-#  fstatus          :string(10)       default(""), not null
+#  fstatus          :varchar(20)      default(""), not null
 #  fstkqty          :decimal(15, 5)   default(0.0), not null
 #  fsubcost         :decimal(17, 5)   default(0.0), not null
 #  ftoolcost        :decimal(17, 5)   default(0.0), not null
@@ -49,7 +49,7 @@
 #  ftoshpbuy        :decimal(15, 5)   default(0.0), not null
 #  ftoshpmake       :decimal(15, 5)   default(0.0), not null
 #  funetprice       :decimal(17, 5)   default(0.0), not null
-#  fvendno          :string(6)        default(""), not null
+#  fvendno          :char(6)          default("      "), not null
 #  fwidth           :decimal(15, 5)   default(0.0), not null
 #  fnretpoqty       :decimal(17, 5)   default(0.0), not null
 #  fnettxnprice     :decimal(17, 5)   default(0.0), not null
@@ -60,25 +60,32 @@
 #  fljrdif          :boolean          default(FALSE), not null
 #  flistaxabl       :boolean          default(FALSE), not null
 #  flatp            :boolean          default(FALSE), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fdelivery        :text             default(""), not null
-#  fcpbtype         :string(1)        default(""), not null
-#  fcbin            :string(14)       default(""), not null
-#  fcloc            :string(14)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  fdelivery        :varchar_max(2147 default(""), not null
+#  fcpbtype         :char(1)          default(" "), not null
+#  fcbin            :char(14)         default("              "), not null
+#  fcloc            :char(14)         default("              "), not null
+#  fcudrev          :char(3)          default("   "), not null
 #  fndbrmod         :integer          default(0), not null
 #  fpriority        :integer          default(4), not null
 #  SchedDate        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flInvcPoss       :boolean          default(FALSE), not null
-#  fmatlpadj        :decimal(16, 5)   default(0.0), not null
-#  ftoolpadj        :decimal(16, 5)   default(0.0), not null
-#  flabpadj         :decimal(16, 5)   default(0.0), not null
-#  fovhdpadj        :decimal(16, 5)   default(0.0), not null
-#  fsubpadj         :decimal(16, 5)   default(0.0), not null
-#  fothrpadj        :decimal(16, 5)   default(0.0), not null
-#  fsetuppadj       :decimal(16, 5)   default(0.0), not null
+#  fmatlpadj        :decimal(16, 5)   default(0.0)
+#  ftoolpadj        :decimal(16, 5)   default(0.0)
+#  flabpadj         :decimal(16, 5)   default(0.0)
+#  fovhdpadj        :decimal(16, 5)   default(0.0)
+#  fsubpadj         :decimal(16, 5)   default(0.0)
+#  fothrpadj        :decimal(16, 5)   default(0.0)
+#  fsetuppadj       :decimal(16, 5)   default(0.0)
 #  fnISOQty         :decimal(15, 5)   default(0.0), not null
+#  EARLYDAYS        :integer          default(0), not null
+#  fcRelsStatus     :char(20)         default("                    "), not null
+#  fdrequestdate    :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdcreateddate    :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  fdmodifieddate   :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  FOrigReqDt       :datetime         default(1900-01-01 00:00:00 UTC), not null
+#  FFinalSchd       :boolean          default(FALSE), not null
 #
 
 class M2m::SalesOrderRelease < M2m::Base
@@ -89,109 +96,92 @@ class M2m::SalesOrderRelease < M2m::Base
   belongs_to_item :fpartno, :fpartrev
   attr_accessor :sales_order_item
 
-  has_many :shipper_items, :class_name => 'M2m::ShipperItem', :finder_sql => 'select shitem.* from shitem where #{fsono} = SUBSTRING(shitem.fsokey,1,6) AND #{finumber} = SUBSTRING(shitem.fsokey,7,3) AND #{frelease} = SUBSTRING(shitem.fsokey,10,3)'
+  scope :shipper_items, -> { M2m::ShipperItem.for_release(self) } 
 
-  scope :for_shipper_items, lambda { |shipper_items|
+  scope :for_shipper_items, -> (shipper_items) {
     if shipper_items.is_a?(M2m::ShipperItem)
       shipper_items = [shipper_items]
     end
-    {
-      :joins => 'inner join shitem on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)',
-      :conditions => ['shitem.identity_column in (?)', shipper_items.map(&:id)]
-    }
+    joins('inner join shitem on sorels.fsono = SUBSTRING(shitem.fsokey,1,6) AND sorels.finumber = SUBSTRING(shitem.fsokey,7,3) AND sorels.frelease = SUBSTRING(shitem.fsokey,10,3)').
+    where(['shitem.identity_column in (?)', shipper_items.map(&:id)])
   }
-  scope :status_open,      :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.open.name} }
-  scope :status_closed,    :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.closed.name} }
-  scope :status_cancelled, :joins => :sales_order, :conditions => { :somast => {:fstatus => M2m::Status.cancelled.name} }
-  scope :status_not_cancelled, :joins => :sales_order, :conditions => ['somast.fstatus != ?', M2m::Status.cancelled.name]
-  scope :by_due_date, :order => 'sorels.fduedate'
-  scope :by_due_date_desc, :order => 'sorels.fduedate desc'
-  scope :by_last_ship_date_desc, :order => 'sorels.flshipdate desc'
-  scope :due_by, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'sorels.fduedate <= ?', date ]
-    }
+  scope :status_open,      -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.open.name}) }
+  scope :status_closed,    -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.closed.name}) }
+  scope :status_cancelled, -> { joins(:sales_order).where(:somast => {:fstatus => M2m::Status.cancelled.name}) }
+  scope :status_not_cancelled, -> { joins(:sales_order).where(['somast.fstatus != ?', M2m::Status.cancelled.name]) }
+  def self.status_open_or_hold
+    joins(:sales_order).where(['somast.fstatus in (?)', [M2m::Status.open.name, M2m::Status.on_hold.name]])
+  end
+
+  scope :by_due_date, -> { order('sorels.fduedate') }
+  scope :by_due_date_desc, -> { order('sorels.fduedate desc') }
+  scope :by_last_ship_date_desc, -> { order('sorels.flshipdate desc') }
+  scope :due_by, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where [ 'sorels.fduedate <= ?', date ]
   }
-  scope :due_after, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'sorels.fduedate >= ?', date ]
-    }
+  scope :due_after, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where [ 'sorels.fduedate >= ?', date ]
   }
-  scope :not_filled, :conditions => [ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]
-  scope :some_filled, :conditions => [ '(sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake) > 0' ]
-  scope :filtered, :joins => 'left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber', :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
-  scope :for_item, lambda { |item|
-    {
-      :conditions => { :fpartno => item.part_number, :fpartrev => item.revision }
-    }
+  scope :not_filled, -> { where([ 'sorels.forderqty > (sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake)' ]) }
+  scope :some_filled, -> { where([ '(sorels.fshipbook + sorels.fshipbuy + sorels.fshipmake) > 0' ]) }
+  scope :filtered, -> { joins('left join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('soitem.fmultiple = 0 OR sorels.frelease != \'000\'') }
+  scope :for_item, -> (item) {
+    where :fpartno => item.part_number, :fpartrev => item.revision
   }
-  scope :for_part_number, lambda { |item|
+  scope :for_part_number, -> (item) {
     fpartno = item.is_a?(M2m::Item) ? item.part_number : item.to_s
-    {
-      :conditions => { :fpartno => fpartno.strip }
-    }
+    where :fpartno => fpartno.strip
   }
-  scope :part_number_starts_with, lambda { |part_number|
-    {
-      :conditions => [ 'sorels.fpartno like ?', part_number + '%' ]
-    }
+  scope :part_number_starts_with, -> (part_number) {
+    where [ 'sorels.fpartno like ?', part_number + '%' ]
   }
-  scope :with_status, lambda { |status|
+  scope :with_status, -> (status) {
     status_name = status.is_a?(M2m::Status) ? status.name : status.to_s
-    {
-      :conditions => { :somast => { :fstatus => status_name.upcase } }
-    }
+    where :somast => { :fstatus => status_name.upcase }
   }
-  scope :customer, lambda { |customer|
-    {
-      :joins => :sales_order,
-      :conditions => { :somast => { :fcustno => customer.customer_number } }
-    }
+  scope :customer, -> (customer) {
+    joins(:sales_order).
+    where(:somast => { :fcustno => customer.customer_number })
   }
-  scope :customers, lambda { |customer_numbers|
+  scope :customers, -> (customer_numbers) {
     customer_numbers = customer_numbers.map { |t| M2m::Customer.fcustno_for(t) }
-    {
-      :joins => :sales_order,
-      :conditions => [ 'somast.fcustno in (?)', customer_numbers ]
-    }
+    joins(:sales_order).
+    where([ 'somast.fcustno in (?)', customer_numbers ])
   }
-  scope :for_sales_order, lambda { |sono|
-    {
-      :conditions => { :fsono => sono }
-    }
+  scope :for_sales_order, -> (sono) {
+    where :fsono => sono
   }
-  scope :sales_order_numbers, lambda { |so_numbers|
+  scope :sales_order_numbers, -> (so_numbers) {
     so_numbers = so_numbers.map { |n| M2m::SalesOrder.pad_sales_order_number(n) }
-    {
-      :conditions => [ 'sorels.fsono in (?)', so_numbers ]
-    }
+    where [ 'sorels.fsono in (?)', so_numbers ]
   }
-  scope :with_number, lambda { |num|
-    {
-      :conditions => { :finumber => num }
-    }
+  scope :with_number, -> (num) {
+    where :finumber => num
   }
-  scope :shipped_after, lambda { |date|
-    {
-      :conditions => [ 'flshipdate >= ?', date ]
-    }
+  scope :shipped, -> {
+    where 'flshipdate is not null'
   }
-  scope :order_dates, lambda { |start_date, end_date|
-    {
-      :joins => :sales_order,
-      :conditions => [ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ]
-    }
+  scope :shipped_after, -> (date) {
+    where [ 'flshipdate >= ?', date ]
   }
-  scope :ordered_since, lambda { |date|
-    {
-      :joins => :sales_order, 
-      :conditions => ['somast.forderdate >= ?', date]
-    }
+  scope :shipped_before, -> (date) {
+    where [ 'flshipdate < ?', date ]    
   }
-  scope :master, :conditions => { :fmasterrel => true }
-  scope :master_or_single, joins('inner join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('(soitem.fmultiple = ? and sorels.fmasterrel = ?) or (soitem.fmultiple = ?)', true, true, false)
+  scope :ship_year, -> (year) {
+    where [ 'flshipdate >= ? and flshipdate < ?', Date.new(year, 1, 1), Date.new(year+1, 1, 1)]
+  }
+  scope :order_dates, -> (start_date, end_date) {
+    joins(:sales_order).
+    where([ 'somast.forderdate >= ? and somast.forderdate < ?', start_date, end_date ])
+  }
+  scope :ordered_since, -> (date) {
+    joins(:sales_order).
+    where(['somast.forderdate >= ?', date])
+  }
+  scope :master, -> { where(:fmasterrel => true) }
+  scope :master_or_single, -> { joins('inner join soitem on soitem.fsono = sorels.fsono and soitem.fenumber = sorels.fenumber').where('(soitem.fmultiple = ? and sorels.fmasterrel = ?) or (soitem.fmultiple = ?)', true, true, false) }
 
   # This does not work because belongs_to :item fails: "undefined local variable or method `fenumber'"
   # scope :not_masters, :joins => :item, :conditions => 'soitem.fmultiple = 0 OR sorels.frelease != \'000\''
@@ -232,7 +222,7 @@ class M2m::SalesOrderRelease < M2m::Base
   # case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > 2)
 
   # scope :shipped, :conditions => ['sorels.flshipdate != ?', Constants.null_time]
-  scope :shipped_late, lambda {
+  scope :shipped_late, -> {
     select_sql = <<-SQL
     sorels.*, ((DATEDIFF(day, sorels.fduedate, sorels.flshipdate) -
     DATEDIFF(wk, sorels.fduedate, sorels.flshipdate) * 2) - 
@@ -247,21 +237,15 @@ class M2m::SalesOrderRelease < M2m::Base
           case when DATEPART(dw, sorels.fduedate) = 1 then 1 else 0 end +
           case when DATEPART(dw, sorels.flshipdate) = 1 then 1 else 0 end) > ?)
     SQL
-    {
-      :joins => :sales_order,
-      :select => select_sql,
-      :conditions => [ conditions_sql, AppConfig.otd_lead_time, AppConfig.otd_grace_period_days ]
-    }
+    joins(:sales_order).
+    select(select_sql).
+    where([ conditions_sql, AppConfig.otd_lead_time, AppConfig.otd_grace_period_days ])
   }
-  scope :due, lambda { |start_date, end_date|
-    {
-      :conditions => ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
-    }
+  scope :due, -> (start_date, end_date) {
+    where ['sorels.fduedate >= ? and sorels.fduedate < ?', start_date, end_date]
   }
-  scope :ids, lambda { |ids|
-    {
-      :conditions => ['sorels.identity_column in (?)', ids]
-    }
+  scope :with_ids, -> (ids) {
+    where ['sorels.identity_column in (?)', ids]
   }
 
   def days_late(date=nil)
@@ -344,6 +328,14 @@ class M2m::SalesOrderRelease < M2m::Base
 
   def master?
     self.fmasterrel
+  end
+
+  def vendors
+    @vendors ||= M2m::InventoryVendor.for_item(self).map(&:vendor)
+  end
+
+  def ship_to_address
+    @ship_to_address ||= self.sales_order.customer.addresses.key(self.fshptoaddr).first
   end
 
 end

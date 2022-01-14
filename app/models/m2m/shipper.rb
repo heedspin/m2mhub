@@ -2,55 +2,52 @@
 #
 # Table name: shmast
 #
-#  fbl_lading       :string(20)       default(""), not null
-#  fcjobno          :string(10)       default(""), not null
-#  fcnumber         :string(6)        default(""), not null
-#  fcollect         :string(3)        default(""), not null
-#  fconfirm         :string(1)        default(""), not null
-#  fcpono           :string(6)        default(""), not null
-#  fcpro_id         :string(7)        default(""), not null
-#  fcsono           :string(6)        default(""), not null
-#  fcso_inum        :string(3)        default(""), not null
-#  fcsono_rel       :string(3)        default(""), not null
-#  fcsorev          :string(2)        default(""), not null
-#  fcvendno         :string(6)        default(""), not null
-#  fenter           :string(3)        default(""), not null
-#  ffob             :string(20)       default(""), not null
-#  ffrtamt          :decimal(17, 5)   default(0.0), not null
+#  fbl_lading       :char(20)         default("                    "), not null
+#  fcjobno          :varchar(20)      default(""), not null
+#  fcnumber         :char(6)          default("      "), not null
+#  fcollect         :char(3)          default("   "), not null
+#  fconfirm         :char(1)          default(" "), not null
+#  fcpono           :varchar(10)      default(""), not null
+#  fcpro_id         :char(7)          default("       "), not null
+#  fcsono           :varchar(10)      default(""), not null
+#  fcso_inum        :char(3)          default("   "), not null
+#  fcsono_rel       :char(3)          default("   "), not null
+#  fcsorev          :char(2)          default("  "), not null
+#  fcvendno         :char(6)          default("      "), not null
+#  fenter           :char(3)          default("   "), not null
+#  ffob             :char(20)         default("                    "), not null
 #  ffrtinvcd        :boolean          default(FALSE), not null
 #  flisinv          :boolean          default(FALSE), not null
-#  fno_boxes        :integer          default(0), not null
 #  fshipdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fshipno          :string(6)        default(""), not null, primary key
-#  fshipvia         :string(20)       default(""), not null
-#  fshipwght        :decimal(12, 4)   default(0.0), not null
-#  fshptoaddr       :string(4)        default(""), not null
-#  ftype            :string(2)        default(""), not null
+#  fshipno          :varchar(10)      default(""), not null, primary key
+#  fshipvia         :char(20)         default("                    "), not null
+#  fshptoaddr       :varchar(6)       default(""), not null
+#  ftype            :char(2)          default("  "), not null
 #  start            :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpickprin       :boolean          default(FALSE), not null
 #  flshipprin       :boolean          default(FALSE), not null
-#  fcfname          :string(15)       default(""), not null
-#  fclname          :string(20)       default(""), not null
-#  fccounty         :string(20)       default(""), not null
-#  fccompany        :string(35)       default(""), not null
-#  fccity           :string(20)       default(""), not null
-#  fccountry        :string(25)       default(""), not null
-#  fcfax            :string(20)       default(""), not null
-#  fcphone          :string(20)       default(""), not null
-#  fcstate          :string(20)       default(""), not null
-#  fczip            :string(10)       default(""), not null
-#  fporev           :string(2)        default(""), not null
-#  fcbcompany       :string(35)       default(""), not null
+#  fcfname          :char(15)         default("               "), not null
+#  fclname          :char(20)         default("                    "), not null
+#  fccounty         :char(20)         default("                    "), not null
+#  fccompany        :varchar(35)      default(""), not null
+#  fccity           :char(20)         default("                    "), not null
+#  fccountry        :char(25)         default("                         "), not null
+#  fcfax            :char(20)         default("                    "), not null
+#  fcphone          :char(20)         default("                    "), not null
+#  fcstate          :char(20)         default("                    "), not null
+#  fczip            :char(10)         default("          "), not null
+#  fporev           :char(2)          default("  "), not null
+#  fcbcompany       :varchar(35)      default(""), not null
 #  flpremcv         :boolean          default(FALSE), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null
-#  fmreferenc       :text             default(""), not null
-#  fmstreet         :text             default(""), not null
-#  fshipmemo        :text             default(""), not null
-#  fmtrckno         :text             default(""), not null
-#  upsdate          :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  upsaddr2         :text             default(""), not null
-#  upsaddr3         :text             default(""), not null
+#  fmreferenc       :varchar_max(2147 default(""), not null
+#  fmstreet         :varchar_max(2147 default(""), not null
+#  fshipmemo        :varchar_max(2147 default(""), not null
+#  upsaddr2         :varchar_max(2147 default(""), not null
+#  upsaddr3         :varchar_max(2147 default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::Shipper < M2m::Base
@@ -76,49 +73,40 @@ class M2m::Shipper < M2m::Base
     self.fconfirm ? 'Shipped' : 'Not Shipped'
   end
   
-  scope :with_ship_date, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate = ?', date.to_s(:database) ],
-    }
+  scope :with_ship_date, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate = ?', date.to_s(:database) ])
   }  
-  scope :for_next_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate > ?', date.to_s(:database) ],
-      :order => :fshipdate
-    }
+  scope :for_next_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate > ?', date.to_s(:database) ]).
+    order(:fshipdate)
   }
-  scope :for_previous_day, lambda { |date|
-    date = date.is_a?(String) ? Date.parse(date) : date
-    {
-      :conditions => [ 'shmast.fshipdate < ?', date.to_s(:database) ],
-      :order => 'shmast.fshipdate desc'
-    }
+  scope :for_previous_day, -> (date) {
+    date = date.is_a?(String) ? DateParser.parse(date) : date
+    where([ 'shmast.fshipdate < ?', date.to_s(:database) ]).
+    order('shmast.fshipdate desc')
   }
-  scope :by_shipper_number_desc, :order => 'shmast.fshipno desc'
-  scope :next_shipper, lambda { |shipper| 
-    {
-      :conditions => ['fshipno > ?', shipper.fsono], 
-      :order => 'fshipno',
-      :limit => 1
-    }
+  scope :by_shipper_number_desc, -> { order('shmast.fshipno desc') }
+  scope :next_shipper, -> (shipper) {
+    where(['fshipno > ?', shipper.fsono]).
+    order('fshipno').
+    limit(1)
   }
-  scope :previous_shipper, lambda { |shipper| 
-    {
-      :conditions => ['fshipno < ?', shipper.fsono], 
-      :order => 'fshipno desc',
-      :limit => 1
-    }
+  scope :previous_shipper, -> (shipper) {
+    where(['fshipno < ?', shipper.fsono]).
+    order('fshipno desc').limit(1)
   }
-  scope :for_item, lambda { |item|
-    {
-      # Using include vs joins eliminates duplicates.
-      :include => :items,
-      :conditions => { :shitem => { :fpartno => item.fpartno, :frev => item.frev } }
-    }
+  scope :for_item, -> (item) {
+    includes(:items).
+    where(:shitem => { :fpartno => item.fpartno, :frev => item.frev })
   }
-  scope :by_ship_date_desc, :order => 'shmast.fshipdate desc'
+  scope :for_item_with_duplicates, -> (item) {
+    # Using include vs joins eliminates duplicates.
+    joins(:items).
+    where(:shitem => { :fpartno => item.fpartno, :frev => item.frev })
+  }
+  scope :by_ship_date_desc, -> { order('shmast.fshipdate desc') }
   
   def self.monthly_quantity_shipped(start_date, end_date)
     results = connection.select_rows <<-SQL
@@ -134,7 +122,8 @@ class M2m::Shipper < M2m::Base
     SQL
     months = {}
     results.each do |month, quantity_shipped|
-      months[Date.parse(month)] = quantity_shipped
+      month = DateParser.parse(month) unless month.is_a?(Date)
+      months[month] = quantity_shipped
     end
     months
   end

@@ -1,7 +1,7 @@
 class M2mhub::ExternalEventResourcesController < M2mhubController
   respond_to :json
-  skip_before_filter :require_login
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :require_login
+  skip_before_action :verify_authenticity_token
 
   def create
     @external_event = build_object
@@ -24,7 +24,7 @@ class M2mhub::ExternalEventResourcesController < M2mhubController
       'external_event_resource'
     end
 
-    before_filter :require_api_key
+    before_action :require_api_key
     def require_api_key
       unless (params[:api_key] == AppConfig.external_event_api_key)
         not_authorized

@@ -18,34 +18,26 @@ class Sales::BookingsReport < M2mhub::Base
   include Plutolib::SerializedAttributes
   self.table_name = 'bookings_reports'
   belongs_to_active_hash :report_time_period
-  scope :date, lambda { |date|
-    {
-      :conditions => { :date => date }
-    }
+  scope :date, -> (date) {
+    where :date => date
   }
-  scope :dates, lambda { |start_date, end_date|
-    {
-      :conditions => [ 'bookings_reports.date >= ? and bookings_reports.date < ?', start_date, end_date]
-    }
+  scope :dates, -> (start_date, end_date) {
+    where [ 'bookings_reports.date >= ? and bookings_reports.date < ?', start_date, end_date]
   }
-  scope :time_period, lambda { |report_time_period|
-    {
-      :conditions => { :report_time_period_id => report_time_period.id }
-    }
+  scope :time_period, -> (report_time_period) {
+    where :report_time_period_id => report_time_period.id
   }
-  scope :by_date_desc, :order => 'bookings_reports.date desc'
-  scope :month, lambda { |month|
-    {
-      :conditions => { :date => month.beginning_of_month, :report_time_period_id => ReportTimePeriod.month.id }
-    }
+  scope :by_date_desc, -> { order('bookings_reports.date desc') }
+  scope :month, -> (month) {
+    where :date => month.beginning_of_month, :report_time_period_id => ReportTimePeriod.month.id
   }
 
   # Bookings
   # M2m::SalesOrderRelease.order_dates('2012-06-01', '2012-07-01').sum(:fnetprice).to_f
   def run!
     next_month = self.date.advance(:months => 1)
-    releases = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).status_not_cancelled.all(:include => :sales_order)
-    self.bookings = releases.sum(&:total_price)
+    releases = M2m::SalesOrderRelease.master_or_single.order_dates(self.date, next_month).status_not_cancelled.includes(:sales_order)
+    self.bookings = releases.sum(:total_price)
     self.ytd_bookings = M2m::SalesOrderRelease.master_or_single.order_dates(self.date.beginning_of_year, next_month).status_not_cancelled.sum(:fnetprice)
     
     sales_orders = {}
@@ -66,7 +58,7 @@ class Sales::BookingsReport < M2mhub::Base
   def sales_order_summaries
     if @sales_order_summaries.nil?
       sales_orders = {}
-      M2m::SalesOrder.with_order_numbers(self.sales_order_memos.map(&:first)).all(:include => :customer).each do |so|
+      M2m::SalesOrder.with_order_numbers(self.sales_order_memos.map(&:first)).includes(:customer).each do |so|
         sales_orders[so.order_number] = so
       end
       @sales_order_summaries = self.sales_order_memos.map do |sales_order_number, total_price|

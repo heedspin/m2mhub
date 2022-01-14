@@ -57,39 +57,53 @@ class Quality::InspectionTask < M2mhub::Base
   attr_accessor :lighthouse_body
   attr_accessor :lighthouse_milestone_id
   attr_accessor :delete_lighthouse_ticket
+  attr_accessor :lighthouse_watchers
+
+  def padded_purchase_order_number
+    M2m::PurchaseOrder.pad_purchase_order_number self.purchase_order_number
+  end
   
-  scope :not_deleted, :conditions => [ 'inspection_tasks.status_id != ?', Quality::InspectionTaskStatus.deleted.id ]
-  scope :task_type, lambda { |task_type|
-    {
-      :conditions => { :task_type_id => task_type.id }
-    }
+  scope :not_deleted, -> { where([ 'inspection_tasks.status_id != ?', Quality::InspectionTaskStatus.deleted.id ]) }
+  scope :task_type, -> (task_type) {
+    where :task_type_id => task_type.id
   }
-  scope :status_open, :conditions => [ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ]
-  scope :purchase_order_number, lambda { |ponums|
-    {
-      :conditions => [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
-    }
+  def self.rma_inspection
+    where task_type_id: Quality::InspectionTaskType.rma_inspection.id
+  end
+  def self.status_open
+    where([ 'inspection_tasks.status_id in (?)', Quality::InspectionTaskStatus.open_ids ])
+  end
+  def self.status_closed
+    where status_id: Quality::InspectionTaskStatus.closed.id
+  end
+  scope :purchase_order_number, -> (ponums) {
+    where [ 'inspection_tasks.purchase_order_number in (?)', ponums ]
   }
+  def self.has_ticket
+    where 'lighthouse_ticket_id is not null'
+  end
   def self.friendly_purchase_order_number(ponum)
     padded = M2m::PurchaseOrder.pad_purchase_order_number(ponum)
-    non_padded = ponum.to_i
+    non_padded = ponum.to_i.to_s
     where(['(inspection_tasks.purchase_order_number = ? or inspection_tasks.purchase_order_number = ?)', padded, non_padded])
   end
-  scope :status, lambda { |s|
+  scope :status, -> (s) { 
     s = Quality::InspectionTaskStatus.find(s) unless s.is_a?(Quality::InspectionTaskStatus)
     status_ids = s.children_ids || [s.id]
-    {
-      :conditions => [ 'inspection_tasks.status_id in (?)', status_ids ]
-    }
+    where [ 'inspection_tasks.status_id in (?)', status_ids ]
   }
-  scope :rma_number, lambda { |num|
+  scope :rma_number, -> (num) {
     rma_numbers = num.is_a?(Enumerable) ? num : [ num ]
-    {
-      :conditions => [ 'inspection_tasks.rma_number in (?)', rma_numbers.map { |n| M2m::Rma.pad_rma_number(n) }]
-    }
+    where [ 'inspection_tasks.rma_number in (?)', rma_numbers.map { |n| M2m::Rma.pad_rma_number(n) }]
   }
   def self.part_number(txt)
     where(:part_number => txt)
+  end
+  def self.created_after(date)
+    where ['inspection_tasks.created_at > ?', date]
+  end
+  def self.created_before(date)
+    where ['inspection_tasks.created_at < ?', date]
   end
   
   before_save :fill_in_details
@@ -130,6 +144,10 @@ class Quality::InspectionTask < M2mhub::Base
   
   def update_lighthouse_status!
     self.lighthouse_watcher_update
+    # Automatically close 7 days after LH ticket is marked resolved.
+    if (self.lighthouse_status == 'resolved') and (Time.current - self.lighthouse_last_updated_at > 7.days)
+      self.status_id = Quality::InspectionTaskStatus.closed.id
+    end
     if self.changed?
       self.save!
     else
@@ -153,7 +171,11 @@ class Quality::InspectionTask < M2mhub::Base
         end
       elsif self.lighthouse_project_id.present?
         self.lighthouse_milestone_id ||= self.task_type.rma_inspection? ? AppConfig.inspection_task_default_lighthouse_rma_milestone : AppConfig.inspection_task_default_lighthouse_incoming_milestone
-        self.lighthouse_watcher_create(self.lighthouse_title, self.lighthouse_body, self.lighthouse_assigned_user_id, self.lighthouse_milestone_id)
+        self.lighthouse_watcher_create(self.lighthouse_title, 
+          self.lighthouse_body, 
+          self.lighthouse_assigned_user_id, 
+          self.lighthouse_milestone_id,
+          self.lighthouse_watchers)
       else
         false
       end
@@ -220,7 +242,7 @@ class Quality::InspectionTask < M2mhub::Base
   after_create :set_inspection_required_flag
   def set_inspection_required_flag
     logger.info "#{self.task_type.incoming_inspection?} #{self.purchase_order_item_id}"
-    if self.task_type.incoming_inspection? and (poi = M2m::PurchaseOrderItem.find(self.purchase_order_item_id)) and !poi.inspection_required?
+    if self.task_type.incoming_inspection? and self.purchase_order_item_id.present? and (poi = M2m::PurchaseOrderItem.find_by_identity_column(self.purchase_order_item_id)) and !poi.inspection_required?
       if poi.update_attributes(:inspection_required => 'Y')
         logger.info "inspection_required success"
       else

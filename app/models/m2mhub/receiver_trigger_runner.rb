@@ -2,10 +2,10 @@ class M2mhub::ReceiverTriggerRunner < M2mhub::TriggerRunnerBase
   include ActionView::Helpers::UrlHelper
   def run
     earliest_time = Time.current.advance(:days => Rails.env.development? ? -70 : -2)
-    receiver_items = M2m::ReceiverItem.scoped(:conditions => ['rcitem.fpartno like ?', @trigger.part_number + '%']).received_since(earliest_time)
+    receiver_items = M2m::ReceiverItem.where(['rcitem.fpartno like ?', @trigger.part_number + '%']).received_since(earliest_time)
     recent_events = @trigger.events.since(earliest_time).all
     if recent_events.size > 0
-      receiver_items = receiver_items.scoped(:conditions => ["#{M2m::ReceiverItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
+      receiver_items = receiver_items.where(["#{M2m::ReceiverItem.table_name}.identity_column not in (?)", recent_events.map(&:erp_id)])
     end
     result = 0
     receiver_items.each do |ri|

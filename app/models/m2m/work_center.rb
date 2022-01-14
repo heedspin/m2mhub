@@ -3,10 +3,10 @@
 # Table name: inwork
 #
 #  fnavgwkhrs       :decimal(6, 2)    default(0.0), not null
-#  fcpro_id         :string(7)        default(""), not null, primary key
-#  fcpro_name       :string(16)       default(""), not null
-#  fccomments       :string(54)       default(""), not null
-#  fdept            :string(2)        default(""), not null
+#  fcpro_id         :char(7)          default("       "), not null, primary key
+#  fcpro_name       :char(16)         default("                "), not null
+#  fccomments       :varchar(54)      default(""), not null
+#  fdept            :varchar(4)       default(""), not null
 #  flabcost         :decimal(17, 5)   default(0.0), not null
 #  fnavgque         :decimal(7, 1)    default(0.0), not null
 #  flschedule       :boolean          default(FALSE), not null
@@ -23,28 +23,33 @@
 #  fnstd_set        :decimal(7, 2)    default(0.0), not null
 #  fnsumdur         :decimal(9, 1)    default(0.0), not null
 #  fovrhdcost       :decimal(17, 5)   default(0.0), not null
-#  fscheduled       :string(1)        default(""), not null
+#  fscheduled       :char(1)          default(" "), not null
 #  fspandays        :integer          default(0), not null
 #  fnpque           :decimal(7, 1)    default(0.0), not null
 #  flconstrnt       :boolean          default(FALSE), not null
 #  identity_column  :integer          not null
-#  timestamp_column :binary
-#  fac              :string(20)       default(""), not null
-#  fcstdormax       :string(8)        default(""), not null
+#  timestamp_column :ss_timestamp
+#  fac              :char(20)         default("                    "), not null
+#  fcstdormax       :char(8)          default("        "), not null
 #  fndbrmod         :integer          default(0), not null
 #  fnloadcapc       :decimal(6, 2)    default(0.0), not null
 #  fnmaxcapload     :decimal(4, 1)    default(0.0), not null
 #  flaltset         :boolean          default(FALSE), not null
-#  fcsyncmisc       :string(20)       default(""), not null
+#  fcsyncmisc       :char(20)         default("                    "), not null
 #  QueueHrs         :decimal(9, 2)    default(0.0), not null
 #  ConstBuff        :decimal(5, 1)    default(0.0), not null
-#  ResGroup         :string(15)       default(""), not null
+#  ResGroup         :char(15)         default("               "), not null
 #  flBFLabor        :boolean          default(FALSE), not null
 #  CycleUnits       :decimal(13, 3)   default(0.0), not null
-#  SimOpsType       :string(10)       default(""), not null
+#  SimOpsType       :char(10)         default("          "), not null
 #  Size             :decimal(13, 3)   default(0.0), not null
 #  CanBreak         :boolean          default(FALSE), not null
-#  SizeUM           :string(3)        default("0"), not null
+#  SizeUM           :char(3)          default("0  "), not null
+#  TimeFence        :integer          default(0), not null
+#  fcGroup          :char(10)         default("          "), not null
+#  FracSimOps       :boolean          default(FALSE), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::WorkCenter < M2m::Base
@@ -54,16 +59,12 @@ class M2m::WorkCenter < M2m::Base
   alias_attribute :work_center_id, :fcpro_id
   alias_attribute :capacity_constraint, :flconstrnt
   
-  scope :name_like, lambda { |names|
+  scope :name_like, -> (names) {
     likes = names.map { |n| "(inwork.fcpro_name like \'%#{n}%\')" }
-    {
-      :conditions => likes.join(" OR ")
-    }
+    where likes.join(" OR ")
   }
-  scope :work_center_ids, lambda { |ids|
-    {
-      :conditions => ['inwork.fcpro_id in (?)', ids]
-    }
+  scope :work_center_ids, -> (ids) {
+    where ['inwork.fcpro_id in (?)', ids]
   }
   
   def name

@@ -2,72 +2,75 @@
 #
 # Table name: armast
 #
-#  fbcity           :string(20)       default(""), not null
-#  fbcompany        :string(35)       default(""), not null
-#  fbcountry        :string(25)       default(""), not null
-#  fbstate          :string(20)       default(""), not null
-#  fbzip            :string(10)       default(""), not null
-#  fccity           :string(20)       default(""), not null
-#  fccompany        :string(35)       default(""), not null
-#  fccountry        :string(25)       default(""), not null
-#  fcstate          :string(20)       default(""), not null
-#  fczip            :string(10)       default(""), not null
-#  fccurid          :string(3)        default(""), not null
-#  fcfactor         :decimal(17, 5)   default(0.0), not null
-#  fcinvoice        :string(20)       default(""), not null, primary key
-#  fcsource         :string(1)        default(""), not null
-#  fcstatus         :string(1)        default(""), not null
-#  fctermsid        :string(4)        default(""), not null
+#  fbcity           :char(20)         default("                    "), not null
+#  fbcompany        :varchar(35)      default(""), not null
+#  fbcountry        :char(25)         default("                         "), not null
+#  fbstate          :char(20)         default("                    "), not null
+#  fbzip            :char(10)         default("          "), not null
+#  fccity           :char(20)         default("                    "), not null
+#  fccompany        :varchar(35)      default(""), not null
+#  fccountry        :char(25)         default("                         "), not null
+#  fcstate          :char(20)         default("                    "), not null
+#  fczip            :char(10)         default("          "), not null
+#  fccurid          :char(3)          default("   "), not null
+#  fcfactor         :decimal(22, 10)  default(0.0), not null
+#  fcinvoice        :char(20)         default("                    "), not null, primary key
+#  fcsource         :char(1)          default(" "), not null
+#  fcstatus         :char(1)          default(" "), not null
+#  fctermsid        :char(4)          default("    "), not null
 #  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fcustno          :string(6)        default(""), not null
+#  fcustno          :char(6)          default("      "), not null
 #  fdfactdate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fdgldate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fduedate         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  ffreight         :decimal(, )      default(0.0), not null
-#  ffob             :string(20)       default(""), not null
+#  ffreight         :money            default(0.0), not null
+#  ffob             :char(20)         default("                    "), not null
 #  finvdate         :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fliscod          :boolean          default(FALSE), not null
 #  flishand         :boolean          default(FALSE), not null
 #  flisprint        :boolean          default(FALSE), not null
 #  flpostnow        :boolean          default(FALSE), not null
-#  finvtype         :string(1)        default(""), not null
-#  fnamount         :decimal(, )      default(0.0), not null
-#  fngoodsamt       :decimal(, )      default(0.0), not null
-#  fncredits        :decimal(, )      default(0.0), not null
-#  fncurex          :decimal(, )      default(0.0), not null
+#  finvtype         :char(1)          default(" "), not null
+#  fnamount         :money            default(0.0), not null
+#  fngoodsamt       :money            default(0.0), not null
+#  fncredits        :money            default(0.0), not null
+#  fncurex          :money            default(0.0), not null
 #  fninvdisrt       :decimal(11, 5)   default(0.0), not null
-#  fnfinchg         :decimal(, )      default(0.0), not null
+#  fnfinchg         :money            default(0.0), not null
 #  fnpaytype        :integer          default(0), not null
 #  fntotalwt        :decimal(12, 4)   default(0.0), not null
-#  fnumber          :string(25)       default("")
-#  fpaidref         :string(20)       default(""), not null
-#  fpono            :string(20)       default(""), not null
+#  fnumber          :char(25)         default("                         ")
+#  fpaidref         :char(20)         default("                    "), not null
+#  fpono            :char(20)         default("                    "), not null
 #  fretrndate       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fsalespn         :string(3)        default(""), not null
+#  fsalespn         :char(3)          default("   "), not null
 #  fshipdate        :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fshipvia         :string(10)       default(""), not null
-#  fsono            :string(6)        default(""), not null
-#  ftaxamt          :decimal(, )      default(0.0), not null
-#  ftaxcode         :string(3)        default(""), not null
+#  fshipvia         :char(10)         default("          "), not null
+#  fsono            :varchar(10)      default(""), not null
+#  ftaxamt          :money            default(0.0), not null
+#  ftaxcode         :char(3)          default("   "), not null
 #  fsalcompct       :decimal(8, 3)    default(0.0), not null
 #  fdeurodate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  feurofctr        :decimal(17, 5)   default(0.0), not null
 #  fdvoiddate       :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  flpremcv         :boolean          default(FALSE), not null
 #  fdtaxpoint       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null
-#  fmbstreet        :text             default(""), not null
-#  fmnotes          :text             default(""), not null
-#  fmremarks        :text             default(""), not null
-#  fmstreet         :text             default(""), not null
-#  fmtermsmsg       :text             default(""), not null
+#  fmbstreet        :varchar_max(2147 default(""), not null
+#  fmnotes          :varchar_max(2147 default(""), not null
+#  fmremarks        :varchar_max(2147 default(""), not null
+#  fmstreet         :varchar_max(2147 default(""), not null
+#  fmtermsmsg       :varchar_max(2147 default(""), not null
 #  flduechng        :boolean          default(FALSE), not null
-#  fccontkey        :string(10)       default(""), not null
+#  fccontkey        :char(10)         default("          "), not null
 #  flcontract       :boolean          default(FALSE), not null
 #  fldifmsg         :boolean          default(FALSE), not null
-#  ContractNu       :string(10)       default(""), not null
-#  fbilladdr        :string(4)        default(""), not null
+#  ContractNu       :varchar(10)      default(""), not null
+#  fbilladdr        :varchar(6)       default(""), not null
+#  flpaybycc        :boolean          default(FALSE), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::Invoice < M2m::Base
@@ -77,6 +80,7 @@ class M2m::Invoice < M2m::Base
   belongs_to :sales_order, :class_name => 'M2m::SalesOrder', :foreign_key => 'fsono', :primary_key => 'fsono'
   has_many :items, :class_name => 'M2m::InvoiceItem', :foreign_key => 'fcinvoice', :primary_key => 'fcinvoice'
   belongs_to :sales_person, :class_name => 'M2m::SalesPerson', :foreign_key => 'fsalespn', :primary_key => 'fsalespn'
+  belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fcsourceid, :primary_key => :fcustno
 
   alias_attribute :invoice_source_code, :fcsource
   alias_attribute :invoice_type_code, :finvtype
@@ -92,40 +96,47 @@ class M2m::Invoice < M2m::Base
   alias_attribute :sales_order_number, :fsono
   alias_attribute :number, :fnumber
 
-  scope :customer, lambda { |customer|
+  scope :customer, -> (customer) {
     custno = customer.is_a?(M2m::Customer) ? customer.customer_number : customer
-    {
-      :conditions => { :fcustno => custno }
-    }
+    where :fcustno => custno
   }
-  scope :invoice_dates, lambda { |start_date, end_date|
-    start_date = Date.parse(start_date) if start_date.is_a?(String)
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
-    }
+  scope :invoice_dates, -> (start_date, end_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', start_date, end_date ]
   }
-  scope :before, lambda { |end_date|
-    end_date = Date.parse(end_date) if end_date.is_a?(String)
-    {
-      :conditions => [ 'armast.finvdate < ?', end_date ]
-    }
+  scope :before, -> (end_date) {
+    end_date = DateParser.parse(end_date) if end_date.is_a?(String)
+    where [ 'armast.finvdate < ?', end_date ]
+  }
+  scope :after, -> (start_date) {
+    start_date = DateParser.parse(start_date) if start_date.is_a?(String)
+    where [ 'armast.finvdate >= ?', start_date ]
   }
   # TODO: Replace 'V' with something intelligent?
-  scope :not_void, :conditions => [ 'armast.fcstatus != ? ', 'V' ]
-  scope :by_date, :order => :finvdate
-  scope :for_date, lambda { |date|
-    {
-      :conditions => [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
-    }
+  scope :not_void, -> { where([ 'armast.fcstatus != ? ', 'V' ]) }
+  scope :unpaid, -> { where([ 'armast.fcstatus = ?', ['U'] ]) }
+  scope :unpaid_or_partial, -> { where([ 'armast.fcstatus in (?)', ['U', 'P'] ]) }
+  scope :not_paid_before, -> (date) {
+    date = DateParser.parse(date) if date.is_a?(String)
+    where [ 'armast.fdfactdate IS NULL or armast.fdfactdate >= ?', date]
   }
-  scope :invoice_number, lambda { |n|
+  scope :by_date, -> { order(:finvdate) }
+  scope :for_date, -> (date) {
+    where [ 'armast.finvdate >= ? and armast.finvdate < ?', date, date.advance(:days => 1) ]
+  }
+  scope :invoice_number, -> (n) {
     # Zero pad.
     n = "%010d" % n if n.is_a?(Fixnum)
-    {
-      :conditions => { :fcinvoice => n }
-    }
+    where :fcinvoice => n
   }
+  scope :normal_type, -> { where([ 'armast.finvtype = ?', 'N' ]) }
+  scope :credit_memo, -> { where([ 'armast.finvtype = ?', 'C' ]) }
+  scope :prepayment, -> { where([ 'armast.finvtype = ?', 'P' ]) }
+
+  def self.invoice_numbers(numbers)
+    where ['armast.fcinvoice in (?)', numbers]
+  end
   def self.part_number_like(part_number)
     joins(:items).where(['aritem.fpartno like ?', '%' + part_number + '%'])
   end
@@ -171,5 +182,22 @@ class M2m::Invoice < M2m::Base
   def customer_name
     M2m::Customer.customer_name(self.fbcompany)
   end
+
+  def self.attach_invoices(objects, invoices=nil)
+    invoices ||= M2m::Invoice.invoice_numbers(objects.map(&:invoice_number).uniq)
+    invoice_hash = {}
+    invoices.each { |i| invoice_hash[i.invoice_number] = i }
+    result = []
+    objects.each do |o|
+      if found = invoice_hash[o.invoice_number]
+        result.push o.invoice = found
+      else
+        # Explicitly set this to keep it from trying to lazy load.
+        o.invoice = nil
+      end
+    end
+    result
+  end
+
 
 end

@@ -3,38 +3,38 @@
 # Table name: intran
 #
 #  fdate            :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  fpartno          :string(25)       default(""), not null
-#  fcpartrev        :string(3)        default(""), not null
-#  ftype            :string(1)        default(""), not null
-#  faccno           :string(25)       default(""), not null
-#  fcode            :string(4)        default(""), not null
+#  fpartno          :char(25)         default("                         "), not null
+#  fcpartrev        :char(3)          default("   "), not null
+#  ftype            :char(1)          default(" "), not null
+#  faccno           :char(25)         default("                         "), not null
+#  fcode            :char(4)          default("    "), not null
 #  fcost            :decimal(17, 5)   default(0.0), not null
-#  ffrombin         :string(14)       default(""), not null
+#  ffrombin         :char(14)         default("              "), not null
 #  ffromexpdt       :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  ffromjob         :string(10)       default(""), not null
-#  ffromloc         :string(14)       default(""), not null
-#  ffromlot         :string(20)       default(""), not null
-#  finspect         :string(3)        default(""), not null
+#  ffromjob         :varchar(20)      default(""), not null
+#  ffromloc         :char(14)         default("              "), not null
+#  ffromlot         :varchar(50)      default(""), not null
+#  finspect         :char(3)          default("   "), not null
 #  flabor           :decimal(17, 5)   default(0.0), not null
 #  fmatl            :decimal(17, 5)   default(0.0), not null
 #  fnumber          :integer          default(0), not null
 #  fovrhd           :decimal(17, 5)   default(0.0), not null
 #  fqty             :decimal(15, 5)   default(0.0), not null
-#  ftobin           :string(14)       default(""), not null
+#  ftobin           :char(14)         default("              "), not null
 #  ftoexpdt         :datetime         default(1900-01-01 00:00:00 UTC), not null
-#  ftojob           :string(10)       default(""), not null
-#  ftoloc           :string(14)       default(""), not null
-#  ftolot           :string(20)       default(""), not null
-#  ftoso            :string(12)       default(""), not null
+#  ftojob           :varchar(20)      default(""), not null
+#  ftoloc           :char(14)         default("              "), not null
+#  ftolot           :varchar(50)      default(""), not null
+#  ftoso            :varchar(16)      default(""), not null
 #  fctime_ts        :datetime         default(1900-01-01 00:00:00 UTC), not null
 #  fnnewonhd        :decimal(17, 5)   default(0.0), not null
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
 #  identity_column  :integer          not null, primary key
-#  fcomment         :text             default(""), not null
-#  fac              :string(20)       default(""), not null
-#  ffromfac         :string(20)       default(""), not null
-#  ftofac           :string(20)       default(""), not null
-#  fcudrev          :string(3)        default(""), not null
+#  fcomment         :varchar_max(2147 default(""), not null
+#  fac              :char(20)         default("                    "), not null
+#  ffromfac         :char(20)         default("                    "), not null
+#  ftofac           :char(20)         default("                    "), not null
+#  fcudrev          :char(3)          default("   "), not null
 #  fiorigum         :integer          default(0), not null
 #  fium1            :integer          default(0), not null
 #  fium2            :integer          default(0), not null
@@ -48,7 +48,13 @@
 #  fnqty3           :decimal(17, 5)   default(0.0), not null
 #  fnqty4           :decimal(17, 5)   default(0.0), not null
 #  fnqty5           :decimal(17, 5)   default(0.0), not null
-#  fuserinfo        :string(10)       default(""), not null
+#  fuserinfo        :varchar(35)      default(""), not null
+#  FCISSUEFROM      :varchar(10)      default(""), not null
+#  FCSONO           :varchar(10)      default(""), not null
+#  FINUMBER         :varchar(3)       default(""), not null
+#  FRELEASE         :varchar(3)       default(""), not null
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::InventoryTransaction < M2m::Base
@@ -71,43 +77,23 @@ class M2m::InventoryTransaction < M2m::Base
   alias_attribute :from_bin, :ffrombin
   alias_attribute :to_bin, :ftobin
   alias_attribute :job_number, :ftojob
-  scope :by_time, :order => :fctime_ts
-  scope :by_time_desc, :order => 'intran.fctime_ts desc'
-  scope :outgoing, :conditions => ['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]
-  scope :incoming, :conditions => ['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]
-  scope :to_sales, :conditions => 'intran.ftoso != \'\''
-  scope :between, lambda { |from_date, to_date|
-    {
-      :conditions => [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
-    }
+  scope :by_time, -> { order(:fctime_ts) }
+  scope :by_time_desc, -> { order('intran.fctime_ts desc') }
+  scope :outgoing, -> { where(['intran.ftype in (?) and intran.fqty < 0', M2m::InventoryTransactionType.outgoing.map(&:key) ]) }
+  scope :incoming, -> { where(['intran.ftype in (?) and intran.fqty > 0', M2m::InventoryTransactionType.all_receipts.map(&:key) ]) }
+  scope :to_sales, -> { where('intran.ftoso != \'\'') }
+  scope :between, -> (from_date, to_date) {
+    where [ 'intran.fctime_ts >= ? and intran.fctime_ts < ?', from_date, to_date ]
   }
-  scope :part_number, lambda { |part_number|
-    {
-      :conditions => { :fpartno => part_number }
-    }
+  scope :part_number, -> (part_number) {
+    where :fpartno => part_number
   }
-  scope :revision, lambda { |revision|
-    {
-      :conditions => { :fcpartrev => revision }
-    }
+  scope :revision, -> (revision) {
+    where :fcpartrev => revision
   }
-  scope :to_location, lambda { |location|
-    {
-      :conditions => { :ftoloc => location }
-    }
+  scope :to_location, -> (location) {
+    where :ftoloc => location
   }
-
-  def self.to_or_from(job)
-    where ['intran.ftojob = ? or intran.ffromjob = ?', job.job_number, job.job_number]
-  end
-
-  def type_transfer?
-    self.ftype == 'T'
-  end
-
-  def type_incoming?
-    self.ftype == 'I'
-  end
   
   # "WHERE intran.ftoso = (sorels.fsono + sorels.finumber + sorels.frelease) " + ;
 
@@ -140,14 +126,7 @@ class M2m::InventoryTransaction < M2m::Base
   end
   
   def job
-    @job ||= M2m::Job.job_number(self.job_number).first
-  end
-
-  def labor_cost
-    self.quantity.abs * self.flabor
-  end
-  def overhead_cost
-    self.quantity.abs * self.fovrhd
+    @job ||= M2m::Job.with_job_number(self.job_number).first
   end
   
   def to_log
@@ -160,5 +139,5 @@ class M2m::InventoryTransaction < M2m::Base
     end
     "#{id} #{self.date.to_s(:number_date)} #{self.transaction_type} #{self.quantity} #{tofrom.join(' ')}"
   end
-	
+  
 end

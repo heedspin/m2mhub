@@ -1,9 +1,12 @@
-require 'plutolib/stateless_delayed_report'
+require 'plutolib/logger_utils'
+
+# Cronhint:
+# */5 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::RunAllTriggers.new.delay.high_frequency'
+# */15 8-17 * * 1-5 /var/www/lxdhub/script/runner.sh 'M2mhub::RunAllTriggers.new.delay.low_frequency'
 
 class M2mhub::RunAllTriggers
-  include Plutolib::StatelessDelayedReport
-
-  # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.run_report
+  include Plutolib::LoggerUtils
+  # require 'm2mhub/run_all_triggers' ; M2mhub::RunAllTriggers.new.high_frequency
   def high_frequency
     log "Running triggers"
     total_events_created = 0

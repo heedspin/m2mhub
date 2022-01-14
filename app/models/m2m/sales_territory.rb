@@ -2,17 +2,19 @@
 #
 # Table name: cspopup
 #
-#  fcpopkey         :string(20)       default(""), not null
-#  fcpoptext        :string(80)       default(""), not null
-#  fcpopval         :string(10)       default(""), not null
+#  fcpopkey         :char(20)         default("                    "), not null
+#  fcpoptext        :varchar(80)      default(""), not null
+#  fcpopval         :char(10)         default("          "), not null
 #  fnorder          :integer          default(0), not null
-#  fcpopacces       :string(1)        default(""), not null
+#  fcpopacces       :char(1)          default(" "), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::SalesTerritory < M2m::CsPopup
-  default_scope where(:fcpopkey => 'SLCDPM.FCTERR')
+  default_scope -> { where(:fcpopkey => 'SLCDPM.FCTERR') }
   def name
     self.text
   end

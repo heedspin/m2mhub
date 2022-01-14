@@ -1,8 +1,8 @@
 class PasswordResetsController < M2mhubController
-  skip_before_filter :require_login
+  skip_before_action :require_login
   
-  before_filter :require_not_logged_in
-  before_filter :load_user_using_perishable_token, :only => [:edit,:update]
+  before_action :require_not_logged_in
+  before_action :load_user_using_perishable_token, :only => [:edit,:update]
 
   def new
     render

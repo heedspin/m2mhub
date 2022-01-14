@@ -13,7 +13,7 @@ class Shipping::BacklogReportsController < M2mhubController
       @title = "#{AppConfig.short_name} Backlog #{due_date.to_s(:sales_date)}"
       @filename = [AppConfig.short_name.downcase, 'backlog', due_date.strftime("%m_%d_%y")].join('_') + '.pdf'
       @page_per_customer = @report.page_per_customer
-      render_pdf :action => 'show.pdf.prince', :filename => @filename, :layout => false
+      render_pdf :action => 'show.pdf.erb', :filename => @filename, :layout => false
     end
   end
 

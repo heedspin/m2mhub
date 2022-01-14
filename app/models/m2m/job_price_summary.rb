@@ -2,12 +2,12 @@
 #
 # Table name: jopest
 #
-#  fjobno           :string(10)       default(""), not null
+#  fjobno           :varchar(20)      default(""), not null
 #  fbuy_itm         :integer          default(0), not null
 #  fcus_itm         :integer          default(0), not null
 #  ffixcost         :decimal(17, 5)   default(0.0), not null
 #  finoper          :integer          default(0), not null
-#  finumber         :string(3)        default(""), not null
+#  finumber         :char(3)          default("   "), not null
 #  flabcost         :decimal(17, 5)   default(0.0), not null
 #  flastoper        :integer          default(0), not null
 #  fldhrs           :decimal(14, 5)   default(0.0), not null
@@ -29,7 +29,9 @@
 #  fsuboper         :integer          default(0), not null
 #  ftoolcost        :decimal(17, 5)   default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::JobPriceSummary < M2m::Base

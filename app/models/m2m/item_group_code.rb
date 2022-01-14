@@ -2,9 +2,9 @@
 #
 # Table name: ingrpc
 #
-#  fgc_number       :string(6)        default(""), not null
-#  fgc_desc         :string(65)       default(""), not null
-#  fpc_desc         :string(65)       default(""), not null
+#  fgc_number       :char(6)          default("      "), not null
+#  fgc_desc         :varchar(65)      default(""), not null
+#  fpc_desc         :varchar(65)      default(""), not null
 #  sc01             :decimal(7, 3)    default(0.0), not null
 #  sc02             :decimal(7, 3)    default(0.0), not null
 #  sc03             :decimal(7, 3)    default(0.0), not null
@@ -38,15 +38,15 @@
 #  sc31             :decimal(7, 3)    default(0.0), not null
 #  sc32             :decimal(7, 3)    default(0.0), not null
 #  identity_column  :integer          not null, primary key
-#  timestamp_column :binary
+#  timestamp_column :ss_timestamp
+#  CreatedDate      :datetime
+#  ModifiedDate     :datetime
 #
 
 class M2m::ItemGroupCode < M2m::Base
   self.table_name = 'ingrpc'
-  scope :for_key, lambda { |key|
-    {
-      :conditions => { :fgc_number => key }
-    }
+  scope :for_key, -> (key) {
+    where :fgc_number => key
   }
   def text
     @text ||= self.fgc_desc.strip.titleize

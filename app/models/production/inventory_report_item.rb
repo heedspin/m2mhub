@@ -31,7 +31,7 @@ require 'active_hash'
 require 'production/inventory_report_quantity'
 require 'production/inventory_movement_data'
 
-class Production::InventoryReportItem < ActiveRecord::Base
+class Production::InventoryReportItem < ApplicationModel
   self.table_name = 'inventory_report_items'
   include ::BelongsToItem
   include ::BelongsToItemGroup # self.group, self.group_name, etc
@@ -45,9 +45,11 @@ class Production::InventoryReportItem < ActiveRecord::Base
   belongs_to :last_sales_order_release, :class_name => 'M2m::SalesOrderRelease', :foreign_key => 'last_sales_order_release_id'
   belongs_to :last_incoming_inventory_transaction, :class_name => 'M2m::InventoryTransaction', :foreign_key => 'last_incoming_inventory_transaction_id'
 
-  scope :by_on_hand_cost_desc, :order => '(inventory_report_items.cost * inventory_report_items.quantity_on_hand) desc'
-  scope :by_latest_activity, :select => "inventory_report_items.*,
-  greatest(coalesce(last_outgoing_date, '1900-01-01'), coalesce(last_incoming_date, '1900-01-01'), coalesce(next_outgoing_date, '1900-01-01'), coalesce(next_incoming_date, '1900-01-01')) as latest_activity_date", :order => 'latest_activity_date'
+  scope :by_on_hand_cost_desc, -> { order('(inventory_report_items.cost * inventory_report_items.quantity_on_hand) desc') }
+  scope :by_latest_activity, -> {
+    select("inventory_report_items.*,
+  greatest(coalesce(last_outgoing_date, '1900-01-01'), coalesce(last_incoming_date, '1900-01-01'), coalesce(next_outgoing_date, '1900-01-01'), coalesce(next_incoming_date, '1900-01-01')) as latest_activity_date").order('latest_activity_date')
+  }
 
   def latest_activity
     @latest_activity ||= [self.last_outgoing_date, self.last_incoming_date, self.next_outgoing_date, self.next_incoming_date].compact.max
