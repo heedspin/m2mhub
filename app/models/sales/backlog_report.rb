@@ -29,7 +29,7 @@ class Sales::BacklogReport < M2mhub::Base
   def run!
     memos = []
     self.total_backlog = late = 0.0
-    M2m::SalesOrderRelease.filtered.status_open_or_hold.not_filled.includes(:sales_order => :customer).each do |r|
+    M2m::SalesOrderRelease.filtered.status_open_or_hold.not_filled.due_after(Date.today.advance(years: -2)).includes(:sales_order => :customer).each do |r|
       memos.push [r.id, r.backlog_price, r.due_date.to_date]
       self.total_backlog += r.backlog_price
       if r.due_date < self.date
@@ -169,34 +169,14 @@ class Sales::BacklogReport < M2mhub::Base
   def xls_sheet_name
     'Backlog'
   end
-
-  def get_first_due_date(part_number)
-    @fdd_cache ||= {}
-    if @fdd_cache.member?(part_number)
-      @fdd_cache[part_number]
-    else
-      result = nil
-      if arev = Sales::CommissionRate.get_arev_part_number(part_number) 
-        result = M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(arev).by_due_date.first.try(:due_date) 
-        result ||= M2m::SalesOrderRelease.filtered.status_not_cancelled.for_part_number(part_number).by_due_date.first.try(:due_date) 
-      end
-      @fdd_cache[part_number] = result
-    end
-  end
   
   def xls_initialize
-    @customer_cache = CustomerCache.new
     dollar_format = Spreadsheet::Format.new(:number_format => '$#,##0.00')
     xls_field('Due Date') { |r| r.due_date }
-    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
-    xls_field('Parent') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) }
-    xls_field('Name') { |rs| @customer_cache.sales_customer(rs.release.try(:sales_order).try(:customer)).try(:parent_company).try(:name) || rs.release.try(:sales_order).try(:customer).try(:company_name).try(:strip) }
+    xls_field('Customer') { |r| r.release.try(:sales_order).try(:customer).try(:company_name) }
     xls_field('Sales Order') { |r| r.release.try(:sales_order).try(:order_number) }
     xls_field('Part Number') { |r| r.release.try(:item).try(:part_number_and_revision) }
     xls_field('Amount', dollar_format) { |r| r.backlog_price.to_f.round(2) }
-    # xls_field('First Due Date') { |r| 
-    #   get_first_due_date(r.release.try(:item).try(:part_number_and_revision))
-    # }
   end  
   
   def all_data
