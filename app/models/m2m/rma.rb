@@ -5,10 +5,7 @@ class M2m::Rma < M2m::Base
   self.primary_key = 'fcrmano'
   belongs_to :inquiry, :class_name => 'M2m::Inquiry', :foreign_key => :finqno, :primary_key => :InquiryNo
   belongs_to :customer, :class_name => 'M2m::Customer', :foreign_key => :fccustno, :primary_key => :fcustno
-  # has_many :items, :class_name => 'M2m::RmaItem', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
-  def items
-    M2m::RmaItem.for_rma(self)
-  end
+  has_many :items, :class_name => 'M2m::RmaItem', :foreign_key => 'fcrmano', :primary_key => 'fcrmano'
 
   alias_attribute :user_defined1, :fcusrchr1
   alias_attribute :user_defined2, :fcusrchr2

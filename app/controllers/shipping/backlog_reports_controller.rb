@@ -2,11 +2,12 @@ class Shipping::BacklogReportsController < M2mhubController
   filter_access_to_defaults
 
   def index
-    @report = Shipping::BacklogReport.new(params[:search])
+    search_params = params.fetch(:search,{}).permit!
+    @report = Shipping::BacklogReport.new(search_params)
     @report.due_date ||= Date.current.next_week
     @report.sort_order_id ||= Shipping::BacklogSortOrder.customer_so_pn.id
     @report.include_jobs ||= Shipping::IncludeJobs.none
-    @report.run if params.member?(:search)
+    @report.run if search_params.present?
     @printing = (params[:commit] == 'Print')
     if @printing
       due_date = Date.parse(@report.due_date)

@@ -1,29 +1,24 @@
 <div class="submenu">
-	<ul>
-		<% if permitted_to?(:read, :quality_quality_dashboard) %>
-		<li class="<%= menu_selected 'quality/quality_dashboard' %>">
-			<%= link_to 'Quality Home', quality_url %>
-		</li>
-		<% end %>
-		<% if permitted_to?(:make, :quality_rma_reports) %>
-		<li class="<%= menu_selected 'rma_reports' %>">
-			<%= link_to 'RMA Report', new_rma_report_url %>
-		</li>
-		<% end %>
-		<% if permitted_to?(:make, :quality_customer_otd_reports) %>
-		<li class="<%= menu_selected 'quality/customer_otd_reports' %>">
-			<%= link_to 'OTD Report', new_customer_otd_report_url %>
-		</li>
-		<% end %>
-		<% if permitted_to?(:make, :quality_credit_memo_reports) %>
-		<li class="<%= menu_selected 'quality/credit_memo_reports' %>">
-			<%= link_to 'Credit Memo Report', new_credit_memo_report_url %>
-		</li>
-		<% end %>
-		<% if permitted_to?(:read, :quality_inspection_tasks) %>
-		<li class="<%= menu_selected 'quality/inspection_tasks' %>">
-			<%= link_to 'Inspection Tasks', inspection_tasks_url %>
-		</li>
-		<% end %>
-	</ul>
+  <ul>
+    <% if permitted_to?(:read, :quality_quality_dashboard) %>
+    <li class="<%= menu_selected 'quality/quality_dashboard' %>">
+      <%= link_to 'Quality Home', quality_url %>
+    </li>
+    <% end %>
+    <% if permitted_to?(:make, :quality_rma_reports) %>
+    <li class="<%= menu_selected 'rma_reports' %>">
+      <%= link_to 'RMA Report', new_rma_report_url %>
+    </li>
+    <% end %>
+    <% if permitted_to?(:make, :quality_customer_otd_reports) %>
+    <li class="<%= menu_selected 'quality/customer_otd_reports' %>">
+      <%= link_to 'OTD Report', new_customer_otd_report_url %>
+    </li>
+    <% end %>
+    <% if permitted_to?(:make, :quality_credit_memo_reports) %>
+    <li class="<%= menu_selected 'quality/credit_memo_reports' %>">
+      <%= link_to 'Credit Memo Report', new_credit_memo_report_url %>
+    </li>
+    <% end %>
+  </ul>
 </div>

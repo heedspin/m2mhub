@@ -32,11 +32,22 @@
 class User < M2mhub::Base
   # model_stamper
   acts_as_authentic do |c|
-    c.validate_password_field = true
-    # c.maintain_sessions = false
-    c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
+    # c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
     c.crypto_provider = Authlogic::CryptoProviders::SCrypt
   end
+
+  validates :password,
+    confirmation: { if: :require_password? },
+    length: {
+      minimum: 6,
+      if: :require_password?
+    }
+  validates :password_confirmation,
+    length: {
+      minimum: 6,
+      if: :require_password?
+  }
+
   belongs_to_active_hash :user_role
   belongs_to_active_hash :user_state
   validates_presence_of :first_name, :last_name, :email, :user_state, :user_role

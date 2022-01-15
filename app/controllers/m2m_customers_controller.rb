@@ -61,7 +61,7 @@ class M2mCustomersController < M2mhubController
   end
 
   def search_index
-    @search = M2m::Customer.new(params.require(:search).permit!)
+    @search = M2m::Customer.new(params.fetch(:search).permit(:fcompany))
     # For who knows what reason, a new customer comes out with a name = " ".
     if @search.fcompany
       @search.fcompany = @search.fcompany.strip

@@ -23,7 +23,7 @@ module PdfGeneration
         headers['Content-type'] = 'application/pdf'
         headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
       elsif Rails.env.development?
-        render :text => '<pre>' + pdf.command_output + '</pre>',
+        render :plain => '<pre>' + pdf.command_output + '</pre>',
           :layout => false,
           :content_type => 'text/html',
           :status => 500

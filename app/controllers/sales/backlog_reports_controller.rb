@@ -10,7 +10,7 @@ class Sales::BacklogReportsController < M2mhubController
       format.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@backlog_report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
-        render :text => @backlog_report.to_xls
+        render :plain => @backlog_report.to_xls
       end
     end
   end

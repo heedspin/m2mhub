@@ -8,7 +8,7 @@ class M2mCustomers::ExportsController < M2mhubController
       format.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@m2m_customer_export.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
-        render :text => @m2m_customer_export.to_xls
+        render :plain => @m2m_customer_export.to_xls
       end
     end
   end

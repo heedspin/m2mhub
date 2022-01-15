@@ -9,12 +9,12 @@ class Sales::CommissionBacklogReportsController < M2mhubController
     @commission_backlog_report = build_object
     respond_to do |f|
       f.html do
-        render :text => 'not implemented'
+        render :plain => 'not implemented'
       end
       f.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@commission_backlog_report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
-        render :text => @commission_backlog_report.to_xls
+        render :plain => @commission_backlog_report.to_xls
       end
     end
   end

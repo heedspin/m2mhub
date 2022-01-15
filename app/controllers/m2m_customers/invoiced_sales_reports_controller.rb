@@ -11,12 +11,12 @@ class M2mCustomers::InvoicedSalesReportsController < M2mhubController
     @report = build_object
     respond_to do |f|
       f.html do
-        render :text => 'not implemented'
+        render :plain => 'not implemented'
       end
       f.xls do
         headers['Content-Disposition'] = "attachment; filename=\"#{@report.xls_filename}.xls\""
         headers['Content-type'] = 'application/vnd.ms-excel'
-        render :text => @report.to_xls
+        render :plain => @report.to_xls
       end
     end
   end
