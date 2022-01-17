@@ -25,6 +25,9 @@ class M2m::Rma < M2m::Base
   scope :with_rma_numbers, -> (rma_numbers) {
     where [ 'syrmama.fcrmano in (?)', rma_numbers ]
   }
+  scope :with_rma_number, -> (rmano) {
+    where [ 'syrmama.fcrmano = ?', rmano.try(:to_i) ]
+  }
 
   def self.closed
     where fcstatus: 'CLOSED'
