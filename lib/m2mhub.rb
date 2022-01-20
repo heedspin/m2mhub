@@ -1,6 +1,6 @@
 module M2mhub
+  class Error < StandardError; end
   class Engine < ::Rails::Engine
-    # Credit: Daniel Connolly
     config.autoload_paths += %W(#{config.root}/lib)
   end
 end

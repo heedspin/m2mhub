@@ -68,7 +68,7 @@ class M2mhubController < ApplicationController
     rescue_from Exception, :with => :server_error unless Rails.env.development?
     def server_error(exception)
       begin
-        notify_airbrake(exception)
+        Honeybadger.notify(exception)
       rescue => hoptoad_exc
         Rails.logger.error "Failed to notify airbrake: #{hoptoad_exc.class.name} #{hoptoad_exc.message}"
       ensure

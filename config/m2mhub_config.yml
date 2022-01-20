@@ -37,7 +37,6 @@ m2mhub_config: &m2mhub_config
   arrow_expand_image: arrow_expand.gif
   arrow_left_image: arrow_left.png
   arrow_right_image: arrow_right.png
-  lighthouse_image: lighthouse.png
   enable_commission_report: true
   enable_events: true
   feature_inspection_tasks: all
