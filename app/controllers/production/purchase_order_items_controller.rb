@@ -6,8 +6,8 @@ class Production::PurchaseOrderItemsController < M2mhubController
   end
 
   def index
-    @search = Search.new(params[:search])
-    unless params.member?(:search)
+    @search = Search.new(params.fetch(:search, {}).permit(:status_id, :inspection_required))
+    unless params.has_key?(:search)
       @search.status_id = M2m::Status.open.id
     end
     s = M2m::PurchaseOrderItem.filtered
