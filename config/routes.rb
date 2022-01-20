@@ -49,7 +49,6 @@ Rails.application.routes.draw do
   resources :customer_otd_reports, :only => [:new], :controller => 'quality/customer_otd_reports'
   resources :rma_reports, :only => [:new], :controller => 'quality/rma_reports'
   resources :credit_memo_reports, :only => [:new], :controller => 'quality/credit_memo_reports'
-  resources :inspection_tasks, :controller => 'quality/inspection_tasks'
   resources :invoiced_sales_reports, :controller => 'sales/invoiced_sales_reports'
   resources :pro_forma_sales_reports, :controller => 'sales/pro_forma_sales_reports'
   resources :commission_rates, :controller => 'sales/commission_rates'
