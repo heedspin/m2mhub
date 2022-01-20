@@ -10,8 +10,7 @@ class Shipping::BacklogReportsController < M2mhubController
     @report.run if search_params.present?
     @printing = (params[:commit] == 'Print')
     if @printing
-      due_date = Date.parse(@report.due_date)
-      @title = "#{AppConfig.short_name} Backlog #{due_date.to_s(:sales_date)}"
+      @title = "#{AppConfig.short_name} Backlog #{@report.due_date.to_s(:sales_date)}"
       @filename = [AppConfig.short_name.downcase, 'backlog', due_date.strftime("%m_%d_%y")].join('_') + '.pdf'
       @page_per_customer = @report.page_per_customer
       render_pdf :action => 'show.pdf.erb', :filename => @filename, :layout => false

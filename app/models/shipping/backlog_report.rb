@@ -8,7 +8,12 @@ class Shipping::BacklogReport
   def initialize(args)
     args ||= {}
     ATTRIBUTES.each do |att|
-      self.send("#{att}=", args[att])
+      if ['due_after', 'due_date'].include?(att.to_s)
+        value = Date.strptime(args[att], '%m/%d/%Y')
+      else
+        value = args[att]
+      end
+      self.send("#{att}=", value)
     end
     @releases ||= []
   end

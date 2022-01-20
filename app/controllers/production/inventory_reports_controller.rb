@@ -1,20 +1,6 @@
 class Production::InventoryReportsController < M2mhubController
   filter_access_to_defaults
 
-  def new
-    @report = build_object
-  end
-
-  def create
-    @report = build_object
-    if @report.save
-      @report.run_in_background!
-      redirect_to inventory_report_url(@report)
-    else
-      render :action => 'new'
-    end
-  end
-
   def show
     @report = current_object
     @customer_reports = @report.customer_reports.by_on_hand_desc.paginate(:page => params[:page], :per_page => 1)

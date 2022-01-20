@@ -84,6 +84,9 @@ class M2m::Quote < M2m::Base
   scope :status_cancelled, -> { where(:fstatus => M2m::Status.cancelled.name) }
 
   scope :by_quote_number_desc, -> { order('fquoteno desc') }
+  scope :with_quote_number, -> (number) {
+    where ['qtmast.fquoteno = ?', number.to_i]
+  }
 
   scope :since, -> (day) {
     where(['qtmast.fquotedate >= ?', day]).order('fquotedate desc, fquoteno desc')

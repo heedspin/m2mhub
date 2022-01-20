@@ -6,9 +6,9 @@ class Sales::M2mQuotesController < M2mhubController
   end
 
   def show
-    @quote = current_object
-    @previous_quote = M2m::Quote.find(:first, :conditions => ['fquoteno < ?', current_object.fquoteno], :order => 'fquoteno desc')
-    @next_quote = M2m::Quote.find(:first, :conditions => ['fquoteno > ?', current_object.fquoteno], :order => 'fquoteno')
+    @quote = M2m::Quote.with_quote_number(params[:id]).first
+    @previous_quote = M2m::Quote.where(['qtmast.fquoteno < ?', @quote.fquoteno.to_i]).order('qtmast.fquoteno desc').first
+    @next_quote = M2m::Quote.where(['qtmast.fquoteno > ?', @quote.fquoteno.to_i]).order('qtmast.fquoteno').first
   end
   
   def new
@@ -18,11 +18,8 @@ class Sales::M2mQuotesController < M2mhubController
 
   protected
 
-    def model_class
-      M2m::Quote
-    end
-    
-    # def current_object
-    #   @current_object ||= M2m::Quote.includes(:items).find(params[:id])
-    # end
+  def current_object
+    @quote
+  end
+
 end

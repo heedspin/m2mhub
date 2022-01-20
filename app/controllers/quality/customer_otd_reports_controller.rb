@@ -2,9 +2,9 @@ class Quality::CustomerOtdReportsController < M2mhubController
   filter_access_to_defaults
 
   def new
-    @search = Quality::ReportSearch.new(params[:search])
+    @search = Quality::ReportSearch.new(params.fetch(:search, {}).permit!)
     @search.year ||= Date.current.year.to_s
-    @report = Quality::CustomerOtdReport.new(:start_date => @search.to_date)
+    @report = Quality::CustomerOtdReport.new(:start_date => @search.start_date)
     @report.run
   end
   
