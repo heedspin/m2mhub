@@ -6,7 +6,7 @@ body {
    display: none;
    }
 form {
-	display: none;
+  display: none;
 }
 #maincopy, #main {
    width: auto;
@@ -19,14 +19,14 @@ form {
    }
 
 a:link, a:visited {
-	text-decoration:none;
-	color: black;
+  text-decoration:none;
+  color: black;
 }
 
 
 table {
-	page-break-inside: avoid;
-	page-break-after: always; 
+  page-break-inside: avoid;
+  page-break-after: auto; 
 }
 
 /* DATA TABLES
@@ -57,24 +57,24 @@ table.data td {
   padding: 5px;
   }
 table.data p {
-	font-size: 1em;
-	padding-bottom: .5em;
+  font-size: 1em;
+  padding-bottom: .5em;
 }
 
 table.data td.monitary {
-	text-align: right;
+  text-align: right;
 }
 
 span.currency_symbol {
-	float: left;
+  float: left;
 }
 
 table.data td.centered {
-	text-align: center;
+  text-align: center;
 }
 
 table.data td.right {
-	text-align: right;
+  text-align: right;
 }
 
 /* BACKLOG TABLES ************************************/
@@ -104,48 +104,48 @@ table.backlog td {
   }
 
 table.backlog td.c1_full {
-	border-top: 3px solid green;
-	border-left: 3px solid green;
-	border-bottom: 3px solid green;	
-	border-right: 1px solid green;
+  border-top: 3px solid green;
+  border-left: 3px solid green;
+  border-bottom: 3px solid green; 
+  border-right: 1px solid green;
 }
 
 table.backlog td.top_full {
-	border-top: 3px solid green;
-	border-left: 1px solid green;
-	border-bottom: 1px solid green;	
-	border-right: 1px solid green;
+  border-top: 3px solid green;
+  border-left: 1px solid green;
+  border-bottom: 1px solid green; 
+  border-right: 1px solid green;
 }
 
 table.backlog td.bottom_full {
-	border-top: 1px solid green;
-	border-left: 1px solid green;
-	border-bottom: 3px solid green;	
-	border-right: 3px solid green;
+  border-top: 1px solid green;
+  border-left: 1px solid green;
+  border-bottom: 3px solid green; 
+  border-right: 3px solid green;
 }
 
 table.backlog td.cr_full {
-	border-top: 3px solid green;
-	border-left: 1px solid green;
-	border-bottom: 1px solid green;	
-	border-right: 3px solid green;
+  border-top: 3px solid green;
+  border-left: 1px solid green;
+  border-bottom: 1px solid green; 
+  border-right: 3px solid green;
 }
 
 table.backlog td.c1_part, table.backlog td.cr_part, table.backlog td.top_part, table.backlog td.bottom_part {
-	border: 1px solid black;
+  border: 1px solid black;
 }
 
 table.backlog td.c1, table.backlog td.cr, table.backlog td.top, table.backlog td.bottom {
-	border: 1px solid #c5c5c5;
-	background-color: #eee;
+  border: 1px solid #c5c5c5;
+  background-color: #eee;
 }
 
 table.backlog td.quantity {
-	width: 50px;
+  width: 50px;
 }
 
 table.backlog td.c1 {
-	width: 200px;
+  width: 200px;
 }
 
 table.backlog tr.spacer td {
@@ -154,24 +154,24 @@ table.backlog tr.spacer td {
 }
 
 table.backlog p {
-	font-size: 1em;
-	padding-bottom: .5em;
+  font-size: 1em;
+  padding-bottom: .5em;
 }
 
 table.backlog td.monitary {
-	text-align: right;
+  text-align: right;
 }
 
 span.currency_symbol {
-	float: left;
+  float: left;
 }
 
 table.backlog td.centered {
-	text-align: center;
+  text-align: center;
 }
 
 table.backlog td.right {
-	text-align: right;
+  text-align: right;
 }
 
 table.backlog table.data td, table.backlog table.data tr {
@@ -188,13 +188,13 @@ table.backlog table.data {
 
 
 .sbl_jobs_link {
-	display: none;
+  display: none;
 }
 
 .page-break-before {
-	page-break-before:always;
+  page-break-before:always;
 }
 
 .no-inside-page-break {
-	page-break-inside:avoid;
+  page-break-inside:avoid;
 }
