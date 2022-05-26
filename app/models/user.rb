@@ -53,7 +53,7 @@ class User < M2mhub::Base
   validates_presence_of :first_name, :last_name, :email, :user_state, :user_role
   has_many :user_messages, :dependent => :delete_all
   has_many :messages, :through => :user_messages
-  belongs_to :notification_preference
+  # belongs_to :notification_preference
   has_many :context_group_users, :class_name => 'Context::GroupUser'
   has_many :context_groups, :class_name => 'Context::Group', :through => :context_group_users, :source => :group
 
