@@ -97,7 +97,7 @@ class Quality::CustomerOtdReport
     late_releases = M2m::SalesOrderRelease.shipped_late.due(@start_date, @end_date)
     M2m::SalesOrderItem.attach_to_releases(late_releases)
     late_releases.each do |release|
-      if vendor_name = release.item.vendors.first.try(:vendor).try(:name)
+      if vendor_name = release.item.try(:vendors).try(:first).try(:vendor).try(:name)
         month_for(release.due_date).add_late_release(release)
         self.get_vendor_late(vendor_name).add_late_release(release)
       end
