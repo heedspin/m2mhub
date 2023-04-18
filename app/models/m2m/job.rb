@@ -150,7 +150,7 @@ class M2m::Job < M2m::Base
   has_many :sub_jobs, :class_name => 'M2m::Job', :foreign_key => :fschbefjob, :primary_key => :fjobno
 
   scope :for_item, -> (item) {
-    where :fpartno => item.part_number, :fpartrev => item.revision
+    where :fpartno => item.try(:part_number), :fpartrev => item.try(:revision)
   }
   scope :with_job_number, -> (jobno) {
     where :fjobno => jobno
